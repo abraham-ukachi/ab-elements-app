@@ -1,28 +1,17 @@
 <p align="center">
-  <!-- Ab - Logo - Light Mode --> 
-  <a href="https://abraham-ukachi.vercel.app/#gh-light-mode-only" target="_blank">
-    <img src="./.github/ab-logo-light.svg" alt="Ab Logo on Light" width="64" height="64" />
-  </a>
-
-  <!-- Ab - Logo - Dark Mode --> 
-  <a href="https://abraham-ukachi.vercel.app/#gh-dark-mode-only" target="_blank">
-    <img src="./.github/ab-logo-dark.svg" alt="Ab Logo on Dark" width="64" height="64" />
-  </a>
-
-  <!-- Next.js - Logo Name - Light Mode -->
-  <a href="https://nextjs.org/#gh-light-mode-only" target="_blank">
-    <img src="./.github/nextjs-logoname-light.svg" alt="Next.js LogoName on Light" width="192" height="64" />
-  </a>
-
-  <!-- Next.js - Logo Name - Dark Mode -->
-  <a href="https://nextjs.org/#gh-dark-mode-only" target="_blank">
-    <img src="./.github/nextjs-logoname-dark.svg" alt="Next.js LogoName on Dark" width="192" height="64" />
+  <!-- Ab - Logo --> 
+  <a href="https://abraham-ukachi.vercel.app" target="_blank">
+    <img src="./.github/ab-logo.svg" alt="Ab Logo" width="256" height="256" />
   </a>
 
 </p>
 
 
-<p align="center">
+<p align="center" style="width:512px; margin:0 auto;">
+  <b>abElements</b> is a lightweight library of 100% free UI elements for all your Next.js, React, Polymer, Lit and Flutter projects.
+</p>
+
+<p align="center" style="margin-top:12px;">
     <a href="https://ab-elements.vercel.app" target="_blank"><b>Checkout abElements &rarr;</b></a>
 </p>
 
