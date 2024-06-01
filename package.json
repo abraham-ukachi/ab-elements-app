@@ -1,0 +1,58 @@
+{
+  "name": "ab-elements-app",
+  "version": "0.1.0",
+  "description": "A lightweight library of 100% free UI elements for your Next.js, React, Polymer, Lit and Flutter projects, created with ❤️  by Abraham Ukachi.",  
+  "private": false,
+
+  "homepage": "https://ab-elements.vercel.app/",
+    
+  "keywords": [
+    "free",
+    "ui",
+    "elements",
+    "nextjs",
+    "react",
+    "polymer",
+    "lit",
+    "flutter",
+    "components",
+    "abraham",
+    "ukachi",
+
+    "ab-nextjs-components",
+    "ab-react-components",
+    "ab-polymer-components",
+    "ab-lit-components",
+    "ab-flutter-components"
+  ],
+
+  "author": {
+    "name": "Abraham Ukachi",
+    "url": "https://github.com/abraham-ukachi",
+    "email": "abraham.ukachi@laplateforme.io"
+  },
+
+  "license": "MIT",
+
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "react": "^18",
+    "react-dom": "^18",
+    "next": "14.2.3"
+  },
+  "devDependencies": {
+    "typescript": "^5",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.3"
+  }
+}
