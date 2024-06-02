@@ -1,11 +1,9 @@
 {
   "name": "ab-elements-app",
   "version": "0.1.0",
-  "description": "A lightweight library of 100% free UI elements for your Next.js, React, Polymer, Lit and Flutter projects, created with ❤️  by Abraham Ukachi.",  
+  "description": "A lightweight library of 100% free UI elements for your Next.js, React, Polymer, Lit and Flutter projects, created with ❤️  by Abraham Ukachi.",
   "private": false,
-
   "homepage": "https://ab-elements.vercel.app/",
-    
   "keywords": [
     "free",
     "ui",
@@ -18,22 +16,18 @@
     "components",
     "abraham",
     "ukachi",
-
     "ab-nextjs-components",
     "ab-react-components",
     "ab-polymer-components",
     "ab-lit-components",
     "ab-flutter-components"
   ],
-
   "author": {
     "name": "Abraham Ukachi",
     "url": "https://github.com/abraham-ukachi",
     "email": "abraham.ukachi@laplateforme.io"
   },
-
   "license": "MIT",
-
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -41,18 +35,18 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "react": "^18",
-    "react-dom": "^18",
-    "next": "14.2.3"
+    "next": "14.2.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
-    "typescript": "^5",
-    "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
-    "postcss": "^8",
-    "tailwindcss": "^3.4.1",
-    "eslint": "^8",
-    "eslint-config-next": "14.2.3"
+    "@types/node": "^20.13.0",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "14.2.3",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.3",
+    "typescript": "^5.4.5"
   }
 }
