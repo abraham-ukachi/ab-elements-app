@@ -81,6 +81,218 @@ pnpm install ab-nextjs-component
 ---
 
 
+## Requirements
+
+These are a couple of the main requirements for this project:
+
+1. A **`splash`** screen - always 😜 
+2. A **`home`** page - duh ;) 
+3. A **`docs`** page.
+4. A **`search`** page.
+5. A **`demo`** page.
+6. TBD
+
+
+## Jobs
+> MOTTO: I'll always do [**more**](#More) 😜
+
+Jobs related to this `ab-elements-app` project - a list of some specific files to be submitted as well as their corresponding / current **status** for this project:
+
+
+| No. | Name | File | Status |
+|:----|:-----|:-----|:-------|
+| 1 | *`Splash - Screen`* | **@splash/page.tsx** | Pending |
+| 2 | *`Welcome - Screen`* | **@welcome/page.tsx** | Pending |
+| 3 | *`Home - Page`* | **(pages)/page.tsx** | Pending |
+| 4 | *`Docs - Page`* | **(pages)/docs/page.tsx** | Pending |
+| 5 | *`Search - Page`* | **(pages)/search/page.tsx** | Pending |
+| 6 | *`Demo - Page`* | **(pages)/demo/page.tsx** | Pending |
+| 7 | *`Color - Theme`* | **assets/theme/color.css** | Pending |
+| 8 | *`Styles - Theme`* | **assets/theme/styles.css** | Pending |
+| 9 | *`Colors - Theme Module`* | **assets/theme/colors.js** | Pending |
+| 10 | *`Typography - Theme`* | **assets/theme/typography.css** | Pending |
+| 11 | *`Root / App - Styles`* | **src/app/globals.css** | Pending |
+| 12 | *`Root / App - Layout`* | **src/app/[locale]/layout.tsx** | Pending |
+| 13 | *`Root / App`* | **src/app/[locale]/page.tsx** | Pending |
+| 14 | *`Pages - Styles`* | **(pages)/styles.module.css** | Pending  |
+| 15 | *`Pages - Layout`* | **(pages)/layout.tsx** | Pending |
+| 16 | *`Pages - Loading`* | **(pages)/loading.tsx** | Pending |
+| 17 | *`Pages - Error`* | **(pages)/error.tsx** | Pending |
+| 18 | *`Pages - Default`* | **(pages)/default.tsx** | Pending |
+| 19 | *`useElement - Hook`* | **hooks/useElement.ts** | Pending |
+| 20 | *`Element - Provider`* | **providers/element-provider** | Pending |
+
+
+> WARNING: This list is a work in progress and will change soon
+
+> NOTE: (\*) = still needs to be updated
+>       (TBD) = to be determined ;)
+
+
+
+
+## Structure
+> IMPORTANT: `ab-elements-app` uses the [App Router](https://nextjs.org/docs/app/building-your-application/routing) feature of [Next.js](https://nextjs.org/).
+
+The folder & file structure of this [Next.js](https://nextjs.org/) project, based on it's [Project Structure](https://nextjs.org/docs/app/building-your-application/routing):
+
+### The `src` folder
+```sh
+src
+├── app
+│   ├── [locale]
+│   │   ├── @splash
+│   │   ├── @welcome
+│   │   ├── (pages)
+│   │   │   ├── docs
+│   │   │   │   ├── aside.tsx
+│   │   │   │   ├── main.tsx
+│   │   │   │   ├── page.tsx
+│   │   │   │   └── styles.module.css
+│   │   │   ├── demo
+│   │   │   ├── search
+│   │   │   ├── ... 
+│   │   │   ├── page.tsx
+│   │   ├── components # <- DEPRECATED: using `ab-nextjs-components` instead ;)
+│   │   │   ├── ab-button
+│   │   │   ├── ab-collapsible
+│   │   │   ├── ab-icon-button
+│   │   │   │   ├── index.tsx
+│   │   │   │   └── styles.module.css
+│   │   │   ├── ...
+│   │   │   └── server
+│   │   │       ├── ab-avatar
+│   │   │       ├── ab-logo
+│   │   │       │   ├── index.tsx
+│   │   │       │   └── styles.module.css
+│   │   │       └── ... 
+│   │   ├── core # <- DEPRECATED: using `ab-nextjs-components` instead ;)
+│   │   │   └── server
+│   │   │       ├── ab-app-layout
+│   │   │       ├── ab-aside-layout
+│   │   │       └── ab-main-layout
+│   │   ├── globals.css
+│   │   ├── hooks
+│   │   │   ├── index.ts
+│   │   │   └── useElement.ts
+│   │   ├── layout.tsx
+│   │   ├── metadata.ts
+│   │   ├── sections
+│   │   ├── skeletons
+│   │   └── views
+│   └── favicon.ico
+├── i18n.ts
+├── messages
+│   ├── en.json
+│   ├── es.json
+│   ├── fr.json
+│   └── ru.json
+└── middleware.ts
+```
+
+
+
+### The `public` folder
+
+- [**public**](./public/)
+- - * manifest.json
+- - * *...*
+- - [**assets**](./assets/)
+- - * [**logos**](./assets/logos)
+- - * [**images**](./assets/images)
+- - * [**animations**](./assets/animations/)
+- - * - *fade-in-animation.css*
+- - * - *pop-in-animation.css*
+- - * - *slide-from-down-animation.css*
+- - * [**theme**](./assets/theme/)
+- - * - *color.css*
+- - * - *typography.css*
+- - * - *styles.css*
+
+### The top-level / root folder
+
+- LICENSE
+- README.md
+- package.json
+- *ab_translator.mjs*
+
+> NOTE: This is just a relatively short snippet derived from the root folder, and it should get periodically update.
+
+
+## More 
+
+These are some of the things we did or plan to do, in addition to this project's [requirements](#Requirements):
+
+| No. | Name | File | Status |
+|:----|:-----|:-----|:-------|
+| 1 | *`Pop In - Animation`* | **pop-in-animation.css** | Pending |
+| 2 | *`Fade In - Animation`* | **fade-in-animation.css** | Pending |
+| 3 | *`Slide From Down - Animation`* | **slide-from-down-animation.css** | Pending |
+| 4 | *`Slide From Up - Animation`* | **slide-from-up-animation.css** | Pending |
+| 5 | *`Slide Left - Animation`* | **slide-left-animation.css** | Pending |
+| 6 | *`Slide From Left - Animation`* | **slide-from-left-animation.css** | Pending |
+| 7 | *`Slide Right - Animation`* | **slide-right-animation.css** | Pending |
+| 8 | *`Slide From Right - Animation`* | **slide-from-right-animation.css** | Pending |
+| 9 | *`Manifest - JSON File`* | **manifest.json** | Pending |
+| 10 | *`Package - JSON File`* | **package.json** | [Done](./package.json)\* |
+| 11 | *`Fade Out - Animation`* | **fade-out-animation.css** | Pending |
+| 12 | *`Slide Down - Animation`* | **slide-down-animation.css** | Pending |
+| 13 | *`Slide Up - Animation`* | **slide-up-animation.css** | Pending |
+| 14 | *`AB Translator - Script`* | **ab_translator.mjs** | Pending |
+| 19 | *`AB Theme - Stylesheet`* | **assets/theme/ab-theme.css** | Pending |
+
+> NOTE: (\*) = still needs to be updated. <br>
+> There's certainly a couple of file we must've forgot or not added yet, so we'll keep the above list updated obv. :)
+
+
+---
+
+## Testing
+> IMPORTANT: All the tests are performed end-to-end reliably using [playwright](https://playwright.dev/)
+
+| Browser | Version | Status | Date | Time
+|:--------|:--------|:-------|:-----|:-----
+| *`Arc`* | **-** | *Pending* | - | - 
+| *`Brave`* | **-** | *Pending*  | - | -
+| *`Chrome`* | **-** | *Pending* | - | -
+| *`Firefox`* | **-** | *Pending* | - | -
+| *`Safari`* | **-** | *Pending* | - | -
+| *`Opera`* | **-** | *Pending* | - | -
+| *`Edge`* | **-** | *Pending* | - | -
+| *`IE`* | **-** | *Pending* | - | -
+
+> NOTE: *`IE`* = Internet Explorer = 👎🏽
+
+
+## AB Translator
+> IMPORTANT: You must install [translate-shell](https://github.com/soimort/translate-shell) first.
+
+A script that currently automates the translation of `ab-elements-app` into 4 different languages (i.e. english, french, russian and spanish)
+
+> GOOD-TO-KNOW: [next-intl](https://https://next-intl-docs.vercel.app/) is currently used for internationalization of `ab-elements-app`.
+
+To translate the ab-elements-app ~~**strings**~~ **messages** to another language (say, french **`fr`**), use the **`ab_translator.mjs`** node script by running the code below in your terminal:
+
+```sh
+node ab_translator.mjs messages fr
+```
+
+<!-- TODO: tnsert Gif here -->
+
+
+> NOTE: The source file (e.g. `fr.json`) should be updated afterwards to fix typos and/or adapt the texts accordingly.
+
+## TODOs
+
+- [x] Create the project-specific logos
+- [ ] Add localization / internationalization (at least: **en**, **fr**, **ru** and **es**)
+- [ ] Create a `ab-nextjs-core` **npm** package
+- [ ] Create a `ab-nextjs-animations` **npm** package
+- [ ] Create a `ab-nextjs-theme` **npm** package
+- [x] Create a `ab-nextjs-components` **npm** package
+
+
+
 ## Learn More abElements
 
 To learn more about **`abElements`**, take a look at the following resources:
