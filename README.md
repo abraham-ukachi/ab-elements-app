@@ -288,7 +288,7 @@ node ab_translator.mjs messages fr
 - [ ] Add localization / internationalization (at least: **en**, **fr**, **ru** and **es**)
 - [x] 🌱 Create a `ab-nextjs-core` **npm** package
 - [x] 💫 Create a `ab-nextjs-animations` **npm** package
-- [ ] 🎨 Create a `ab-nextjs-theme` **npm** package
+- [x] 🎨 Create a `ab-nextjs-theme` **npm** package
 - [x] 📦 Create a `ab-nextjs-components` **npm** package
 - [x] ✏️  Create a `ab-nextjs-fonts` **npm** package
 - [ ] ⭐️ Create a `ab-nextjs-icons` **npm** package
