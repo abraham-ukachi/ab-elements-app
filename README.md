@@ -286,12 +286,13 @@ node ab_translator.mjs messages fr
 
 - [x] Create the project-specific logos
 - [ ] Add localization / internationalization (at least: **en**, **fr**, **ru** and **es**)
-- [ ] Create a `ab-nextjs-core` **npm** package
-- [x] Create a `ab-nextjs-animations` **npm** package
-- [ ] Create a `ab-nextjs-theme` **npm** package
-- [x] Create a `ab-nextjs-components` **npm** package
-- [x] Create a `ab-nextjs-fonts` **npm** package
-- [ ] Create a `ab-nextjs-icons` **npm** package
+- [x] 🌱 Create a `ab-nextjs-core` **npm** package
+- [x] 💫 Create a `ab-nextjs-animations` **npm** package
+- [ ] 🎨 Create a `ab-nextjs-theme` **npm** package
+- [x] 📦 Create a `ab-nextjs-components` **npm** package
+- [x] ✏️  Create a `ab-nextjs-fonts` **npm** package
+- [ ] ⭐️ Create a `ab-nextjs-icons` **npm** package
+- [ ] 🪝 Create a `ab-nextjs-hooks` **npm** package
 
 
 
