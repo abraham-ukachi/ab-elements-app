@@ -292,7 +292,7 @@ node ab_translator.mjs messages fr
 - [x] 📦 Create a `ab-nextjs-components` **npm** package
 - [x] ✏️  Create a `ab-nextjs-fonts` **npm** package
 - [x] ⭐️ Create a `ab-nextjs-icons` **npm** package
-- [ ] 🪝 Create a `ab-nextjs-hooks` **npm** package
+- [x] 🪝 Create a `ab-nextjs-hooks` **npm** package
 
 
 
