@@ -166,13 +166,13 @@ src
 │   │   │       │   ├── index.tsx
 │   │   │       │   └── styles.module.css
 │   │   │       └── ... 
-│   │   ├── core # <- DEPRECATED: using `ab-nextjs-components` instead ;)
+│   │   ├── core # <- DEPRECATED: using `ab-nextjs-core` instead ;)
 │   │   │   └── server
 │   │   │       ├── ab-app-layout
 │   │   │       ├── ab-aside-layout
 │   │   │       └── ab-main-layout
 │   │   ├── globals.css
-│   │   ├── hooks
+│   │   ├── hooks # <- DEPRECATED: using `ab-nextjs-hooks` instead ;)
 │   │   │   ├── index.ts
 │   │   │   └── useElement.ts
 │   │   ├── layout.tsx
@@ -293,6 +293,19 @@ node ab_translator.mjs messages fr
 - [x] ✏️  Create a `ab-nextjs-fonts` **npm** package
 - [x] ⭐️ Create a `ab-nextjs-icons` **npm** package
 - [x] 🪝 Create a `ab-nextjs-hooks` **npm** package
+
+
+## Inspirations
+
+The design & development of this project was inspired by the following:
+
+| Name | Type | Inspired By |
+|:-----|:-----|:------------|
+| [*`tailwindcss.com`*](https://tailwindcss.com/) | **`Framework`** | website, documentation, ui, search |
+| [*`catalyst`*](https://tailwindui.com/templates/catalyst) | **`UI Kit`** | ui, components, documentation |
+| [*`google fonts`*](https://fonts.google.com/icons) | **`Icons/Symbols`** | search, layout, icons/symbols |
+
+> NOTE: The above **`catalyst`** UI kit is currently *€129* (plus local taxes), but `abElements` is 100% free and always will be ;)
 
 
 
