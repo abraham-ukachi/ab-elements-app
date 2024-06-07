@@ -1,7 +1,7 @@
 /* 
 * @license MIT
 * ~~~~~~~~~~~~
-* lesyeuxdoux
+* ab-elements-app
 * ~~~~~~~~~~~~
 * Copyright (c) 2024 Abraham Ukachi. The abElements Project.
 *
