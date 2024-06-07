@@ -1,0 +1,96 @@
+{
+  "name": "abElements",
+  "short_name": "ab-elements",
+  "description": "A lightweight library of 100% free UI elements for your Next.js, React, Vue, Lit and Flutter projects, created with ❤️  by Abraham UKachi.",
+  "id": "/?homescreen=1",
+  "start_url": "/?homescreen=1",
+  "display": "standalone",
+  "display_override": [ "fullscreen", "minimal-ui"],
+  "display-override": [ "fullscreen", "minimal-ui"],
+  "theme_color": "#A67C52",
+  "background_color": "#A67C52",
+  "orientation": "portrait-primary",
+
+  "protocol_handlers": [
+    {
+      "protocol": "web+core",
+      "url": "/core/%s"
+    },
+    {
+      "protocol": "web+components",
+      "url": "/components/%s"
+    },
+    {
+      "protocol": "web+fonts",
+      "url": "/fonts/%s"
+    },
+    {
+      "protocol": "web+animations",
+      "url": "/animations/%s"
+    },
+    {
+      "protocol": "web+theme",
+      "url": "/theme/%s"
+    },
+    {
+      "protocol": "web+icons",
+      "url": "/icons/%s"
+    },
+    {
+      "protocol": "web+hooks",
+      "url": "/hooks/%s"
+    }
+
+  ],
+
+  "icons": [
+    {
+        "src": "assets/images/manifest/squircle/icon-48x48.png",
+        "sizes": "48x48",
+        "type": "image/png"
+    },
+    {
+      "src": "assets/images/manifest/squircle/icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png"
+    },
+    {
+
+      "src": "assets/images/manifest/squircle/icon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+
+      "src": "assets/images/manifest/squircle/icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/images/manifest/squircle/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/images/manifest/squircle/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+
+  "screenshots": [
+    {
+      "src": "assets/images/screenshots/mobile_screenshot_light.png",
+      "sizes": "430x932",
+      "type": "image/png",
+      "form_factor": "narrow"
+    },
+
+    {
+      "src": "assets/images/screenshots/laptop_screenshot_light.png",
+      "sizes": "1024x720",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ]
+}
