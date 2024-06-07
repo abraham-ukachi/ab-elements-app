@@ -8,7 +8,7 @@
 
 
 <p align="center" style="width:512px; margin:0 auto;">
-  <b>abElements</b> is a lightweight library of 100% free UI elements for all your Next.js, React, Polymer, Lit and Flutter projects.
+  <b>abElements</b> is a lightweight library of 100% free UI elements for all your Next.js, React, Vue, Lit and Flutter projects.
 </p>
 
 <p align="center" style="margin-top:12px;">
