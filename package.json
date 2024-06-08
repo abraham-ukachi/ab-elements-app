@@ -10,7 +10,7 @@
     "elements",
     "nextjs",
     "react",
-    "polymer",
+    "vue",
     "lit",
     "flutter",
     "components",
@@ -18,7 +18,7 @@
     "ukachi",
     "ab-nextjs-components",
     "ab-react-components",
-    "ab-polymer-components",
+    "ab-vue-components",
     "ab-lit-components",
     "ab-flutter-components"
   ],
