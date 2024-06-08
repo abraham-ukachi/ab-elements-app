@@ -286,6 +286,8 @@ node ab_translator.mjs messages fr
 
 - [x] Create the project-specific logos
 - [ ] Add localization / internationalization (at least: **en**, **fr**, **ru** and **es**)
+
+### Next.JS - TODOs
 - [x] 🌱 Create a `ab-nextjs-core` **npm** package
 - [x] 💫 Create a `ab-nextjs-animations` **npm** package
 - [x] 🎨 Create a `ab-nextjs-theme` **npm** package
@@ -294,6 +296,41 @@ node ab_translator.mjs messages fr
 - [x] ⭐️ Create a `ab-nextjs-icons` **npm** package
 - [x] 🪝 Create a `ab-nextjs-hooks` **npm** package
 
+### React - TODOs
+- [ ] 🌱 Create a `ab-react-core` **npm** package
+- [ ] 💫 Create a `ab-react-animations` **npm** package
+- [ ] 🎨 Create a `ab-react-theme` **npm** package
+- [ ] 📦 Create a `ab-react-components` **npm** package
+- [ ] ✏️  Create a `ab-react-fonts` **npm** package
+- [ ] ⭐️ Create a `ab-react-icons` **npm** package
+- [ ] 🪝 Create a `ab-react-hooks` **npm** package
+
+### Vue - TODOs
+- [ ] 🌱 Create a `ab-vue-core` **npm** package
+- [ ] 💫 Create a `ab-vue-animations` **npm** package
+- [ ] 🎨 Create a `ab-vue-theme` **npm** package
+- [ ] 📦 Create a `ab-vue-components` **npm** package
+- [ ] ✏️  Create a `ab-vue-fonts` **npm** package
+- [ ] ⭐️ Create a `ab-vue-icons` **npm** package
+- [ ] 🪝 Create a `ab-vue-hooks` **npm** package
+
+### Lit - TODOs
+- [ ] 🌱 Create a `ab-lit-core` **npm** package
+- [ ] 💫 Create a `ab-lit-animations` **npm** package
+- [ ] 🎨 Create a `ab-lit-theme` **npm** package
+- [ ] 📦 Create a `ab-lit-components` **npm** package
+- [ ] ✏️  Create a `ab-lit-fonts` **npm** package
+- [ ] ⭐️ Create a `ab-lit-icons` **npm** package
+- [ ] 🪝 Create a `ab-lit-hooks` **npm** package
+
+### Flutter - TODOs
+- [ ] 🌱 Create a `ab-flutter-core` **npm** package
+- [ ] 💫 Create a `ab-flutter-animations` **npm** package
+- [ ] 🎨 Create a `ab-flutter-theme` **npm** package
+- [ ] 📦 Create a `ab-flutter-components` **npm** package
+- [ ] ✏️  Create a `ab-flutter-fonts` **npm** package
+- [ ] ⭐️ Create a `ab-flutter-icons` **npm** package
+- [ ] 🪝 Create a `ab-flutter-hooks` **npm** package
 
 ## Inspirations
 
