@@ -89,7 +89,31 @@ export const StaticMetadata: Metadata = {
 
   /* App Icons */
   icons: {
-    icon: [ {url: IMAGES_DIR + '/favicon.ico'} ],
+
+    icon: [ 
+
+      { url: IMAGES_DIR + '/favicon.ico' },
+
+      {
+        rel: 'icon',
+        type: 'image/png',
+        sizes: '32x32',
+        media: '(prefers-color-scheme: light)',
+        url: IMAGES_DIR + '/favicon-light.png',
+        href: IMAGES_DIR + '/favicon-light.png',
+      },
+
+      {
+        rel: 'icon',
+        type: 'image/png',
+        sizes: '32x32',
+        media: '(prefers-color-scheme: dark)',
+        url: IMAGES_DIR + '/favicon-dark.png',
+        href: IMAGES_DIR + '/favicon-dark.png',
+      },
+
+    ],
+
     shortcut: [ IMAGES_DIR + '/shortcut-icon.png' ],
     apple: [
       { url: MANIFEST_DIR + '/squircle' + '/icon-48x48.png' },
