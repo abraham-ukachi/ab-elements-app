@@ -7,8 +7,8 @@
   "display": "standalone",
   "display_override": [ "fullscreen", "minimal-ui"],
   "display-override": [ "fullscreen", "minimal-ui"],
-  "theme_color": "#A67C52",
-  "background_color": "#A67C52",
+  "theme_color": "#201a17",
+  "background_color": "#201a17",
   "orientation": "portrait-primary",
 
   "protocol_handlers": [
