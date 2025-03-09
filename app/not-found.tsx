@@ -64,7 +64,7 @@ import { permanentRedirect } from 'next/navigation';
  *
  * @returns { Promise<ReactElement> }
  */
-export default async function NotFoundPage(): Promise<ReactElement> {
+export default async function NotFoundPage(): Promise<ReactElement<any>> {
   return permanentRedirect('/');
 };
 
