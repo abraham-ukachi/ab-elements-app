@@ -37,6 +37,7 @@
   "engines": {
     "node": ">=24"
   },
+  "packageManager": "pnpm@11.3.0",
   "dependencies": {
     "ab-nextjs-animations": "^0.2.1",
     "ab-nextjs-components": "^0.1.4",
