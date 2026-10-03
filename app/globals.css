@@ -1,10 +1,7 @@
 @import "tailwindcss";
 
-/* the Ab theme colors & typography
- * NOTE: `ab-nextjs-theme/styles.css` isn't imported (yet) because its `css/styles.css`
- *       points at images & spinners that aren't shipped in the npm package (0.2.9). */
-@import "ab-nextjs-theme/css/colors.css";
-@import "ab-nextjs-theme/css/typography.css";
+/* the full Ab theme (colors, typography & styles) from `ab-nextjs-theme` */
+@import "ab-nextjs-theme/styles.css";
 /* the Inter font from `ab-nextjs-fonts` */
 @import "ab-nextjs-fonts/inter/styles.css";
 
