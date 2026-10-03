@@ -126,13 +126,13 @@ pnpm add ab-nextjs-fonts ab-nextjs-icons ab-nextjs-animations ab-nextjs-theme ab
 
 | No. | Package | Version | Role in abElements | Entry file | Status |
 |:----|:--------|:--------|:-------------------|:-----------|:-------|
-| 1 | ✏️ [`ab-nextjs-fonts`](https://github.com/abraham-ukachi/ab-nextjs-fonts) | ^0.2.3 | All app typefaces (Inter, Mulish, Quicksand, Roboto, Zilla Slab) instead of `next/font/google`. | [index.ts](https://github.com/abraham-ukachi/ab-nextjs-fonts/blob/main/index.ts) | Done |
-| 2 | ⭐️ [`ab-nextjs-icons`](https://github.com/abraham-ukachi/ab-nextjs-icons) | ^0.1.4 | Sidebar, bottom bar, card and action icons; Ab / AbElements logos. | [src/index.ts](https://github.com/abraham-ukachi/ab-nextjs-icons/blob/main/src/index.ts) | Done |
-| 3 | 💫 [`ab-nextjs-animations`](https://github.com/abraham-ukachi/ab-nextjs-animations) | ^0.2.1 | Balloon pop, sheet/aside slides, fades; turned off by **reduced motion**. | [index.ts](https://github.com/abraham-ukachi/ab-nextjs-animations/blob/main/index.ts) | Done |
-| 4 | 🎨 [`ab-nextjs-theme`](https://github.com/abraham-ukachi/ab-nextjs-theme) | ^0.2.9 | Color tokens (light / dark + medium & high contrast), typography, CSS variables; accent color + density. | [styles.css](https://github.com/abraham-ukachi/ab-nextjs-theme/blob/main/styles.css) | Done |
-| 5 | 🪝 [`ab-nextjs-hooks`](https://github.com/abraham-ukachi/ab-nextjs-hooks) | ^0.1.2 | Theme, dialogs (Cmd/Ctrl+K), menus, toasts, toggles, auth/user helpers. | [index.ts](https://github.com/abraham-ukachi/ab-nextjs-hooks/blob/main/index.ts) | Done |
-| 6 | 🌱 [`ab-nextjs-core`](https://github.com/abraham-ukachi/ab-nextjs-core) | ^0.1.2 | App / Screen / Main / Aside layouts (server + client), page provider, linear progress. | [index.ts](https://github.com/abraham-ukachi/ab-nextjs-core/blob/main/index.ts) | Done |
-| 7 | 🧱 [`ab-nextjs-components`](https://github.com/abraham-ukachi/ab-nextjs-components) | ^0.1.4 | Sidebar, navbar, searchbar, buttons, inputs, tabs, avatar, badge, balloon, demo box/code... | [index.ts](https://github.com/abraham-ukachi/ab-nextjs-components/blob/main/index.ts) | Done |
+| 1 | ✏️ [`ab-nextjs-fonts`](https://github.com/abraham-ukachi/ab-nextjs-fonts) | ^0.2.4 | All app typefaces (Inter, Mulish, Quicksand, Roboto, Zilla Slab) instead of `next/font/google`. | [index.ts](https://github.com/abraham-ukachi/ab-nextjs-fonts/blob/main/index.ts) | Done |
+| 2 | ⭐️ [`ab-nextjs-icons`](https://github.com/abraham-ukachi/ab-nextjs-icons) | ^0.1.5 | Sidebar, bottom bar, card and action icons; Ab / AbElements logos. | [src/index.ts](https://github.com/abraham-ukachi/ab-nextjs-icons/blob/main/src/index.ts) | Done |
+| 3 | 💫 [`ab-nextjs-animations`](https://github.com/abraham-ukachi/ab-nextjs-animations) | ^0.2.2 | Balloon pop, sheet/aside slides, fades; turned off by **reduced motion**. | [index.ts](https://github.com/abraham-ukachi/ab-nextjs-animations/blob/main/index.ts) | Done |
+| 4 | 🎨 [`ab-nextjs-theme`](https://github.com/abraham-ukachi/ab-nextjs-theme) | ^0.2.10 | Color tokens (light / dark + medium & high contrast), typography, CSS variables; accent color + density. | [styles.css](https://github.com/abraham-ukachi/ab-nextjs-theme/blob/main/styles.css) | Done |
+| 5 | 🪝 [`ab-nextjs-hooks`](https://github.com/abraham-ukachi/ab-nextjs-hooks) | ^0.1.3 | Theme, dialogs (Cmd/Ctrl+K), menus, toasts, toggles, auth/user helpers. | [index.ts](https://github.com/abraham-ukachi/ab-nextjs-hooks/blob/main/index.ts) | Done |
+| 6 | 🌱 [`ab-nextjs-core`](https://github.com/abraham-ukachi/ab-nextjs-core) | ^0.1.3 | App / Screen / Main / Aside layouts (server + client), page provider, linear progress. | [index.ts](https://github.com/abraham-ukachi/ab-nextjs-core/blob/main/index.ts) | Done |
+| 7 | 🧱 [`ab-nextjs-components`](https://github.com/abraham-ukachi/ab-nextjs-components) | ^0.1.5 | Sidebar, navbar, searchbar, buttons, inputs, tabs, avatar, badge, balloon, demo box/code... | [index.ts](https://github.com/abraham-ukachi/ab-nextjs-components/blob/main/index.ts) | Done |
 | 8 | 🌍 `ab-nextjs-i18n` | - | Locales + messages for the **Language** setting (en, fr, es, ru), replacing the old `next-intl` + `ab_translator.mjs` plan. | *to be created* | Pending |
 
 
@@ -193,7 +193,7 @@ Environment variables (planned, for auth + database; never commit them):
 ```sh
 .
 ├── app
-│   ├── globals.css          # Tailwind v4 + ab-nextjs-theme colors/typography + ab-nextjs-fonts Inter
+│   ├── globals.css          # Tailwind v4 + ab-nextjs-theme styles.css + ab-nextjs-fonts Inter
 │   ├── layout.tsx           # no-flash theme script, lang from APP_LANG
 │   ├── manifest.ts          # web app manifest (/manifest.webmanifest)
 │   ├── metadata.ts
