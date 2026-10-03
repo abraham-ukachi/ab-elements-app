@@ -2,5 +2,6 @@
 allowBuilds:
   sharp: true
   unrs-resolver: true
+# our own Ab packages are trusted, so fresh releases skip pnpm's minimum release age
 minimumReleaseAgeExclude:
-  - ab-nextjs-theme@0.2.9
+  - ab-nextjs-*
