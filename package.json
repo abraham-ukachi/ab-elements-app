@@ -1,7 +1,7 @@
 {
   "name": "ab-elements-app",
   "version": "0.2.3",
-  "description": "A lightweight library of 100% free UI elements for your Next.js, React, Vue, Lit and Flutter projects, created with ❤️  by Abraham Ukachi.",
+  "description": "abElements is the home of every Ab package: docs, live examples, and an installable PWA, built with the same packages it documents.",
   "private": true,
   "homepage": "https://ab-elements.vercel.app/",
   "keywords": [

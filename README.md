@@ -193,16 +193,16 @@ Environment variables (planned, for auth + database; never commit them):
 ```sh
 .
 ├── app
-│   ├── [...rest]/page.tsx   # catch-all -> notFound()
-│   ├── globals.css
-│   ├── layout.tsx
+│   ├── globals.css          # Tailwind v4 + ab-nextjs-theme colors/typography + ab-nextjs-fonts Inter
+│   ├── layout.tsx           # no-flash theme script, lang from APP_LANG
+│   ├── manifest.ts          # web app manifest (/manifest.webmanifest)
 │   ├── metadata.ts
-│   ├── not-found.tsx        # currently redirects to "/" (Coming Soon)
+│   ├── not-found.tsx        # simple 404 (full design still pending)
 │   ├── page.tsx             # Coming Soon page
 │   └── viewport.ts
-├── public                   # logos, favicons, PWA icons, manifest.json, screenshots
+├── public                   # logos, favicons, PWA icons, screenshots
 ├── eslint.config.mjs
-├── next.config.mjs
+├── next.config.ts
 ├── package.json
 ├── pnpm-workspace.yaml
 ├── postcss.config.mjs
@@ -431,7 +431,7 @@ These are some of the things we did or plan to do, in addition to this project's
 | 6 | *`Slide From Left - Animation`* | [slide-from-left/styles.css](https://github.com/abraham-ukachi/ab-nextjs-animations/blob/main/slide-from-left/styles.css) | Done |
 | 7 | *`Slide Right - Animation`* | [slide-right/styles.css](https://github.com/abraham-ukachi/ab-nextjs-animations/blob/main/slide-right/styles.css) | Done |
 | 8 | *`Slide From Right - Animation`* | [slide-from-right/styles.css](https://github.com/abraham-ukachi/ab-nextjs-animations/blob/main/slide-from-right/styles.css) | Done |
-| 9 | *`Manifest - JSON File`* | [public/manifest.json](./public/manifest.json) | Done\* |
+| 9 | *`Web App Manifest - File`* | [app/manifest.ts](./app/manifest.ts) | Done\* |
 | 10 | *`Package - JSON File`* | [package.json](./package.json) | Done\* |
 | 11 | *`Fade Out - Animation`* | [fade-out/styles.css](https://github.com/abraham-ukachi/ab-nextjs-animations/blob/main/fade-out/styles.css) | Done |
 | 12 | *`Slide Down - Animation`* | [slide-down/styles.css](https://github.com/abraham-ukachi/ab-nextjs-animations/blob/main/slide-down/styles.css) | Done |
