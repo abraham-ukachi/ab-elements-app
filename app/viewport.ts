@@ -46,24 +46,32 @@
 // import the Viewport type from `next`
 import type { Viewport } from 'next';
 
-/* TODDO: do something w/ the Viewport type here ;) */
+// import the Ab theme's material colors from `ab-nextjs-theme`
+import materialTheme from 'ab-nextjs-theme/material-theme.json';
 
-export { Viewport };
+
+export type { Viewport };
+
+
+// create and export the theme colors used by the browser UI as `THEME_COLORS`
+export const THEME_COLORS = {
+  light: materialTheme.schemes.light.background,
+  dark: materialTheme.schemes.dark.background,
+} as const;
 
 
 // create and export abElements' root static viewport as `StaticViewport`
+// NOTE: zooming stays allowed on purpose (no `maximumScale` / `userScalable`) for a11y ;)
 export const StaticViewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
-  
+
   /* Color Scheme */
-  colorScheme: 'light',
+  colorScheme: 'light dark',
 
   /* Theme Color */
   themeColor: [
-    { media: '(prefers-color-scheme: light', color: '#8B5000' },
-    { media: '(prefers-color-scheme: dark', color: '#FFB86B' },
+    { media: '(prefers-color-scheme: light)', color: THEME_COLORS.light },
+    { media: '(prefers-color-scheme: dark)', color: THEME_COLORS.dark },
   ],
-}
+};

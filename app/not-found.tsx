@@ -43,28 +43,46 @@
 * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 */
 
+
 // REACT types
 import type { ReactElement } from 'react';
-// REACT hooks
-// REACT components
-
 // NEXT types
+import type { Metadata } from 'next';
 // NEXT components
-// NEXT hooks
-import { permanentRedirect } from 'next/navigation';
+import Link from 'next/link';
+
+
+// the 404 page's own metadata (uses the root title template)
+export const metadata: Metadata = {
+  title: 'Page not found',
+};
 
 
 /**
  * `NotFound` / 404 - Page
  *
- * This component is used to render the 404 abElements page.
+ * This component renders the real 404 abElements page.
+ * Next.js serves it (with a 404 status) for every unmatched URL and every `notFound()` call.
  *
- * > HACK: However, we are redirecting all traffic to home/comingSoon page. 
- *         This is a temporary solution until we are ready for products and/or have a proper 404 page ;)
- *
- * @returns { Promise<ReactElement> }
+ * @returns { ReactElement }
  */
-export default async function NotFoundPage(): Promise<ReactElement<any>> {
-  return permanentRedirect('/');
-};
+export default function NotFoundPage(): ReactElement {
+  return (
+    <main className="flex flex-col w-full h-dvh items-center justify-center gap-4 p-6 text-center">
 
+      {/* Status Code */}
+      <p className="font-inter-bold text-6xl lg:text-8xl text-(--md-sys-color-primary)">404</p>
+
+      {/* Title */}
+      <h1 className="font-inter-medium text-xl lg:text-3xl">This page could not be found.</h1>
+
+      {/* Home - Link */}
+      <Link
+        href="/"
+        className="text-(--md-sys-color-primary) hover:underline decoration-dashed underline-offset-4">
+        Back to abElements
+      </Link>
+
+    </main>
+  );
+};

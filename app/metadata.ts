@@ -53,6 +53,13 @@ export const IMAGES_DIR: string = '/assets/images';
 export const MANIFEST_DIR: string = '/assets/images/manifest';
 
 
+// create and export abElements' shared copy as `APP_DESCRIPTION` (used by the metadata & the web app manifest)
+export const APP_DESCRIPTION: string = 'abElements is the home of every Ab package: docs, live examples, and an installable PWA, built with the same packages it documents.';
+
+// create and export the document language as `APP_LANG` (set `NEXT_PUBLIC_APP_LANG` to override; `en` by default)
+export const APP_LANG: string = process.env.NEXT_PUBLIC_APP_LANG || 'en';
+
+
 export { Metadata };
 
 // create and export abElements' root static metadata as `StaticMetadata`
@@ -67,10 +74,7 @@ export const StaticMetadata: Metadata = {
   },
 
   /* App Description */
-  description: 'A lightweight library of 100% free UI elements for your Next.js, React, Vue, Lit and Flutter projects, created with ❤️  by Abraham UKachi.',
-
-  /* JSON Manifest file */
-  manifest: '/manifest.json',
+  description: APP_DESCRIPTION,
 
   /* Generator 4 SEO */
   generator: 'abElements',
@@ -79,7 +83,7 @@ export const StaticMetadata: Metadata = {
   referrer: 'origin-when-cross-origin',
 
   /* Keywords */
-  keywords: [ "nextjs", "react", "vue", "lit", "flutter", "components", "free", "ui", "open-source", "ab-elements", "abraham", "ukachi", "ab-nextjs-components", "ab-react-components", "ab-vue-components", "ab-lit-components", "ab-flutter-components" ],
+  keywords: [ "nextjs", "react", "components", "free", "ui", "open-source", "pwa", "ab-elements", "abraham", "ukachi", "ab-nextjs-fonts", "ab-nextjs-icons", "ab-nextjs-animations", "ab-nextjs-theme", "ab-nextjs-hooks", "ab-nextjs-core", "ab-nextjs-components" ],
  
   /* Apple Web App - ...add to homescreen for Safari on iOS */
   appleWebApp: {
