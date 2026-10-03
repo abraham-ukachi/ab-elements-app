@@ -2,14 +2,5 @@
 allowBuilds:
   sharp: true
   unrs-resolver: true
-
 minimumReleaseAgeExclude:
-  - eslint@10.12.0
-
-# ab-nextjs-theme@0.2.8 was published with `file:../ab-nextjs-*` dependencies,
-# which can't resolve from the registry. Point them at the published packages
-# until a fixed theme release is out.
-overrides:
-  ab-nextjs-theme>ab-nextjs-fonts: ^0.2.3
-  ab-nextjs-theme>ab-nextjs-icons: ^0.1.4
-  ab-nextjs-theme>ab-nextjs-animations: ^0.2.1
+  - ab-nextjs-theme@0.2.9
