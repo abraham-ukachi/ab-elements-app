@@ -78,7 +78,7 @@ Based on the approved UI/UX designs (light + dark, mobile, tablet, laptop and de
 | 9 | *`404`* | `not-found.tsx` | Big "404", "Did you mean `/docs/components/button`?", search, **Back to home** / **Browse docs**, suggested + popular pages. | `AbSearchbar`, `AbButton` |
 | 10 | *`Cmd/Ctrl + K`* | overlay (not a route) | Command palette: grouped results (Components, Props, Guides), filters, recent searches, keyboard hints. On mobile it opens from the **Search** tab as a full screen. | `AbSearchbar`, `AbSearchResult`, `useAbDialog` |
 
-> NOTE: The mockups are private drafts and are intentionally **not** linked here.
+> NOTE: A selection of the approved mockups is shown in [Screenshots](#screenshots-); the full set stays in the private design workspace.
 
 
 ### Responsive PWA shell 📐
@@ -192,6 +192,8 @@ Environment variables (planned, for auth + database; never commit them):
 
 ```sh
 .
+├── .github
+│   └── screenshots          # README mockups (mobile/ & laptop/, light & dark)
 ├── app
 │   ├── globals.css          # Tailwind v4 + ab-nextjs-theme styles.css + ab-nextjs-fonts Inter
 │   ├── layout.tsx           # no-flash theme script, lang from APP_LANG
@@ -556,6 +558,37 @@ To learn more about **`abElements`**, take a look at the following resources:
 - [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
 
 You can check out [the abElements GitHub repository](https://github.com/abraham-ukachi/ab-elements-app) for more details.
+
+
+---
+
+
+## Screenshots 📸
+
+A selection of the approved abElements designs (concept mockups, not production captures yet), in ☀️ light and 🌙 dark.
+
+### On Mobile
+
+| Light Mode | Dark Mode | Tags |
+|:-----------|:----------|:-----|
+| ![Splash Screen - Mobile - Light / Mockup](./.github/screenshots/mobile/splash-screen-mobile-light.png) | ![Splash Screen - Mobile - Dark / Mockup](./.github/screenshots/mobile/splash-screen-mobile-dark.png) | **Splash**: logo + progress bar <br/> #splash, #screen, #design, #concept |
+| ![Welcome Screen - Mobile - Light / Mockup](./.github/screenshots/mobile/welcome-screen-mobile-light.png) | ![Welcome Screen - Mobile - Dark / Mockup](./.github/screenshots/mobile/welcome-screen-mobile-dark.png) | **Welcome**: onboarding sheet + Get Started <br/> #welcome, #screen, #design, #concept |
+| ![Home Page - Mobile - Light / Mockup](./.github/screenshots/mobile/home-page-mobile-light.png) | ![Home Page - Mobile - Dark / Mockup](./.github/screenshots/mobile/home-page-mobile-dark.png) | **Home**: install snippet + packages <br/> #home, #page, #design, #concept |
+| ![Login Page - Mobile - Light / Mockup](./.github/screenshots/mobile/login-page-mobile-light.png) | ![Login Page - Mobile - Dark / Mockup](./.github/screenshots/mobile/login-page-mobile-dark.png) | **Login**: password, magic link or GitHub <br/> #login, #page, #user, #design |
+| ![Settings Page - Mobile - Light / Mockup](./.github/screenshots/mobile/settings-page-mobile-light.png) | ![Settings Page - Mobile - Dark / Mockup](./.github/screenshots/mobile/settings-page-mobile-dark.png) | **Settings**: appearance, accessibility & docs prefs <br/> #settings, #page, #user, #design |
+
+
+### On Laptop
+
+| Light Mode | Dark Mode | Tags |
+|:-----------|:----------|:-----|
+| ![Home Page - Laptop - Light / Mockup](./.github/screenshots/laptop/home-page-laptop-light.png) | ![Home Page - Laptop - Dark / Mockup](./.github/screenshots/laptop/home-page-laptop-dark.png) | **Home**: docs catalog <br/> #home, #page, #design, #concept |
+| ![Docs Page - Laptop - Light / Mockup](./.github/screenshots/laptop/docs-page-laptop-light.png) | ![Docs Page - Laptop - Dark / Mockup](./.github/screenshots/laptop/docs-page-laptop-dark.png) | **Docs**: preview, code + On This Page <br/> #docs, #page, #design, #concept |
+| ![Profile Page - Laptop - Light / Mockup](./.github/screenshots/laptop/profile-page-laptop-light.png) | ![Profile Page - Laptop - Dark / Mockup](./.github/screenshots/laptop/profile-page-laptop-dark.png) | **Profile**: accounts, bookmarks & recents <br/> #profile, #page, #user, #design |
+| ![Cmd/Ctrl + K Overlay - Laptop - Light / Mockup](./.github/screenshots/laptop/cmdk-overlay-laptop-light.png) | ![Cmd/Ctrl + K Overlay - Laptop - Dark / Mockup](./.github/screenshots/laptop/cmdk-overlay-laptop-dark.png) | **`Ctrl/⌘ + K`**: command palette <br/> #search, #overlay, #design, #concept |
+| ![404 Page - Laptop - Light / Mockup](./.github/screenshots/laptop/404-page-laptop-light.png) | ![404 Page - Laptop - Dark / Mockup](./.github/screenshots/laptop/404-page-laptop-dark.png) | **404**: "Did you mean...?" + search <br/> #404, #page, #design, #concept |
+
+> NOTE: The full set of mockups (incl. register, tablet & desktop) stays in the private design workspace.
 
 
 ---
