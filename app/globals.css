@@ -1,31 +1,24 @@
 @import "tailwindcss";
 
-:root {
-  --foreground-rgb: 131, 117, 105; /* b4: 0, 0, 0 */
-  --background-start-rgb: 228, 228, 228; /* b4: 214, 219, 220 */
-  --background-end-rgb: 255, 255, 255;
-}
+/* the Ab theme colors & typography
+ * NOTE: `ab-nextjs-theme/styles.css` isn't imported (yet) because its `css/styles.css`
+ *       points at images & spinners that aren't shipped in the npm package (0.2.9). */
+@import "ab-nextjs-theme/css/colors.css";
+@import "ab-nextjs-theme/css/typography.css";
+/* the Inter font from `ab-nextjs-fonts` */
+@import "ab-nextjs-fonts/inter/styles.css";
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 158, 142, 129; /* b4: 255, 255, 255 */
-    --background-start-rgb: 32, 26, 23; /* b4: 0, 0, 0 */
-    --background-end-rgb: 32, 26, 23; /* b4: 0, 0, 0 */
-  }
+
+/* follow the Ab theme set on `<html>` (`.dark` / `.light`) instead of the media query */
+@custom-variant dark (&:where(.dark, .dark *));
+
+
+/* Ab theme defaults while the theme script hasn't run (e.g. no JS) */
+:root {
+  color-scheme: light dark;
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-}
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+  background-color: var(--md-sys-color-background, light-dark(#FFF8F5, #19120C));
+  color: var(--md-sys-color-on-background, light-dark(#211A14, #EFE0D5));
 }
