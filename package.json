@@ -40,10 +40,10 @@
   "packageManager": "pnpm@11.3.0",
   "dependencies": {
     "ab-nextjs-animations": "^0.2.2",
-    "ab-nextjs-components": "^0.1.5",
-    "ab-nextjs-core": "^0.1.3",
+    "ab-nextjs-components": "^0.1.7",
+    "ab-nextjs-core": "^0.1.5",
     "ab-nextjs-fonts": "^0.2.4",
-    "ab-nextjs-hooks": "^0.1.3",
+    "ab-nextjs-hooks": "^0.1.4",
     "ab-nextjs-icons": "^0.1.5",
     "ab-nextjs-theme": "^0.2.10",
     "clsx": "^2.1.1",
