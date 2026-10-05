@@ -12,8 +12,8 @@ importers:
         specifier: ^0.2.2
         version: 0.2.2(next@16.3.4(@babel/core@7.29.7)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       ab-nextjs-components:
-        specifier: ^0.1.7
-        version: 0.1.7(ab-nextjs-animations@0.2.2(next@16.3.4(@babel/core@7.29.7)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(ab-nextjs-hooks@0.1.4(next@16.3.4(@babel/core@7.29.7)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(ab-nextjs-icons@0.1.5(next@16.3.4(@babel/core@7.29.7)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(ab-nextjs-theme@0.2.10(next@16.3.4(@babel/core@7.29.7)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(clsx@2.1.1)(next@16.3.4(@babel/core@7.29.7)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+        specifier: ^0.1.8
+        version: 0.1.8(ab-nextjs-animations@0.2.2(next@16.3.4(@babel/core@7.29.7)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(ab-nextjs-hooks@0.1.4(next@16.3.4(@babel/core@7.29.7)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(ab-nextjs-icons@0.1.5(next@16.3.4(@babel/core@7.29.7)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(ab-nextjs-theme@0.3.0(next@16.3.4(@babel/core@7.29.7)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(clsx@2.1.1)(next@16.3.4(@babel/core@7.29.7)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       ab-nextjs-core:
         specifier: ^0.1.5
         version: 0.1.5(clsx@2.1.1)(next@16.3.4(@babel/core@7.29.7)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
@@ -27,8 +27,8 @@ importers:
         specifier: ^0.1.5
         version: 0.1.5(next@16.3.4(@babel/core@7.29.7)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       ab-nextjs-theme:
-        specifier: ^0.2.10
-        version: 0.2.10(next@16.3.4(@babel/core@7.29.7)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+        specifier: ^0.3.0
+        version: 0.3.0(next@16.3.4(@babel/core@7.29.7)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -640,20 +640,6 @@ packages:
     resolution: {integrity: sha512-8eQ9R218XORK+KLosnf4bu/QsUXvUyVwTbArg7/0NMB1Pu87OJKvj4nhFblkYE8gQV73mW1dx1ptlPCkwRGa7A==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
-  ab-nextjs-animations@0.2.1:
-    resolution: {integrity: sha512-zz48J/pWQBdkJ7xEp3oEFthaU21E+jeKKOU5aXrNztt3JZ15EWHmRAQDHp3PrFjojMpJmB0ye492qIkk3ZGm7Q==}
-    peerDependencies:
-      next: 16.3.4
-      react: ^19
-      react-dom: ^19
-    peerDependenciesMeta:
-      next:
-        optional: true
-      react:
-        optional: true
-      react-dom:
-        optional: true
-
   ab-nextjs-animations@0.2.2:
     resolution: {integrity: sha512-E4Zp4iH7xBEirzf3JwzkD3erz6hJYkP22acUd5YJR0PXsAQ2sNMkRIjPMq547TkaCkptiehOw+bXTKqeTtZILQ==}
     peerDependencies:
@@ -668,8 +654,8 @@ packages:
       react-dom:
         optional: true
 
-  ab-nextjs-components@0.1.7:
-    resolution: {integrity: sha512-ljUKc4KYpHf/Fk9J2Gw+cvbWNNIMp5FJcCnBMSlf0J48AQ81hdiwqhfw06wh/NXjrxi89U5G/4LdD/njYthLaA==}
+  ab-nextjs-components@0.1.8:
+    resolution: {integrity: sha512-ctvzBmGWh3JMvM/mIgWYhK06RyDTt/c0NwYKsQcPT9VDcKuCticasKAQbqvvgmxywDWOwbk1xXeR/aaL80Y0UA==}
     peerDependencies:
       ab-nextjs-animations: '*'
       ab-nextjs-hooks: '*'
@@ -697,20 +683,6 @@ packages:
       react: ^19
       react-dom: ^19
 
-  ab-nextjs-fonts@0.2.3:
-    resolution: {integrity: sha512-vrM7JElEsgaiFnfH8SbhR1EYiVeWfsvYIYY2kg6zO5irWKV4fGXsqT2eFrVNy+dvL8GNjibrDQt8DOdlkOYjog==}
-    peerDependencies:
-      next: 16.3.4
-      react: ^19
-      react-dom: ^19
-    peerDependenciesMeta:
-      next:
-        optional: true
-      react:
-        optional: true
-      react-dom:
-        optional: true
-
   ab-nextjs-fonts@0.2.4:
     resolution: {integrity: sha512-TaOUDoFId0Ui8IX9I8LuBE+DhVdtiA5eP7SbytTSJ00QIxwwHaoox2EjEzJMteUBWh0jPIP10CVUk8/fchB9mQ==}
     peerDependencies:
@@ -732,20 +704,6 @@ packages:
       react: ^19
       react-dom: ^19
 
-  ab-nextjs-icons@0.1.4:
-    resolution: {integrity: sha512-tDmr4ZaN6rzLa6frsnV+ZUWCxNeeHUuWoqSaFzkVlMAawR4C/JOk779/wUGcyxYJFoZU52r+KkcpUEAYWup/lQ==}
-    peerDependencies:
-      next: 16.3.4
-      react: ^19.0.0
-      react-dom: ^19.0.0
-    peerDependenciesMeta:
-      next:
-        optional: true
-      react:
-        optional: true
-      react-dom:
-        optional: true
-
   ab-nextjs-icons@0.1.5:
     resolution: {integrity: sha512-Ox5ZrxFVumACYYNhtEhUgg0YsW0NHwEC16wrHmYA30/mrRPn+UrcbFVryDqjGA9ZEGe+80h28BQUBlVISZ7ZxA==}
     peerDependencies:
@@ -760,8 +718,8 @@ packages:
       react-dom:
         optional: true
 
-  ab-nextjs-theme@0.2.10:
-    resolution: {integrity: sha512-QA/pHiUNqBXbFgK+s6mElTMnv/y9lXgpH0HEczR1bkeT3tI3o+8P+0LMetLbeNBO17gh0BKAtKdi7B4XtRBzNw==}
+  ab-nextjs-theme@0.3.0:
+    resolution: {integrity: sha512-/4RovG69V0dLPWela5BKN0VVN3vreDhDJ9Utr40qg/HjByd3wU3eSAPkTGEiGcnfL6Pa511VsR7Zn0GQtR6KgA==}
     peerDependencies:
       next: ^16.3.4
       react: ^19
@@ -2627,19 +2585,13 @@ snapshots:
       '@typescript-eslint/types': 8.71.0
       eslint-visitor-keys: 5.0.1
 
-  ab-nextjs-animations@0.2.1(next@16.3.4(@babel/core@7.29.7)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0):
-    optionalDependencies:
-      next: 16.3.4(@babel/core@7.29.7)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
-      react: 19.3.0
-      react-dom: 19.3.0(react@19.3.0)
-
   ab-nextjs-animations@0.2.2(next@16.3.4(@babel/core@7.29.7)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0):
     optionalDependencies:
       next: 16.3.4(@babel/core@7.29.7)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       react: 19.3.0
       react-dom: 19.3.0(react@19.3.0)
 
-  ab-nextjs-components@0.1.7(ab-nextjs-animations@0.2.2(next@16.3.4(@babel/core@7.29.7)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(ab-nextjs-hooks@0.1.4(next@16.3.4(@babel/core@7.29.7)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(ab-nextjs-icons@0.1.5(next@16.3.4(@babel/core@7.29.7)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(ab-nextjs-theme@0.2.10(next@16.3.4(@babel/core@7.29.7)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(clsx@2.1.1)(next@16.3.4(@babel/core@7.29.7)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0):
+  ab-nextjs-components@0.1.8(ab-nextjs-animations@0.2.2(next@16.3.4(@babel/core@7.29.7)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(ab-nextjs-hooks@0.1.4(next@16.3.4(@babel/core@7.29.7)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(ab-nextjs-icons@0.1.5(next@16.3.4(@babel/core@7.29.7)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(ab-nextjs-theme@0.3.0(next@16.3.4(@babel/core@7.29.7)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(clsx@2.1.1)(next@16.3.4(@babel/core@7.29.7)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0):
     dependencies:
       clsx: 2.1.1
       next: 16.3.4(@babel/core@7.29.7)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
@@ -2649,17 +2601,11 @@ snapshots:
       ab-nextjs-animations: 0.2.2(next@16.3.4(@babel/core@7.29.7)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       ab-nextjs-hooks: 0.1.4(next@16.3.4(@babel/core@7.29.7)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       ab-nextjs-icons: 0.1.5(next@16.3.4(@babel/core@7.29.7)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
-      ab-nextjs-theme: 0.2.10(next@16.3.4(@babel/core@7.29.7)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+      ab-nextjs-theme: 0.3.0(next@16.3.4(@babel/core@7.29.7)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
 
   ab-nextjs-core@0.1.5(clsx@2.1.1)(next@16.3.4(@babel/core@7.29.7)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0):
     dependencies:
       clsx: 2.1.1
-      next: 16.3.4(@babel/core@7.29.7)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
-      react: 19.3.0
-      react-dom: 19.3.0(react@19.3.0)
-
-  ab-nextjs-fonts@0.2.3(next@16.3.4(@babel/core@7.29.7)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0):
-    optionalDependencies:
       next: 16.3.4(@babel/core@7.29.7)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       react: 19.3.0
       react-dom: 19.3.0(react@19.3.0)
@@ -2676,14 +2622,6 @@ snapshots:
       react: 19.3.0
       react-dom: 19.3.0(react@19.3.0)
 
-  ab-nextjs-icons@0.1.4(next@16.3.4(@babel/core@7.29.7)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0):
-    dependencies:
-      material-symbols: 0.29.3
-    optionalDependencies:
-      next: 16.3.4(@babel/core@7.29.7)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
-      react: 19.3.0
-      react-dom: 19.3.0(react@19.3.0)
-
   ab-nextjs-icons@0.1.5(next@16.3.4(@babel/core@7.29.7)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0):
     dependencies:
       material-symbols: 0.29.3
@@ -2692,11 +2630,11 @@ snapshots:
       react: 19.3.0
       react-dom: 19.3.0(react@19.3.0)
 
-  ab-nextjs-theme@0.2.10(next@16.3.4(@babel/core@7.29.7)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0):
+  ab-nextjs-theme@0.3.0(next@16.3.4(@babel/core@7.29.7)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0):
     dependencies:
-      ab-nextjs-animations: 0.2.1(next@16.3.4(@babel/core@7.29.7)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
-      ab-nextjs-fonts: 0.2.3(next@16.3.4(@babel/core@7.29.7)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
-      ab-nextjs-icons: 0.1.4(next@16.3.4(@babel/core@7.29.7)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+      ab-nextjs-animations: 0.2.2(next@16.3.4(@babel/core@7.29.7)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+      ab-nextjs-fonts: 0.2.4(next@16.3.4(@babel/core@7.29.7)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+      ab-nextjs-icons: 0.1.5(next@16.3.4(@babel/core@7.29.7)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
     optionalDependencies:
       next: 16.3.4(@babel/core@7.29.7)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       react: 19.3.0
