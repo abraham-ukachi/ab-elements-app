@@ -111,10 +111,10 @@ Each package lives in **its own GitHub repo** and is **published to npm on its o
 | 1 | ✏️ `ab-nextjs-fonts` | **0.2.4** (`^0.2.4`) | Typefaces (Inter, Mulish, Quicksand, Roboto, Zilla Slab) as CSS + class names (`interStyles`, ...). | [npm](https://www.npmjs.com/package/ab-nextjs-fonts) | [repo](https://github.com/abraham-ukachi/ab-nextjs-fonts) |
 | 2 | ⭐️ `ab-nextjs-icons` | **0.1.5** (`^0.1.5`) | Material Symbols / Material Icons CSS, AbIcons, Ant Design icons, logos & pics. | [npm](https://www.npmjs.com/package/ab-nextjs-icons) | [repo](https://github.com/abraham-ukachi/ab-nextjs-icons) |
 | 3 | 💫 `ab-nextjs-animations` | **0.2.2** (`^0.2.2`) | `fadeIn`, `fadeOut`, `popIn`, `slide*` keyframes + classes (CSS) and their keyframe objects (TS). | [npm](https://www.npmjs.com/package/ab-nextjs-animations) | [repo](https://github.com/abraham-ukachi/ab-nextjs-animations) |
-| 4 | 🎨 `ab-nextjs-theme` | **0.2.10** (`^0.2.10`) | Color tokens (light / dark + medium & high contrast), typography and base styles as CSS variables. | [npm](https://www.npmjs.com/package/ab-nextjs-theme) | [repo](https://github.com/abraham-ukachi/ab-nextjs-theme) |
+| 4 | 🎨 `ab-nextjs-theme` | **0.3.0** (`^0.3.0`) | Color tokens (light / dark + medium & high contrast), typography, and base/shell styles as CSS variables. | [npm](https://www.npmjs.com/package/ab-nextjs-theme) | [repo](https://github.com/abraham-ukachi/ab-nextjs-theme) |
 | 5 | 🪝 `ab-nextjs-hooks` | **0.1.4** (`^0.1.4`) | `useAbTheme`, `useAbDialog`, `useAbMenu`, `useAbToast`, data & auth helpers. | [npm](https://www.npmjs.com/package/ab-nextjs-hooks) | [repo](https://github.com/abraham-ukachi/ab-nextjs-hooks) |
 | 6 | 🌱 `ab-nextjs-core` | **0.1.5** (`^0.1.5`) | `AbAppLayout`, `AbScreenLayout`, `AbMainLayout`, `AbAsideLayout` (server + client), `AbPageProvider`, `AbLinearProgress`. Landmark tags + `data-ab-part`. | [npm](https://www.npmjs.com/package/ab-nextjs-core) | [repo](https://github.com/abraham-ukachi/ab-nextjs-core) |
-| 7 | 🧱 `ab-nextjs-components` | **0.1.7** (`^0.1.7`) | `AbSidebar`, `AbNavbar`, `AbButton`, `AbIconButton`, `AbMenu`, `AbTabs`, `AbSearchbar`, `AbDemoBox`... (server + client). | [npm](https://www.npmjs.com/package/ab-nextjs-components) | [repo](https://github.com/abraham-ukachi/ab-nextjs-components) |
+| 7 | 🧱 `ab-nextjs-components` | **0.1.8** (`^0.1.8`) | `AbSidebar`, `AbNavbar`, `AbButton`, `AbIconButton`, `AbMenu`, `AbTabs`, `AbSearchbar`, `AbDemoBox`... (server + client). Ships the chrome via `styles.css`: toast, dialog, spinner, logo, doodle. | [npm](https://www.npmjs.com/package/ab-nextjs-components) | [repo](https://github.com/abraham-ukachi/ab-nextjs-components) |
 | 8 | 🌍 `ab-nextjs-i18n` | *not installed yet* (0.1.0 is published) | Locales, messages & routing for the **Language** setting (en, fr, es, ru), wrapping `next-intl`, plus a CLI. | [npm](https://www.npmjs.com/package/ab-nextjs-i18n) | [repo](https://github.com/abraham-ukachi/ab-nextjs-i18n) |
 
 > NOTE: The guiding principle of this app is **packages first** 📦➡️📱: whenever abElements needs something reusable that doesn't exist yet (e.g. an `AbSheet`, an `AbDialog` or a `useAbMedia` hook), it's **built in the relevant package first**, released to npm, and **then** used here. No app-only copies of reusable UI 🚫📋. The current gaps are listed in the [README](./README.md#package-gaps-to-build-first).
@@ -240,7 +240,7 @@ The tracked files of `ab-elements-app` today (`node_modules`, `.next`, `.vercel`
 │   ├── nextjs-logoname-*.svg    # Next.js logos (light / dark)
 │   └── screenshots              # README mockups: laptop/ & mobile/, light & dark
 ├── app
-│   ├── globals.css              # Tailwind v4 + ab-nextjs-theme styles.css + ab-nextjs-fonts Inter
+│   ├── globals.css              # Tailwind v4 + theme styles.css + components chrome styles.css + Inter
 │   ├── layout.tsx               # root layout: no-flash theme script, <html lang={APP_LANG}>
 │   ├── manifest.ts              # web app manifest (/manifest.webmanifest)
 │   ├── metadata.ts              # StaticMetadata, APP_LANG, APP_DESCRIPTION & asset directories
@@ -513,7 +513,7 @@ app
 
 #### 1. Update `app/globals.css` (once)
 
-The Ab components use the **Material Symbols** icon font, the dialogs & menus use the **Ab animations**, and the packages use Tailwind utility classes that Tailwind can't see in `node_modules` by default. Add these lines to [`app/globals.css`](./app/globals.css), right after the existing `ab-nextjs-fonts` import:
+The Ab components use the **Material Symbols** icon font, the dialogs & menus use the **Ab animations**, and the packages use Tailwind utility classes that Tailwind can't see in `node_modules` by default. Keep **both** theme and components chrome imports (theme first), then add these lines to [`app/globals.css`](./app/globals.css), right after the existing `ab-nextjs-fonts` import:
 
 ```css
 /* the Material Symbols used by the Ab components (`material-symbols-rounded`) */
@@ -539,8 +539,10 @@ The Ab components use the **Material Symbols** icon font, the dialogs & menus us
 ```css
 @import "tailwindcss";
 
-/* the full Ab theme (colors, typography & styles) from `ab-nextjs-theme` */
+/* the full Ab theme (colors, typography & base/shell) from `ab-nextjs-theme` */
 @import "ab-nextjs-theme/styles.css";
+/* chrome (toast, dialog, spinner, logo, doodle) from `ab-nextjs-components` — requires >= 0.1.8 */
+@import "ab-nextjs-components/styles.css";
 /* the Inter font from `ab-nextjs-fonts` */
 @import "ab-nextjs-fonts/inter/styles.css";
 /* the Material Symbols used by the Ab components (`material-symbols-rounded`) */
@@ -660,7 +662,7 @@ export default function PageHeader({ title, actions }: PageHeaderProps): ReactEl
 }
 ```
 
-> TIP: `<AbLogo type="contained">` ships with an inlined default logo. Pass `src` (e.g. [`public/ab-logo.svg`](./public/ab-logo.svg)) only when you want your own branding. Mask types (`outlined` / `hollow` / `naked`) without `src`/`mask` defer to `ab-nextjs-theme`'s `--app-logo-url`.
+> TIP: `<AbLogo type="contained">` ships with an inlined default logo. Pass `src` (e.g. [`public/ab-logo.svg`](./public/ab-logo.svg)) only when you want your own branding. Mask types (`outlined` / `hollow` / `naked`) without `src`/`mask` defer to `ab-nextjs-components`' `--app-logo-url`.
 
 #### 5. Create the app shell: `app/hello-world/layout.tsx`
 
@@ -1376,10 +1378,11 @@ Fixed in **hooks 0.1.4 / core 0.1.5 / components 0.1.7** (so this guide no longe
 
 ## Theming 🎨
 
-The colors, typography and base styles come from [`ab-nextjs-theme`](https://www.npmjs.com/package/ab-nextjs-theme), imported once in [`app/globals.css`](./app/globals.css):
+The colors, typography and base/shell styles come from [`ab-nextjs-theme`](https://www.npmjs.com/package/ab-nextjs-theme), and the chrome (toast, dialog, spinner, logo, doodle) from [`ab-nextjs-components`](https://www.npmjs.com/package/ab-nextjs-components), both imported in [`app/globals.css`](./app/globals.css):
 
 ```css
 @import "ab-nextjs-theme/styles.css";
+@import "ab-nextjs-components/styles.css";
 ```
 
 #### Light & dark
