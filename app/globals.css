@@ -1,7 +1,9 @@
 @import "tailwindcss";
 
-/* the full Ab theme (colors, typography & styles) from `ab-nextjs-theme` */
+/* the full Ab theme (colors, typography & base/shell) from `ab-nextjs-theme` */
 @import "ab-nextjs-theme/styles.css";
+/* chrome (toast, dialog, spinner, logo, doodle) from `ab-nextjs-components` — requires >= 0.1.8 */
+@import "ab-nextjs-components/styles.css";
 /* the Inter font from `ab-nextjs-fonts` */
 @import "ab-nextjs-fonts/inter/styles.css";
 
