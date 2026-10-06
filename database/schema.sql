@@ -5,7 +5,7 @@
 --             serverless providers on Vercel (TiDB Cloud Starter recommended,
 --             PlanetScale Vitess supported - see database/README.md).
 --  Status   : DESIGN ONLY - not applied anywhere yet. Create it on Vercel later.
---  Author   : abElements crew (research: Surgeon James) for Abraham Ukachi
+--  Author   : Abraham Ukachi
 --  License  : MIT
 --
 --  Conventions
