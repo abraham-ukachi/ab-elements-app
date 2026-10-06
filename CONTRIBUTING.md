@@ -202,8 +202,8 @@ The real scripts from [`package.json`](./package.json):
 | `pnpm build` | `next build` | Production build (also type-checks the app). |
 | `pnpm start` | `next start` | Serves the production build (run `pnpm build` first). |
 | `pnpm lint` | `eslint .` | ESLint 9 flat config ([`eslint.config.mjs`](./eslint.config.mjs)); there's no `next lint` in Next.js 16. |
-
-> TIP: For a quick type check without a full build: `pnpm exec tsc --noEmit`.
+| `pnpm typecheck` | `tsc --noEmit` | Quick type check without a full build. |
+| `pnpm test` | `vitest run` | Unit tests in `tests/unit` ([`vitest.config.mts`](./vitest.config.mts)). |
 
 
 ### Environment variables
@@ -238,7 +238,9 @@ The tracked files of `ab-elements-app` today (`node_modules`, `.next`, `.vercel`
 ├── .github
 │   ├── ab-logo*.svg             # Ab logos (light / dark) used by the README & this guide
 │   ├── nextjs-logoname-*.svg    # Next.js logos (light / dark)
-│   └── screenshots              # README mockups: laptop/ & mobile/, light & dark
+│   ├── pull_request_template.md # summary, version, announcement & release checklist
+│   ├── screenshots              # README mockups: laptop/ & mobile/, light & dark
+│   └── workflows/ci.yml         # CI: lint, typecheck, test & build on every PR and push to main
 ├── app
 │   ├── globals.css              # Tailwind v4 + theme styles.css + components chrome styles.css + Inter
 │   ├── layout.tsx               # root layout: no-flash theme script, <html lang={APP_LANG}>
@@ -253,6 +255,8 @@ The tracked files of `ab-elements-app` today (`node_modules`, `.next`, `.vercel`
 ├── public
 │   ├── assets/images            # favicons, manifest icons (squircle/), PWA screenshots
 │   └── *.svg, me.jpg, ...       # logos & pictures used by the pages
+├── tests
+│   └── unit                     # Vitest unit tests (*.test.ts)
 ├── CHANGELOG.md                 # one heading per release (standard-version format)
 ├── CONTRIBUTING.md              # this file ;)
 ├── LICENSE                      # MIT
@@ -263,7 +267,8 @@ The tracked files of `ab-elements-app` today (`node_modules`, `.next`, `.vercel`
 ├── pnpm-lock.yaml
 ├── pnpm-workspace.yaml          # pnpm 11 settings
 ├── postcss.config.mjs           # @tailwindcss/postcss
-└── tsconfig.json                # strict, moduleResolution "bundler", "@/*" path alias
+├── tsconfig.json                # strict, moduleResolution "bundler", "@/*" path alias
+└── vitest.config.mts            # Vitest: unit tests only, "@/*" path alias
 ```
 
 > NOTE: The planned structure (route groups like `(docs)/` and `(auth)/`, `@splash` / `@welcome` parallel routes, `proxy.ts`, ...) is drafted in the [README](./README.md#planned-draft-follows-the-approved-designs). The old `components/`, `core/` and `hooks/` folders are gone for good: they're the npm packages now.
@@ -315,8 +320,8 @@ git commit -m "chore(release): 0.2.7"
 
 ### Opening & merging a pull request
 
-1. Make sure `pnpm lint` and `pnpm build` pass.
-2. **Announce the push**, then push the branch and open a pull request against `main`.
+1. Make sure `pnpm lint`, `pnpm typecheck`, `pnpm test` and `pnpm build` pass.
+2. **Announce the push**, then push the branch and open a pull request against `main`, and fill in the [pull request template](./.github/pull_request_template.md).
 3. Title it like a commit (gitmoji + summary) **plus the new version** in parentheses, e.g. `:memo: Replace squash-merge with merge commits & announce-first releases (0.2.9)`.
 4. **Announce the merge**, then merge with **Create a merge commit**. Don't use *Squash and merge* or *Rebase and merge*: every branch commit stays in the history.
 5. **Tag the merge commit** with the new version and push the tag (announce that push too):
@@ -1667,13 +1672,15 @@ pnpm exec ab-nextjs-i18n check                 # exit 1 on missing keys / placeh
 
 ## Testing 🧪
 
-There's **no automated test suite** in this repo yet (no test runner, no CI workflow). Until there is, every pull request must:
+Unit tests run with [Vitest](https://vitest.dev) and live in `tests/unit` (`*.test.ts`). The [CI workflow](./.github/workflows/ci.yml) runs on every pull request and every push to `main` (Node.js 24, the pinned pnpm, `pnpm install --frozen-lockfile`). Every pull request must:
 
 1. pass `pnpm lint`,
-2. pass `pnpm build` (production build + type check),
-3. be checked by hand with `pnpm dev` (or `pnpm build && pnpm start`) in **light & dark**, on a **mobile** and a **laptop** width, for every page it touches.
+2. pass `pnpm typecheck`,
+3. pass `pnpm test`,
+4. pass `pnpm build` (production build),
+5. be checked by hand with `pnpm dev` (or `pnpm build && pnpm start`) in **light & dark**, on a **mobile** and a **laptop** width, for every page it touches.
 
-> NOTE: Tests (e.g. Playwright for the screens) will come with the docs screens. When they do, use ✅ `:white_check_mark:` for them, as [gitmoji.dev](https://gitmoji.dev) intends.
+> NOTE: End-to-end tests (e.g. Playwright for the screens) will come with the docs screens. Use ✅ `:white_check_mark:` for tests and 👷 `:construction_worker:` for CI changes, as [gitmoji.dev](https://gitmoji.dev) intends.
 
 
 ---
