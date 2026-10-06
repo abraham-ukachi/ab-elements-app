@@ -1,6 +1,6 @@
 {
   "name": "ab-elements-app",
-  "version": "0.2.9",
+  "version": "0.2.10",
   "description": "abElements is the home of every Ab package: docs, live examples, and an installable PWA, built with the same packages it documents.",
   "private": true,
   "homepage": "https://ab-elements.vercel.app/",
@@ -32,7 +32,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
   },
   "engines": {
     "node": ">=24"
@@ -59,6 +61,7 @@
     "eslint": "^9.39.5",
     "eslint-config-next": "16.3.4",
     "tailwindcss": "^4.3.3",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "vitest": "^5.0.3"
   }
 }
