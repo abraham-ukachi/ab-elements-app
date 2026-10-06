@@ -274,7 +274,9 @@ The tracked files of `ab-elements-app` today (`node_modules`, `.next`, `.vercel`
 
 ## Branches, Pull Requests & Versioning 🌿
 
-`main` is the production branch (Vercel deploys it). Don't push to `main` directly: every change goes through a short-lived branch, a **patch release commit** and a **squash-merged** pull request.
+`main` is the production branch (Vercel deploys it). Don't push to `main` directly: every change goes through a short-lived branch, a **patch release commit** and a pull request **merged with a merge commit** (never squash, never rebase).
+
+> IMPORTANT: **Announce before acting.** Before every version bump commit, every `git push` and every merge, post a one-liner to the maintainer ([Abraham Ukachi](https://github.com/abraham-ukachi)): *what, which branch / PR, which version*. Wait for the go-ahead when it's asked for.
 
 ### Branch names
 
@@ -294,7 +296,7 @@ Use `<type>/<short-kebab-case-description>`, where `<type>` says what kind of ch
 
 Every pull request **is** a release: the **last commit of the branch** bumps the **patch** version.
 
-1. Bump `version` in [`package.json`](./package.json) (e.g. `0.2.6` → `0.2.7`).
+1. **Announce the bump** (e.g. "Bumping `docs/merge-commit-workflow` to 0.2.9"), then bump `version` in [`package.json`](./package.json) (e.g. `0.2.6` → `0.2.7`).
 2. Add the matching heading at the top of [`CHANGELOG.md`](./CHANGELOG.md), in the same format as the others:
 
 ```md
@@ -313,27 +315,34 @@ git commit -m "chore(release): 0.2.7"
 
 ### Opening & merging a pull request
 
-1. Push the branch and open a pull request against `main`.
-2. Title it like a commit (gitmoji + summary) **plus the new version** in parentheses.
-3. Make sure `pnpm lint` and `pnpm build` pass.
-4. **Squash and merge**: GitHub appends the PR number and lists the branch commits in the body.
+1. Make sure `pnpm lint` and `pnpm build` pass.
+2. **Announce the push**, then push the branch and open a pull request against `main`.
+3. Title it like a commit (gitmoji + summary) **plus the new version** in parentheses, e.g. `:memo: Replace squash-merge with merge commits & announce-first releases (0.2.9)`.
+4. **Announce the merge**, then merge with **Create a merge commit**. Don't use *Squash and merge* or *Rebase and merge*: every branch commit stays in the history.
+5. **Tag the merge commit** with the new version and push the tag (announce that push too):
 
-This is what the history looks like (real subjects, newest first):
-
-```
-:memo: Add a Screenshots section to the README (0.2.6) (#9)
-:arrow_up: Bump the 7 Ab packages to their trusted-publishing releases (0.2.5) (#8)
-:arrow_up: Bump ab-nextjs-theme to 0.2.9 & drop overrides (0.2.3) (#6)
-:arrow_up: Upgrade to Next.js 16 + Ab packages, README & schema (0.2.1) (#4)
+```sh
+git switch main && git pull
+git tag -a v0.2.9 -m "v0.2.9"   # HEAD is the merge commit
+git push origin v0.2.9
 ```
 
-And the branch behind `(#9)`, before it was squashed:
+The tag is what makes the `compare/v0.2.8...v0.2.9` link of the `CHANGELOG.md` heading work.
+
+This is what the history looks like with a merge commit (`git log --oneline --graph`, newest first, using the 0.2.9 pull request as the example):
 
 ```
-:bento: Add the README screenshots (mobile & laptop, light & dark)
-:memo: Add a Screenshots section to the README
-chore(release): 0.2.6
+*   Merge pull request #13 from abraham-ukachi/docs/merge-commit-workflow   (tag: v0.2.9)
+|\
+| * chore(release): 0.2.9
+| * :card_file_box: Credit Abraham Ukachi as the schema author
+| * :memo: Refresh the package table & document the ab-nextjs-i18n CLI
+| * :memo: Replace squash-merge with merge commits & announce-first releases
+|/
+* :lipstick: Adopt theme 0.3.0 + components chrome styles (0.2.8) (#12)
 ```
+
+> NOTE: Pull requests up to `(0.2.8) (#12)` were squash-merged, so they show up as a single commit with the PR number appended, and they have no `v0.2.x` tags.
 
 
 ---
@@ -384,7 +393,7 @@ Built from `git log --all --format=%s`: **54** of the **73** commit subjects sta
 | ✅ | `:white_check_mark:` | 5 | Add, update, or pass tests. | So far only with 📝, to tick a TODO as done ("Done - create a ab-nextjs-… npm package"). Use it for tests once there are some. |
 | 🐛 | `:bug:` | 4 | Fix a bug. | Bug fixes (404 page, viewport, ...), also as the title of a fix PR. |
 | 💥 | `:boom:` | 4 | Introduce breaking changes. | Initial commit, major refactors, routing changes (not-found redirects). |
-| 💚 | `:green_heart:` | 4 | Fix CI build. | **House meaning:** creating a new file (`metadata.ts`, `viewport.ts`, public assets, manifest). |
+| 💚 | `:green_heart:` | 4 | Fix CI build. | Fixing the CI build only. Early commits used it for "new file" (`metadata.ts`, `viewport.ts`, public assets, manifest); that house meaning is **retired**: use ✨ (feature), 🍱 (assets) or 🔧 (config) for a new file instead. |
 | 💄 | `:lipstick:` | 2 | Add or update the UI and style files. | Layout & styling with ab-nextjs-theme / ab-nextjs-fonts. |
 | ♻️ | `:recycle:` | 2 | Refactor code. | Refactors (with 🐛 / 💥 or 🍱). |
 | 💩 | `:poop:` | 2 | Write bad code that needs to be improved. | Experimental work in progress ("Polymer"). |
@@ -392,7 +401,7 @@ Built from `git log --all --format=%s`: **54** of the **73** commit subjects sta
 | 🗃️ | `:card_file_box:` | 1 | Perform database related changes. | `database/schema.sql`. |
 | 🔒 | `:lock:` | 1 | Fix security or privacy issues. | Making the package `private`. |
 
-> NOTE: Only the emojis above have been used so far. If you need another one, pick it from [gitmoji.dev](https://gitmoji.dev) and use its official meaning (💚 is the only "house" meaning).
+> NOTE: Only the emojis above have been used so far. If you need another one, pick it from [gitmoji.dev](https://gitmoji.dev) and use its official meaning. There are no house meanings (💚's old "new file" meaning is retired).
 
 
 ### TypeScript & React Styleguide

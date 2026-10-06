@@ -52,7 +52,7 @@ And the best part? 🍒 abElements is **built with the very packages it document
 
 ## Guiding principle: packages first 📦➡️📱
 
-`ab-elements-app` **must consume all seven Ab packages** (fonts, icons, animations, theme, hooks, core, components).
+`ab-elements-app` **must consume all eight Ab packages** (fonts, icons, animations, theme, hooks, core, components, i18n).
 Whenever the app needs something that doesn't exist yet (e.g. a `Sheet`, a `BottomNav`, a `useAbMedia` hook), it is **built in the relevant package first**, released to npm, and **then** used in the app. No app-only copies of reusable UI. 🚫📋
 
 The pieces the approved designs still need from the packages are tracked in [Package gaps](#package-gaps-to-build-first).
@@ -118,7 +118,7 @@ Versions as declared in [`package.json`](./package.json) (2026-10-03):
 
 ## The Ab packages
 
-All seven are installed as dependencies of this app:
+Seven are installed as dependencies of this app today; `ab-nextjs-i18n` (published as 0.1.0) gets added with the `app/[locale]` restructure:
 
 ```sh
 pnpm add ab-nextjs-fonts ab-nextjs-icons ab-nextjs-animations ab-nextjs-theme ab-nextjs-hooks ab-nextjs-core ab-nextjs-components
@@ -129,11 +129,11 @@ pnpm add ab-nextjs-fonts ab-nextjs-icons ab-nextjs-animations ab-nextjs-theme ab
 | 1 | ✏️ [`ab-nextjs-fonts`](https://github.com/abraham-ukachi/ab-nextjs-fonts) | ^0.2.4 | All app typefaces (Inter, Mulish, Quicksand, Roboto, Zilla Slab) instead of `next/font/google`. | [index.ts](https://github.com/abraham-ukachi/ab-nextjs-fonts/blob/main/index.ts) | Done |
 | 2 | ⭐️ [`ab-nextjs-icons`](https://github.com/abraham-ukachi/ab-nextjs-icons) | ^0.1.5 | Sidebar, bottom bar, card and action icons; Ab / AbElements logos. | [src/index.ts](https://github.com/abraham-ukachi/ab-nextjs-icons/blob/main/src/index.ts) | Done |
 | 3 | 💫 [`ab-nextjs-animations`](https://github.com/abraham-ukachi/ab-nextjs-animations) | ^0.2.2 | Balloon pop, sheet/aside slides, fades; turned off by **reduced motion**. | [index.ts](https://github.com/abraham-ukachi/ab-nextjs-animations/blob/main/index.ts) | Done |
-| 4 | 🎨 [`ab-nextjs-theme`](https://github.com/abraham-ukachi/ab-nextjs-theme) | ^0.2.10 | Color tokens (light / dark + medium & high contrast), typography, CSS variables; accent color + density. | [styles.css](https://github.com/abraham-ukachi/ab-nextjs-theme/blob/main/styles.css) | Done |
+| 4 | 🎨 [`ab-nextjs-theme`](https://github.com/abraham-ukachi/ab-nextjs-theme) | ^0.3.0 | Color tokens (light / dark + medium & high contrast), typography, CSS variables and the base / shell styles (menus, backdrop, FAB, app & nav bars). | [styles.css](https://github.com/abraham-ukachi/ab-nextjs-theme/blob/main/styles.css) | Done |
 | 5 | 🪝 [`ab-nextjs-hooks`](https://github.com/abraham-ukachi/ab-nextjs-hooks) | ^0.1.4 | Theme, dialogs (Cmd/Ctrl+K), menus, toasts, toggles, auth/user helpers. | [index.ts](https://github.com/abraham-ukachi/ab-nextjs-hooks/blob/main/index.ts) | Done |
 | 6 | 🌱 [`ab-nextjs-core`](https://github.com/abraham-ukachi/ab-nextjs-core) | ^0.1.5 | App / Screen / Main / Aside layouts (server + client), page provider, linear progress. | [index.ts](https://github.com/abraham-ukachi/ab-nextjs-core/blob/main/index.ts) | Done |
-| 7 | 🧱 [`ab-nextjs-components`](https://github.com/abraham-ukachi/ab-nextjs-components) | ^0.1.7 | Sidebar, navbar, searchbar, buttons, inputs, tabs, avatar, badge, balloon, demo box/code... | [index.ts](https://github.com/abraham-ukachi/ab-nextjs-components/blob/main/index.ts) | Done |
-| 8 | 🌍 `ab-nextjs-i18n` | - | Locales + messages for the **Language** setting (en, fr, es, ru), replacing the old `next-intl` + `ab_translator.mjs` plan. | *to be created* | Pending |
+| 7 | 🧱 [`ab-nextjs-components`](https://github.com/abraham-ukachi/ab-nextjs-components) | ^0.1.8 | Sidebar, navbar, searchbar, buttons, inputs, tabs, avatar, badge, balloon, demo box/code... plus the chrome styles (toast, dialog, spinner, logo, doodle). | [index.ts](https://github.com/abraham-ukachi/ab-nextjs-components/blob/main/index.ts) | Done |
+| 8 | 🌍 [`ab-nextjs-i18n`](https://github.com/abraham-ukachi/ab-nextjs-i18n) | 0.1.0 | Locale routing + messages for the **Language** setting (en, fr, es, ru) over `next-intl`, plus the `ab-nextjs-i18n` CLI (`init`, `translate`, `check`, `migrate`). | [README](https://github.com/abraham-ukachi/ab-nextjs-i18n#readme) | Published (not installed yet) |
 
 
 ### Package gaps (to build first)
@@ -150,7 +150,7 @@ What the approved designs use that the packages don't ship yet. Each one gets bu
 | Settings, Login | `ab-nextjs-components` | `AbSwitch`, `AbSegmentedControl`, `AbCheckbox`, `AbRadioCard`, `AbSelect` | Pending |
 | Docs | `ab-nextjs-components` | `AbCodeBlock` (package-manager tabs + copy), `AbBreadcrumbs`, `AbToc` (On This Page), `AbPropsTable` | Pending |
 | Shell | `ab-nextjs-hooks` | `useAbMedia` / breakpoints, `useAbHotkey` (Cmd/Ctrl+K), `useAbScrollSpy` (TOC), `useAbClipboard` | Pending |
-| Settings | `ab-nextjs-i18n` | Locale routing + messages (en, fr, es, ru) | Pending |
+| Settings | `ab-nextjs-i18n` | Locale routing + messages (en, fr, es, ru) | Done (0.1.0) |
 
 > NOTE: Some names above are proposals; final names follow each package's own catalog.
 
@@ -438,7 +438,7 @@ These are some of the things we did or plan to do, in addition to this project's
 | 11 | *`Fade Out - Animation`* | [fade-out/styles.css](https://github.com/abraham-ukachi/ab-nextjs-animations/blob/main/fade-out/styles.css) | Done |
 | 12 | *`Slide Down - Animation`* | [slide-down/styles.css](https://github.com/abraham-ukachi/ab-nextjs-animations/blob/main/slide-down/styles.css) | Done |
 | 13 | *`Slide Up - Animation`* | [slide-up/styles.css](https://github.com/abraham-ukachi/ab-nextjs-animations/blob/main/slide-up/styles.css) | Done |
-| 14 | *`AB Translator - Script`* | **ab_translator.mjs** (moves to `ab-nextjs-i18n`) | Pending |
+| 14 | *`AB i18n - CLI`* | [`ab-nextjs-i18n`](https://github.com/abraham-ukachi/ab-nextjs-i18n#readme) (`npx ab-nextjs-i18n`) | Done |
 | 15 | *`Loop - Animation`* | [loop/styles.css](https://github.com/abraham-ukachi/ab-nextjs-animations/blob/main/loop/styles.css) | Done |
 | 16 | *`Animations - Tailwind Plugin`* | [index.ts](https://github.com/abraham-ukachi/ab-nextjs-animations/blob/main/index.ts) | Done |
 | 19 | *`AB Theme - Stylesheet`* | [styles.css](https://github.com/abraham-ukachi/ab-nextjs-theme/blob/main/styles.css) | Done |
@@ -467,16 +467,19 @@ These are some of the things we did or plan to do, in addition to this project's
 
 
 ## Internationalization 🌍
-> IMPORTANT: Translations will come from the upcoming [`ab-nextjs-i18n`](#the-ab-packages) package (Pending).
+> IMPORTANT: Translations come from the [`ab-nextjs-i18n`](#the-ab-packages) package (0.1.0, published). It gets wired into the app with the `app/[locale]` restructure.
 
 abElements will ship in at least 4 languages: **en**, **fr**, **ru** and **es** (see Settings > Docs preferences > Language).
-The old `ab_translator.mjs` script (which used [translate-shell](https://github.com/soimort/translate-shell) to translate `messages/*.json`) is planned to move into `ab-nextjs-i18n`:
+The old `ab_translator.mjs` script is replaced by the **`ab-nextjs-i18n` CLI**:
 
 ```sh
-node ab_translator.mjs messages fr
+npx ab-nextjs-i18n init                  # create the missing i18n files (messages/, request config, ...)
+npx ab-nextjs-i18n translate --to fr     # translate messages/en.json into fr.json
+npx ab-nextjs-i18n check                 # missing keys, broken placeholders (exit 1 on errors)
+npx ab-nextjs-i18n migrate               # dry run of the message-format migration (--write to apply)
 ```
 
-> NOTE: The source file (e.g. `fr.json`) should be updated afterwards to fix typos and/or adapt the texts accordingly.
+> NOTE: Review the machine translations afterwards (e.g. `messages/fr.json`) to fix typos and adapt the texts. `translate` never overwrites your hand edits.
 
 
 ## TODOs
@@ -496,7 +499,7 @@ node ab_translator.mjs messages fr
 - [x] ✏️  Create a `ab-nextjs-fonts` **npm** package
 - [x] ⭐️ Create a `ab-nextjs-icons` **npm** package
 - [x] 🪝 Create a `ab-nextjs-hooks` **npm** package
-- [ ] 🌍 Create a `ab-nextjs-i18n` **npm** package (Pending)
+- [x] 🌍 Create a `ab-nextjs-i18n` **npm** package
 
 ### React - TODOs
 - [ ] 🌱 Create a `ab-react-core` **npm** package
