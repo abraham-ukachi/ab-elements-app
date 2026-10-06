@@ -56,10 +56,6 @@ export const MANIFEST_DIR: string = '/assets/images/manifest';
 // create and export abElements' shared copy as `APP_DESCRIPTION` (used by the metadata & the web app manifest)
 export const APP_DESCRIPTION: string = 'abElements is the home of every Ab package: docs, live examples, and an installable PWA, built with the same packages it documents.';
 
-// create and export the document language as `APP_LANG` (set `NEXT_PUBLIC_APP_LANG` to override; `en` by default)
-export const APP_LANG: string = process.env.NEXT_PUBLIC_APP_LANG || 'en';
-
-
 export { Metadata };
 
 // create and export abElements' root static metadata as `StaticMetadata`

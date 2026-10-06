@@ -47,7 +47,7 @@
 import type { MetadataRoute } from 'next';
 
 // import abElements' shared copy, language & directories
-import { APP_DESCRIPTION, APP_LANG, MANIFEST_DIR, IMAGES_DIR } from './metadata';
+import { APP_DESCRIPTION, MANIFEST_DIR, IMAGES_DIR } from './metadata';
 // import the theme colors
 import { THEME_COLORS } from './viewport';
 
@@ -68,7 +68,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: 'abElements',
     short_name: 'abElements',
     description: APP_DESCRIPTION,
-    lang: APP_LANG,
+    lang: 'en', // localized in 0.2.13
     id: '/?homescreen=1',
     start_url: '/?homescreen=1',
     scope: '/',
