@@ -1,0 +1,31 @@
+{
+  "Metadata": {
+    "titleDefault": "Próximamente 🫶🏼 - abElements",
+    "titleTemplate": "%s | abElements",
+    "description": "abElements es el hogar de cada paquete Ab: documentación, ejemplos en vivo y una PWA instalable, construidos con los mismos paquetes que documenta.",
+    "applicationName": "abElements",
+    "notFoundTitle": "Página no encontrada"
+  },
+  "Common": {
+    "comingSoon": "Próximamente",
+    "taglineBefore": "Una biblioteca ligera de elementos de servidor + cliente/UI <strong>100 %</strong> gratuitos para tus",
+    "taglineAfter": "proyectos,",
+    "createdBy": "creada con ❤️ por",
+    "authorName": "Abraham Ukachi",
+    "copyright": "© {year} abElements. Todos los derechos reservados.",
+    "logoAlt": "AB Elements",
+    "githubAlt": "Logo de Github",
+    "authorAlt": "Abraham Ukachi",
+    "next": "Next.js",
+    "react": "React",
+    "vue": "Vue",
+    "lit": "Lit",
+    "flutter": "Flutter",
+    "and": "y"
+  },
+  "NotFound": {
+    "code": "404",
+    "title": "No se pudo encontrar esta página.",
+    "backHome": "Volver a abElements"
+  }
+}

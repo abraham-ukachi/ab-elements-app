@@ -1,0 +1,31 @@
+{
+  "Metadata": {
+    "titleDefault": "Скоро 🫶🏼 - abElements",
+    "titleTemplate": "%s | abElements",
+    "description": "abElements — дом каждого пакета Ab: документация, живые примеры и устанавливаемое PWA, созданные теми же пакетами, которые он документирует.",
+    "applicationName": "abElements",
+    "notFoundTitle": "Страница не найдена"
+  },
+  "Common": {
+    "comingSoon": "Скоро",
+    "taglineBefore": "Лёгкая библиотека <strong>100 %</strong> бесплатных серверных и клиентских/UI-элементов для ваших",
+    "taglineAfter": "проектов,",
+    "createdBy": "создана с ❤️",
+    "authorName": "Abraham Ukachi",
+    "copyright": "© {year} abElements. Все права защищены.",
+    "logoAlt": "AB Elements",
+    "githubAlt": "Логотип Github",
+    "authorAlt": "Abraham Ukachi",
+    "next": "Next.js",
+    "react": "React",
+    "vue": "Vue",
+    "lit": "Lit",
+    "flutter": "Flutter",
+    "and": "и"
+  },
+  "NotFound": {
+    "code": "404",
+    "title": "Эта страница не найдена.",
+    "backHome": "Назад к abElements"
+  }
+}
