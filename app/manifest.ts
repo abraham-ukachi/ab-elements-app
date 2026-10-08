@@ -46,8 +46,11 @@
 // NEXT types
 import type { MetadataRoute } from 'next';
 
-// import abElements' shared copy, language & directories
-import { APP_DESCRIPTION, MANIFEST_DIR, IMAGES_DIR } from './metadata';
+// import the i18n config (default locale) & the default (en) messages
+import abI18nConfig from '@/i18n/config';
+import enMessages from '@/messages/en.json';
+// import abElements' directories
+import { MANIFEST_DIR, IMAGES_DIR } from './metadata';
 // import the theme colors
 import { THEME_COLORS } from './viewport';
 
@@ -60,15 +63,16 @@ const ICON_SIZES: readonly number[] = [48, 72, 96, 144, 192, 512];
  * `manifest` - Web App Manifest
  *
  * Next.js serves this as `/manifest.webmanifest` and links it in every page's `<head>`.
+ * There's one manifest for every locale, so its copy comes from the default (en) messages.
  *
  * @returns { MetadataRoute.Manifest }
  */
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'abElements',
-    short_name: 'abElements',
-    description: APP_DESCRIPTION,
-    lang: 'en', // localized in 0.2.13
+    name: enMessages.Metadata.applicationName,
+    short_name: enMessages.Metadata.applicationName,
+    description: enMessages.Metadata.description,
+    lang: abI18nConfig.defaultLocale,
     id: '/?homescreen=1',
     start_url: '/?homescreen=1',
     scope: '/',
