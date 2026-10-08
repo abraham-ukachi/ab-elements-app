@@ -1,6 +1,6 @@
 {
   "name": "ab-elements-app",
-  "version": "0.2.11",
+  "version": "0.2.12",
   "description": "abElements is the home of every Ab package: docs, live examples, and an installable PWA, built with the same packages it documents.",
   "private": true,
   "homepage": "https://ab-elements.vercel.app/",
