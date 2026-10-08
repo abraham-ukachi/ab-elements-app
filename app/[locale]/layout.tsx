@@ -11,7 +11,7 @@ import { interStyles } from 'ab-nextjs-fonts';
 
 import { AbI18nProvider } from 'ab-nextjs-i18n';
 import { isAbLocale } from 'ab-nextjs-i18n/config';
-import { generateAbStaticParams } from 'ab-nextjs-i18n/server';
+import { generateAbStaticParams, getAbTranslations } from 'ab-nextjs-i18n/server';
 
 import abI18nConfig from '@/i18n/config';
 import { StaticMetadata } from '../metadata';
@@ -20,8 +20,29 @@ import { StaticViewport } from '../viewport';
 import '../globals.css';
 
 
-// export the static metadata
-export const metadata: Metadata = StaticMetadata;
+type LocaleLayoutProps = Readonly<{
+  children: ReactNode;
+  params: Promise<{ locale: string }>;
+}>;
+
+
+// the root metadata, with the title & description of the `Metadata` messages of this locale
+// (each page adds its own canonical & hreflang alternates)
+export async function generateMetadata({ params }: Pick<LocaleLayoutProps, 'params'>): Promise<Metadata> {
+  const { locale } = await params;
+  if (!isAbLocale(abI18nConfig, locale)) notFound();
+  const t = await getAbTranslations({ locale, namespace: 'Metadata' });
+
+  return {
+    ...StaticMetadata,
+    title: {
+      template: t('titleTemplate'),
+      default: t('titleDefault'),
+    },
+    description: t('description'),
+  };
+}
+
 // export the static viewport
 export const viewport: Viewport = StaticViewport;
 
@@ -50,13 +71,7 @@ const themeScript: string = `(function () {
 })();`;
 
 
-export default async function LocaleLayout({
-  children,
-  params,
-}: Readonly<{
-  children: ReactNode;
-  params: Promise<{ locale: string }>;
-}>) {
+export default async function LocaleLayout({ children, params }: LocaleLayoutProps) {
   const { locale } = await params;
   if (!isAbLocale(abI18nConfig, locale)) notFound();
 
