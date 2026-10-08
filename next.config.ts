@@ -49,6 +49,44 @@ import type { NextConfig } from 'next';
 import { withAbI18n } from 'ab-nextjs-i18n/plugin';
 
 
+// `true` under `next dev` (React needs `eval` there to rebuild server error stacks in the browser)
+const isDev: boolean = process.env.NODE_ENV === 'development';
+
+
+// create abElements' report-only Content Security Policy as `contentSecurityPolicy`
+// NOTE: static tier of PLAN.md D13, no nonce (a nonce would make every page dynamic).
+//       `'unsafe-inline'` covers Next.js' inline scripts and the theme script until the
+//       policy is enforced (0.2.53); `upgrade-insecure-requests` is added then too
+//       (browsers ignore it in a report-only policy).
+const contentSecurityPolicy: string = [
+  `default-src 'self'`,
+  `script-src 'self' 'unsafe-inline'${isDev ? ` 'unsafe-eval'` : ''}`,
+  `style-src 'self' 'unsafe-inline'`,
+  `img-src 'self' data: blob:`,
+  `font-src 'self'`,
+  `connect-src 'self'`,
+  `manifest-src 'self'`,
+  `worker-src 'self'`,
+  `object-src 'none'`,
+  `base-uri 'self'`,
+  `form-action 'self'`,
+  `frame-ancestors 'none'`,
+].join('; ');
+
+
+// create abElements' baseline security headers as `securityHeaders` (PLAN.md §3.10)
+const securityHeaders: { key: string; value: string }[] = [
+  // two years; `preload` waits for the final custom domain
+  { key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains' },
+  { key: 'X-Content-Type-Options', value: 'nosniff' },
+  { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+  { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()' },
+  { key: 'Cross-Origin-Opener-Policy', value: 'same-origin' },
+  { key: 'X-Frame-Options', value: 'DENY' },
+  { key: 'Content-Security-Policy-Report-Only', value: contentSecurityPolicy },
+];
+
+
 // create abElements' Next.js config as `nextConfig`
 const nextConfig: NextConfig = {
   // the Ab packages ship TypeScript sources, so let Next.js compile them
@@ -66,6 +104,11 @@ const nextConfig: NextConfig = {
   experimental: {
     // root 404 for unmatched URLs when the root layout is under `app/[locale]`
     globalNotFound: true,
+  },
+
+  // send the security headers with every response (pages, redirects, robots, sitemap, manifest, assets)
+  async headers() {
+    return [{ source: '/:path*', headers: securityHeaders }];
   },
 };
 

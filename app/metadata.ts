@@ -76,8 +76,8 @@ export const StaticMetadata: Metadata = {
   /* Generator 4 SEO */
   generator: 'abElements',
 
-  /* Referrer - OWCO to send the full URL to referring pages within abElements but only domain/subdomain to external sites */
-  referrer: 'origin-when-cross-origin',
+  /* Referrer - the full URL within abElements, only the origin to other HTTPS sites & nothing on HTTPS → HTTP (same as the Referrer-Policy header) */
+  referrer: 'strict-origin-when-cross-origin',
 
   /* Keywords */
   keywords: [ "nextjs", "react", "components", "free", "ui", "open-source", "pwa", "ab-elements", "abraham", "ukachi", "ab-nextjs-fonts", "ab-nextjs-icons", "ab-nextjs-animations", "ab-nextjs-theme", "ab-nextjs-hooks", "ab-nextjs-core", "ab-nextjs-components" ],
