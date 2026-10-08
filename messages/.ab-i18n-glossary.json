@@ -1,0 +1,25 @@
+{
+  "doNotTranslate": [
+    "abElements",
+    "AB Elements",
+    "Abraham Ukachi",
+    "Next.js",
+    "React",
+    "Vue",
+    "Lit",
+    "Flutter",
+    "Github"
+  ],
+  "allowIdentical": [
+    "Metadata.titleTemplate",
+    "Common.authorName",
+    "Common.logoAlt",
+    "Common.authorAlt",
+    "Common.next",
+    "Common.react",
+    "Common.vue",
+    "Common.lit",
+    "Common.flutter"
+  ],
+  "terms": {}
+}

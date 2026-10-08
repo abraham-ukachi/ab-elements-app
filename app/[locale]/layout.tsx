@@ -1,22 +1,33 @@
 // REACT types
 import type { ReactNode } from 'react';
 
-import type { Metadata } from './metadata';
-import type { Viewport } from './viewport';
+import type { Metadata } from '../metadata';
+import type { Viewport } from '../viewport';
+
+import { notFound } from 'next/navigation';
 
 // import the Inter font class names from `ab-nextjs-fonts`
 import { interStyles } from 'ab-nextjs-fonts';
 
-import { APP_LANG, StaticMetadata } from './metadata';
-import { StaticViewport } from './viewport';
+import { AbI18nProvider } from 'ab-nextjs-i18n';
+import { isAbLocale } from 'ab-nextjs-i18n/config';
+import { generateAbStaticParams } from 'ab-nextjs-i18n/server';
 
-import './globals.css';
+import abI18nConfig from '@/i18n/config';
+import { StaticMetadata } from '../metadata';
+import { StaticViewport } from '../viewport';
+
+import '../globals.css';
 
 
 // export the static metadata
 export const metadata: Metadata = StaticMetadata;
 // export the static viewport
 export const viewport: Viewport = StaticViewport;
+
+// Prerender /, /fr, /es and /ru at build time (i18n/request.ts reads the locale from
+// next/root-params, so no setAbRequestLocale is needed).
+export const generateStaticParams = () => generateAbStaticParams(abI18nConfig);
 
 
 /**
@@ -39,17 +50,24 @@ const themeScript: string = `(function () {
 })();`;
 
 
-export default function RootLayout({
+export default async function LocaleLayout({
   children,
+  params,
 }: Readonly<{
   children: ReactNode;
+  params: Promise<{ locale: string }>;
 }>) {
+  const { locale } = await params;
+  if (!isAbLocale(abI18nConfig, locale)) notFound();
+
   return (
-    <html lang={APP_LANG} suppressHydrationWarning>
+    <html lang={locale} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
-      <body className={interStyles.regular}>{children}</body>
+      <body className={interStyles.regular}>
+        <AbI18nProvider config={abI18nConfig}>{children}</AbI18nProvider>
+      </body>
     </html>
   );
 }

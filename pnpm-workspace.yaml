@@ -1,5 +1,7 @@
 # pnpm 11 settings (the "pnpm" field in package.json is no longer read).
 allowBuilds:
+  '@parcel/watcher': true
+  '@swc/core': true
   sharp: true
   unrs-resolver: true
 # our own Ab packages are trusted, so fresh releases skip pnpm's minimum release age
