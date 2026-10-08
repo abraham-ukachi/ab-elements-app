@@ -1,7 +1,27 @@
+import type { Metadata } from 'next';
 import Image from 'next/image';
 import NextLink from 'next/link';
+import { notFound } from 'next/navigation';
 
-import { getAbTranslations } from 'ab-nextjs-i18n/server';
+import { isAbLocale } from 'ab-nextjs-i18n/config';
+import { getAbAlternates, getAbTranslations } from 'ab-nextjs-i18n/server';
+
+import abI18nConfig from '@/i18n/config';
+import { APP_URL } from '@/app/metadata';
+
+
+type HomeProps = Readonly<{ params: Promise<{ locale: string }> }>;
+
+
+// canonical URL of this locale + hreflang alternates for every locale (and x-default)
+export async function generateMetadata({ params }: HomeProps): Promise<Metadata> {
+  const { locale } = await params;
+  if (!isAbLocale(abI18nConfig, locale)) notFound();
+
+  return {
+    alternates: getAbAlternates(abI18nConfig, '/', { locale, baseUrl: APP_URL }),
+  };
+}
 
 
 const frameworkLinkClass =

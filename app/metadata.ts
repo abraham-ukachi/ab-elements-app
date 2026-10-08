@@ -46,6 +46,9 @@
 // import the Metadata type from `next`
 import type { Metadata } from 'next';
 
+// import the default (en) messages: the source of abElements' shared copy
+import enMessages from '../messages/en.json';
+
 
 // create and export some vip path directories ;)
 export const ASSETS_DIR: string = '/assets';
@@ -53,24 +56,22 @@ export const IMAGES_DIR: string = '/assets/images';
 export const MANIFEST_DIR: string = '/assets/images/manifest';
 
 
-// create and export abElements' shared copy as `APP_DESCRIPTION` (used by the metadata & the web app manifest)
-export const APP_DESCRIPTION: string = 'abElements is the home of every Ab package: docs, live examples, and an installable PWA, built with the same packages it documents.';
+// create and export abElements' public URL as `APP_URL` (metadataBase, canonical & hreflang URLs, sitemap, robots)
+export const APP_URL: string = process.env.NEXT_PUBLIC_APP_URL || 'https://ab-elements.vercel.app';
+
+// create and export abElements' default (en) description as `APP_DESCRIPTION` (global 404 & web app manifest)
+export const APP_DESCRIPTION: string = enMessages.Metadata.description;
 
 export { Metadata };
 
 // create and export abElements' root static metadata as `StaticMetadata`
+// NOTE: the title & description are localized in `app/[locale]/layout.tsx` (`generateMetadata`)
 export const StaticMetadata: Metadata = {
+  /* Metadata Base - resolves relative URLs (canonical, hreflang, Open Graph...) */
+  metadataBase: new URL(APP_URL),
+
   /* Application Name */
   applicationName: 'abElements',
-
-  /* App Title */
-  title: {
-    template: '%s | abElements',
-    default: 'Coming Soon 🫶🏼 - abElements',
-  },
-
-  /* App Description */
-  description: APP_DESCRIPTION,
 
   /* Generator 4 SEO */
   generator: 'abElements',
