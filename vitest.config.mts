@@ -8,6 +8,8 @@ export default defineConfig({
     // mirror the `@/*` path alias of tsconfig.json
     alias: [
       { find: /^@\//, replacement: fileURLToPath(new URL('./', import.meta.url)) },
+      // `server-only` throws outside React Server Components (see tests/unit/stubs/server-only.ts)
+      { find: /^server-only$/, replacement: fileURLToPath(new URL('./tests/unit/stubs/server-only.ts', import.meta.url)) },
     ],
   },
 
