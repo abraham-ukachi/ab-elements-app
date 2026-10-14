@@ -24,7 +24,7 @@
 * SOFTWARE.
 *
 * @project: ab-elements-app
-* @name: abElements Splash - Index
+* @name: abElements Splash - Index (thin wrapper over ab-nextjs-components/ab-splash)
 * @file: components/app/splash/index.ts
 * @type: TypeScript
 * @authors: Abraham Ukachi <abrahamukachi@gmail.com>
@@ -43,7 +43,16 @@
 */
 
 
-// export the Splash overlay as the default 💦
-export { default } from './splash';
-// export the gate script & helpers 🚦
-export * from './splash-gate';
+// export the Splash overlay (mark + wordmark + AbLinearProgress) from `ab-nextjs-components` as the default 💦
+export { default } from 'ab-nextjs-components/ab-splash';
+
+// import the gate script builder from `ab-nextjs-components` 🚦
+import { buildAbSplashGateScript } from 'ab-nextjs-components/ab-splash/gate';
+// import our i18n config (the single source of truth for locales) 🌐
+import { abI18nConfig } from '@/i18n/config';
+
+// create and export the gate script, built from OUR locales (`/fr`, `/es`, `/ru` + `/` for the default) as `abSplashGateScript` 🏗️
+export const abSplashGateScript: string = buildAbSplashGateScript({
+  locales: abI18nConfig.locales,
+  defaultLocale: abI18nConfig.defaultLocale,
+});
