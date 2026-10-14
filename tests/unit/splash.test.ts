@@ -58,14 +58,25 @@ import nextConfig from '../../next.config';
 
 // NOTE: the gate's path / storage / timing tests live in ab-nextjs-components/__tests__/ab-splash.test.ts 😉
 
+// a normal desktop browser's user agent 🖥️
+const AB_TEST_UA = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36';
+
+// a tiny in-memory Storage 🗄️ (shared between visits when passed in)
+const createStorage = () => {
+  // the stored values
+  const data = new Map<string, string>();
+  // the Storage-like API
+  return { getItem: (k: string) => data.get(k) ?? null, setItem: (k: string, v: string) => void data.set(k, v) };
+};
+
 // run the gate script against a fake browser 🌐 and return the `<html>` flag
-const runGate = (pathname: string): string | undefined => {
+const runGate = (pathname: string, {
+  userAgent = AB_TEST_UA, webdriver = false, localStorage = createStorage(),
+}: { userAgent?: string; webdriver?: boolean; localStorage?: ReturnType<typeof createStorage> } = {}): string | undefined => {
   // the fake `<html>` attributes
   const attrs = new Map<string, string>();
-  // a tiny in-memory Storage 🗄️
-  const storage = () => { const d = new Map<string, string>(); return { getItem: (k: string) => d.get(k) ?? null, setItem: (k: string, v: string) => void d.set(k, v) }; };
-  // the fake `window` (a first visit in a normal tab)
-  const window = { matchMedia: () => ({ matches: false }), navigator: { userAgent: 'Mozilla/5.0' }, location: { pathname }, localStorage: storage(), sessionStorage: storage() };
+  // the fake `window` (a normal tab, not standalone)
+  const window = { matchMedia: () => ({ matches: false }), navigator: { userAgent, webdriver }, location: { pathname }, localStorage, sessionStorage: createStorage() };
   // the fake `document`
   const document = { documentElement: { setAttribute: (k: string, v: string) => void attrs.set(k, v) } };
   // run the inline script with our fakes 🏃
@@ -98,6 +109,23 @@ describe('components/app/splash (thin wrapper)', () => {
 
   it('never blocks a deep link on the first visit', () => {
     expect(runGate('/docs/button')).toBeUndefined();
+  });
+
+  it('never shows on the default locale prefix (`/en`, `/en/welcome`) 🇬🇧', () => {
+    for (const path of ['/en', '/en/', '/en/welcome']) expect(runGate(path)).toBeUndefined();
+  });
+
+  it('never shows for bots or automation (crawler UA, headless, `navigator.webdriver`) 🤖', () => {
+    expect(runGate('/', { userAgent: 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)' })).toBeUndefined();
+    expect(runGate('/', { userAgent: 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/141.0.0.0 Safari/537.36' })).toBeUndefined();
+    expect(runGate('/', { webdriver: true })).toBeUndefined();
+  });
+
+  it('shows on the first visit only, not on the second (same localStorage) 👣', () => {
+    const localStorage = createStorage();
+    expect(runGate('/', { localStorage })).toBe('on');
+    expect(runGate('/', { localStorage })).toBeUndefined();
+    expect(runGate('/fr', { localStorage })).toBeUndefined();
   });
 
   it('keeps the gate hash OUT of the main CSP (`unsafe-inline` must keep working) 🔐', async () => {
