@@ -27,5 +27,110 @@
     "code": "404",
     "title": "This page could not be found.",
     "backHome": "Back to abElements"
+  },
+  "Welcome": {
+    "meta": {
+      "title": "Welcome · abElements"
+    },
+    "carouselLabel": "Introduction to AbElements",
+    "counter": "{current} / {total}",
+    "skip": "Skip",
+    "back": "Previous slide",
+    "next": "Next slide",
+    "goTo": "Go to slide {n}: {title}",
+    "slideLabel": "{n} of {total}",
+    "announce": "Slide {n} of {total}: {title}",
+    "theme": {
+      "label": "Theme",
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
+    },
+    "language": "Language",
+    "install": {
+      "label": "Install {pkg}",
+      "copy": "Copy command",
+      "copied": "Copied"
+    },
+    "playground": {
+      "title": "Live Playground",
+      "live": "live"
+    },
+    "cta": "Get Started",
+    "github": "Continue with GitHub",
+    "comingSoon": "Coming soon",
+    "slides": {
+      "s01": {
+        "eyebrow": "Welcome",
+        "title": "Welcome to <em>AbElements</em>",
+        "body": "A free, open-source Next.js UI library: eight focused packages that share one theme, with live docs and examples for every element.",
+        "illustrationAlt": "Diagram: the eight AbElements packages all connect to the AbElements logo.",
+        "packages": {
+          "core": "Config, layouts & a11y primitives",
+          "components": "Buttons, tabs, menus & a splash screen",
+          "theme": "Bronze tokens & real dark mode",
+          "icons": "Tree-shakable SVG icons",
+          "fonts": "Inter, Mulish & more, self-hosted",
+          "animations": "Easings, fades & transitions",
+          "hooks": "Typed React hooks",
+          "i18n": "Locales, routing & messages"
+        }
+      },
+      "s02": {
+        "title": "Core elements",
+        "body": "The config, layouts and accessible primitives every other AbElements package builds on.",
+        "illustrationAlt": "Diagram: the screen, main and aside layouts all connect to the core package."
+      },
+      "s03": {
+        "title": "Ready-made components",
+        "body": "Accessible React UI built on Core and Theme, from buttons and tabs to menus and a splash screen.",
+        "illustrationAlt": "Diagram: a button, a tab bar, a menu and a splash screen connect to the components package."
+      },
+      "s04": {
+        "title": "Warm, tokenised theming",
+        "body": "Bronze design tokens as CSS variables, with a real dark mode and no flash on load.",
+        "illustrationAlt": "Diagram: colour swatches and a light and dark switch connect to the theme tokens.",
+        "chips": {
+          "tokens": "Tokens",
+          "lightDark": "Light & dark",
+          "cssVariables": "CSS variables"
+        }
+      },
+      "s05": {
+        "title": "Tree-shakable icons",
+        "body": "SVG icons with typed names. Import only the icons you ship.",
+        "illustrationAlt": "Diagram: a grid of icons connects to the icon component, with size and weight options.",
+        "chips": {
+          "grid": "24px grid",
+          "typed": "Typed names"
+        }
+      },
+      "s06": {
+        "title": "Fonts without layout shift",
+        "body": "Inter, Zilla Slab, Mulish, Quicksand and Roboto, self-hosted for Next.js with simple font-* utilities.",
+        "illustrationAlt": "Diagram: five font specimens surround a large “Aa”."
+      },
+      "s07": {
+        "title": "Animations that feel right",
+        "body": "Easings, fades and transitions that respect the reduced-motion setting out of the box.",
+        "illustrationAlt": "Diagram: an easing curve and a reduce-animations switch connect to the animations package.",
+        "chips": {
+          "easings": "Easings",
+          "fades": "Fades",
+          "reducedMotion": "Reduced motion"
+        }
+      },
+      "s08": {
+        "title": "Typed React hooks",
+        "body": "Small, typed hooks for the theme, media queries, storage and the clipboard.",
+        "illustrationAlt": "Diagram: four hooks connect to the hooks package."
+      },
+      "s09": {
+        "pill": "Free forever · MIT",
+        "title": "Build your web apps<br></br>for free with <em>AbElements</em>",
+        "body": "Eight open-source packages, live docs and one PWA. MIT, free forever.",
+        "illustrationAlt": "Diagram: the eight packages, the docs and the PWA all connect to AbElements."
+      }
+    }
   }
 }
