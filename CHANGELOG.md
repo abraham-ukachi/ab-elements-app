@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.15](https://github.com/abraham-ukachi/ab-elements-app/compare/v0.2.14...v0.2.15) (2026-10-14)
+
+* :lock: Add baseline security headers: HSTS, nosniff, Referrer-Policy, Permissions-Policy, COOP, `X-Frame-Options: DENY` & a report-only CSP; drop `X-Powered-By`
+* :white_check_mark: Test the security headers with Vitest & Playwright (new `test:e2e` script)
+* :bulb: Update the copyright year to 2026 in the license headers & the LICENSE
+
 ### [0.2.14](https://github.com/abraham-ukachi/ab-elements-app/compare/v0.2.13...v0.2.14) (2026-10-14)
 
 ### [0.2.13](https://github.com/abraham-ukachi/ab-elements-app/compare/v0.2.12...v0.2.13) (2026-10-08)
