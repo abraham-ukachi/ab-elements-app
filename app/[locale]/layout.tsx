@@ -70,6 +70,9 @@ import { StaticMetadata } from '../metadata';
 import { StaticViewport } from '../viewport';
 
 // import the global styles 🎨
+// import the Splash overlay & its (pre-paint 🚦) gate script
+import Splash, { abSplashGateScript } from '@/components/app/splash';
+
 import '../globals.css';
 
 
@@ -152,9 +155,13 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
       {/* Head - with the (no flash ⚡️) theme script */}
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        {/* the Splash gate (standalone launch / first visit 💦) */}
+        <script dangerouslySetInnerHTML={{ __html: abSplashGateScript }} />
       </head>
       {/* Body - with the Inter font & the i18n provider */}
       <body className={interStyles.regular}>
+        {/* the Splash overlay (CSS-hidden unless the gate turned it on) */}
+        <Splash />
         <AbI18nProvider config={abI18nConfig}>{children}</AbI18nProvider>
       </body>
     </html>

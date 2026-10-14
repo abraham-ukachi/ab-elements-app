@@ -1,0 +1,145 @@
+/* 
+* @license MIT
+* ~~~~~~~~~~~~
+* ab-elements-app
+* ~~~~~~~~~~~~
+* Copyright (c) 2026 Abraham Ukachi. The abElements Project.
+*
+* Permission is hereby granted, free of charge, to any person obtaining a copy
+* of this software and associated documentation files (the 'Software'), to deal
+* in the Software without restriction, including without limitation the rights
+* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+* copies of the Software, and to permit persons to whom the Software is
+* furnished to do so, subject to the following conditions:
+*
+* The above copyright notice and this permission notice shall be included in all
+* copies or substantial portions of the Software.
+*
+* THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+* SOFTWARE.
+*
+* @project: ab-elements-app
+* @name: abElements Splash - Styles
+* @file: components/app/splash/splash.module.css
+* @type: CSS
+* @authors: Abraham Ukachi <abrahamukachi@gmail.com>
+*
+* Example usage:
+*   1+|> import styles from './splash.module.css';
+*    -|>
+*
+*/
+
+
+/*
+* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+* MOTTO: We'll always do more 😜!!!
+* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+*/
+
+
+/* the overlay: hidden by default (so JS off = no Splash 🙈) */
+.splash {
+  /* hidden unless the gate turned it on */
+  display: none;
+  /* cover the whole viewport */
+  position: fixed;
+  inset: 0;
+  /* above everything 🔝 */
+  z-index: 1000;
+  /* center the brand & the progress */
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2.5rem;
+  /* light colors ☀️ */
+  background-color: #fff8f3;
+  color: #a67c52;
+  /* the fade-out 🌫️ */
+  transition: opacity 200ms ease;
+  /* failsafe: never longer than 1.2 s, even if hydration never happens ⏱️ */
+  animation: ab-splash-out 0s linear 1.2s forwards;
+}
+
+/* dark colors 🌙 */
+:global(html.dark) .splash {
+  background-color: #1a1310;
+  color: #ffffff;
+}
+
+/* the gate said "on" (or we're leaving) 🚦 */
+:global(html[data-ab-splash]) .splash {
+  display: flex;
+}
+
+/* leaving: fade out 👋 */
+:global(html[data-ab-splash='leaving']) .splash {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* the brand row (mark + wordmark) */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* the mark 🅰️ */
+.logo {
+  width: clamp(2.75rem, 6vw, 3.5rem) !important;
+  height: clamp(2.75rem, 6vw, 3.5rem) !important;
+}
+
+/* the mark goes white in dark mode 🌙 */
+:global(html.dark) .logo {
+  filter: brightness(0) invert(1);
+}
+
+/* the "Elements" wordmark 🔤 */
+.wordmark {
+  font-size: clamp(2.5rem, 6vw, 3.25rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.01em;
+}
+
+/* the progress track 📶 */
+.progress {
+  width: min(18rem, 60vw);
+  height: 0.375rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background-color: color-mix(in srgb, currentColor 18%, transparent);
+  color: #a67c52;
+}
+
+/* the progress bar (inside `AbLinearProgress`) */
+.progress > div {
+  height: 100%;
+  border-radius: inherit;
+  background-color: currentColor;
+  opacity: 1 !important;
+  transition: width 300ms ease;
+}
+
+/* reduced motion: no fade, no sliding bar ♿️ */
+@media (prefers-reduced-motion: reduce) {
+  .splash,
+  .progress > div {
+    transition: none;
+  }
+}
+
+/* the failsafe keyframes */
+@keyframes ab-splash-out {
+  to {
+    visibility: hidden;
+    pointer-events: none;
+  }
+}
