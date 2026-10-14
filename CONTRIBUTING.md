@@ -204,6 +204,7 @@ The real scripts from [`package.json`](./package.json):
 | `pnpm lint` | `eslint .` | ESLint 9 flat config ([`eslint.config.mjs`](./eslint.config.mjs)); there's no `next lint` in Next.js 16. |
 | `pnpm typecheck` | `tsc --noEmit` | Quick type check without a full build. |
 | `pnpm test` | `vitest run` | Unit tests in `tests/unit` ([`vitest.config.mts`](./vitest.config.mts)). |
+| `pnpm test:e2e` | `playwright test` | End-to-end tests in `tests/e2e` ([`playwright.config.ts`](./playwright.config.ts)) against `pnpm start` on port 3020 (run `pnpm build` first; `E2E_PORT` overrides the port). |
 
 
 ### Environment variables
@@ -256,14 +257,16 @@ The tracked files of `ab-elements-app` today (`node_modules`, `.next`, `.vercel`
 │   ├── assets/images            # favicons, manifest icons (squircle/), PWA screenshots
 │   └── *.svg, me.jpg, ...       # logos & pictures used by the pages
 ├── tests
+│   ├── e2e                      # Playwright end-to-end tests (*.spec.ts)
 │   └── unit                     # Vitest unit tests (*.test.ts)
 ├── CHANGELOG.md                 # one heading per release (standard-version format)
 ├── CONTRIBUTING.md              # this file ;)
 ├── LICENSE                      # MIT
 ├── README.md
 ├── eslint.config.mjs            # ESLint 9 flat config (next core-web-vitals + typescript)
-├── next.config.ts               # transpilePackages: the 7 Ab packages
+├── next.config.ts               # transpilePackages (the 7 Ab packages), withAbI18n & the security headers
 ├── package.json
+├── playwright.config.ts         # Playwright: e2e tests against the production server (port 3020)
 ├── pnpm-lock.yaml
 ├── pnpm-workspace.yaml          # pnpm 11 settings
 ├── postcss.config.mjs           # @tailwindcss/postcss
@@ -446,7 +449,7 @@ import { useAbDialog } from 'ab-nextjs-hooks';
 * ~~~~~~~~~~~~
 * ab-elements-app
 * ~~~~~~~~~~~~
-* Copyright (c) 2024 Abraham Ukachi. The abElements Project.
+* Copyright (c) 2026 Abraham Ukachi. The abElements Project.
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * ...(the rest of the MIT license text, as in app/not-found.tsx)...
@@ -1680,7 +1683,9 @@ Unit tests run with [Vitest](https://vitest.dev) and live in `tests/unit` (`*.te
 4. pass `pnpm build` (production build),
 5. be checked by hand with `pnpm dev` (or `pnpm build && pnpm start`) in **light & dark**, on a **mobile** and a **laptop** width, for every page it touches.
 
-> NOTE: End-to-end tests (e.g. Playwright for the screens) will come with the docs screens. Use ✅ `:white_check_mark:` for tests and 👷 `:construction_worker:` for CI changes, as [gitmoji.dev](https://gitmoji.dev) intends.
+End-to-end tests run with [Playwright](https://playwright.dev) and live in `tests/e2e` (`*.spec.ts`). They hit the production server (`pnpm build && pnpm test:e2e`), so the security headers of `next.config.ts` and the i18n proxy behave as on Vercel. They aren't part of CI yet.
+
+> NOTE: More end-to-end tests (e.g. the screens and visual snapshots) will come with the docs screens. Use ✅ `:white_check_mark:` for tests and 👷 `:construction_worker:` for CI changes, as [gitmoji.dev](https://gitmoji.dev) intends.
 
 
 ---
