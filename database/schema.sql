@@ -633,18 +633,18 @@ CREATE TABLE audit_logs (
 
 
 -- =============================================================================
--- 8. SEED: the AbElements package catalogue (as of 2026-10-03)
+-- 8. SEED: the abElements package catalogue (as of 2026-10-14, = the versions ab-elements-app uses)
 -- =============================================================================
 
 INSERT INTO packages (slug, npm_name, display_name, tagline, icon_name, github_repo, status, latest_version, sort_order) VALUES
-  ('fonts',      'ab-nextjs-fonts',      'Fonts',      'Font presets for next/font, zero layout shift.',  'text_fields', 'abraham-ukachi/ab-nextjs-fonts',      'stable',  '0.2.3', 1),
-  ('icons',      'ab-nextjs-icons',      'Icons',      'Material Symbols as tree-shakable React icons.',  'interests',   'abraham-ukachi/ab-nextjs-icons',      'stable',  '0.1.4', 2),
-  ('animations', 'ab-nextjs-animations', 'Animations', 'Motion presets and easings, reduced-motion aware.', 'animation', 'abraham-ukachi/ab-nextjs-animations', 'beta',    '0.2.1', 3),
-  ('theme',      'ab-nextjs-theme',      'Theme',      'Design tokens, light/dark modes, CSS variables.', 'palette',     'abraham-ukachi/ab-nextjs-theme',      'stable',  '0.2.8', 4),
-  ('hooks',      'ab-nextjs-hooks',      'Hooks',      'Typed React hooks for media, theme and storage.', 'phishing',    'abraham-ukachi/ab-nextjs-hooks',      'stable',  '0.1.2', 5),
-  ('core',       'ab-nextjs-core',       'Core',       'Layouts, providers and shared utilities.',        'deployed_code','abraham-ukachi/ab-nextjs-core',      'stable',  '0.1.2', 6),
-  ('components', 'ab-nextjs-components', 'Components', 'Accessible UI built on core and theme.',          'widgets',     'abraham-ukachi/ab-nextjs-components', 'stable',  '0.1.4', 7),
-  ('i18n',       'ab-nextjs-i18n',       'i18n',       'Locales, messages and translation helpers (to be created).', 'translate', NULL,                   'planned', NULL,    8);
+  ('fonts',      'ab-nextjs-fonts',      'Fonts',      'Font presets for next/font, zero layout shift.',  'text_fields', 'abraham-ukachi/ab-nextjs-fonts',      'stable',  '0.2.4', 1),
+  ('icons',      'ab-nextjs-icons',      'Icons',      'Material Symbols as tree-shakable React icons.',  'interests',   'abraham-ukachi/ab-nextjs-icons',      'stable',  '0.2.2', 2),
+  ('animations', 'ab-nextjs-animations', 'Animations', 'Motion presets and easings, reduced-motion aware.', 'animation', 'abraham-ukachi/ab-nextjs-animations', 'beta',    '0.2.2', 3),
+  ('theme',      'ab-nextjs-theme',      'Theme',      'Design tokens, light/dark modes, CSS variables.', 'palette',     'abraham-ukachi/ab-nextjs-theme',      'stable',  '0.3.0', 4),
+  ('hooks',      'ab-nextjs-hooks',      'Hooks',      'Typed React hooks for media, theme and storage.', 'phishing',    'abraham-ukachi/ab-nextjs-hooks',      'stable',  '0.1.4', 5),
+  ('core',       'ab-nextjs-core',       'Core',       'Layouts, providers and shared utilities.',        'deployed_code','abraham-ukachi/ab-nextjs-core',      'stable',  '0.1.5', 6),
+  ('components', 'ab-nextjs-components', 'Components', 'Accessible UI built on core and theme.',          'widgets',     'abraham-ukachi/ab-nextjs-components', 'stable',  '0.1.8', 7),
+  ('i18n',       'ab-nextjs-i18n',       'i18n',       'Locales, messages and translation helpers (next-intl + CLI).', 'translate', 'abraham-ukachi/ab-nextjs-i18n', 'beta', '0.1.0', 8);  -- 🌍 published on npm (0.1.0)
 
 INSERT INTO doc_versions (label, slug, status, is_default) VALUES ('v1.x', 'v1', 'current', 1);
 
