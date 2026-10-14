@@ -71,5 +71,8 @@ export default defineConfig({
     include: ['tests/unit/**/*.test.{ts,tsx}'],
     // run them in Node.js (no DOM needed yet)
     environment: 'node',
+    // bundle next-intl through Vite: its ESM imports `next/server` without the `.js` extension,
+    // which Node's resolver refuses (the proxy.ts gate tests load the i18n proxy) 🧭
+    server: { deps: { inline: ['next-intl'] } },
   },
 });
