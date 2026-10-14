@@ -1,0 +1,310 @@
+/* 
+* @license MIT
+* ~~~~~~~~~~~~
+* ab-elements-app
+* ~~~~~~~~~~~~
+* Copyright (c) 2026 Abraham Ukachi. The abElements Project.
+*
+* Permission is hereby granted, free of charge, to any person obtaining a copy
+* of this software and associated documentation files (the 'Software'), to deal
+* in the Software without restriction, including without limitation the rights
+* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+* copies of the Software, and to permit persons to whom the Software is
+* furnished to do so, subject to the following conditions:
+*
+* The above copyright notice and this permission notice shall be included in all
+* copies or substantial portions of the Software.
+*
+* THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+* SOFTWARE.
+*
+* @project: ab-elements-app
+* @name: abElements Welcome Styles
+* @file: app/[locale]/welcome/welcome.module.css
+* @type: CSS (Module)
+* @authors: Abraham Ukachi <abrahamukachi@gmail.com>
+*
+* Example usage:
+*   1+|> import styles from './welcome.module.css';
+*    -|> 
+*
+*/
+
+
+/*
+* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+* MOTTO: We'll always do more 😜!!!
+* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+*/
+
+
+/* 🎨 Every Welcome-only style lives here (nothing in globals.css or the shared layouts). */
+/* Colors come from the theme tokens only (`var(--md-sys-color-*)`), never a hard-coded hex. */
+/* TODO(0.2.18): needs ab-nextjs-theme@0.3.1 (G18 `--ab-color-bronze-text`, `--ab-font-title`, sage/glow/focus tokens) */
+
+/* 🎬 the Welcome page */
+.welcome {
+  /* full viewport height */
+  min-height: 100dvh;
+  /* the warm page background */
+  background: var(--md-sys-color-background);
+  /* the body text color */
+  color: var(--md-sys-color-on-background);
+}
+
+/* 🔝 top bar: logo left, utilities right */
+.topBar {
+  /* a row */
+  display: flex;
+  /* logo left, utilities right */
+  justify-content: space-between;
+  /* vertically centered */
+  align-items: center;
+  /* mobile height (48px) */
+  height: 48px;
+  /* side padding */
+  padding: 0 16px;
+  /* the divider under it */
+  border-bottom: 1px solid var(--md-sys-color-outline-variant);
+}
+
+/* 🌗🌍 theme + globe */
+.utilities {
+  /* a row */
+  display: flex;
+  /* 8px apart */
+  gap: 8px;
+}
+
+/* 🎞️ the slide stack (no-JS layout) */
+.slides {
+  /* a column */
+  display: flex;
+  /* stacked slides */
+  flex-direction: column;
+}
+
+/* 🎞️ one slide */
+.slide {
+  /* text pane + aside */
+  display: grid;
+  /* mobile padding */
+  padding: 32px 16px;
+  /* the divider between slides */
+  border-bottom: 1px solid var(--md-sys-color-outline-variant);
+}
+
+/* 📝 the text pane */
+.textPane {
+  /* centered column */
+  display: flex;
+  /* top to bottom */
+  flex-direction: column;
+  /* 16px rhythm */
+  gap: 16px;
+  /* the mocks' max width */
+  max-width: 700px;
+}
+
+/* 🔢 the `02 / 09` counter */
+.counter {
+  /* mono digits */
+  font-family: ui-monospace, monospace;
+  /* small */
+  font-size: 0.875rem;
+  /* muted */
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+/* 🏷️ eyebrow / pill text (small bronze text: needs the darker light-mode token) */
+.eyebrow {
+  /* mono, uppercase */
+  font-family: ui-monospace, monospace;
+  /* uppercase label */
+  text-transform: uppercase;
+  /* small */
+  font-size: 0.75rem;
+  /* letter spacing */
+  letter-spacing: 0.08em;
+  /* the bronze text token (falls back to the primary color until theme 0.3.1) */
+  color: var(--ab-color-bronze-text, var(--md-sys-color-primary));
+}
+
+/* 🔠 slide title (Mulish via the font class) */
+.title {
+  /* Mulish, with system fallbacks (`--ab-font-title` from theme 0.3.1) */
+  font-family: var(--ab-font-title, 'Mulish', system-ui, sans-serif);
+  /* mobile size */
+  font-size: 32px;
+  /* tight lines */
+  line-height: 1.1;
+  /* long fr/ru titles wrap, never clip 🌍 */
+  overflow-wrap: anywhere;
+  /* no focus outline on the programmatic Skip focus (it's not interactive) ♿ */
+  outline: none;
+}
+
+/* ✨ the bronze accent word */
+.accent {
+  /* not italic: the mocks use color only */
+  font-style: normal;
+  /* bronze (large text: the base accent passes) */
+  color: var(--md-sys-color-primary);
+}
+
+/* 📄 the lead paragraph */
+.body {
+  /* lead size */
+  font-size: 1.0625rem;
+  /* comfortable lines */
+  line-height: 1.6;
+  /* muted */
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+/* 📦 the s01 package cards (2 columns) */
+.cards {
+  /* a grid */
+  display: grid;
+  /* 2 columns */
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  /* 12px gaps */
+  gap: 12px;
+  /* no bullets */
+  list-style: none;
+  /* no indent */
+  padding: 0;
+}
+
+/* 📦 one card */
+.card {
+  /* a column */
+  display: flex;
+  /* name above the one-liner */
+  flex-direction: column;
+  /* 4px apart */
+  gap: 4px;
+  /* inner padding */
+  padding: 12px;
+  /* rounded */
+  border-radius: 12px;
+  /* hairline border */
+  border: 1px solid var(--md-sys-color-outline-variant);
+  /* card surface */
+  background: var(--md-sys-color-surface-container-low);
+}
+
+/* 📦 package name */
+.cardName {
+  /* small mono */
+  font-size: 0.8125rem;
+  /* bold */
+  font-weight: 700;
+}
+
+/* 📦 one-liner (hidden on mobile, as in the mocks) */
+.cardDesc {
+  /* hidden on mobile */
+  display: none;
+  /* small */
+  font-size: 0.8125rem;
+  /* muted */
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+/* 🏷️ chip list */
+.chips {
+  /* a wrapping row */
+  display: flex;
+  /* wrap */
+  flex-wrap: wrap;
+  /* 8px gaps */
+  gap: 8px;
+  /* no bullets */
+  list-style: none;
+  /* no indent */
+  padding: 0;
+}
+
+/* 🏷️ one chip */
+.chip {
+  /* pill padding */
+  padding: 4px 12px;
+  /* pill */
+  border-radius: 999px;
+  /* hairline */
+  border: 1px solid var(--md-sys-color-outline-variant);
+  /* small */
+  font-size: 0.8125rem;
+}
+
+/* 💻 install command */
+.install {
+  /* inner padding */
+  padding: 12px 16px;
+  /* rounded */
+  border-radius: 12px;
+  /* code surface */
+  background: var(--md-sys-color-surface-container-high);
+  /* scroll long commands */
+  overflow-x: auto;
+}
+
+/* 🚀 s09 actions */
+.actions {
+  /* a wrapping row */
+  display: flex;
+  /* wrap on mobile */
+  flex-wrap: wrap;
+  /* 12px gaps */
+  gap: 12px;
+}
+
+/* ♿ visually hidden, still read by screen readers */
+.srOnly {
+  /* out of the flow */
+  position: absolute;
+  /* 1px box */
+  width: 1px;
+  /* 1px box */
+  height: 1px;
+  /* clipped */
+  overflow: hidden;
+  /* fully clipped */
+  clip-path: inset(50%);
+  /* no wrapping */
+  white-space: nowrap;
+}
+
+/* 📱→💻 tablet (≥ 640) */
+@media (min-width: 640px) {
+  /* taller top bar */
+  .topBar { height: 56px; padding: 0 32px; }
+  /* more padding */
+  .slide { padding: 32px; }
+  /* show the card one-liners */
+  .cardDesc { display: block; }
+}
+
+/* 💻 laptop (≥ 1024): text pane + aside side by side */
+@media (min-width: 1024px) {
+  /* the mocks' 60px top bar */
+  .topBar { height: 60px; }
+  /* text 55% / aside 45% */
+  .slide { grid-template-columns: 55fr 45fr; padding: 40px 96px 48px; }
+  /* fluid title */
+  .title { font-size: clamp(48px, 4.5vw, 68px); }
+  /* the s09 title is bigger */
+  .slide:last-child .title { font-size: clamp(52px, 5.3vw, 80px); }
+}
+
+/* 🧘 reduced motion: nothing animates here yet (the carousel handles it) */
+@media (prefers-reduced-motion: reduce) {
+  /* no transitions at all */
+  .welcome * { transition: none; animation: none; }
+}
