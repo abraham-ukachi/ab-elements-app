@@ -1,9 +1,9 @@
 /* 
 * @license MIT
 * ~~~~~~~~~~~~
-* ab-elements-app 
+* ab-elements-app
 * ~~~~~~~~~~~~
-* Copyright (c) 2024 Abraham Ukachi. The abElements Project.
+* Copyright (c) 2024 Abraham Ukachi. The abElments Project.
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the 'Software'), to deal
@@ -30,7 +30,7 @@
 * @authors: Abraham Ukachi <abraham.ukachi@laplateforme.io>
 *
 * Example usage:
-*   1+|> 
+*   1+|> // served as `/manifest.webmanifest`
 *    -|>
 *
 */
@@ -68,25 +68,33 @@ const ICON_SIZES: readonly number[] = [48, 72, 96, 144, 192, 512];
  * @returns { MetadataRoute.Manifest }
  */
 export default function manifest(): MetadataRoute.Manifest {
+  // return abElements' web app manifest 📱
   return {
+    /* App Name, Short Name & Description (en) */
     name: enMessages.Metadata.applicationName,
     short_name: enMessages.Metadata.applicationName,
     description: enMessages.Metadata.description,
+    /* Language - the default locale */
     lang: abI18nConfig.defaultLocale,
+    /* ID, Start URL & Scope */
     id: '/?homescreen=1',
     start_url: '/?homescreen=1',
     scope: '/',
+    /* Display - standalone, with fallbacks */
     display: 'standalone',
     display_override: ['fullscreen', 'minimal-ui'],
+    /* Theme & Background Colors (dark 🌙) */
     theme_color: THEME_COLORS.dark,
     background_color: THEME_COLORS.dark,
 
+    /* App Icons - one squircle icon per size */
     icons: ICON_SIZES.map((size) => ({
       src: `${MANIFEST_DIR}/squircle/icon-${size}x${size}.png`,
       sizes: `${size}x${size}`,
       type: 'image/png',
     })),
 
+    /* Screenshots - mobile (narrow) & laptop (wide) 📸 */
     screenshots: [
       {
         src: `${IMAGES_DIR}/screenshots/mobile_screenshot_light.png`,
