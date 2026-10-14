@@ -456,7 +456,7 @@ import { useAbDialog } from 'ab-nextjs-hooks';
 * @name: Hello World - Page
 * @file: app/hello-world/page.tsx
 * @type: TypeScript + JSX
-* @authors: Abraham Ukachi <abraham.ukachi@laplateforme.io>
+* @authors: Abraham Ukachi <abrahamukachi@gmail.com>
 *
 */
 
