@@ -26,6 +26,13 @@ mysql --host "$TIDB_HOST" --port 4000 --user "$TIDB_USER" -p --ssl-mode=VERIFY_I
 - TiDB ignores `CHECK` constraints unless `tidb_enable_check_constraint = ON`: validate enum-like values in the app as well.
 - The `FULLTEXT ... WITH PARSER ngram` index at the bottom of `schema.sql` is **MySQL-only** and commented out.
 
+## Locales 🌐
+
+- `locales.code` uses **short** language codes: `en`, `fr`, `es` and `ru`, the same codes as ab-nextjs-i18n and the URL prefix (`/`, `/fr`, `/es`, `/ru`).
+- `user_settings.locale_code` defaults to `en` and references `locales.code` (`ON UPDATE CASCADE`).
+- Region variants (e.g. `en-GB`) can be added later as extra rows; keep the short codes as the canonical ones.
+- The schema is **not applied anywhere yet**: there is no live database to migrate, so the seeds were changed in place rather than through a migration.
+
 ## Rules of thumb
 
 - Store timestamps in **UTC**; render them in the user's timezone.

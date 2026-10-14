@@ -1,11 +1,11 @@
 -- =============================================================================
---  AbElements (ab-elements-app) - MySQL 8 schema
+--  abElements (ab-elements-app) - MySQL 8 schema
 -- =============================================================================
 --  Target   : MySQL 8.0.16+ / 8.4 LTS (InnoDB, utf8mb4) and MySQL-compatible
 --             serverless providers on Vercel (TiDB Cloud Starter recommended,
 --             PlanetScale Vitess supported - see database/README.md).
 --  Status   : DESIGN ONLY - not applied anywhere yet. Create it on Vercel later.
---  Author   : Abraham Ukachi
+--  Author   : Abraham Ukachi <abrahamukachi@gmail.com>
 --  License  : MIT
 --
 --  Conventions
@@ -39,8 +39,8 @@ SET time_zone = '+00:00';
 
 -- Languages offered in Settings > Docs preferences > Language (ab-nextjs-i18n).
 CREATE TABLE locales (
-  code          VARCHAR(16)   NOT NULL,                 -- BCP-47, e.g. 'en-US', 'fr-FR'
-  english_name  VARCHAR(64)   NOT NULL,                 -- 'English (US)'
+  code          VARCHAR(16)   NOT NULL,                 -- 🌐 short BCP-47 language code, e.g. 'en', 'fr' (= the app's /[locale] segment)
+  english_name  VARCHAR(64)   NOT NULL,                 -- 'English'
   native_name   VARCHAR(64)   NOT NULL,                 -- 'Français'
   is_rtl        TINYINT(1)    NOT NULL DEFAULT 0,
   is_enabled    TINYINT(1)    NOT NULL DEFAULT 1,
@@ -49,11 +49,12 @@ CREATE TABLE locales (
   PRIMARY KEY (code)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+-- 🗣️ Short codes only: they match ab-nextjs-i18n's locales & the URL prefix (/, /fr, /es, /ru).
 INSERT INTO locales (code, english_name, native_name, sort_order) VALUES
-  ('en-US', 'English (US)', 'English (US)', 1),
-  ('fr-FR', 'French',       'Français',     2),
-  ('es-ES', 'Spanish',      'Español',      3),
-  ('ru-RU', 'Russian',      'Русский',      4);
+  ('en', 'English', 'English',  1),   -- 🇬🇧 default locale (no URL prefix)
+  ('fr', 'French',  'Français', 2),   -- 🇫🇷 /fr
+  ('es', 'Spanish', 'Español',  3),   -- 🇪🇸 /es
+  ('ru', 'Russian', 'Русский',  4);   -- 🇷🇺 /ru
 
 
 -- =============================================================================
@@ -192,7 +193,7 @@ CREATE TABLE user_settings (
   reduced_motion           TINYINT(1)          NULL,                   -- NULL = follow OS prefers-reduced-motion
   always_show_focus_rings  TINYINT(1)      NOT NULL DEFAULT 0,         -- Accessibility
   package_manager          ENUM('pnpm','npm','yarn','bun') NOT NULL DEFAULT 'pnpm',  -- install snippets
-  locale_code              VARCHAR(16)     NOT NULL DEFAULT 'en-US',   -- Docs preferences > Language
+  locale_code              VARCHAR(16)     NOT NULL DEFAULT 'en',      -- Docs preferences > Language (🌐 short code, FK -> locales.code)
   docs_version_id          INT UNSIGNED        NULL,                   -- 'Docs v1.x' selector (NULL = default)
   sidebar_collapsed        TINYINT(1)      NOT NULL DEFAULT 0,         -- '<<' / '>>' rail state
   settings_version         INT UNSIGNED    NOT NULL DEFAULT 1,         -- optimistic concurrency for sync
@@ -632,18 +633,18 @@ CREATE TABLE audit_logs (
 
 
 -- =============================================================================
--- 8. SEED: the AbElements package catalogue (as of 2026-10-03)
+-- 8. SEED: the abElements package catalogue (as of 2026-10-14, = the versions ab-elements-app uses)
 -- =============================================================================
 
 INSERT INTO packages (slug, npm_name, display_name, tagline, icon_name, github_repo, status, latest_version, sort_order) VALUES
-  ('fonts',      'ab-nextjs-fonts',      'Fonts',      'Font presets for next/font, zero layout shift.',  'text_fields', 'abraham-ukachi/ab-nextjs-fonts',      'stable',  '0.2.3', 1),
-  ('icons',      'ab-nextjs-icons',      'Icons',      'Material Symbols as tree-shakable React icons.',  'interests',   'abraham-ukachi/ab-nextjs-icons',      'stable',  '0.1.4', 2),
-  ('animations', 'ab-nextjs-animations', 'Animations', 'Motion presets and easings, reduced-motion aware.', 'animation', 'abraham-ukachi/ab-nextjs-animations', 'beta',    '0.2.1', 3),
-  ('theme',      'ab-nextjs-theme',      'Theme',      'Design tokens, light/dark modes, CSS variables.', 'palette',     'abraham-ukachi/ab-nextjs-theme',      'stable',  '0.2.8', 4),
-  ('hooks',      'ab-nextjs-hooks',      'Hooks',      'Typed React hooks for media, theme and storage.', 'phishing',    'abraham-ukachi/ab-nextjs-hooks',      'stable',  '0.1.2', 5),
-  ('core',       'ab-nextjs-core',       'Core',       'Layouts, providers and shared utilities.',        'deployed_code','abraham-ukachi/ab-nextjs-core',      'stable',  '0.1.2', 6),
-  ('components', 'ab-nextjs-components', 'Components', 'Accessible UI built on core and theme.',          'widgets',     'abraham-ukachi/ab-nextjs-components', 'stable',  '0.1.4', 7),
-  ('i18n',       'ab-nextjs-i18n',       'i18n',       'Locales, messages and translation helpers (to be created).', 'translate', NULL,                   'planned', NULL,    8);
+  ('fonts',      'ab-nextjs-fonts',      'Fonts',      'Font presets for next/font, zero layout shift.',  'text_fields', 'abraham-ukachi/ab-nextjs-fonts',      'stable',  '0.2.4', 1),
+  ('icons',      'ab-nextjs-icons',      'Icons',      'Material Symbols as tree-shakable React icons.',  'interests',   'abraham-ukachi/ab-nextjs-icons',      'stable',  '0.2.2', 2),
+  ('animations', 'ab-nextjs-animations', 'Animations', 'Motion presets and easings, reduced-motion aware.', 'animation', 'abraham-ukachi/ab-nextjs-animations', 'beta',    '0.2.2', 3),
+  ('theme',      'ab-nextjs-theme',      'Theme',      'Design tokens, light/dark modes, CSS variables.', 'palette',     'abraham-ukachi/ab-nextjs-theme',      'stable',  '0.3.0', 4),
+  ('hooks',      'ab-nextjs-hooks',      'Hooks',      'Typed React hooks for media, theme and storage.', 'phishing',    'abraham-ukachi/ab-nextjs-hooks',      'stable',  '0.1.4', 5),
+  ('core',       'ab-nextjs-core',       'Core',       'Layouts, providers and shared utilities.',        'deployed_code','abraham-ukachi/ab-nextjs-core',      'stable',  '0.1.5', 6),
+  ('components', 'ab-nextjs-components', 'Components', 'Accessible UI built on core and theme.',          'widgets',     'abraham-ukachi/ab-nextjs-components', 'stable',  '0.1.8', 7),
+  ('i18n',       'ab-nextjs-i18n',       'i18n',       'Locales, messages and translation helpers (next-intl + CLI).', 'translate', 'abraham-ukachi/ab-nextjs-i18n', 'beta', '0.1.0', 8);  -- 🌍 published on npm (0.1.0)
 
 INSERT INTO doc_versions (label, slug, status, is_default) VALUES ('v1.x', 'v1', 'current', 1);
 
