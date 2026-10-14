@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.16](https://github.com/abraham-ukachi/ab-elements-app/compare/v0.2.15...v0.2.16) (2026-10-14)
+
 ### [0.2.15](https://github.com/abraham-ukachi/ab-elements-app/compare/v0.2.14...v0.2.15) (2026-10-14)
 
 * :lock: Add baseline security headers: HSTS, nosniff, Referrer-Policy, Permissions-Policy, COOP, `X-Frame-Options: DENY` & a report-only CSP; drop `X-Powered-By`
