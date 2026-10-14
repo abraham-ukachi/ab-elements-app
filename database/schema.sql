@@ -1,11 +1,11 @@
 -- =============================================================================
---  AbElements (ab-elements-app) - MySQL 8 schema
+--  abElements (ab-elements-app) - MySQL 8 schema
 -- =============================================================================
 --  Target   : MySQL 8.0.16+ / 8.4 LTS (InnoDB, utf8mb4) and MySQL-compatible
 --             serverless providers on Vercel (TiDB Cloud Starter recommended,
 --             PlanetScale Vitess supported - see database/README.md).
 --  Status   : DESIGN ONLY - not applied anywhere yet. Create it on Vercel later.
---  Author   : Abraham Ukachi
+--  Author   : Abraham Ukachi <abrahamukachi@gmail.com>
 --  License  : MIT
 --
 --  Conventions
@@ -39,8 +39,8 @@ SET time_zone = '+00:00';
 
 -- Languages offered in Settings > Docs preferences > Language (ab-nextjs-i18n).
 CREATE TABLE locales (
-  code          VARCHAR(16)   NOT NULL,                 -- BCP-47, e.g. 'en-US', 'fr-FR'
-  english_name  VARCHAR(64)   NOT NULL,                 -- 'English (US)'
+  code          VARCHAR(16)   NOT NULL,                 -- 🌐 short BCP-47 language code, e.g. 'en', 'fr' (= the app's /[locale] segment)
+  english_name  VARCHAR(64)   NOT NULL,                 -- 'English'
   native_name   VARCHAR(64)   NOT NULL,                 -- 'Français'
   is_rtl        TINYINT(1)    NOT NULL DEFAULT 0,
   is_enabled    TINYINT(1)    NOT NULL DEFAULT 1,
@@ -49,11 +49,12 @@ CREATE TABLE locales (
   PRIMARY KEY (code)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+-- 🗣️ Short codes only: they match ab-nextjs-i18n's locales & the URL prefix (/, /fr, /es, /ru).
 INSERT INTO locales (code, english_name, native_name, sort_order) VALUES
-  ('en-US', 'English (US)', 'English (US)', 1),
-  ('fr-FR', 'French',       'Français',     2),
-  ('es-ES', 'Spanish',      'Español',      3),
-  ('ru-RU', 'Russian',      'Русский',      4);
+  ('en', 'English', 'English',  1),   -- 🇬🇧 default locale (no URL prefix)
+  ('fr', 'French',  'Français', 2),   -- 🇫🇷 /fr
+  ('es', 'Spanish', 'Español',  3),   -- 🇪🇸 /es
+  ('ru', 'Russian', 'Русский',  4);   -- 🇷🇺 /ru
 
 
 -- =============================================================================
@@ -192,7 +193,7 @@ CREATE TABLE user_settings (
   reduced_motion           TINYINT(1)          NULL,                   -- NULL = follow OS prefers-reduced-motion
   always_show_focus_rings  TINYINT(1)      NOT NULL DEFAULT 0,         -- Accessibility
   package_manager          ENUM('pnpm','npm','yarn','bun') NOT NULL DEFAULT 'pnpm',  -- install snippets
-  locale_code              VARCHAR(16)     NOT NULL DEFAULT 'en-US',   -- Docs preferences > Language
+  locale_code              VARCHAR(16)     NOT NULL DEFAULT 'en',      -- Docs preferences > Language (🌐 short code, FK -> locales.code)
   docs_version_id          INT UNSIGNED        NULL,                   -- 'Docs v1.x' selector (NULL = default)
   sidebar_collapsed        TINYINT(1)      NOT NULL DEFAULT 0,         -- '<<' / '>>' rail state
   settings_version         INT UNSIGNED    NOT NULL DEFAULT 1,         -- optimistic concurrency for sync
