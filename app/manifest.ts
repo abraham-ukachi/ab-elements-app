@@ -3,7 +3,7 @@
 * ~~~~~~~~~~~~
 * ab-elements-app
 * ~~~~~~~~~~~~
-* Copyright (c) 2024 Abraham Ukachi. The abElments Project.
+* Copyright (c) 2024 Abraham Ukachi. The abElements Project.
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the 'Software'), to deal
@@ -27,7 +27,7 @@
 * @name: abElements Web App Manifest
 * @file: app/manifest.ts
 * @type: TypeScript
-* @authors: Abraham Ukachi <abraham.ukachi@laplateforme.io>
+* @authors: Abraham Ukachi <abrahamukachi@gmail.com>
 *
 * Example usage:
 *   1+|> // served as `/manifest.webmanifest`

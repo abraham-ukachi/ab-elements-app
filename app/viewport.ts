@@ -27,7 +27,7 @@
 * @name: abElements Viewport
 * @file: viewport.ts
 * @type: TypeScript
-* @authors: Abraham Ukachi <abraham.ukachi@laplateforme.io>
+* @authors: Abraham Ukachi <abrahamukachi@gmail.com>
 *
 * Example usage:
 *   1+|> 
