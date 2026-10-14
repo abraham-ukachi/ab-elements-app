@@ -449,7 +449,7 @@ import { useAbDialog } from 'ab-nextjs-hooks';
 * ~~~~~~~~~~~~
 * ab-elements-app
 * ~~~~~~~~~~~~
-* Copyright (c) 2024 Abraham Ukachi. The abElements Project.
+* Copyright (c) 2026 Abraham Ukachi. The abElements Project.
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * ...(the rest of the MIT license text, as in app/not-found.tsx)...
