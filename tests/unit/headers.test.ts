@@ -50,7 +50,7 @@ describe('next.config headers()', () => {
       {
         "Content-Security-Policy-Report-Only": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'",
         "Cross-Origin-Opener-Policy": "same-origin",
-        "Permissions-Policy": "camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()",
+        "Permissions-Policy": "camera=(), microphone=(), geolocation=(), payment=(), usb=(), browsing-topics=()",
         "Referrer-Policy": "strict-origin-when-cross-origin",
         "Strict-Transport-Security": "max-age=63072000; includeSubDomains",
         "X-Content-Type-Options": "nosniff",
@@ -64,6 +64,10 @@ describe('next.config headers()', () => {
 
     expect(headers).not.toHaveProperty('Content-Security-Policy');
     expect(headers['Content-Security-Policy-Report-Only']).not.toContain('unsafe-eval');
+  });
+
+  it('turns off the X-Powered-By header', () => {
+    expect(nextConfig.poweredByHeader).toBe(false);
   });
 
   it('keeps the metadata referrer in line with the Referrer-Policy header', async () => {

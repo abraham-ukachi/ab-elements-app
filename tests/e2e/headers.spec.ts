@@ -26,7 +26,7 @@ const SECURITY_HEADERS: Readonly<Record<string, string>> = {
   'strict-transport-security': 'max-age=63072000; includeSubDomains',
   'x-content-type-options': 'nosniff',
   'referrer-policy': 'strict-origin-when-cross-origin',
-  'permissions-policy': 'camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()',
+  'permissions-policy': 'camera=(), microphone=(), geolocation=(), payment=(), usb=(), browsing-topics=()',
   'cross-origin-opener-policy': 'same-origin',
   'x-frame-options': 'DENY',
 };
@@ -57,6 +57,7 @@ const expectSecurityHeaders = (response: APIResponse): void => {
   const headers = response.headers();
 
   expect(headers).toMatchObject(SECURITY_HEADERS);
+  expect(headers).not.toHaveProperty('x-powered-by');
   // report-only for now: violations are collected, nothing is blocked
   expect(headers).not.toHaveProperty('content-security-policy');
   const csp = headers['content-security-policy-report-only'];

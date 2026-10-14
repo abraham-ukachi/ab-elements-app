@@ -80,7 +80,7 @@ const securityHeaders: { key: string; value: string }[] = [
   { key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains' },
   { key: 'X-Content-Type-Options', value: 'nosniff' },
   { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
-  { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()' },
+  { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=(), payment=(), usb=(), browsing-topics=()' },
   { key: 'Cross-Origin-Opener-Policy', value: 'same-origin' },
   { key: 'X-Frame-Options', value: 'DENY' },
   { key: 'Content-Security-Policy-Report-Only', value: contentSecurityPolicy },
@@ -100,6 +100,9 @@ const nextConfig: NextConfig = {
     'ab-nextjs-core',
     'ab-nextjs-components',
   ],
+  // don't send the `X-Powered-By: Next.js` header
+  poweredByHeader: false,
+
   /* Experimental */
   experimental: {
     // root 404 for unmatched URLs when the root layout is under `app/[locale]`
