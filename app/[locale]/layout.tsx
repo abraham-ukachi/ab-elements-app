@@ -69,10 +69,10 @@ import abI18nConfig from '@/i18n/config';
 import { StaticMetadata } from '../metadata';
 import { StaticViewport } from '../viewport';
 
-// import the global styles 🎨
 // import the Splash overlay & its (pre-paint 🚦) gate script
 import Splash, { abSplashGateScript } from '@/components/app/splash';
 
+// import the global styles 🎨
 import '../globals.css';
 
 
