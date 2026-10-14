@@ -61,6 +61,10 @@ export default defineConfig({
     ],
   },
 
+  /* CSS */
+  // no Tailwind / PostCSS in unit tests: packaged CSS modules (e.g. `ab-nextjs-components/ab-splash`) load as-is 🎨
+  css: { postcss: {} },
+
   /* Test */
   test: {
     // unit tests live in `tests/unit` (end-to-end tests will get their own folder)

@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.17](https://github.com/abraham-ukachi/ab-elements-app/compare/v0.2.16...v0.2.17) (2026-10-14)
+
+* :sparkles: Add the Splash screen (light & dark), shown on the first visit only
+* :recycle: Make the Splash a thin wrapper over `ab-nextjs-components/ab-splash`, with the gate built from the i18n config
+* :arrow_up: Bump ab-nextjs-components 0.1.9, ab-nextjs-hooks 0.1.5 & ab-nextjs-animations 0.2.3
+* :white_check_mark: Test the Splash gate & timing (skips `/en`, bots & webdriver, and second visits)
+* :pencil2: Move the global styles comment back above `globals.css`
+
 ### [0.2.16](https://github.com/abraham-ukachi/ab-elements-app/compare/v0.2.15...v0.2.16) (2026-10-14)
 
 ### [0.2.15](https://github.com/abraham-ukachi/ab-elements-app/compare/v0.2.14...v0.2.15) (2026-10-14)
