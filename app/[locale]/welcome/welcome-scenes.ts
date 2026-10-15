@@ -116,8 +116,8 @@ export const WELCOME_SCENES: Readonly<Record<WelcomeSlideId, WelcomeScene>> = {
   s08: hub('ab-nextjs-hooks', 'Hooks', ['useAbTheme', 'useAbMedia', 'useAbLocalStorage', 'useAbClipboard']),
   // s09: everything + docs + PWA 🚀
   s09: hub('ab-elements', 'AbElements', ['core', 'components', 'theme', 'icons', 'fonts', 'animations', 'hooks', 'i18n', 'docs', 'PWA'], 36, {
-    // 10 spokes crowd the top: slide `core` left & `components` right/down so they never nearly touch (mobile) 📱↔️
+    // 10 spokes crowd the top: slide `core` left & `components` right so they never nearly touch (mobile) 📱↔️
     core: { dx: -5 },
-    components: { dx: 5, dy: 3 },
+    components: { dx: 5 },
   }),
 };
