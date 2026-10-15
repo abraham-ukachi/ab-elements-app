@@ -163,8 +163,8 @@
 .slide {
   /* fill the track cell */
   height: 100%;
-  /* a long slide scrolls inside itself */
-  overflow-y: auto;
+  /* the scrolling happens one level down, in the focusable `.slideBody` region ♿ */
+  overflow: hidden;
 }
 
 /* 🧩 a slide's body: illustration above the text (mobile), side by side (laptop) */
@@ -175,8 +175,10 @@
   flex-direction: column;
   /* 16px apart */
   gap: 16px;
-  /* at least the slide's height (taller content scrolls inside the slide) */
-  min-height: 100%;
+  /* exactly the slide's height... */
+  height: 100%;
+  /* ...and a long slide scrolls inside it (keyboard-scrollable: the region is focusable ♿⌨️) */
+  overflow-y: auto;
 }
 
 /* 📝 the text pane */

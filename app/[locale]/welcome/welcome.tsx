@@ -193,7 +193,14 @@ export default async function Welcome({ locale }: WelcomeProps) {
       title: t.markup(`${key}.title`, plain),
       // 🧩 the slide markup
       content: (
-        <div id={`welcome-${slide.id}`} className={clsx(styles.slideBody, slide.id === 's09' && styles.slideEnd)}>
+        <div
+          id={`welcome-${slide.id}`}
+          className={clsx(styles.slideBody, slide.id === 's09' && styles.slideEnd)}
+          // ♿ a long slide scrolls in here: make it a named, keyboard-focusable region (axe `scrollable-region-focusable`) ⌨️
+          role="region"
+          aria-labelledby={`welcome-${slide.id}-title`}
+          tabIndex={0}
+        >
           {/* Text Pane */}
           <div className={styles.textPane}>
             {/* Eyebrow (s01) / package pill (s02–s08) / MIT pill with a sage dot (s09) 🏷️ */}
