@@ -87,7 +87,7 @@
         "illustrationAlt": "Schéma : un bouton, des onglets, un menu et un écran de démarrage reliés au package components."
       },
       "s04": {
-        "title": "Un thème chaleureux, en jetons",
+        "title": "Un thème chaleureux, fondé sur des jetons",
         "body": "Des jetons de design bronze en variables CSS, avec un vrai mode sombre et aucun flash au chargement.",
         "illustrationAlt": "Schéma : des nuanciers et un interrupteur clair/sombre reliés aux jetons du thème.",
         "chips": {
