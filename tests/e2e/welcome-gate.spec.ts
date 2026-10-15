@@ -48,6 +48,7 @@
 
 // import the test helpers from `@playwright/test` 🎭
 import { expect, test } from '@playwright/test';
+import type { Page } from '@playwright/test';
 // import the shared Welcome helpers 🧰
 import { BOT_UA, HEADLESS_UA, REAL_UA, SLIDE_COUNT } from './welcome-helpers';
 
@@ -172,5 +173,84 @@ test.describe('Welcome gate (webdriver / headless) 👻', () => {
     await page.goto('/');
     // expect to stay home ✅
     await expect(page).toHaveURL(/\/$/);
+  });
+});
+
+
+test.describe('Welcome gate (JavaScript disabled) 🚫📜', () => {
+  // a real visitor with JavaScript OFF: Get Started is a plain `<form action>` POST ♿
+  test.use({ userAgent: REAL_UA, javaScriptEnabled: false });
+
+  test('Get Started POSTs, sets the 1-year cookie and lands on `/` 🍪', async ({ page, context }) => {
+    // a first visit of `/` still lands on the Welcome (the gate is server-side) 🎬
+    await page.goto('/');
+    await expect(page).toHaveURL(/\/welcome$/);
+
+    // open s09 & catch the POST the button sends 📮
+    await page.goto(`/welcome?s=${SLIDE_COUNT}`);
+    const post = page.waitForRequest((request) => request.method() === 'POST');
+    await page.getByRole('button', { name: 'Get Started' }).click();
+    expect((await post).method()).toBe('POST');
+
+    // back home ↩️
+    await expect(page).toHaveURL(/\/$/);
+    // the hello cookie is `true` with ~1 year of life (± 1 day) 📅
+    const hello = (await context.cookies()).find((cookie) => cookie.name === 'AB_APP_HELLO');
+    expect(hello?.value).toBe('true');
+    const lifetime = (hello?.expires ?? 0) - Date.now() / 1000;
+    expect(lifetime).toBeGreaterThan(ONE_YEAR - 86_400);
+    expect(lifetime).toBeLessThan(ONE_YEAR + 86_400);
+
+    // a revisit of `/` stays home 🏠
+    await page.goto('/');
+    await expect(page).toHaveURL(/\/$/);
+  });
+});
+
+
+test.describe('Splash & Welcome on a first visit 💦🎬', () => {
+  // a real visitor (the Splash gate skips `navigator.webdriver`, so we hide it like a normal browser) 🖥️
+  test.use({ userAgent: REAL_UA });
+
+  test.beforeEach(async ({ context }) => {
+    // before any page script: hide webdriver & count every time the Splash turns on (across loads) 🔢
+    await context.addInitScript(() => {
+      // look like a normal browser to the Splash gate 🕶️
+      Object.defineProperty(Navigator.prototype, 'webdriver', { get: () => false, configurable: true });
+      // bump a session counter whenever `<html data-ab-splash="on">` appears 💦
+      const bump = () => sessionStorage.setItem('e2e-splash-shows', String(Number(sessionStorage.getItem('e2e-splash-shows') ?? 0) + 1));
+      new MutationObserver((records) => {
+        for (const record of records) {
+          const html = record.target as Element;
+          if (record.attributeName === 'data-ab-splash' && html.getAttribute('data-ab-splash') === 'on' && record.oldValue !== 'on') bump();
+        }
+      }).observe(document, { subtree: true, attributes: true, attributeFilter: ['data-ab-splash'], attributeOldValue: true });
+    });
+  });
+
+  // read the Splash show count of this tab 📊
+  const splashShows = (page: Page) => page.evaluate(() => Number(sessionStorage.getItem('e2e-splash-shows') ?? 0));
+
+  test('the Splash shows once, the Welcome once, and neither comes back 🙅', async ({ page }) => {
+    // 1. first visit of `/` → the Welcome, with ONE Splash on top 🎬💦
+    await page.goto('/');
+    await expect(page).toHaveURL(/\/welcome$/);
+    await expect.poll(() => splashShows(page)).toBe(1);
+    // the Splash hands over to the Welcome (the attribute goes away) 👋
+    await expect(page.locator('html[data-ab-splash]')).toHaveCount(0, { timeout: 5_000 });
+    await expect(page.locator('[data-ab-part="carousel"]')).toBeVisible();
+
+    // 2. a reload of the Welcome: no second Splash 🔁
+    await page.reload();
+    await expect(page.locator('[data-ab-part="carousel"]')).toBeVisible();
+    expect(await splashShows(page)).toBe(1);
+
+    // 3. Get Started → home: no Splash and no Welcome again 🏠
+    await page.goto(`/welcome?s=${SLIDE_COUNT}`);
+    await page.getByRole('button', { name: 'Get Started' }).click();
+    await expect(page).toHaveURL(/\/$/);
+    await page.goto('/');
+    await expect(page).toHaveURL(/\/$/);
+    expect(await splashShows(page)).toBe(1);
   });
 });

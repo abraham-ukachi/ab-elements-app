@@ -48,9 +48,10 @@
 
 // import the test helpers from `@playwright/test` 🎭
 import { expect, test } from '@playwright/test';
+import type { Page } from '@playwright/test';
 // import the shared Welcome helpers 🧰
 import {
-  LAPTOP, SLIDE_COUNT, dots, expectSlide, nextButton, openWelcome, prevButton, slideTitle,
+  LAPTOP, MOBILE, SLIDE_COUNT, dots, expectSlide, nextButton, openWelcome, prevButton, slideTitle,
 } from './welcome-helpers';
 
 
@@ -163,6 +164,7 @@ test.describe('Welcome slides 🎞️', () => {
     await expectSlide(page, 3);
   });
 
+  // TODO(theme 0.3.3): flip `test.fail` → `test` once the bare `main { z-index: 99 }` is scoped in the theme 🧹
   // ⚠️ KNOWN PACKAGE GAP (ab-nextjs-theme 0.3.2 `css/styles.css:552-557`): the bare `main { position: relative;
   // z-index: 99 }` rule lifts the carousel above the header, so the open globe menu sits UNDER the counter row and
   // can't be clicked. Packages-first: fixed by scoping that rule in the theme, not patched here. Flip to `test` then 🧹
@@ -174,5 +176,63 @@ test.describe('Welcome slides 🎞️', () => {
     await page.getByRole('menuitemradio', { name: 'Français' }).click({ timeout: 3_000 });
     // expect the French Welcome
     await expect(page).toHaveURL(/\/fr\/welcome\?s=3$/);
+  });
+});
+
+
+test.describe('Welcome slides on mobile (390px) 📱', () => {
+  // the 390×844 frame of the v6 mocks, as a touch device 👆
+  test.use({ viewport: MOBILE, hasTouch: true, isMobile: true });
+
+  /**
+   * `swipe` 👆
+   *
+   * Swipes the carousel track horizontally with real touch pointer events (what `useAbSwipe` listens to).
+   *
+   * @param { Page } page - the Playwright page
+   * @param { number } dx - the horizontal distance in px (negative = to the left → next)
+   * @param { number } [ms] - how long the finger stays down (slow drags aren't flicks) ⏱️
+   * @returns { Promise<void> }
+   */
+  async function swipe(page: Page, dx: number, ms = 120): Promise<void> {
+    // the track & its center 🎯
+    const track = page.locator('[data-ab-part="track"]');
+    const box = await track.boundingBox();
+    if (!box) throw new Error('no carousel track');
+    const y = box.y + box.height / 2;
+    const x0 = box.x + box.width / 2 - dx / 2;
+    // fire down → a few moves → up, as a touch pointer 🖐️
+    await track.evaluate(async (el, { x0, y, dx, ms }) => {
+      const fire = (type: string, x: number) => el.dispatchEvent(new PointerEvent(type, {
+        bubbles: true, cancelable: true, pointerId: 7, pointerType: 'touch', isPrimary: true, clientX: x, clientY: y,
+      }));
+      fire('pointerdown', x0);
+      for (let i = 1; i <= 5; i++) {
+        // spread the moves over `ms` 🐢
+        await new Promise((resolve) => setTimeout(resolve, ms / 5));
+        fire('pointermove', x0 + (dx * i) / 5);
+      }
+      fire('pointerup', x0 + dx);
+    }, { x0, y, dx, ms });
+  }
+
+  test('a left swipe goes to the next slide, a right swipe goes back 👈👉', async ({ page }) => {
+    // start on s02
+    await openWelcome(page, 'en', 2);
+    // swipe left (well past the 48px threshold) → s03 ⏭️
+    await swipe(page, -160);
+    await expectSlide(page, 3);
+    // swipe right → s02 ⏮️
+    await swipe(page, 160);
+    await expectSlide(page, 2);
+  });
+
+  test('a short drag (under the threshold) keeps the slide 🙅', async ({ page }) => {
+    // start on s02
+    await openWelcome(page, 'en', 2);
+    // a slow 20px nudge over 400ms (neither past 48px nor a 0.35px/ms flick) 🐢
+    await swipe(page, -20, 400);
+    // still s02 ✅
+    await expectSlide(page, 2);
   });
 });
