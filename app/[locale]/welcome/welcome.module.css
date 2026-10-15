@@ -341,31 +341,20 @@
   gap: 12px;
 }
 
-/* 🚀 Get Started: the primary filled look of the mock (theme tokens, via the button's own custom properties) */
+/* 🚀 Get Started: theme 0.3.2's contained button paints the bronze fill & on-primary text itself 🎨 */
 .getStarted {
-  /* bronze primary background */
-  --ab-button-background-color: var(--md-sys-color-primary);
-  /* readable text on it */
-  --ab-button-text-color: var(--md-sys-color-on-primary);
-  /* the arrow follows the text color */
+  /* the arrow follows the on-primary text color */
   --material-icon-color: var(--md-sys-color-on-primary);
 }
 
 /* 🗺️ the illustration pane */
 .aside {
-  /* TODO(theme 0.3.2): theme 0.3.1's unscoped `aside` shell rules (css/styles.css ~l.561 & ~l.2460-2468) position every bare `aside` absolutely 🐛, so we pull ours back into the flow here; remove once theme 0.3.2 ships */
-  /* in the flow (the theme's shell styles position a bare `aside` absolutely) */
-  position: relative;
-  /* undo the theme's absolute offsets (same TODO as above) */
-  inset: auto;
   /* centered content */
   display: flex;
   justify-content: center;
   align-items: center;
-  /* 🩹 STOPGAP: mobile gets a taller 380px scene (was 276px) so AbFlowDiagram's top node (e.g. s01's "core") */
-  /* sits below the card's header row instead of covering it 📱; drop this back to 276px once */
-  /* AbFlowDiagram gets a header-safe top inset (or a box-scaled radius) in ab-nextjs-components */
-  height: 380px;
+  /* a 276px scene on mobile 📱 (components 0.1.11's AbFlowDiagram keeps its nodes below the header & inside the card) */
+  height: 276px;
   /* never shrinks */
   flex: none;
   /* side padding */
@@ -419,8 +408,8 @@
   .textPane { padding: 16px 32px 32px; }
   /* the one-liners come back */
   .cardDesc { display: block; grid-column: 2; }
-  /* a taller illustration (🩹 stays above the 380px mobile stopgap; back to 360px with it) */
-  .aside { height: 420px; }
+  /* a taller illustration 🖼️ */
+  .aside { height: 360px; }
 }
 
 /* 💻 laptop (≥1024): text left, illustration right (45%) */
@@ -446,10 +435,4 @@
   .diagram { max-width: 760px; max-height: 600px; }
 }
 
-/* 🧘 reduced motion: nothing here animates on its own (the packages calm their own motion) */
-@media (prefers-reduced-motion: reduce) {
-  /* TODO(theme 0.3.2): theme 0.3.1's global `form > *` entrance (css/styles.css ~l.965-968) ignores reduced motion 🐛 */
-  /* and starts at opacity 0, so we force the form visible here; remove once theme 0.3.2 ships (it'll wrap it in `no-preference`) */
-  /* the theme's global `form > *` entrance starts at opacity 0: show the Get Started form right away */
-  .actions form > * { opacity: 1; animation: none; }
-}
+/* 🧘 reduced motion: nothing here animates on its own (the packages & theme 0.3.2 calm their own motion) */
