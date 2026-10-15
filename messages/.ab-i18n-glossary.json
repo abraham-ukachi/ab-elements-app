@@ -8,7 +8,11 @@
     "Vue",
     "Lit",
     "Flutter",
-    "Github"
+    "Github",
+    "AbElements",
+    "GitHub",
+    "MIT",
+    "PWA"
   ],
   "allowIdentical": [
     "Metadata.titleTemplate",
@@ -19,7 +23,8 @@
     "Common.react",
     "Common.vue",
     "Common.lit",
-    "Common.flutter"
+    "Common.flutter",
+    "Welcome.counter"
   ],
   "terms": {}
 }

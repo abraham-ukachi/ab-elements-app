@@ -575,7 +575,7 @@ A selection of the approved abElements designs (concept mockups, not production 
 | Light Mode | Dark Mode | Tags |
 |:-----------|:----------|:-----|
 | ![Splash Screen - Mobile - Light / Mockup](./.github/screenshots/mobile/splash-screen-mobile-light.png) | ![Splash Screen - Mobile - Dark / Mockup](./.github/screenshots/mobile/splash-screen-mobile-dark.png) | **Splash**: logo + progress bar <br/> #splash, #screen, #design, #concept |
-| ![Welcome Screen - Mobile - Light / Mockup](./.github/screenshots/mobile/welcome-screen-mobile-light.png) | ![Welcome Screen - Mobile - Dark / Mockup](./.github/screenshots/mobile/welcome-screen-mobile-dark.png) | **Welcome**: onboarding sheet + Get Started <br/> #welcome, #screen, #design, #concept |
+| ![Welcome Screen - Mobile - Light / Mockup](./.github/screenshots/mobile/welcome-screen-mobile-light.png) | ![Welcome Screen - Mobile - Dark / Mockup](./.github/screenshots/mobile/welcome-screen-mobile-dark.png) | **Welcome**: 9-slide walkthrough + Get Started <br/> #welcome, #screen, #design, #concept |
 | ![Home Page - Mobile - Light / Mockup](./.github/screenshots/mobile/home-page-mobile-light.png) | ![Home Page - Mobile - Dark / Mockup](./.github/screenshots/mobile/home-page-mobile-dark.png) | **Home**: install snippet + packages <br/> #home, #page, #design, #concept |
 | ![Login Page - Mobile - Light / Mockup](./.github/screenshots/mobile/login-page-mobile-light.png) | ![Login Page - Mobile - Dark / Mockup](./.github/screenshots/mobile/login-page-mobile-dark.png) | **Login**: password, magic link or GitHub <br/> #login, #page, #user, #design |
 | ![Settings Page - Mobile - Light / Mockup](./.github/screenshots/mobile/settings-page-mobile-light.png) | ![Settings Page - Mobile - Dark / Mockup](./.github/screenshots/mobile/settings-page-mobile-dark.png) | **Settings**: appearance, accessibility & docs prefs <br/> #settings, #page, #user, #design |
@@ -585,6 +585,7 @@ A selection of the approved abElements designs (concept mockups, not production 
 
 | Light Mode | Dark Mode | Tags |
 |:-----------|:----------|:-----|
+| ![Welcome Screen - Laptop - Light / Mockup](./.github/screenshots/laptop/welcome-screen-laptop-light.png) | ![Welcome Screen - Laptop - Dark / Mockup](./.github/screenshots/laptop/welcome-screen-laptop-dark.png) | **Welcome**: 8 packages + Live Playground <br/> #welcome, #screen, #design, #concept |
 | ![Home Page - Laptop - Light / Mockup](./.github/screenshots/laptop/home-page-laptop-light.png) | ![Home Page - Laptop - Dark / Mockup](./.github/screenshots/laptop/home-page-laptop-dark.png) | **Home**: docs catalog <br/> #home, #page, #design, #concept |
 | ![Docs Page - Laptop - Light / Mockup](./.github/screenshots/laptop/docs-page-laptop-light.png) | ![Docs Page - Laptop - Dark / Mockup](./.github/screenshots/laptop/docs-page-laptop-dark.png) | **Docs**: preview, code + On This Page <br/> #docs, #page, #design, #concept |
 | ![Profile Page - Laptop - Light / Mockup](./.github/screenshots/laptop/profile-page-laptop-light.png) | ![Profile Page - Laptop - Dark / Mockup](./.github/screenshots/laptop/profile-page-laptop-dark.png) | **Profile**: accounts, bookmarks & recents <br/> #profile, #page, #user, #design |

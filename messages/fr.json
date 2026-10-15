@@ -27,5 +27,110 @@
     "code": "404",
     "title": "Cette page est introuvable.",
     "backHome": "Retour à abElements"
+  },
+  "Welcome": {
+    "meta": {
+      "title": "Bienvenue · abElements"
+    },
+    "carouselLabel": "Présentation d’AbElements",
+    "counter": "{current} / {total}",
+    "skip": "Passer",
+    "back": "Diapositive précédente",
+    "next": "Diapositive suivante",
+    "goTo": "Aller à la diapositive {n} : {title}",
+    "slideLabel": "{n} sur {total}",
+    "announce": "Diapositive {n} sur {total} : {title}",
+    "theme": {
+      "label": "Thème",
+      "light": "Clair",
+      "dark": "Sombre",
+      "system": "Système"
+    },
+    "language": "Langue",
+    "install": {
+      "label": "Installer {pkg}",
+      "copy": "Copier la commande",
+      "copied": "Copié"
+    },
+    "playground": {
+      "title": "Bac à sable en direct",
+      "live": "en direct"
+    },
+    "cta": "Commencer",
+    "github": "Continuer avec GitHub",
+    "comingSoon": "Bientôt disponible",
+    "slides": {
+      "s01": {
+        "eyebrow": "Bienvenue",
+        "title": "Bienvenue sur <em>AbElements</em>",
+        "body": "Une bibliothèque d’interface Next.js libre et gratuite : huit paquets ciblés qui partagent un même thème, avec une documentation vivante et des exemples pour chaque élément.",
+        "illustrationAlt": "Schéma : les huit paquets AbElements reliés au logo AbElements.",
+        "packages": {
+          "core": "Config, mises en page et primitives a11y",
+          "components": "Boutons, onglets, menus et écran de démarrage",
+          "theme": "Jetons bronze et vrai mode sombre",
+          "icons": "Icônes SVG optimisables",
+          "fonts": "Inter, Mulish et plus, auto-hébergées",
+          "animations": "Courbes, fondus et transitions",
+          "hooks": "Hooks React typés",
+          "i18n": "Langues, routage et messages"
+        }
+      },
+      "s02": {
+        "title": "Éléments de base",
+        "body": "La config, les mises en page et les primitives accessibles sur lesquelles reposent tous les autres paquets AbElements.",
+        "illustrationAlt": "Schéma : les mises en page écran, principale et latérale reliées au paquet core."
+      },
+      "s03": {
+        "title": "Des composants prêts à l’emploi",
+        "body": "Une interface React accessible bâtie sur Core et Theme, des boutons et onglets aux menus et à l’écran de démarrage.",
+        "illustrationAlt": "Schéma : un bouton, des onglets, un menu et un écran de démarrage reliés au paquet components."
+      },
+      "s04": {
+        "title": "Un thème chaleureux, en jetons",
+        "body": "Des jetons de design bronze en variables CSS, avec un vrai mode sombre et aucun flash au chargement.",
+        "illustrationAlt": "Schéma : des nuanciers et un interrupteur clair/sombre reliés aux jetons du thème.",
+        "chips": {
+          "tokens": "Jetons",
+          "lightDark": "Clair et sombre",
+          "cssVariables": "Variables CSS"
+        }
+      },
+      "s05": {
+        "title": "Des icônes optimisables",
+        "body": "Des icônes SVG aux noms typés. N’importez que celles que vous utilisez.",
+        "illustrationAlt": "Schéma : une grille d’icônes reliée au composant d’icône, avec des options de taille et de graisse.",
+        "chips": {
+          "grid": "Grille de 24 px",
+          "typed": "Noms typés"
+        }
+      },
+      "s06": {
+        "title": "Des polices sans décalage",
+        "body": "Inter, Zilla Slab, Mulish, Quicksand et Roboto, auto-hébergées pour Next.js avec de simples utilitaires font-*.",
+        "illustrationAlt": "Schéma : cinq spécimens de polices autour d’un grand « Aa »."
+      },
+      "s07": {
+        "title": "Des animations justes",
+        "body": "Des courbes, fondus et transitions qui respectent d’emblée le réglage de réduction des animations.",
+        "illustrationAlt": "Schéma : une courbe d’accélération et un interrupteur de réduction des animations reliés au paquet animations.",
+        "chips": {
+          "easings": "Courbes",
+          "fades": "Fondus",
+          "reducedMotion": "Animations réduites"
+        }
+      },
+      "s08": {
+        "title": "Des hooks React typés",
+        "body": "De petits hooks typés pour le thème, les media queries, le stockage et le presse-papiers.",
+        "illustrationAlt": "Schéma : quatre hooks reliés au paquet hooks."
+      },
+      "s09": {
+        "pill": "Gratuit pour toujours · MIT",
+        "title": "Créez vos applis web<br></br>gratuitement avec <em>AbElements</em>",
+        "body": "Huit paquets open source, une documentation vivante et une PWA. MIT, gratuit pour toujours.",
+        "illustrationAlt": "Schéma : les huit paquets, la documentation et la PWA reliés à AbElements."
+      }
+    }
   }
 }
