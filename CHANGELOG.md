@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.18](https://github.com/abraham-ukachi/ab-elements-app/compare/v0.2.17...v0.2.18) (2026-10-15)
+
+* :sparkles: Add the Welcome v6 walkthrough at `/[locale]/welcome`: 9 slides built on `AbCarousel` & `AbFlowDiagram`, with Skip to the last slide and a Get Started action
+* :passport_control: Gate the first home visit behind the Welcome, remembered for one year (`AB_APP_COOKIE_MAX_AGE.oneYear`); direct links, bots & browsers without `sec-fetch-dest` never see it
+* :globe_with_meridians: Add the Welcome messages (en, fr, es, ru)
+* :lipstick: Keep the system theme mode in the no-flash theme script
+* :lipstick: Keep the Welcome diagrams clear of their header, never clip a slide's top, and show Skip as plain bronze text
+* :fire: Remove the app-side theme workarounds now fixed in ab-nextjs-theme 0.3.2
+* :arrow_up: Bump ab-nextjs-theme 0.3.2, ab-nextjs-components 0.1.11 & the other Ab packages for the Welcome
+* :white_check_mark: Test the Welcome gate, the Get Started action, the slides, messages & scenes
+* :bento: Swap the README screenshots to the Welcome v6 (laptop & mobile)
+
 ### [0.2.17](https://github.com/abraham-ukachi/ab-elements-app/compare/v0.2.16...v0.2.17) (2026-10-14)
 
 * :sparkles: Add the Splash screen (light & dark), shown on the first visit only
