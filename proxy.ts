@@ -106,6 +106,8 @@ export function shouldShowWelcome(request: NextRequest): boolean {
   // 1. 🏠 the home page only (`/`, `/fr`, `/es/`...)
   if (stripAbLocalePrefix(request.nextUrl.pathname, abI18nConfig) !== '/') return false;
   // 2. 📄 a real document navigation only
+  //    ⚠️ heads-up: browsers (or clients) that never send `sec-fetch-dest` fail this check,
+  //    so they NEVER see the Welcome 👋 and go straight to the home page (safe by design 🛡️)
   if (request.headers.get('sec-fetch-dest') !== 'document') return false;
   // 3. 🍪 not once the visitor said hello
   if (request.cookies.get(WELCOME_COOKIE)?.value === 'true') return false;
