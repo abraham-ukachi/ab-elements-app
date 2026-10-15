@@ -119,6 +119,7 @@ export const generateStaticParams = () => generateAbStaticParams(abI18nConfig);
  *
  * Runs before the first paint to put the right Ab theme (`light` or `dark`) on `<html>`,
  * from the saved `theme` preference or the system's color scheme, so there's no theme flash.
+ * A saved `system` mode (the 3-state theme switch 🌗) follows the OS and is kept in `data-theme-mode`.
  */
 const themeScript: string = `(function () {
   try {
@@ -128,6 +129,7 @@ const themeScript: string = `(function () {
       : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
     var root = document.documentElement;
     root.dataset.theme = theme;
+    root.dataset.themeMode = saved === 'system' ? 'system' : theme;
     root.classList.add(theme);
     root.style.colorScheme = theme;
   } catch (e) {}
