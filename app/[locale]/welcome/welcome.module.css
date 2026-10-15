@@ -141,7 +141,11 @@
 
 /* ⏩ Skip (small bronze text) */
 .skip {
-  /* AA bronze for small text 🥉 */
+  /* AA bronze for small text 🥉, via the theme's public text-button hook (beats `button[data-type="text"]`'s color) */
+  --ab-button-text-color: var(--ab-color-bronze-text);
+  /* plain text like the mock: no resting grey tint (the theme's 10% `::before` wash) 🫥 */
+  --ab-button-text-background-color-opacity: 0;
+  /* fallback color (kept for non-theme contexts) */
   color: var(--ab-color-bronze-text);
 }
 
@@ -183,8 +187,8 @@
   flex-direction: column;
   /* items start */
   align-items: flex-start;
-  /* vertically centered */
-  justify-content: center;
+  /* vertically centered, but `safe`: a too-tall pane starts at the top (never clipped above, always scrollable) 🛟 */
+  justify-content: safe center;
   /* 16px apart */
   gap: 16px;
   /* mobile padding */
@@ -343,16 +347,16 @@
 
 /* 🚀 Get Started: theme 0.3.2's contained button paints the bronze fill & on-primary text itself 🎨 */
 .getStarted {
-  /* the arrow follows the on-primary text color */
-  --material-icon-color: var(--md-sys-color-on-primary);
+  /* the arrow follows the theme's on-primary-container text (dark on the pale light-mode fill, light in dark mode) 🌗 */
+  --material-icon-color: var(--md-sys-color-on-primary-container);
 }
 
 /* 🗺️ the illustration pane */
 .aside {
-  /* centered content */
+  /* centered content (`safe`: an oversized scene overflows downwards, never above the top 🛟) */
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: safe center;
+  align-items: safe center;
   /* a 276px scene on mobile 📱 (components 0.1.11's AbFlowDiagram keeps its nodes below the header & inside the card) */
   height: 276px;
   /* never shrinks */
