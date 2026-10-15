@@ -30,7 +30,7 @@
   },
   "Welcome": {
     "meta": {
-      "title": "Bienvenida · abElements"
+      "title": "Te damos la bienvenida · abElements"
     },
     "carouselLabel": "Introducción a AbElements",
     "counter": "{current} / {total}",
@@ -63,13 +63,13 @@
       "s01": {
         "eyebrow": "Bienvenida",
         "title": "Bienvenido a <em>AbElements</em>",
-        "body": "Una biblioteca de interfaz para Next.js libre y gratuita: ocho paquetes enfocados que comparten un mismo tema, con documentación viva y ejemplos para cada elemento.",
+        "body": "Una biblioteca de UI para Next.js, gratuita y de código abierto: ocho paquetes específicos que comparten un mismo tema, con documentación y ejemplos en vivo para cada elemento.",
         "illustrationAlt": "Diagrama: los ocho paquetes de AbElements conectados al logotipo de AbElements.",
         "packages": {
-          "core": "Configuración, diseños y primitivas a11y",
+          "core": "Configuración, layouts y primitivas accesibles",
           "components": "Botones, pestañas, menús y pantalla de inicio",
           "theme": "Tokens bronce y modo oscuro real",
-          "icons": "Iconos SVG optimizables",
+          "icons": "Iconos SVG: importa solo los que uses",
           "fonts": "Inter, Mulish y más, autoalojadas",
           "animations": "Curvas, fundidos y transiciones",
           "hooks": "Hooks de React tipados",
@@ -78,26 +78,26 @@
       },
       "s02": {
         "title": "Elementos básicos",
-        "body": "La configuración, los diseños y las primitivas accesibles sobre los que se construyen todos los demás paquetes de AbElements.",
-        "illustrationAlt": "Diagrama: los diseños de pantalla, principal y lateral conectados al paquete core."
+        "body": "La configuración, los layouts y las primitivas accesibles en los que se basan todos los demás paquetes de AbElements.",
+        "illustrationAlt": "Diagrama: los layouts de pantalla, principal y lateral conectados al paquete core."
       },
       "s03": {
         "title": "Componentes listos para usar",
-        "body": "Interfaz de React accesible construida sobre Core y Theme, desde botones y pestañas hasta menús y una pantalla de inicio.",
+        "body": "Una UI de React accesible, construida sobre Core y Theme: desde botones y pestañas hasta menús y una pantalla de inicio.",
         "illustrationAlt": "Diagrama: un botón, pestañas, un menú y una pantalla de inicio conectados al paquete components."
       },
       "s04": {
-        "title": "Temas cálidos con tokens",
+        "title": "Temas cálidos basados en tokens",
         "body": "Tokens de diseño bronce como variables CSS, con un modo oscuro real y sin parpadeo al cargar.",
         "illustrationAlt": "Diagrama: muestras de color y un interruptor claro/oscuro conectados a los tokens del tema.",
         "chips": {
-          "tokens": "Tokens de diseño",
+          "tokens": "Tokens",
           "lightDark": "Claro y oscuro",
           "cssVariables": "Variables CSS"
         }
       },
       "s05": {
-        "title": "Iconos optimizables",
+        "title": "Iconos a la carta",
         "body": "Iconos SVG con nombres tipados. Importa solo los iconos que uses.",
         "illustrationAlt": "Diagrama: una cuadrícula de iconos conectada al componente de icono, con opciones de tamaño y grosor.",
         "chips": {
@@ -106,13 +106,13 @@
         }
       },
       "s06": {
-        "title": "Fuentes sin saltos de diseño",
+        "title": "Fuentes sin saltos de maquetación",
         "body": "Inter, Zilla Slab, Mulish, Quicksand y Roboto, autoalojadas para Next.js con sencillas utilidades font-*.",
         "illustrationAlt": "Diagrama: cinco muestras tipográficas alrededor de una gran «Aa»."
       },
       "s07": {
-        "title": "Animaciones que se sienten bien",
-        "body": "Curvas, fundidos y transiciones que respetan desde el inicio el ajuste de movimiento reducido.",
+        "title": "Animaciones con naturalidad",
+        "body": "Curvas, fundidos y transiciones que respetan de serie el ajuste de movimiento reducido.",
         "illustrationAlt": "Diagrama: una curva de aceleración y un interruptor para reducir animaciones conectados al paquete animations.",
         "chips": {
           "easings": "Curvas",
@@ -128,7 +128,7 @@
       "s09": {
         "pill": "Gratis para siempre · MIT",
         "title": "Crea tus aplicaciones web<br></br>gratis con <em>AbElements</em>",
-        "body": "Ocho paquetes de código abierto, documentación viva y una PWA. MIT, gratis para siempre.",
+        "body": "Ocho paquetes de código abierto, documentación en vivo y una PWA. MIT, gratis para siempre.",
         "illustrationAlt": "Diagrama: los ocho paquetes, la documentación y la PWA conectados a AbElements."
       }
     }

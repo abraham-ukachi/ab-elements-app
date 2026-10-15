@@ -24,7 +24,8 @@
     "Common.vue",
     "Common.lit",
     "Common.flutter",
-    "Welcome.counter"
+    "Welcome.counter",
+    "Welcome.slides.s04.chips.tokens"
   ],
   "terms": {}
 }
