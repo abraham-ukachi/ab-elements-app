@@ -51,30 +51,13 @@
 // import `redirect` from `next/navigation` (throws a NEXT_REDIRECT, so it must stay last 🚦)
 import { redirect } from 'next/navigation';
 
-// import the hello cookie action (writes `AB_APP_HELLO`) from `ab-nextjs-hooks` 🍪
-import { toggleAppHello } from 'ab-nextjs-hooks/server/useAbApp';
+// import the hello cookie action (writes `AB_APP_HELLO`) + the cookie lifetimes from `ab-nextjs-hooks` 🍪
+import { AB_APP_COOKIE_MAX_AGE, toggleAppHello } from 'ab-nextjs-hooks/server/useAbApp';
 // import the locale guard & the localized pathname helper from `ab-nextjs-i18n` 🌍
 import { isAbLocale, localizeAbPathname } from 'ab-nextjs-i18n/config';
 
 // import abElements' i18n config (locales, default locale...)
 import abI18nConfig from '@/i18n/config';
-
-
-// TODO(0.2.18): needs ab-nextjs-hooks@0.1.6 (G11: `toggleAppHello(state, { maxAge })` + `AB_APP_COOKIE_MAX_AGE`)
-// Until then, the published 0.1.5 `toggleAppHello` takes one argument and ignores the second one,
-// so the cookie keeps the package's 7-day lifetime ⏳. When hooks 0.1.6 lands:
-//   1. import { AB_APP_COOKIE_MAX_AGE, toggleAppHello } from 'ab-nextjs-hooks/server/useAbApp';
-//   2. delete `WELCOME_COOKIE_MAX_AGE` & `toggleWelcomeHello` below
-//   3. call `toggleAppHello(true, { maxAge: AB_APP_COOKIE_MAX_AGE.oneYear })`
-// one year, in SECONDS (= the planned `AB_APP_COOKIE_MAX_AGE.oneYear`) 📅
-const WELCOME_COOKIE_MAX_AGE = 31536000;
-// the planned 0.1.6 signature of `toggleAppHello` (a typed view of the same function, no runtime change) 🔭
-const toggleWelcomeHello = toggleAppHello as (
-  // the new hello state (`true` = the visitor finished the Welcome)
-  newHelloState?: boolean,
-  // the cookie options (`maxAge` in seconds)
-  options?: { maxAge?: number },
-) => Promise<boolean>;
 
 
 /**
@@ -92,8 +75,8 @@ export async function completeWelcome(formData: FormData): Promise<never> {
   // keep it only if it's one of our locales, else use the default locale (no open redirect 🛡️)
   const locale = isAbLocale(abI18nConfig, field) ? field : abI18nConfig.defaultLocale;
 
-  // 🍪 say hello for one year (see the TODO above: 7 days until hooks 0.1.6)
-  await toggleWelcomeHello(true, { maxAge: WELCOME_COOKIE_MAX_AGE });
+  // 🍪 say hello for ONE YEAR (the package default stays 7 days) 📅
+  await toggleAppHello(true, { maxAge: AB_APP_COOKIE_MAX_AGE.oneYear });
 
   // 🏠 go home, in the visitor's locale
   redirect(localizeAbPathname('/', locale, abI18nConfig));

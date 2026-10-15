@@ -49,7 +49,12 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 // mock the hello cookie action (no request scope in unit tests 🍪)
-vi.mock('ab-nextjs-hooks/server/useAbApp', () => ({ toggleAppHello: vi.fn(async (state?: boolean) => state ?? false) }));
+vi.mock('ab-nextjs-hooks/server/useAbApp', () => ({
+  // the real cookie lifetimes (hooks 0.1.6: 7 days by default, 1 year for the Welcome) 📅
+  AB_APP_COOKIE_MAX_AGE: { oneWeek: 604800, oneYear: 31536000 },
+  // a spy for the hello cookie action 🍪
+  toggleAppHello: vi.fn(async (state?: boolean) => state ?? false),
+}));
 // mock `redirect` (the real one throws NEXT_REDIRECT 🚦)
 vi.mock('next/navigation', () => ({ redirect: vi.fn() }));
 
