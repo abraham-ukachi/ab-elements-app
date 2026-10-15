@@ -44,13 +44,17 @@
 
 
 /* 🎨 Every Welcome-only style lives here (nothing in globals.css or the shared layouts). */
-/* Colors come from the theme tokens only (`var(--md-sys-color-*)`), never a hard-coded hex. */
-/* TODO(0.2.18): needs ab-nextjs-theme@0.3.1 (G18 `--ab-color-bronze-text`, `--ab-font-title`, sage/glow/focus tokens) */
+/* Colors & fonts come from the theme tokens only (`var(--md-sys-color-*)`, `var(--ab-*)`), never a hard-coded hex. */
+/* Titles use `--ab-font-title` (Mulish, Cyrillic-ready) and small bronze text uses `--ab-color-bronze-text` (theme 0.3.1) 🥉 */
 
-/* 🎬 the Welcome page */
+/* 🎬 the Welcome page: top bar + carousel, full viewport */
 .welcome {
-  /* full viewport height */
-  min-height: 100dvh;
+  /* a column: top bar, then the carousel */
+  display: flex;
+  /* stacked */
+  flex-direction: column;
+  /* exactly one viewport high (the slides scroll inside, the footer stays visible) */
+  height: 100dvh;
   /* the warm page background */
   background: var(--md-sys-color-background);
   /* the body text color */
@@ -67,6 +71,8 @@
   align-items: center;
   /* mobile height (48px) */
   height: 48px;
+  /* never shrinks */
+  flex: none;
   /* side padding */
   padding: 0 16px;
   /* the divider under it */
@@ -77,234 +83,367 @@
 .utilities {
   /* a row */
   display: flex;
+  /* centered */
+  align-items: center;
   /* 8px apart */
   gap: 8px;
 }
 
-/* 🎞️ the slide stack (no-JS layout) */
-.slides {
-  /* a column */
+/* 🎞️ main: holds the carousel, fills the rest of the page */
+.main {
+  /* fill the remaining height */
+  flex: 1;
+  /* a column (so the carousel can stretch) */
   display: flex;
-  /* stacked slides */
+  /* stacked */
   flex-direction: column;
+  /* allow shrinking */
+  min-height: 0;
+  /* nothing spills out of it */
+  overflow: hidden;
 }
 
-/* 🎞️ one slide */
+/* 🎠 the carousel region: counter row, track, footer */
+.carousel {
+  /* fill main */
+  flex: 1;
+  /* a column */
+  display: flex;
+  /* stacked */
+  flex-direction: column;
+  /* allow shrinking */
+  min-height: 0;
+}
+
+/* 🔢⏩ counter row: `02 / 09` left, Skip right */
+.counterRow {
+  /* a row */
+  display: flex;
+  /* ends */
+  justify-content: space-between;
+  /* centered */
+  align-items: center;
+  /* fixed height (keeps the layout still when Skip hides on s09) */
+  min-height: 48px;
+  /* side padding */
+  padding: 8px 16px 0;
+}
+
+/* 🔢 the counter (mono, small bronze text) */
+.counter {
+  /* monospace */
+  font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  /* small */
+  font-size: 0.8125rem;
+  /* AA bronze for small text 🥉 */
+  color: var(--ab-color-bronze-text);
+}
+
+/* ⏩ Skip (small bronze text) */
+.skip {
+  /* AA bronze for small text 🥉 */
+  color: var(--ab-color-bronze-text);
+}
+
+/* 🛤️ the track fills the space between the counter row and the footer */
+.track {
+  /* fill */
+  flex: 1;
+  /* allow shrinking */
+  min-height: 0;
+  /* one row that fits the space (not the tallest slide) */
+  grid-template-rows: minmax(0, 1fr);
+}
+
+/* 🖼️ one slide */
 .slide {
-  /* text pane + aside */
-  display: grid;
-  /* mobile padding */
-  padding: 32px 16px;
-  /* the divider between slides */
-  border-bottom: 1px solid var(--md-sys-color-outline-variant);
+  /* fill the track cell */
+  height: 100%;
+  /* a long slide scrolls inside itself */
+  overflow-y: auto;
+}
+
+/* 🧩 a slide's body: illustration above the text (mobile), side by side (laptop) */
+.slideBody {
+  /* a column on mobile */
+  display: flex;
+  /* stacked (the illustration goes first via `order`) */
+  flex-direction: column;
+  /* 16px apart */
+  gap: 16px;
+  /* at least the slide's height (taller content scrolls inside the slide) */
+  min-height: 100%;
 }
 
 /* 📝 the text pane */
 .textPane {
-  /* centered column */
+  /* a column */
   display: flex;
-  /* top to bottom */
+  /* stacked */
   flex-direction: column;
-  /* 16px rhythm */
+  /* items start */
+  align-items: flex-start;
+  /* vertically centered */
+  justify-content: center;
+  /* 16px apart */
   gap: 16px;
-  /* the mocks' max width */
-  max-width: 700px;
+  /* mobile padding */
+  padding: 8px 16px 16px;
+  /* below the illustration on mobile */
+  order: 2;
+  /* never squeezed (the slide scrolls instead) */
+  flex: none;
 }
 
-/* 🔢 the `02 / 09` counter */
-.counter {
-  /* mono digits */
-  font-family: ui-monospace, monospace;
-  /* small */
-  font-size: 0.875rem;
-  /* muted */
-  color: var(--md-sys-color-on-surface-variant);
-}
-
-/* 🏷️ eyebrow / pill text (small bronze text: needs the darker light-mode token) */
-.eyebrow {
-  /* mono, uppercase */
-  font-family: ui-monospace, monospace;
-  /* uppercase label */
-  text-transform: uppercase;
-  /* small */
-  font-size: 0.75rem;
-  /* letter spacing */
-  letter-spacing: 0.08em;
-  /* the bronze text token (falls back to the primary color until theme 0.3.1) */
-  color: var(--ab-color-bronze-text, var(--md-sys-color-primary));
-}
-
-/* 🔠 slide title (Mulish via the font class) */
+/* 🔠 slide titles: Mulish via the theme token (Cyrillic-ready 🇷🇺) */
 .title {
-  /* Mulish, with system fallbacks (`--ab-font-title` from theme 0.3.1) */
-  font-family: var(--ab-font-title, 'Mulish', system-ui, sans-serif);
+  /* the title font (Mulish) */
+  font-family: var(--ab-font-title);
+  /* extra bold */
+  font-weight: 800;
   /* mobile size */
   font-size: 32px;
   /* tight lines */
   line-height: 1.1;
-  /* long fr/ru titles wrap, never clip 🌍 */
-  overflow-wrap: anywhere;
-  /* no focus outline on the programmatic Skip focus (it's not interactive) ♿ */
+  /* tight tracking */
+  letter-spacing: -0.02em;
+  /* no margin (the gap spaces it) */
+  margin: 0;
+  /* no focus ring when focused by Skip (it's not interactive) */
   outline: none;
 }
 
-/* ✨ the bronze accent word */
+/* 🚀 s09: a bigger title */
+.slideEnd .title {
+  /* mobile s09 size */
+  font-size: 38px;
+}
+
+/* 🥉 the accent word (large text: the bronze accent is AA there) */
 .accent {
-  /* not italic: the mocks use color only */
+  /* bronze */
+  color: var(--ab-color-bronze);
+  /* not italic */
   font-style: normal;
-  /* bronze (large text: the base accent passes) */
-  color: var(--md-sys-color-primary);
+  /* no highlight box (the global `em` style adds one) */
+  background: none;
 }
 
 /* 📄 the lead paragraph */
 .body {
-  /* lead size */
-  font-size: 1.0625rem;
-  /* comfortable lines */
+  /* reset */
+  margin: 0;
+  /* comfortable size */
+  font-size: 1rem;
+  /* airy */
   line-height: 1.6;
-  /* muted */
+  /* a softer color */
   color: var(--md-sys-color-on-surface-variant);
+  /* readable width */
+  max-width: 60ch;
 }
 
-/* 📦 the s01 package cards (2 columns) */
+/* 📦 the 8 package cards (2 columns) */
 .cards {
-  /* a grid */
-  display: grid;
-  /* 2 columns */
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  /* 12px gaps */
-  gap: 12px;
-  /* no bullets */
+  /* reset the list */
   list-style: none;
-  /* no indent */
+  margin: 0;
   padding: 0;
+  /* a 2-column grid */
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  /* 8px apart */
+  gap: 8px;
+  /* full width */
+  width: 100%;
 }
 
-/* 📦 one card */
+/* 📦 one card: glyph + name (+ one-liner on bigger screens) */
 .card {
-  /* a column */
-  display: flex;
-  /* name above the one-liner */
-  flex-direction: column;
-  /* 4px apart */
-  gap: 4px;
-  /* inner padding */
-  padding: 12px;
+  /* a small grid: glyph | text */
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  /* glyph spans both text rows */
+  column-gap: 10px;
+  /* centered */
+  align-items: center;
+  /* padding */
+  padding: 10px 12px;
   /* rounded */
   border-radius: 12px;
-  /* hairline border */
+  /* the outline */
   border: 1px solid var(--md-sys-color-outline-variant);
-  /* card surface */
+  /* a raised surface */
   background: var(--md-sys-color-surface-container-low);
 }
 
-/* 📦 package name */
-.cardName {
-  /* small mono */
-  font-size: 0.8125rem;
-  /* bold */
-  font-weight: 700;
+/* 🔣 the card glyph (bronze) */
+.cardIcon {
+  /* spans name + one-liner */
+  grid-row: span 2;
+  /* bronze */
+  color: var(--ab-color-bronze);
 }
 
-/* 📦 one-liner (hidden on mobile, as in the mocks) */
+/* 🏷️ the package name (code) */
+.cardName {
+  /* small mono */
+  font-size: 0.75rem;
+  /* never wraps mid-name */
+  overflow-wrap: anywhere;
+}
+
+/* 💬 the one-liner (hidden on mobile) */
 .cardDesc {
   /* hidden on mobile */
   display: none;
   /* small */
-  font-size: 0.8125rem;
-  /* muted */
+  font-size: 0.75rem;
+  /* softer */
   color: var(--md-sys-color-on-surface-variant);
 }
 
-/* 🏷️ chip list */
+/* 🏷️ the chips list */
 .chips {
+  /* reset the list */
+  list-style: none;
+  margin: 0;
+  padding: 0;
   /* a wrapping row */
   display: flex;
-  /* wrap */
   flex-wrap: wrap;
-  /* 8px gaps */
+  /* 8px apart */
   gap: 8px;
-  /* no bullets */
-  list-style: none;
-  /* no indent */
-  padding: 0;
 }
 
-/* 🏷️ one chip */
-.chip {
-  /* pill padding */
-  padding: 4px 12px;
-  /* pill */
-  border-radius: 999px;
-  /* hairline */
-  border: 1px solid var(--md-sys-color-outline-variant);
-  /* small */
-  font-size: 0.8125rem;
-}
-
-/* 💻 install command */
+/* 💻 the install box: full width, capped */
 .install {
-  /* inner padding */
-  padding: 12px 16px;
-  /* rounded */
-  border-radius: 12px;
-  /* code surface */
-  background: var(--md-sys-color-surface-container-high);
-  /* scroll long commands */
-  overflow-x: auto;
+  /* full width */
+  width: 100%;
+  /* capped */
+  max-width: 520px;
 }
 
-/* 🚀 s09 actions */
+/* 🚀 the Get Started form: no box of its own (its button sits in the actions row) */
+.actions form {
+  /* let the button be a direct flex item of `.actions` */
+  display: contents;
+}
+
+/* 🚀 s09 actions: Get Started + GitHub */
 .actions {
   /* a wrapping row */
   display: flex;
-  /* wrap on mobile */
   flex-wrap: wrap;
-  /* 12px gaps */
+  /* centered */
+  align-items: center;
+  /* 12px apart */
   gap: 12px;
 }
 
-/* ♿ visually hidden, still read by screen readers */
-.srOnly {
-  /* out of the flow */
-  position: absolute;
-  /* 1px box */
-  width: 1px;
-  /* 1px box */
-  height: 1px;
-  /* clipped */
-  overflow: hidden;
-  /* fully clipped */
-  clip-path: inset(50%);
-  /* no wrapping */
-  white-space: nowrap;
+/* 🚀 Get Started: the primary filled look of the mock (theme tokens, via the button's own custom properties) */
+.getStarted {
+  /* bronze primary background */
+  --ab-button-background-color: var(--md-sys-color-primary);
+  /* readable text on it */
+  --ab-button-text-color: var(--md-sys-color-on-primary);
+  /* the arrow follows the text color */
+  --material-icon-color: var(--md-sys-color-on-primary);
 }
 
-/* 📱→💻 tablet (≥ 640) */
+/* 🗺️ the illustration pane */
+.aside {
+  /* in the flow (the theme's shell styles position a bare `aside` absolutely) */
+  position: relative;
+  inset: auto;
+  /* centered content */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* mobile: a 276px scene */
+  height: 276px;
+  /* never shrinks */
+  flex: none;
+  /* side padding */
+  padding: 0 16px;
+  /* above the text on mobile */
+  order: 1;
+}
+
+/* 🗺️ the diagram card fills its pane */
+.diagram {
+  /* full width, capped */
+  width: 100%;
+  max-width: 560px;
+  /* full height */
+  height: 100%;
+}
+
+/* ⚫⏮️⏭️ footer: dots left, arrows right */
+.footer {
+  /* a row */
+  display: flex;
+  /* ends */
+  justify-content: space-between;
+  /* centered */
+  align-items: center;
+  /* fixed height (no jump when the arrows hide on s09) */
+  min-height: 72px;
+  /* padding */
+  padding: 12px 16px;
+  /* never shrinks */
+  flex: none;
+  /* the divider above it */
+  border-top: 1px solid var(--md-sys-color-outline-variant);
+}
+
+/* ⏮️⏭️ the arrows */
+.arrows {
+  /* a row */
+  display: flex;
+  /* 12px apart */
+  gap: 12px;
+}
+
+/* 📱➡️💻 tablet (640–1023): roomier, one-liners back */
 @media (min-width: 640px) {
-  /* taller top bar */
+  /* a taller top bar */
   .topBar { height: 56px; padding: 0 32px; }
-  /* more padding */
-  .slide { padding: 32px; }
-  /* show the card one-liners */
-  .cardDesc { display: block; }
+  /* roomier counter row & footer */
+  .counterRow, .footer { padding-left: 32px; padding-right: 32px; }
+  /* roomier text */
+  .textPane { padding: 16px 32px 32px; }
+  /* the one-liners come back */
+  .cardDesc { display: block; grid-column: 2; }
+  /* a taller illustration */
+  .aside { height: 360px; }
 }
 
-/* 💻 laptop (≥ 1024): text pane + aside side by side */
+/* 💻 laptop (≥1024): text left, illustration right (45%) */
 @media (min-width: 1024px) {
-  /* the mocks' 60px top bar */
+  /* the laptop top bar */
   .topBar { height: 60px; }
-  /* text 55% / aside 45% */
-  .slide { grid-template-columns: 55fr 45fr; padding: 40px 96px 48px; }
-  /* fluid title */
+  /* side by side */
+  .slideBody { flex-direction: row; gap: 0; height: 100%; }
+  /* text left, illustration right */
+  .textPane { order: 1; flex: 1; }
+  .aside { order: 2; }
+  /* the text pane: centered, capped */
+  .textPane { flex: 1; padding: 40px 96px 48px; max-width: 796px; }
+  /* s09: a wider text pane */
+  .slideEnd .textPane { max-width: 976px; }
+  /* the laptop title scale */
   .title { font-size: clamp(48px, 4.5vw, 68px); }
-  /* the s09 title is bigger */
-  .slide:last-child .title { font-size: clamp(52px, 5.3vw, 80px); }
+  /* the laptop s09 title scale */
+  .slideEnd .title { font-size: clamp(52px, 5.3vw, 80px); }
+  /* the illustration: 45%, full height, divider on its left */
+  .aside { width: 45%; height: auto; margin-left: auto; padding: 32px; border-left: 1px solid var(--md-sys-color-outline-variant); }
+  /* the diagram card: capped like the mock (760×600) */
+  .diagram { max-width: 760px; max-height: 600px; }
 }
 
-/* 🧘 reduced motion: nothing animates here yet (the carousel handles it) */
+/* 🧘 reduced motion: nothing here animates on its own (the packages calm their own motion) */
 @media (prefers-reduced-motion: reduce) {
-  /* no transitions at all */
-  .welcome * { transition: none; animation: none; }
+  /* the theme's global `form > *` entrance starts at opacity 0: show the Get Started form right away */
+  .actions form > * { opacity: 1; animation: none; }
 }
