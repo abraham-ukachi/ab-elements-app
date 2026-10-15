@@ -114,6 +114,32 @@ describe('proxy.ts: the Welcome gate 🎬', () => {
     expect(shouldShowWelcome(request('/', { ua: UA.replace('Chrome', 'HeadlessChrome') }))).toBe(false);
   });
 
+  // 🗺️ the full table: every locale's home page → its localized Welcome (307), and the cases that never redirect
+  it.each([
+    ['/', '/welcome'],
+    ['/fr', '/fr/welcome'],
+    ['/es', '/es/welcome'],
+    ['/ru', '/ru/welcome'],
+  ])('redirects a first visit of `%s` (307) to `%s` 🌍', (path, target) => {
+    // the gate's answer for a first-visit document navigation
+    const res = welcomeGate(request(path));
+    // a temporary redirect to the localized Welcome ↪️
+    expect(res?.status).toBe(307);
+    expect(new URL(res!.headers.get('location')!).pathname).toBe(target);
+  });
+
+  it.each([
+    ['a returning visitor on `/ru`', '/ru', { cookie: 'true' }],
+    ['a deep link `/es/docs`', '/es/docs', {}],
+    ['an RSC request (`sec-fetch-dest: empty`)', '/fr', { dest: 'empty' }],
+    ['a request without `sec-fetch-dest`', '/es', { dest: null }],
+    ['Lighthouse', '/', { ua: `${UA} Chrome-Lighthouse` }],
+    ['Bingbot', '/fr', { ua: 'Mozilla/5.0 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)' }],
+  ] as const)('never redirects %s 🙅', (_name, path, options) => {
+    // no redirect at all: the i18n proxy takes over ✅
+    expect(welcomeGate(request(path, options))).toBeUndefined();
+  });
+
   it('runs first in the default proxy (and lets the i18n proxy handle everything else)', async () => {
     const first = await proxy(request('/'));
     expect(first.status).toBe(307);
