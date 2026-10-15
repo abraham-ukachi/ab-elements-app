@@ -62,7 +62,14 @@ export interface WelcomeScene {
 }
 
 // a hub-and-spokes scene: one hub in the middle, the spokes on a circle around it 🎡
-function hub(caption: string, center: string, spokes: readonly string[], radius = 36): WelcomeScene {
+// `nudge` optionally shifts named spokes (in 0–100 units) to pull crowded neighbours apart 🤏↔️
+function hub(
+  caption: string,
+  center: string,
+  spokes: readonly string[],
+  radius = 36,
+  nudge: Readonly<Record<string, { dx?: number; dy?: number }>> = {},
+): WelcomeScene {
   // the hub node (centre) 🎯
   const nodes: AbFlowNode[] = [{ id: 'hub', label: center, x: 50, y: 50, tone: 'hub' }];
   // one wire per spoke 〰️
@@ -74,7 +81,14 @@ function hub(caption: string, center: string, spokes: readonly string[], radius 
     // the spoke's id
     const id = `n${i}`;
     // the spoke node (rounded to one decimal so SSR and the client agree 🤝)
-    nodes.push({ id, label, x: Math.round((50 + radius * Math.cos(angle)) * 10) / 10, y: Math.round((50 + radius * Math.sin(angle)) * 10) / 10 });
+    // this spoke's optional nudge (none by default) 🤏
+    const { dx = 0, dy = 0 } = nudge[label] ?? {};
+    nodes.push({
+      id,
+      label,
+      x: Math.round((50 + radius * Math.cos(angle) + dx) * 10) / 10,
+      y: Math.round((50 + radius * Math.sin(angle) + dy) * 10) / 10,
+    });
     // its wire to the hub, slightly curved 🌙
     edges.push({ from: id, to: 'hub', curve: i % 2 === 0 ? 0.15 : -0.15 });
   });
@@ -101,5 +115,9 @@ export const WELCOME_SCENES: Readonly<Record<WelcomeSlideId, WelcomeScene>> = {
   // s08: the hooks hub 🪝
   s08: hub('ab-nextjs-hooks', 'Hooks', ['useAbTheme', 'useAbMedia', 'useAbLocalStorage', 'useAbClipboard']),
   // s09: everything + docs + PWA 🚀
-  s09: hub('ab-elements', 'AbElements', ['core', 'components', 'theme', 'icons', 'fonts', 'animations', 'hooks', 'i18n', 'docs', 'PWA']),
+  s09: hub('ab-elements', 'AbElements', ['core', 'components', 'theme', 'icons', 'fonts', 'animations', 'hooks', 'i18n', 'docs', 'PWA'], 36, {
+    // 10 spokes crowd the top: slide `core` left & `components` right/down so they never nearly touch (mobile) 📱↔️
+    core: { dx: -5 },
+    components: { dx: 5, dy: 3 },
+  }),
 };
