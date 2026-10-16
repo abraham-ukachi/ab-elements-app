@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.19](https://github.com/abraham-ukachi/ab-elements-app/compare/v0.2.18...v0.2.19) (2026-10-16)
+
+* :globe_with_meridians: Polish & refine the Welcome translations in fr, es & ru
+* :wheelchair: Make long Welcome slides a focusable, keyboard-scrollable region
+* :heavy_plus_sign: Add @axe-core/playwright for the accessibility e2e tests
+* :white_check_mark: Test the Welcome messages & the full gate table
+* :white_check_mark: Add the Welcome e2e tests: gate (incl. Get Started without JavaScript), slides (incl. swipe at 390px), Splash shown once, theme, motion, axe & Cyrillic
+* :bento: Add the Welcome visual snapshot baselines (s01 & s09; laptop & mobile, light & dark)
+* :arrow_up: Bump ab-nextjs-theme 0.3.3 & ab-nextjs-components 0.1.12: the globe menu can be clicked with a mouse again (scoped layout `main` z-index), and the `AbInstallSnippet` tabs pass AA in every state
+* :white_check_mark: Drop the globe menu & AbInstallSnippet test allowances (no axe exceptions left)
+* :lipstick: Use the filled (solid bronze) AbButton for the Welcome Get Started
+* Deferred: WebKit e2e, the full 72+ visual set & tablet frame, Lighthouse / JS budget, the HTTPS (`Secure`) cookie check, and a CI e2e job (0.2.20+)
+
 ### [0.2.18](https://github.com/abraham-ukachi/ab-elements-app/compare/v0.2.17...v0.2.18) (2026-10-15)
 
 * :sparkles: Add the Welcome v6 walkthrough at `/[locale]/welcome`: 9 slides built on `AbCarousel` & `AbFlowDiagram`, with Skip to the last slide and a Get Started action
