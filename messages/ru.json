@@ -132,5 +132,156 @@
         "illustrationAlt": "Схема: восемь пакетов, документация и PWA связаны с AbElements."
       }
     }
+  },
+  "Shell": {
+    "skipToContent": "Перейти к содержимому",
+    "brandLabel": "Главная AbElements",
+    "nav": {
+      "primary": "Основное",
+      "docs": "Документация",
+      "packages": "Пакеты",
+      "guides": "Руководства",
+      "changelog": "Изменения",
+      "more": "Ещё"
+    },
+    "sidebar": {
+      "label": "Документация",
+      "home": "Главная",
+      "sections": {
+        "gettingStarted": "Начало работы",
+        "packages": "Пакеты",
+        "guides": "Руководства"
+      },
+      "items": {
+        "introduction": "Введение",
+        "installation": "Установка",
+        "quickStart": "Быстрый старт",
+        "themingDarkMode": "Темы и тёмный режим",
+        "iconsFonts": "Иконки и шрифты",
+        "pwaShell": "Оболочка PWA"
+      },
+      "collapse": "Свернуть боковую панель",
+      "expand": "Развернуть боковую панель",
+      "version": "Документация {version}"
+    },
+    "bottomBar": {
+      "label": "Основная навигация",
+      "home": "Главная",
+      "docs": "Доки",
+      "search": "Поиск",
+      "profile": "Профиль"
+    },
+    "search": {
+      "placeholder": "Поиск по документации…",
+      "short": "Поиск",
+      "shortcut": "{key} K",
+      "comingSoon": "Поиск скоро появится"
+    },
+    "aside": {
+      "toggleOpen": "Показать оглавление страницы",
+      "toggleClose": "Скрыть оглавление страницы",
+      "onThisPage": "На этой странице",
+      "editPage": "Редактировать страницу",
+      "changelog": "Изменения"
+    },
+    "github": "AbElements на GitHub",
+    "language": {
+      "label": "Язык"
+    },
+    "error": {
+      "title": "Что-то пошло не так",
+      "retry": "Повторить"
+    },
+    "offline": "Вы офлайн. Показаны сохранённые страницы.",
+    "profile": {
+      "comingSoon": "Аккаунты скоро появятся"
+    }
+  },
+  "Home": {
+    "meta": {
+      "title": "AbElements · UI-библиотека для Next.js",
+      "description": "Документация, живые примеры и устанавливаемое PWA для восьми пакетов AbElements."
+    },
+    "pill": "Документация AbElements",
+    "title": "Создавайте интерфейсы Next.js с <em>AbElements</em>",
+    "lead": "Восемь узконаправленных пакетов (core, components, theme, icons, fonts, animations, hooks и i18n) с живыми примерами.",
+    "cta": {
+      "getStarted": "Начать",
+      "browse": "Все пакеты"
+    },
+    "packages": {
+      "title": "Пакеты",
+      "viewAll": "Показать все",
+      "count": "{count, number}",
+      "core": {
+        "desc": "Макеты экрана, основной и боковой области, а также провайдер страницы."
+      },
+      "components": {
+        "desc": "Доступный UI на основе core и theme."
+      },
+      "theme": {
+        "desc": "Дизайн-токены, светлая и тёмная темы, CSS-переменные."
+      },
+      "icons": {
+        "desc": "AbIcons в SVG и CSS, контурные и заливные."
+      },
+      "fonts": {
+        "desc": "Пресеты шрифтов для next/font без сдвига макета."
+      },
+      "animations": {
+        "desc": "Пресеты анимаций и кривые с учётом уменьшения движения."
+      },
+      "hooks": {
+        "desc": "Типизированные хуки React для темы, медиа и хранилища."
+      },
+      "i18n": {
+        "desc": "Маршрутизация и сообщения на четырёх языках."
+      },
+      "beta": "бета",
+      "all": {
+        "title": "Все пакеты",
+        "body": "Сравнивайте, устанавливайте и читайте справочник API.",
+        "cta": "Все пакеты"
+      }
+    },
+    "guides": {
+      "title": "Руководства",
+      "all": "Все руководства",
+      "items": {
+        "install": {
+          "title": "Установка AbElements",
+          "tag": "Настройка"
+        },
+        "theming": {
+          "title": "Темы и тёмный режим",
+          "tag": "Тема"
+        },
+        "iconsFonts": {
+          "title": "Иконки и шрифты",
+          "tag": "Ресурсы"
+        },
+        "pwaShell": {
+          "title": "Создание оболочки PWA",
+          "tag": "PWA"
+        }
+      }
+    },
+    "whatsNew": {
+      "title": "Что нового",
+      "changelog": "Изменения",
+      "kind": {
+        "new": "Новое",
+        "improved": "Улучшено",
+        "fixed": "Исправлено"
+      },
+      "asideLabel": "Новое в {pkg}"
+    },
+    "toc": {
+      "overview": "Обзор",
+      "install": "Установка",
+      "packages": "Пакеты",
+      "guides": "Руководства",
+      "whatsNew": "Что нового"
+    }
   }
 }

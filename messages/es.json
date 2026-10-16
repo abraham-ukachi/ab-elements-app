@@ -132,5 +132,156 @@
         "illustrationAlt": "Diagrama: los ocho paquetes, la documentación y la PWA conectados a AbElements."
       }
     }
+  },
+  "Shell": {
+    "skipToContent": "Ir al contenido",
+    "brandLabel": "Inicio de AbElements",
+    "nav": {
+      "primary": "Principal",
+      "docs": "Documentación",
+      "packages": "Paquetes",
+      "guides": "Guías",
+      "changelog": "Registro de cambios",
+      "more": "Más"
+    },
+    "sidebar": {
+      "label": "Documentación",
+      "home": "Inicio",
+      "sections": {
+        "gettingStarted": "Primeros pasos",
+        "packages": "Paquetes",
+        "guides": "Guías"
+      },
+      "items": {
+        "introduction": "Introducción",
+        "installation": "Instalación",
+        "quickStart": "Inicio rápido",
+        "themingDarkMode": "Temas y modo oscuro",
+        "iconsFonts": "Iconos y fuentes",
+        "pwaShell": "Shell PWA"
+      },
+      "collapse": "Contraer la barra lateral",
+      "expand": "Expandir la barra lateral",
+      "version": "Documentación {version}"
+    },
+    "bottomBar": {
+      "label": "Navegación principal",
+      "home": "Inicio",
+      "docs": "Docs",
+      "search": "Buscar",
+      "profile": "Perfil"
+    },
+    "search": {
+      "placeholder": "Buscar en la documentación…",
+      "short": "Buscar",
+      "shortcut": "{key} K",
+      "comingSoon": "La búsqueda llegará pronto"
+    },
+    "aside": {
+      "toggleOpen": "Mostrar el índice de la página",
+      "toggleClose": "Ocultar el índice de la página",
+      "onThisPage": "En esta página",
+      "editPage": "Editar esta página",
+      "changelog": "Registro de cambios"
+    },
+    "github": "AbElements en GitHub",
+    "language": {
+      "label": "Idioma"
+    },
+    "error": {
+      "title": "Algo salió mal",
+      "retry": "Reintentar"
+    },
+    "offline": "Estás sin conexión. Mostrando páginas guardadas.",
+    "profile": {
+      "comingSoon": "Las cuentas llegarán pronto"
+    }
+  },
+  "Home": {
+    "meta": {
+      "title": "AbElements · Biblioteca de UI para Next.js",
+      "description": "Documentación, ejemplos en vivo y una PWA instalable para los ocho paquetes de AbElements."
+    },
+    "pill": "Documentación de AbElements",
+    "title": "Crea interfaces Next.js con <em>AbElements</em>",
+    "lead": "Ocho paquetes enfocados (core, components, theme, icons, fonts, animations, hooks e i18n), documentados con ejemplos en vivo.",
+    "cta": {
+      "getStarted": "Empezar",
+      "browse": "Explorar paquetes"
+    },
+    "packages": {
+      "title": "Paquetes",
+      "viewAll": "Ver todo",
+      "count": "{count, number}",
+      "core": {
+        "desc": "Diseños de pantalla, principal y lateral, más el proveedor de página."
+      },
+      "components": {
+        "desc": "UI accesible construida sobre core y theme."
+      },
+      "theme": {
+        "desc": "Tokens de diseño, modos claro y oscuro, variables CSS."
+      },
+      "icons": {
+        "desc": "AbIcons en SVG y CSS, con contorno y rellenos."
+      },
+      "fonts": {
+        "desc": "Ajustes de fuentes para next/font, sin saltos de diseño."
+      },
+      "animations": {
+        "desc": "Ajustes de movimiento y curvas, compatibles con el movimiento reducido."
+      },
+      "hooks": {
+        "desc": "Hooks de React tipados para tema, medios y almacenamiento."
+      },
+      "i18n": {
+        "desc": "Rutas y mensajes en cuatro idiomas."
+      },
+      "beta": "beta",
+      "all": {
+        "title": "Todos los paquetes",
+        "body": "Compara, instala y lee la referencia de la API.",
+        "cta": "Explorar paquetes"
+      }
+    },
+    "guides": {
+      "title": "Guías",
+      "all": "Todas las guías",
+      "items": {
+        "install": {
+          "title": "Instalar AbElements",
+          "tag": "Configuración"
+        },
+        "theming": {
+          "title": "Temas y modo oscuro",
+          "tag": "Tema"
+        },
+        "iconsFonts": {
+          "title": "Iconos y fuentes",
+          "tag": "Recursos"
+        },
+        "pwaShell": {
+          "title": "Crear un shell PWA",
+          "tag": "PWA"
+        }
+      }
+    },
+    "whatsNew": {
+      "title": "Novedades",
+      "changelog": "Registro de cambios",
+      "kind": {
+        "new": "Nuevo",
+        "improved": "Mejorado",
+        "fixed": "Corregido"
+      },
+      "asideLabel": "Novedad en {pkg}"
+    },
+    "toc": {
+      "overview": "Resumen",
+      "install": "Instalación",
+      "packages": "Paquetes",
+      "guides": "Guías",
+      "whatsNew": "Novedades"
+    }
   }
 }
