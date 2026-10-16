@@ -36,5 +36,5 @@ The app is a showcase of God's published packages: `ab-nextjs-fonts`, `ab-nextjs
 ## Git
 
 - Commit messages use gitmoji with a capitalized summary, e.g. `:memo: Update README`, `:sparkles: Add settings page`, `:bug: Fix theme toggle`, `:arrow_up: Upgrade deps`, `:wrench: Update config`.
-- Version bumps get their own commit, `chore(release): x.y.z`, which updates `package.json` and adds a `CHANGELOG.md` entry.
+- Version bumps get their own commit, `:bookmark: Release x.y.z`, which updates `package.json` and adds a `CHANGELOG.md` entry.
 - Work on a branch. **No push, PR merge or npm publish without God's review.**
