@@ -261,12 +261,12 @@ export default async function Welcome({ locale }: WelcomeProps) {
                   {/* the visitor's locale (validated by the action) */}
                   <input type="hidden" name="locale" value={locale} />
                   {/* the submit button */}
+                  {/* solid bronze `filled` type (components 0.1.12 + theme 0.3.3: on-primary label & icon, AA in light & dark) 🥉 */}
                   <AbButton
-                    type="contained"
+                    type="filled"
                     htmlType="submit"
                     label={t('cta')}
                     endIcon={<AbIcon name="arrow_forward" svg={iconArrowForward} size={20} />}
-                    className={styles.getStarted}
                   />
                 </form>
                 {/* Continue with GitHub - disabled until auth exists, with a "Coming soon" badge (sets NO cookie) 🚫 */}

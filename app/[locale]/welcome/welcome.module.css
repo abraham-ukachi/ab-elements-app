@@ -347,12 +347,6 @@
   gap: 12px;
 }
 
-/* 🚀 Get Started: theme 0.3.2's contained button paints the pale primary-container fill & dark on-primary-container text itself 🎨 */
-.getStarted {
-  /* the arrow follows the theme's on-primary-container text (dark on the pale light-mode fill, light in dark mode) 🌗 */
-  --material-icon-color: var(--md-sys-color-on-primary-container);
-}
-
 /* 🗺️ the illustration pane */
 .aside {
   /* centered content (`safe`: an oversized scene overflows downwards, never above the top 🛟) */
@@ -441,4 +435,4 @@
   .diagram { max-width: 760px; max-height: 600px; }
 }
 
-/* 🧘 reduced motion: nothing here animates on its own (the packages & theme 0.3.2 calm their own motion) */
+/* 🧘 reduced motion: nothing here animates on its own (the packages & the theme calm their own motion) */
