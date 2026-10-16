@@ -193,7 +193,14 @@ export default async function Welcome({ locale }: WelcomeProps) {
       title: t.markup(`${key}.title`, plain),
       // 🧩 the slide markup
       content: (
-        <div id={`welcome-${slide.id}`} className={clsx(styles.slideBody, slide.id === 's09' && styles.slideEnd)}>
+        <div
+          id={`welcome-${slide.id}`}
+          className={clsx(styles.slideBody, slide.id === 's09' && styles.slideEnd)}
+          // ♿ a long slide scrolls in here: make it a named, keyboard-focusable region (axe `scrollable-region-focusable`) ⌨️
+          role="region"
+          aria-labelledby={`welcome-${slide.id}-title`}
+          tabIndex={0}
+        >
           {/* Text Pane */}
           <div className={styles.textPane}>
             {/* Eyebrow (s01) / package pill (s02–s08) / MIT pill with a sage dot (s09) 🏷️ */}
@@ -254,12 +261,12 @@ export default async function Welcome({ locale }: WelcomeProps) {
                   {/* the visitor's locale (validated by the action) */}
                   <input type="hidden" name="locale" value={locale} />
                   {/* the submit button */}
+                  {/* solid bronze `filled` type (components 0.1.12 + theme 0.3.3: on-primary label & icon, AA in light & dark) 🥉 */}
                   <AbButton
-                    type="contained"
+                    type="filled"
                     htmlType="submit"
                     label={t('cta')}
                     endIcon={<AbIcon name="arrow_forward" svg={iconArrowForward} size={20} />}
-                    className={styles.getStarted}
                   />
                 </form>
                 {/* Continue with GitHub - disabled until auth exists, with a "Coming soon" badge (sets NO cookie) 🚫 */}
