@@ -71,6 +71,8 @@ import { StaticViewport } from '../viewport';
 
 // import the Splash overlay & its (pre-paint 🚦) gate script
 import Splash, { abSplashGateScript } from '@/components/app/splash';
+// import the (pre-paint 🚦) package-manager key migration (`ab-welcome-pm` → `ab-pm`, D27 📦)
+import { abPmMigrationScript } from '@/lib/install-pm';
 
 // import the global styles 🎨
 import '../globals.css';
@@ -159,6 +161,8 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
         {/* the Splash gate (standalone launch / first visit 💦) */}
         <script dangerouslySetInnerHTML={{ __html: abSplashGateScript }} />
+        {/* the package-manager key migration, before any install box reads it 📦 */}
+        <script dangerouslySetInnerHTML={{ __html: abPmMigrationScript }} />
       </head>
       {/* Body - with the Inter font & the i18n provider */}
       <body className={interStyles.regular}>
