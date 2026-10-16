@@ -342,7 +342,7 @@ This is what the history looks like with a merge commit (`git log --oneline --gr
 ```
 *   Merge pull request #13 from abraham-ukachi/docs/merge-commit-workflow   (tag: v0.2.9)
 |\
-| * :bookmark: Release 0.2.9
+| * chore(release): 0.2.9
 | * :card_file_box: Credit Abraham Ukachi as the schema author
 | * :memo: Refresh the package table & document the ab-nextjs-i18n CLI
 | * :memo: Replace squash-merge with merge commits & announce-first releases
@@ -367,6 +367,7 @@ This is what the history looks like with a merge commit (`git log --oneline --gr
 * Put extra details in parentheses at the end of the subject when they help: `:wrench: Migrate next.config.mjs to next.config.ts (transpile the Ab packages)`
 * Several emojis are fine when a commit really does several things: `:memo: :fire: Update README.md`
 * The release commit follows the same format: `:bookmark: Release x.y.z`
+* Releases up to 0.2.19 used `chore(release): x.y.z`; from 0.2.20 on, `:bookmark: Release x.y.z`
 
 The format:
 
@@ -383,13 +384,13 @@ Real examples from this repo:
 :wrench: Require Node.js 24+ (Vercel dropped 20.x)
 :card_file_box: Add MySQL database schema design
 :pencil2: Clean the package.json description & update the README tree
-:bookmark: Release 0.2.4
+chore(release): 0.2.4
 ```
 
 
 ### Gitmoji used in this repo
 
-Built from `git log --all --format=%s`: **54** of the **73** commit subjects start with a gitmoji (the rest are the older `chore(release): x.y.z` release commits, from before the 🔖 `:bookmark: Release x.y.z` style, and a few merge / housekeeping commits). A subject with two emojis counts for both.
+Built from `git log --all --format=%s`: **54** of the **73** commit subjects start with a gitmoji (the rest are `chore(release): x.y.z` release commits, the style used up to 0.2.19, and a few merge / housekeeping commits). A subject with two emojis counts for both.
 
 | Emoji | Shortcode | Count | Meaning ([gitmoji.dev](https://gitmoji.dev)) | How it's used here |
 |:------|:----------|:------|:----------------------------------------------|:-------------------|
