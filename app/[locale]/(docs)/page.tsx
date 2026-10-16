@@ -25,7 +25,7 @@
 *
 * @project: ab-elements-app
 * @name: abElements Home - Page
-* @file: app/[locale]/page.tsx
+* @file: app/[locale]/(docs)/page.tsx
 * @type: TypeScript + JSX
 * @authors: Abraham Ukachi <abrahamukachi@gmail.com>
 *
@@ -108,7 +108,8 @@ export default async function Home() {
 
   // return the home page
   return (
-    <main className="flex flex-col relative w-full h-dvh items-center justify-center box-border p-6 select-none">
+    // `#main` is the skip link's target (the `(docs)` layout), focusable from the link only ♿
+    <main id="main" tabIndex={-1} className="flex flex-col relative w-full h-dvh items-center justify-center box-border p-6 select-none">
 
       {/* Container */}
       <div className="Container relative flex flex-col size-full grow overflow-auto items-left lg:items-center justify-center rounded-lg lg:rounded-xl lg:bg-(--md-sys-color-surface-container-low) p-0 lg:p-24">
