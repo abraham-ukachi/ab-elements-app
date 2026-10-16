@@ -64,55 +64,6 @@ const SUMMARY_DIR = join('test-results', 'axe-summary');
 const BLOCKING = new Set(['serious', 'critical']);
 
 
-// ⚠️ KNOWN PACKAGE GAP (ab-nextjs-components 0.1.11 `AbInstallSnippet`): in light mode the SELECTED
-// package-manager tab paints `--ab-color-bronze-text` (#8a6440) on the primary-container (#f2ded1) = 4.05:1 (< 4.5:1).
-// Packages-first: it gets fixed in the package, not overridden here. Remove this allowance once it ships 🧹
-// TODO(components 0.1.12): remove
-const KNOWN_GAP_NOTE = 'ab-nextjs-components AbInstallSnippet: selected tab contrast 4.05:1 in light mode';
-// the AbInstallSnippet root: the ONLY place the allowance applies 📦
-const INSTALL_SNIPPET_ROOT = '[data-ab-part="install-snippet"]';
-// the axe results type (inferred from the builder, so no direct `axe-core` import) 🧾
-type AxeResults = Awaited<ReturnType<AxeBuilder['analyze']>>;
-// one axe node (a violation's offending element) 🔍
-type AxeNode = AxeResults['violations'][number]['nodes'][number];
-// a stable key for an axe node (its CSS target chain) 🔑
-const nodeKey = (node: AxeNode): string => JSON.stringify(node.target);
-
-/**
- * `findKnownPackageGaps` 🎯
- *
- * Returns the keys of the axe nodes that are the known package gap: a `color-contrast` hit on the
- * SELECTED `role="tab"` that lives INSIDE the AbInstallSnippet root (checked in the live page, not by
- * markup alone), so a selected tab anywhere else still fails the test 🚫.
- *
- * TODO(components 0.1.12): remove (with `KNOWN_GAP_NOTE` & its uses) once the package fix ships 🧹
- *
- * @param { Page } page - the Playwright page axe just ran on
- * @param { AxeResults } results - the axe results
- * @returns { Promise<Set<string>> } - the `nodeKey`s of the excused nodes
- */
-async function findKnownPackageGaps(page: Page, results: AxeResults): Promise<Set<string>> {
-  // the excused node keys 🗂️
-  const gaps = new Set<string>();
-  // only `color-contrast` can be excused 🎨
-  for (const violation of results.violations.filter((v) => v.id === 'color-contrast')) {
-    for (const node of violation.nodes) {
-      // only a single (non-shadow, non-iframe) selector can be looked up here 🔎
-      const [selector, ...rest] = node.target;
-      if (rest.length || typeof selector !== 'string') continue;
-      // in the page: a selected tab, inside the install snippet root? ✅
-      const isGap = await page.locator(selector).first().evaluate((el, root) =>
-        el.getAttribute('role') === 'tab' && el.getAttribute('aria-selected') === 'true' && !!el.closest(root),
-      INSTALL_SNIPPET_ROOT).catch(() => false);
-      // remember it 📝
-      if (isGap) gaps.add(nodeKey(node));
-    }
-  }
-  // done 🏁
-  return gaps;
-}
-
-
 // laptop frame + reduced motion (axe sees the settled page) 💻
 test.use({ viewport: LAPTOP, reducedMotion: 'reduce' });
 
@@ -129,11 +80,6 @@ for (const scheme of ['light', 'dark'] as const) {
         // run axe on WCAG 2.0 / 2.1 / 2.2 A + AA 🪓
         const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa']).analyze();
 
-        // the known package gap nodes (selected tab inside AbInstallSnippet only) 🎯
-        const gapKeys = await findKnownPackageGaps(page, results);
-        // true for an excused node 🏷️
-        const isKnownPackageGap = (node: AxeNode): boolean => gapKeys.has(nodeKey(node));
-
         // count by impact for the summary 📊
         const byImpact: Record<string, number> = {};
         for (const violation of results.violations) byImpact[violation.impact ?? 'unknown'] = (byImpact[violation.impact ?? 'unknown'] ?? 0) + violation.nodes.length;
@@ -141,18 +87,11 @@ for (const scheme of ['light', 'dark'] as const) {
         mkdirSync(SUMMARY_DIR, { recursive: true });
         writeFileSync(join(SUMMARY_DIR, `${scheme}-${id}.json`), JSON.stringify({
           slide: id, scheme, passes: results.passes.length, violations: byImpact,
-          knownPackageGaps: results.violations.flatMap((violation) => violation.nodes.filter((node) => isKnownPackageGap(node)).map(() => violation.id)),
           rules: results.violations.map((violation) => `${violation.id} (${violation.impact}, ${violation.nodes.length})`),
         }, null, 2));
 
-        // the blocking violations, minus the known PACKAGE gaps (fixed upstream, never patched in the app) 🚫
-        const blocking = results.violations
-          .filter((violation) => BLOCKING.has(violation.impact ?? ''))
-          .map((violation) => ({ ...violation, nodes: violation.nodes.filter((node) => !isKnownPackageGap(node)) }))
-          .filter((violation) => violation.nodes.length > 0);
-        // flag any known gap that showed up, so it stays visible in the report 🏷️
-        const gaps = results.violations.flatMap((violation) => violation.nodes.filter((node) => isKnownPackageGap(node)).map(() => violation.id));
-        if (gaps.length) test.info().annotations.push({ type: 'known package gap', description: `${KNOWN_GAP_NOTE} (${gaps.length} node)` });
+        // the blocking violations: none allowed, no exceptions (components 0.1.12 fixed the AbInstallSnippet tabs) 🚫
+        const blocking = results.violations.filter((violation) => BLOCKING.has(violation.impact ?? ''));
         expect(blocking.map((violation) => `${violation.id}: ${violation.help} (${violation.nodes.length})`)).toEqual([]);
       });
     });

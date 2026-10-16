@@ -164,11 +164,8 @@ test.describe('Welcome slides 🎞️', () => {
     await expectSlide(page, 3);
   });
 
-  // TODO(theme 0.3.3): flip `test.fail` → `test` once the bare `main { z-index: 99 }` is scoped in the theme 🧹
-  // ⚠️ KNOWN PACKAGE GAP (ab-nextjs-theme 0.3.2 `css/styles.css:552-557`): the bare `main { position: relative;
-  // z-index: 99 }` rule lifts the carousel above the header, so the open globe menu sits UNDER the counter row and
-  // can't be clicked. Packages-first: fixed by scoping that rule in the theme, not patched here. Flip to `test` then 🧹
-  test.fail('the globe menu items can be clicked with a pointer 🖱️ (theme `main` z-index gap)', async ({ page }) => {
+  // 🖱️ theme 0.3.3 scoped the layout `main { z-index: 99 }` to the Ab layout main, so the open globe menu sits ABOVE the counter row again
+  test('the globe menu items can be clicked with a pointer 🖱️', async ({ page }) => {
     // start on s03 in English
     await openWelcome(page, 'en', 3);
     // open the globe menu & click French
