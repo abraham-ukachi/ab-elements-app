@@ -39,7 +39,7 @@
 ### Release
 
 - [ ] The version bump was announced before it was committed
-- [ ] The **last commit** is `chore(release): 0.2.y` and only bumps `version` in `package.json` + adds the `CHANGELOG.md` heading
+- [ ] The **last commit** is `:bookmark: Release 0.2.y` and only bumps `version` in `package.json` + adds the `CHANGELOG.md` heading
 - [ ] The push was announced before the branch was pushed
 
 ### Merge
