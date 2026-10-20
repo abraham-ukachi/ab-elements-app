@@ -43,9 +43,9 @@
 */
 
 
-// 🧭 The `(docs)` shell layout (0.2.21 scaffolding): the route group Home, Docs, 404, Icons, Profile & Settings share.
-// For now it only adds the skip link ♿: the app bar, sidebar, bottom bar & aside wait for the new packages
-// (G40 sidebar, G41 navbar, G42 link provider, G43 app bar, G44 search pill, G17 4-breakpoint panes).
+// 🧭 The `(docs)` shell layout (0.2.21–0.2.22): translates every label on the server, resolves the nav data
+// (lib/nav + lib/packages, D26: only built pages) and hands them to the packaged shell (`DocsShell`) 🧩.
+// The skip link stays first ♿.
 
 // REACT types
 import type { ReactNode } from 'react';
@@ -53,24 +53,57 @@ import type { ReactNode } from 'react';
 // import the server-side translations helper from `ab-nextjs-i18n` 🌐
 import { getAbTranslations } from 'ab-nextjs-i18n/server';
 
+// import the packaged-only docs shell 🧭
+import DocsShell from '@/components/app/docs-shell';
+// import the nav & package data 🗂️📦
+import { BOTTOM_TABS, SIDEBAR_HOME, SIDEBAR_SECTIONS, TOP_LINKS, readyNavSections } from '@/lib/nav';
+import { getAbPackages } from '@/lib/packages';
+import { PACKAGE_ICONS, SHELL_ICONS } from '@/lib/shell-icons';
+// import the packaged, server-safe icon registration (components 0.1.13) 🔣
+import AbIconRegistrar from 'ab-nextjs-components/ab-icon/registrar';
+// import the locale endonyms (shared with the Welcome globe) 🗣️
+import { WELCOME_LOCALES } from '@/app/[locale]/welcome/welcome';
+// import the app version (the "Docs v0.2.x" badge, D23 (a)) 🏷️
+import appPackage from '@/package.json';
+
 
 // create the props type of the docs layout as `DocsLayoutProps`
-type DocsLayoutProps = Readonly<{ children: ReactNode }>;
+type DocsLayoutProps = Readonly<{ children: ReactNode; params: Promise<{ locale: string }> }>;
 
 
 /**
  * `DocsLayout` - Layout 🧭
  *
- * The docs shell frame. The skip link is the first focusable element and jumps to `#main` ♿.
- *
- * @param { DocsLayoutProps } props - the layout props (`children`)
+ * @param { DocsLayoutProps } props - the layout props (`children` & the `locale` param)
  * @returns { Promise<ReactElement> }
  */
-export default async function DocsLayout({ children }: DocsLayoutProps) {
-  // get the translations of the `Shell` messages of the current locale 🌐
+export default async function DocsLayout({ children, params }: DocsLayoutProps) {
+  // 🌍 the current locale
+  const { locale } = await params;
+  // get the translations of the `Shell` messages 🌐
   const t = await getAbTranslations('Shell');
+  // the theme labels still live in `Welcome.theme` (D30 moves them to `Common` later) 🌗
+  const tw = await getAbTranslations('Welcome');
+  // 🔑 lib/nav keys are plain strings (checked by tests/unit/shell-data.test.ts), so widen them once
+  const tk = (key: string): string => t(key as Parameters<typeof t>[0]);
+  // 📦 the installed packages (real versions, D22)
+  const packages = getAbPackages();
+  // 🏷️ the "Docs v0.2.x" badge
+  const version = t('sidebar.version', { version: `v${appPackage.version.split('.').slice(0, 2).join('.')}.x` });
 
-  // return the shell frame
+  // 🗂️ the sidebar: Home, then the ready sections (packages filled from lib/packages, anchored on Home)
+  const sections = [
+    { id: 'home', items: [{ href: SIDEBAR_HOME.href, icon: SIDEBAR_HOME.icon, label: tk(SIDEBAR_HOME.label) }] },
+    ...readyNavSections(SIDEBAR_SECTIONS).map((section) => ({
+      id: section.id,
+      label: tk(section.label),
+      items: section.id === 'packages'
+        ? packages.map((pkg) => ({ href: `/#package-${pkg.id}`, icon: PACKAGE_ICONS[pkg.id], label: pkg.name, badge: pkg.versionLabel }))
+        : section.items.map((item) => ({ href: item.href, icon: item.icon, label: tk(item.label) })),
+    })),
+  ];
+
+  // return the skip link + the packaged shell
   return (
     <>
       {/* Skip link ♿ - hidden until focused, then pinned top-left above everything */}
@@ -81,8 +114,33 @@ export default async function DocsLayout({ children }: DocsLayoutProps) {
       >
         {t('skipToContent')}
       </a>
-      {/* the page 📄 (it renders `<main id="main">`) */}
-      {children}
+      {/* 🔣 register the shell icons for the client AbIcon (server-safe, before any icon renders) */}
+      <AbIconRegistrar icons={SHELL_ICONS} />
+      {/* the packaged shell 🧭 */}
+      <DocsShell
+        locale={locale}
+        locales={WELCOME_LOCALES}
+        sections={sections}
+        topLinks={TOP_LINKS.filter((link) => link.ready).map((link) => ({ href: link.href, label: tk(link.label) }))}
+        bottomTabs={BOTTOM_TABS.map((tab) => ('kind' in tab
+          // 🔘 Search (D24) & Profile (D25) are inert "coming soon" buttons until P5 / P7 🚧
+          ? { kind: 'button' as const, id: tab.id, icon: tab.icon ?? 'search', label: tk(tab.label), comingSoon: tw('comingSoon') }
+          // 🔗 unbuilt links fall back to Home's packages section (D26: no 404s)
+          : tab.ready
+            ? { kind: 'link' as const, href: tab.href, icon: tab.icon ?? 'home', label: tk(tab.label) }
+            : tab.id === 'profile'
+              ? { kind: 'button' as const, id: tab.id, icon: tab.icon ?? 'person', label: tk(tab.label), comingSoon: tw('comingSoon') }
+              : { kind: 'link' as const, href: '/#packages', icon: tab.icon ?? 'article', label: tk(tab.label) }))}
+        labels={{
+          brand: t('brandLabel'), nav: t('nav.primary'), more: t('nav.more'), sidebar: t('sidebar.label'),
+          collapse: t('sidebar.collapse'), expand: t('sidebar.expand'), version, bottomBar: t('bottomBar.label'),
+          search: t('search.placeholder'), searchComingSoon: t('search.comingSoon'),
+          asideOpen: t('aside.toggleOpen'), asideClose: t('aside.toggleClose'), language: t('language.label'),
+          theme: { group: tw('theme.label'), light: tw('theme.light'), dark: tw('theme.dark'), system: tw('theme.system') },
+        }}
+      >
+        {children}
+      </DocsShell>
     </>
   );
 }
