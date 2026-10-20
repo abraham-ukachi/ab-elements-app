@@ -566,6 +566,30 @@ You can check out [the abElements GitHub repository](https://github.com/abraham-
 ---
 
 
+## Search design 🔎
+
+Search opens a **search drawer** (from the bottom-nav **Search** tab on mobile and the search field on laptop), with recent searches, results grouped by package and a "Did you mean …?" fallback. Full spec: [`docs/design/search/`](./docs/design/search/README.md).
+
+### Current: search drawer
+
+| Light Mode | Dark Mode | Tags |
+|:-----------|:----------|:-----|
+| ![Search Drawer - Mobile - Light / Mockup](./.github/screenshots/mobile/search-drawer-mobile-light.png) | ![Search Drawer - Mobile - Dark / Mockup](./.github/screenshots/mobile/search-drawer-mobile-dark.png) | **Search drawer** (mobile): recents + grouped results <br/> #search, #drawer, #design, #current |
+| ![Search Drawer No Results - Mobile - Light / Mockup](./.github/screenshots/mobile/search-drawer-empty-mobile-light.png) | ![Search Drawer No Results - Mobile - Dark / Mockup](./.github/screenshots/mobile/search-drawer-empty-mobile-dark.png) | **Search drawer** (mobile): no results + "Did you mean …?" <br/> #search, #drawer, #design, #current |
+| ![Search Drawer - Laptop - Light / Mockup](./.github/screenshots/laptop/search-drawer-laptop-light.png) | ![Search Drawer - Laptop - Dark / Mockup](./.github/screenshots/laptop/search-drawer-laptop-dark.png) | **Search drawer** (laptop): centred, keyboard navigable <br/> #search, #drawer, #design, #current |
+
+### Previous: `Ctrl/⌘ + K` command palette
+
+| Light Mode | Dark Mode | Tags |
+|:-----------|:----------|:-----|
+| ![Cmd/Ctrl + K Overlay - Laptop - Light / Mockup](./.github/screenshots/laptop/cmdk-overlay-laptop-light.png) | ![Cmd/Ctrl + K Overlay - Laptop - Dark / Mockup](./.github/screenshots/laptop/cmdk-overlay-laptop-dark.png) | **Previous** `Ctrl/⌘ + K` command palette, kept for reference <br/> #search, #overlay, #design, #previous |
+
+> NOTE: The search drawer supersedes the `Ctrl/⌘ + K` palette as the current search design.
+
+
+---
+
+
 ## Screenshots 📸
 
 A selection of the approved abElements designs (concept mockups, not production captures yet), in ☀️ light and 🌙 dark.
@@ -589,7 +613,7 @@ A selection of the approved abElements designs (concept mockups, not production 
 | ![Home Page - Laptop - Light / Mockup](./.github/screenshots/laptop/home-page-laptop-light.png) | ![Home Page - Laptop - Dark / Mockup](./.github/screenshots/laptop/home-page-laptop-dark.png) | **Home**: docs catalog <br/> #home, #page, #design, #concept |
 | ![Docs Page - Laptop - Light / Mockup](./.github/screenshots/laptop/docs-page-laptop-light.png) | ![Docs Page - Laptop - Dark / Mockup](./.github/screenshots/laptop/docs-page-laptop-dark.png) | **Docs**: preview, code + On This Page <br/> #docs, #page, #design, #concept |
 | ![Profile Page - Laptop - Light / Mockup](./.github/screenshots/laptop/profile-page-laptop-light.png) | ![Profile Page - Laptop - Dark / Mockup](./.github/screenshots/laptop/profile-page-laptop-dark.png) | **Profile**: accounts, bookmarks & recents <br/> #profile, #page, #user, #design |
-| ![Cmd/Ctrl + K Overlay - Laptop - Light / Mockup](./.github/screenshots/laptop/cmdk-overlay-laptop-light.png) | ![Cmd/Ctrl + K Overlay - Laptop - Dark / Mockup](./.github/screenshots/laptop/cmdk-overlay-laptop-dark.png) | **`Ctrl/⌘ + K`**: command palette <br/> #search, #overlay, #design, #concept |
+| ![Cmd/Ctrl + K Overlay - Laptop - Light / Mockup](./.github/screenshots/laptop/cmdk-overlay-laptop-light.png) | ![Cmd/Ctrl + K Overlay - Laptop - Dark / Mockup](./.github/screenshots/laptop/cmdk-overlay-laptop-dark.png) | **`Ctrl/⌘ + K`** (previous): command palette, see [Search design](#search-design-) <br/> #search, #overlay, #design, #previous |
 | ![404 Page - Laptop - Light / Mockup](./.github/screenshots/laptop/404-page-laptop-light.png) | ![404 Page - Laptop - Dark / Mockup](./.github/screenshots/laptop/404-page-laptop-dark.png) | **404**: "Did you mean...?" + search <br/> #404, #page, #design, #concept |
 
 > NOTE: The full set of mockups (incl. register, tablet & desktop) stays in the private design workspace.
