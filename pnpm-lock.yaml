@@ -12,8 +12,8 @@ importers:
         specifier: ^0.2.4
         version: 0.2.4(next@16.3.4(@babel/core@7.29.7)(@playwright/test@1.63.0)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       ab-nextjs-components:
-        specifier: 0.1.12
-        version: 0.1.12(4e1d647cc57aa5f32dd6555135d99f8e)
+        specifier: 0.1.13
+        version: 0.1.13(4e1d647cc57aa5f32dd6555135d99f8e)
       ab-nextjs-core:
         specifier: 0.1.6
         version: 0.1.6(clsx@2.1.1)(next@16.3.4(@babel/core@7.29.7)(@playwright/test@1.63.0)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
@@ -1006,13 +1006,13 @@ packages:
       react-dom:
         optional: true
 
-  ab-nextjs-components@0.1.12:
-    resolution: {integrity: sha512-AxKKYKDqRS+ry8UHXVrP9flXcRX1yNU+bNaW+dJ4eNMZ9Ktz0Z34b0/O2kea7vt6CYNf9bixv3aeZD9LlmFAJg==}
+  ab-nextjs-components@0.1.13:
+    resolution: {integrity: sha512-AyXBypydl9RC4trBaU/5Ve3AilHED5N0dMFnriKjBeaS+NrjwMy0nOEcsQ4/P3Aw64h6k1nBKpFBvc/djkDIIg==}
     peerDependencies:
       ab-nextjs-animations: ^0.2.4
-      ab-nextjs-hooks: ^0.1.6
-      ab-nextjs-icons: ^0.2.3
-      ab-nextjs-theme: ^0.3.3
+      ab-nextjs-hooks: ^0.1.7
+      ab-nextjs-icons: ^0.2.4
+      ab-nextjs-theme: ^0.3.4
       clsx: ^2
       next: ^16.3.4
       react: ^19
@@ -3432,7 +3432,7 @@ snapshots:
       react: 19.3.0
       react-dom: 19.3.0(react@19.3.0)
 
-  ab-nextjs-components@0.1.12(4e1d647cc57aa5f32dd6555135d99f8e):
+  ab-nextjs-components@0.1.13(4e1d647cc57aa5f32dd6555135d99f8e):
     dependencies:
       ab-nextjs-animations: 0.2.4(next@16.3.4(@babel/core@7.29.7)(@playwright/test@1.63.0)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       ab-nextjs-icons: 0.2.4(next@16.3.4(@babel/core@7.29.7)(@playwright/test@1.63.0)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
