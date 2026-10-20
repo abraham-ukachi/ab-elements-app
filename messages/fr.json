@@ -203,8 +203,8 @@
       "description": "Docs, exemples en direct et une PWA installable pour les huit packages AbElements."
     },
     "pill": "Docs AbElements",
-    "title": "Créez des interfaces Next.js avec <em>AbElements</em>",
-    "lead": "Huit packages ciblés (core, components, theme, icons, fonts, animations, hooks et i18n), documentés avec des exemples en direct.",
+    "title": "Créez des interfaces Next.js avec AbElements",
+    "lead": "Huit packages ciblés — polices, icônes, animations, thème, hooks, core, composants et i18n — documentés avec des exemples en direct.",
     "cta": {
       "getStarted": "Commencer",
       "browse": "Parcourir les packages"
@@ -229,7 +229,7 @@
         "desc": "Préréglages de polices pour next/font, sans décalage de mise en page."
       },
       "animations": {
-        "desc": "Préréglages d’animation et courbes, respectant la réduction des animations."
+        "desc": "Préréglages d’animation et courbes, respectueux du mouvement réduit."
       },
       "hooks": {
         "desc": "Hooks React typés pour le thème, les médias et le stockage."
@@ -249,20 +249,20 @@
       "all": "Tous les guides",
       "items": {
         "install": {
-          "title": "Installer AbElements",
-          "tag": "Installation"
+          "title": "Installer AbElements dans une app Next.js",
+          "tag": "Bien démarrer"
         },
         "theming": {
-          "title": "Thèmes et mode sombre",
+          "title": "Thèmes avec des tokens et mode sombre",
           "tag": "Thème"
         },
         "iconsFonts": {
-          "title": "Icônes et polices",
-          "tag": "Ressources"
+          "title": "Icônes et polices sans décalage de mise en page",
+          "tag": "Icônes · Polices"
         },
         "pwaShell": {
-          "title": "Créer un shell PWA",
-          "tag": "PWA"
+          "title": "Créer un shell de docs PWA",
+          "tag": "Composants"
         }
       }
     },
@@ -274,7 +274,22 @@
         "improved": "Amélioré",
         "fixed": "Corrigé"
       },
-      "asideLabel": "Nouveau dans {pkg}"
+      "asideLabel": "Nouveau dans {pkg}",
+      "items": {
+        "core": {
+          "title": "Des volets qui défilent seuls (la règle de mise en page)",
+          "date": "oct. 2026"
+        },
+        "hooks": {
+          "title": "useAbScrollSpy et le script de thème sans flash",
+          "date": "oct. 2026"
+        },
+        "components": {
+          "title": "Table des matières, barre d’app et cartes de packages",
+          "date": "oct. 2026"
+        }
+      },
+      "promo": "Table des matières et barre d’app"
     },
     "toc": {
       "overview": "Vue d’ensemble",

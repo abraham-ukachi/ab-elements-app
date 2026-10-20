@@ -203,8 +203,8 @@
       "description": "Documentación, ejemplos en vivo y una PWA instalable para los ocho paquetes de AbElements."
     },
     "pill": "Documentación de AbElements",
-    "title": "Crea interfaces Next.js con <em>AbElements</em>",
-    "lead": "Ocho paquetes enfocados (core, components, theme, icons, fonts, animations, hooks e i18n), documentados con ejemplos en vivo.",
+    "title": "Crea interfaces Next.js con AbElements",
+    "lead": "Ocho paquetes enfocados — fuentes, iconos, animaciones, tema, hooks, core, componentes e i18n — documentados con ejemplos en vivo.",
     "cta": {
       "getStarted": "Empezar",
       "browse": "Explorar paquetes"
@@ -229,7 +229,7 @@
         "desc": "Ajustes de fuentes para next/font, sin saltos de diseño."
       },
       "animations": {
-        "desc": "Ajustes de movimiento y curvas, compatibles con el movimiento reducido."
+        "desc": "Ajustes de animación y curvas, compatibles con movimiento reducido."
       },
       "hooks": {
         "desc": "Hooks de React tipados para tema, medios y almacenamiento."
@@ -249,20 +249,20 @@
       "all": "Todas las guías",
       "items": {
         "install": {
-          "title": "Instalar AbElements",
-          "tag": "Configuración"
+          "title": "Instalar AbElements en una app Next.js",
+          "tag": "Primeros pasos"
         },
         "theming": {
-          "title": "Temas y modo oscuro",
+          "title": "Temas con tokens y modo oscuro",
           "tag": "Tema"
         },
         "iconsFonts": {
-          "title": "Iconos y fuentes",
-          "tag": "Recursos"
+          "title": "Iconos y fuentes sin saltos de diseño",
+          "tag": "Iconos · Fuentes"
         },
         "pwaShell": {
-          "title": "Crear un shell PWA",
-          "tag": "PWA"
+          "title": "Crear un shell de docs PWA",
+          "tag": "Componentes"
         }
       }
     },
@@ -274,7 +274,22 @@
         "improved": "Mejorado",
         "fixed": "Corregido"
       },
-      "asideLabel": "Novedad en {pkg}"
+      "asideLabel": "Novedad en {pkg}",
+      "items": {
+        "core": {
+          "title": "Paneles que se desplazan solos (la regla de diseño)",
+          "date": "oct 2026"
+        },
+        "hooks": {
+          "title": "useAbScrollSpy y el script de tema sin destellos",
+          "date": "oct 2026"
+        },
+        "components": {
+          "title": "Tabla de contenidos, barra de app y tarjetas de paquetes",
+          "date": "oct 2026"
+        }
+      },
+      "promo": "Tabla de contenidos y barra de app"
     },
     "toc": {
       "overview": "Resumen",

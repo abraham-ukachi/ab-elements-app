@@ -60,10 +60,20 @@ import { useEffect, useState } from 'react';
 import { useAbPage } from 'ab-nextjs-core/ab-page-provider';
 // import the DOM lookup for the main scroller from `ab-nextjs-components` 🔎 (effects only)
 import { getAbMainScroller } from 'ab-nextjs-components/ab-toc';
+// import the packaged link, icon, chip & card for the TOC extras (fidelity spec §4) 🔗
+import { AbLink } from 'ab-nextjs-components/ab-link';
+import AbIcon from 'ab-nextjs-components/ab-icon';
+import AbChip from 'ab-nextjs-components/ab-chip';
+import AbCard from 'ab-nextjs-components/ab-card';
 
 
 // 🧾 the props of `HomeAside`
-export type HomeAsideProps = Readonly<{ items: AbTocItem[]; title: string }>;
+export type HomeAsideProps = Readonly<{
+  items: AbTocItem[]; // 📑 the sections
+  title: string; // 🏷️ "On this page"
+  links: { edit: { href: string; label: string }; changelog: { href: string; label: string } }; // 🔗 the TOC extras (spec §4)
+  promo: { kind: string; title: string; body: string }; // 🆕 the "New" card
+}>;
 
 
 /**
@@ -72,7 +82,7 @@ export type HomeAsideProps = Readonly<{ items: AbTocItem[]; title: string }>;
  * @param { HomeAsideProps } props - the TOC items (section ids + labels) & the title
  * @returns { ReactElement }
  */
-export default function HomeAside({ items, title }: HomeAsideProps) {
+export default function HomeAside({ items, title, links, promo }: HomeAsideProps) {
   // 📜 the main pane scrolls on its own (the page never does), so it's the spy root & the scroll container
   const { mainScrollElement } = useAbPage();
   // 🔎 fallback: look the scroller up in the DOM after mount (never during render / SSR)
@@ -97,6 +107,18 @@ export default function HomeAside({ items, title }: HomeAsideProps) {
     <AbAsideLayout orientation="vertical" pageName="home">
       {/* 📑 On this page (plain #id links without JS) */}
       <AbToc items={items} activeId={activeId} label={title} onNavigate={(id) => scrollToAbSection(id, { container: scroller, updateHash: true })} />
+      {/* ➖ then the extras: Edit this page (GitHub) & Changelog ↗, and the "New" card (spec §4, packaged parts only) */}
+      <div className="mt-[18px] flex flex-col gap-1 border-t border-(--md-sys-color-outline-variant) px-[22px] pt-3 text-[12.5px] text-(--md-sys-color-on-surface-variant)">
+        <AbLink href={links.edit.href} className="flex items-center gap-2 py-[5px] hover:underline" target="_blank" rel="noopener">
+          <AbIcon name="github" size={15} />{links.edit.label}
+        </AbLink>
+        <AbLink href={links.changelog.href} className="flex items-center gap-2 py-[5px] hover:underline" target="_blank" rel="noopener">
+          <AbIcon name="north_east" size={15} />{links.changelog.label}
+        </AbLink>
+        <div className="mt-4">
+          <AbCard as="div" eyebrow={<AbChip>{promo.kind}</AbChip>} title={promo.title} description={promo.body} />
+        </div>
+      </div>
     </AbAsideLayout>
   );
 }

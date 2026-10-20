@@ -43,7 +43,8 @@
 */
 
 
-// 🏠 Home (0.2.23): hero, install, the 8 package cards & the guides, inside the packaged shell panes.
+// 🏠 Home (0.2.23 + fidelity pass 1): hero (copy · install), the 8 package cards, then Guides + What's new side by side,
+// inside the packaged shell panes. Sizes / spacing follow `home-fidelity-spec.md` §2–§4 (John, approved by God 20:10).
 // Composition only: AbMainLayout + AbAsideLayout (core), AbChip / AbButton / AbInstallSnippet / AbPackageCard / AbCard (components).
 
 // NEXT types
@@ -78,13 +79,32 @@ import { PACKAGE_ICONS } from '@/lib/shell-icons';
 import { AB_PM_STORAGE_KEY } from '@/lib/install-pm';
 // import Home's "On this page" pane 📑
 import HomeAside from '@/components/app/home-aside';
+// import the repo URL (Edit this page / Changelog) 🐙
+import { GITHUB_URL } from '@/lib/nav';
 
 
 // create the props type of the home page as `HomeProps` (Next.js 16 hands us the `params` as a Promise)
 type HomeProps = Readonly<{ params: Promise<{ locale: string }> }>;
 
-// 📚 the 4 guide rows (no pages yet, D26: plain cards without links)
-const GUIDES = ['install', 'theming', 'iconsFonts', 'pwaShell'] as const;
+// 📚 the 4 guide rows (no pages yet, D26: plain cards without links) + their icons (spec §4)
+const GUIDES = [
+  { id: 'install', icon: 'rocket_launch' },
+  { id: 'theming', icon: 'palette' },
+  { id: 'iconsFonts', icon: 'match_case' },
+  { id: 'pwaShell', icon: 'dashboard_customize' },
+] as const;
+
+// 🆕 What's new: real entries from the published changelogs (core 0.1.6, hooks 0.1.7, components 0.1.13) 📰
+const WHATS_NEW = [
+  { id: 'core', kind: 'new' },
+  { id: 'hooks', kind: 'new' },
+  { id: 'components', kind: 'new' },
+] as const;
+
+// 🔠 the shared title look (spec §2): Mulish via the theme's `--ab-font-title`, heavy & tight
+const TITLE = 'font-(family-name:--ab-font-title) font-[750] tracking-[-0.032em]';
+// 🔠 a section header's h2 (18 / 700 / −0.015em)
+const H2 = 'font-(family-name:--ab-font-title) text-[18px] font-bold tracking-[-0.015em]';
 
 
 /**
@@ -131,70 +151,103 @@ export default async function Home() {
       {/* 🧱 the main pane */}
       {/* `id="main"` = the skip link's target ♿; no mainHeader / mainBar = 0px (layout rule, core 0.1.6) 🫥 */}
       <AbMainLayout id="main" orientation="vertical" pageName="home">
-        <div className="flex flex-col gap-12 p-6 lg:p-10 max-w-6xl">
+        {/* 📏 pane padding per breakpoint (spec §3): 18×16 mobile · 30×36 tablet · 34×48 laptop · 44 / max 1060 desktop */}
+        <div className="@container px-4 pt-[18px] pb-8 md:px-9 md:py-[30px] min-[1180px]:px-12 min-[1180px]:py-[34px] min-[1920px]:px-0 min-[1920px]:py-11">
+          <div className="mx-auto flex max-w-[1060px] flex-col gap-6 md:gap-[30px] min-[1180px]:gap-[34px] min-[1920px]:gap-10">
 
-          {/* 1️⃣ Overview */}
-          {/* 🎨 `--em-background: transparent` (hero only): no grey box behind the title's <em> */}
-          <section id="overview" aria-labelledby="overview-title" className="flex flex-col items-start gap-4 [--em-background:transparent]">
-            <AbChip dot>{t('pill')}</AbChip>
-            <h1 id="overview-title" className="text-4xl lg:text-6xl font-bold">{t.rich('title', { em: (chunks) => <em>{chunks}</em> })}</h1>
-            <p className="text-lg max-w-2xl">{t('lead')}</p>
-            <div className="flex flex-wrap gap-3">
-              {/* D26 (a): Get started → #install until the Docs exist */}
-              <AbButton type="filled" label={t('cta.getStarted')} href="#install" />
-              <AbButton type="outlined" label={t('cta.browse')} href="#packages" />
+            {/* 1️⃣ Overview: copy left, install right from ~680px of content (stacked below), no hero art (Decision 5) */}
+            <section
+              id="overview"
+              aria-labelledby="overview-title"
+              className="grid grid-cols-1 items-center gap-[14px] @min-[680px]:grid-cols-[minmax(0,1fr)_300px] @min-[680px]:gap-7 @min-[820px]:grid-cols-[minmax(0,1fr)_340px] @min-[820px]:gap-10 @min-[1000px]:grid-cols-[minmax(0,1fr)_380px]"
+            >
+              <div className="flex min-w-0 flex-col items-start">
+                <AbChip dot>{t('pill')}</AbChip>
+                {/* 🔠 h1: 29 mobile · 34 tablet · 38 laptop · 44 desktop, 750, no italics (spec §2) */}
+                <h1
+                  id="overview-title"
+                  className={`${TITLE} mt-3 max-w-[560px] text-[29px] leading-[1.13] md:mt-[14px] md:text-[34px] md:leading-[1.12] min-[1180px]:text-[38px] min-[1920px]:max-w-[620px] min-[1920px]:text-[44px]`}
+                >
+                  {t('title')}
+                </h1>
+                {/* 📝 lede: 14.5 / 15.5 / 16.5, muted */}
+                <p className="mt-[10px] max-w-[520px] text-[14.5px] leading-[1.55] text-(--md-sys-color-on-surface-variant) md:mt-3 md:text-[15.5px] min-[1920px]:max-w-[560px] min-[1920px]:text-[16.5px]">
+                  {t('lead')}
+                </p>
+                {/* 🔘 CTAs: side by side (halves on mobile), Get started with its arrow */}
+                <div className="mt-4 flex w-full gap-[10px] md:mt-[22px] md:w-auto [&>*]:flex-1 md:[&>*]:flex-none">
+                  {/* D26 (a): Get started → #install until the Docs exist */}
+                  <AbButton type="filled" label={t('cta.getStarted')} href="#install" endIcon={<AbIcon name="arrow_forward" size={18} />} />
+                  <AbButton type="outlined" label={t('cta.browse')} href="#packages" />
+                </div>
+              </div>
+
+              {/* 2️⃣ Install (the TOC's "Install" target) */}
+              <div id="install" className="min-w-0 scroll-mt-4 @min-[680px]:pt-10" aria-label={t('toc.install')} role="region">
+                <AbInstallSnippet
+                  pkg="ab-nextjs-core"
+                  storageKey={AB_PM_STORAGE_KEY}
+                  labels={{ group: tw('install.label', { pkg: 'ab-nextjs-core' }), copy: tw('install.copy'), copied: tw('install.copied') }}
+                />
+              </div>
+            </section>
+
+            {/* 3️⃣ Packages: 2 cols (gap 10) on phones, 4 cols (gap 12) from tablet; the 8 cards fill two rows (no "All packages", Decision 1) */}
+            <section id="packages" aria-labelledby="packages-title" className="flex flex-col gap-[10px] md:gap-[14px]">
+              <div className="flex items-center gap-2">
+                <h2 id="packages-title" className={H2}>{t('packages.title')}</h2>
+                <AbChip>{t('packages.count', { count: packages.length })}</AbChip>
+              </div>
+              <ul className="grid grid-cols-2 gap-[10px] @min-[560px]:grid-cols-4 @min-[560px]:gap-3">
+                {packages.map((pkg) => (
+                  // 🔗 the sidebar's package rows jump here (`/#package-<id>`)
+                  <li key={pkg.id} id={`package-${pkg.id}`} className="min-w-0">
+                    <AbPackageCard
+                      name={pkg.name}
+                      href={`https://www.npmjs.com/package/${pkg.name}`}
+                      version={pkg.version}
+                      description={t(`packages.${pkg.id as AbPackageId}.desc`)}
+                      icon={<AbIcon name={PACKAGE_ICONS[pkg.id]} size={18} />}
+                      badge={pkg.beta ? t('packages.beta') : undefined}
+                      headingLevel={3}
+                    />
+                  </li>
+                ))}
+              </ul>
+            </section>
+
+            {/* 4️⃣ Guides + 5️⃣ What's new: side by side (2 × 1fr, gap 24) from ~760px of content, stacked below */}
+            <div className="grid grid-cols-1 gap-6 @min-[760px]:grid-cols-2">
+              <section id="guides" aria-labelledby="guides-title" className="flex min-w-0 flex-col gap-[10px] md:gap-[14px]">
+                <h2 id="guides-title" className={H2}>{t('guides.title')}</h2>
+                <ul className="flex flex-col gap-2">
+                  {GUIDES.map(({ id, icon }) => (
+                    // ⚓ the sidebar's Guides rows jump here (`/#guide-<id>`)
+                    <li key={id} id={`guide-${id}`}>
+                      <AbCard as="div" media={<AbIcon name={icon} size={18} />} title={t(`guides.items.${id}.title`)} description={t(`guides.items.${id}.tag`)} />
+                    </li>
+                  ))}
+                </ul>
+              </section>
+
+              <section id="whats-new" aria-labelledby="whats-new-title" className="flex min-w-0 flex-col gap-[10px] md:gap-[14px]">
+                <h2 id="whats-new-title" className={H2}>{t('whatsNew.title')}</h2>
+                <ul className="flex flex-col gap-2">
+                  {WHATS_NEW.map(({ id, kind }) => (
+                    <li key={id}>
+                      {/* 📰 eyebrow = New / Improved, meta = the package (mono) · the month */}
+                      <AbCard
+                        as="div"
+                        eyebrow={t(`whatsNew.kind.${kind}`)}
+                        title={t(`whatsNew.items.${id}.title`)}
+                        footer={<span><code>{`ab-nextjs-${id}`}</code> · {t(`whatsNew.items.${id}.date`)}</span>}
+                      />
+                    </li>
+                  ))}
+                </ul>
+              </section>
             </div>
-          </section>
-
-          {/* 2️⃣ Install */}
-          <section id="install" aria-label={t('toc.install')}>
-            <AbInstallSnippet
-              pkg="ab-nextjs-core"
-              storageKey={AB_PM_STORAGE_KEY}
-              labels={{ group: tw('install.label', { pkg: 'ab-nextjs-core' }), copy: tw('install.copy'), copied: tw('install.copied') }}
-            />
-          </section>
-
-          {/* 3️⃣ Packages */}
-          <section id="packages" aria-labelledby="packages-title" className="flex flex-col gap-4">
-            <h2 id="packages-title" className="text-2xl font-bold flex items-center gap-2">
-              {t('packages.title')} <AbChip>{t('packages.count', { count: packages.length })}</AbChip>
-            </h2>
-            <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {packages.map((pkg) => (
-                // 🔗 the sidebar's package rows jump here (`/#package-<id>`)
-                <li key={pkg.id} id={`package-${pkg.id}`}>
-                  <AbPackageCard
-                    name={pkg.name}
-                    href={`https://www.npmjs.com/package/${pkg.name}`}
-                    version={pkg.version}
-                    description={t(`packages.${pkg.id as AbPackageId}.desc`)}
-                    icon={<AbIcon name={PACKAGE_ICONS[pkg.id]} size={24} />}
-                    badge={pkg.beta ? t('packages.beta') : undefined}
-                    headingLevel={3}
-                  />
-                </li>
-              ))}
-              {/* ➕ All packages */}
-              <li>
-                <AbCard as="div" title={t('packages.all.title')} href="#packages" description={t('packages.all.body')} />
-              </li>
-            </ul>
-          </section>
-
-          {/* 4️⃣ Guides */}
-          <section id="guides" aria-labelledby="guides-title" className="flex flex-col gap-4">
-            <h2 id="guides-title" className="text-2xl font-bold">{t('guides.title')}</h2>
-            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {GUIDES.map((id) => (
-                <li key={id}>
-                  <AbCard as="div" eyebrow={t(`guides.items.${id}.tag`)} title={t(`guides.items.${id}.title`)} />
-                </li>
-              ))}
-            </ul>
-          </section>
-
-          {/* 5️⃣ What's new: no entries yet (D31) → hidden, with its TOC entry (§1.4 empty state) */}
+          </div>
         </div>
       </AbMainLayout>
 
@@ -206,7 +259,14 @@ export default async function Home() {
           { id: 'install', label: t('toc.install') },
           { id: 'packages', label: t('toc.packages') },
           { id: 'guides', label: t('toc.guides') },
+          { id: 'whats-new', label: t('toc.whatsNew') },
         ]}
+        links={{
+          // ✏️ "Edit this page" → this file on GitHub; ↗ "Changelog" → the repo's releases
+          edit: { href: `${GITHUB_URL}/blob/main/app/%5Blocale%5D/(docs)/page.tsx`, label: ts('aside.editPage') },
+          changelog: { href: `${GITHUB_URL}/releases`, label: ts('aside.changelog') },
+        }}
+        promo={{ kind: t('whatsNew.kind.new'), title: t('whatsNew.promo'), body: t('whatsNew.asideLabel', { pkg: 'ab-nextjs-components' }) }}
       />
     </>
   );

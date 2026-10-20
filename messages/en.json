@@ -203,8 +203,8 @@
       "description": "Docs, live examples and an installable PWA for the eight AbElements packages."
     },
     "pill": "AbElements docs",
-    "title": "Build Next.js UIs with <em>AbElements</em>",
-    "lead": "Eight focused packages (core, components, theme, icons, fonts, animations, hooks and i18n), documented with live examples.",
+    "title": "Build Next.js UIs with AbElements",
+    "lead": "Eight focused packages — fonts, icons, animations, theme, hooks, core, components and i18n — documented with live examples.",
     "cta": {
       "getStarted": "Get started",
       "browse": "Browse packages"
@@ -229,7 +229,7 @@
         "desc": "Font presets for next/font, zero layout shift."
       },
       "animations": {
-        "desc": "Motion presets and easings, reduced-motion aware."
+        "desc": "Animation presets and easings, reduced-motion aware."
       },
       "hooks": {
         "desc": "Typed React hooks for theme, media and storage."
@@ -249,20 +249,20 @@
       "all": "All guides",
       "items": {
         "install": {
-          "title": "Install AbElements",
-          "tag": "Setup"
+          "title": "Install AbElements in a Next.js app",
+          "tag": "Getting started"
         },
         "theming": {
-          "title": "Theming & dark mode",
+          "title": "Theming with tokens and dark mode",
           "tag": "Theme"
         },
         "iconsFonts": {
-          "title": "Icons & fonts",
-          "tag": "Assets"
+          "title": "Icons and fonts without layout shift",
+          "tag": "Icons · Fonts"
         },
         "pwaShell": {
-          "title": "Build a PWA shell",
-          "tag": "PWA"
+          "title": "Build a PWA docs shell",
+          "tag": "Components"
         }
       }
     },
@@ -274,7 +274,22 @@
         "improved": "Improved",
         "fixed": "Fixed"
       },
-      "asideLabel": "Now in {pkg}"
+      "asideLabel": "Now in {pkg}",
+      "items": {
+        "core": {
+          "title": "Panes that scroll on their own (the layout rule)",
+          "date": "Oct 2026"
+        },
+        "hooks": {
+          "title": "useAbScrollSpy and the no-flash theme script",
+          "date": "Oct 2026"
+        },
+        "components": {
+          "title": "Table of contents, app bar and package cards",
+          "date": "Oct 2026"
+        }
+      },
+      "promo": "Table of contents & app bar"
     },
     "toc": {
       "overview": "Overview",
