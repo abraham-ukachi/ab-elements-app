@@ -43,14 +43,25 @@
 */
 
 
+// 🏠 Home (0.2.23): hero, install, the 8 package cards & the guides, inside the packaged shell panes.
+// Composition only: AbMainLayout + AbAsideLayout (core), AbChip / AbButton / AbInstallSnippet / AbPackageCard / AbCard (components).
+
 // NEXT types
 import type { Metadata } from 'next';
-// import the `Image` & `Link` components from `next` (as `NextLink`, since `Link` is the locale-aware one 😉)
-import Image from 'next/image';
-import NextLink from 'next/link';
 // import `notFound` to throw a 404 for unknown locales
 import { notFound } from 'next/navigation';
 
+// import the server main pane from `ab-nextjs-core` 🧱 (core 0.1.6 publishes its scroller on
+// `useAbPage().mainScrollElement` via a tiny client island, inside the shell's AbPageProvider 📜)
+import AbMainLayout from 'ab-nextjs-core/server/ab-main-layout';
+// import the packaged UI from `ab-nextjs-components` 🧩
+import AbChip from 'ab-nextjs-components/ab-chip';
+import AbButton from 'ab-nextjs-components/ab-button';
+import AbInstallSnippet from 'ab-nextjs-components/ab-install-snippet';
+import AbPackageCard from 'ab-nextjs-components/ab-package-card';
+import AbCard from 'ab-nextjs-components/ab-card';
+// import the server AbIcon (full icon map, no JS shipped) 🔣
+import AbIcon from 'ab-nextjs-components/server/ab-icon';
 // import the locale guard from `ab-nextjs-i18n`
 import { isAbLocale } from 'ab-nextjs-i18n/config';
 // import the hreflang alternates & server-side translations helpers from `ab-nextjs-i18n`
@@ -60,17 +71,24 @@ import { getAbAlternates, getAbTranslations } from 'ab-nextjs-i18n/server';
 import abI18nConfig from '@/i18n/config';
 // import abElements' public URL (for the canonical & hreflang URLs)
 import { APP_URL } from '@/app/metadata';
+// import the package data (real installed versions, D22) & their icons 📦
+import { getAbPackages, type AbPackageId } from '@/lib/packages';
+import { PACKAGE_ICONS } from '@/lib/shell-icons';
+// import the shared package-manager key (D27) 📦
+import { AB_PM_STORAGE_KEY } from '@/lib/install-pm';
+// import Home's "On this page" pane 📑
+import HomeAside from '@/components/app/home-aside';
 
 
 // create the props type of the home page as `HomeProps` (Next.js 16 hands us the `params` as a Promise)
 type HomeProps = Readonly<{ params: Promise<{ locale: string }> }>;
 
+// 📚 the 4 guide rows (no pages yet, D26: plain cards without links)
+const GUIDES = ['install', 'theming', 'iconsFonts', 'pwaShell'] as const;
+
 
 /**
  * `generateMetadata` - Home Page Metadata 🔎
- *
- * Gives the home page the canonical URL of this locale
- * + hreflang alternates for every locale (and x-default).
  *
  * @param { HomeProps } props - the page props (with the `locale` param)
  * @returns { Promise<Metadata> }
@@ -80,176 +98,116 @@ export async function generateMetadata({ params }: HomeProps): Promise<Metadata>
   const { locale } = await params;
   // unknown locale ? throw a 404 🚫
   if (!isAbLocale(abI18nConfig, locale)) notFound();
+  // the Home messages 🌐
+  const t = await getAbTranslations({ locale, namespace: 'Home' });
 
-  // return the localized alternates of `/` as the page's metadata
+  // return the localized title, description & alternates of `/`
   return {
+    title: { absolute: t('meta.title') },
+    description: t('meta.description'),
     alternates: getAbAlternates(abI18nConfig, '/', { locale, baseUrl: APP_URL }),
   };
 }
 
 
-// the class names shared by every framework link (Next.js, React, Vue, Lit & Flutter) 🔗
-const frameworkLinkClass =
-  'hover:text-(--md-sys-color-primary) hover:underline decoration-dashed underline-offset-4';
-
-
 /**
  * `Home` - Page 🏠
- *
- * abElements' (localized) "Coming Soon" home page.
  *
  * @returns { Promise<ReactElement> }
  */
 export default async function Home() {
-  // get the translations of the `Common` messages of the current locale 🌐
-  const t = await getAbTranslations('Common');
-  // get the current year (for the copyright)
-  const year = new Date().getFullYear();
+  // get the translations of the `Home` messages of the current locale 🌐
+  const t = await getAbTranslations('Home');
+  // the install box labels still live in `Welcome.install` 💻
+  const tw = await getAbTranslations('Welcome');
+  // the aside title lives in `Shell.aside` 📑
+  const ts = await getAbTranslations('Shell');
+  // 📦 the 8 installed packages
+  const packages = getAbPackages();
 
-  // return the home page
+  // return the main pane + the aside pane (direct children of the panes, G17)
   return (
-    // `#main` is the skip link's target (the `(docs)` layout), focusable from the link only ♿
-    <main id="main" tabIndex={-1} className="flex flex-col relative w-full h-dvh items-center justify-center box-border p-6 select-none">
+    <>
+      {/* 🧱 the main pane */}
+      {/* `id="main"` = the skip link's target ♿; no mainHeader / mainBar = 0px (layout rule, core 0.1.6) 🫥 */}
+      <AbMainLayout id="main" orientation="vertical" pageName="home">
+        <div className="flex flex-col gap-12 p-6 lg:p-10 max-w-6xl">
 
-      {/* Container */}
-      <div className="Container relative flex flex-col size-full grow overflow-auto items-left lg:items-center justify-center rounded-lg lg:rounded-xl lg:bg-(--md-sys-color-surface-container-low) p-0 lg:p-24">
+          {/* 1️⃣ Overview */}
+          {/* 🎨 `--em-background: transparent` (hero only): no grey box behind the title's <em> */}
+          <section id="overview" aria-labelledby="overview-title" className="flex flex-col items-start gap-4 [--em-background:transparent]">
+            <AbChip dot>{t('pill')}</AbChip>
+            <h1 id="overview-title" className="text-4xl lg:text-6xl font-bold">{t.rich('title', { em: (chunks) => <em>{chunks}</em> })}</h1>
+            <p className="text-lg max-w-2xl">{t('lead')}</p>
+            <div className="flex flex-wrap gap-3">
+              {/* D26 (a): Get started → #install until the Docs exist */}
+              <AbButton type="filled" label={t('cta.getStarted')} href="#install" />
+              <AbButton type="outlined" label={t('cta.browse')} href="#packages" />
+            </div>
+          </section>
 
-        {/* abElements GitHub repo - Link */}
-        <NextLink
-          className="flex w-fit hover:no-underline"
-          href="https://github.com/abraham-ukachi/ab-elements-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          {/* Ab Elements - SVG */}
-          <Image
-            src="/ab-elements.svg"
-            alt={t('logoAlt')}
-            className="dark:invert w-[110px] h-[24px] lg:w-[220px] lg:h-[48px]"
-            width={439}
-            height={96}
-            priority
-          />
-        </NextLink>
-
-        {/* Coming Soon - Title */}
-        <h1 className="text-4xl text-(--md-sys-color-primary) font-inter-bold my-2 animate-pulse hover:animate-none lg:text-7xl lg:uppercase lg:my-4">
-          {t('comingSoon')}
-        </h1>
-
-        {/* Description */}
-        <p className="text-base lg:text-xl lg:max-w-xl lg:text-center">
-          {/* Tagline - with the framework links */}
-          <span>
-            {/* "A lightweight library of **100%** free ... for your" */}
-            {t.rich('taglineBefore', {
-              strong: (chunks) => <strong>{chunks}</strong>,
-            })}{' '}
-            {/* Next.js - Link */}
-            `<NextLink
-              href="https://nextjs.org/docs"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={frameworkLinkClass}
-            >
-              {t('next')}
-            </NextLink>`,
-            {' '}
-            {/* React - Link */}
-            `<NextLink
-              href="https://react.dev/learn"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={frameworkLinkClass}
-            >
-              {t('react')}
-            </NextLink>`,
-            {' '}
-            {/* Vue - Link */}
-            `<NextLink
-              href="https://vuejs.org/guide/introduction.html"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={frameworkLinkClass}
-            >
-              {t('vue')}
-            </NextLink>`,
-            {' '}
-            {/* Lit - Link */}
-            `<NextLink
-              href="https://lit.dev/docs/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={frameworkLinkClass}
-            >
-              {t('lit')}
-            </NextLink>`,
-            {' '}
-            {/* "and" */}
-            {t('and')}
-            {' '}
-            {/* Flutter - Link */}
-            `<NextLink
-              href="https://docs.flutter.dev/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={frameworkLinkClass}
-            >
-              {t('flutter')}
-            </NextLink>`
-            {/* "projects" */}
-            {t('taglineAfter')}
-          </span>
-          {/* "created with ❤️ by" */}
-          <span> {t('createdBy')} </span>
-          {/* Author */}
-          <span>
-            {/* Abraham Ukachi's GitHub - Link */}
-            <NextLink
-              href="https://github.com/abraham-ukachi"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group/author font-medium text-(--md-sys-color-primary)/80 hover:text-(--md-sys-color-primary) hover:underline decoration-dashed underline-offset-4 relative"
-            >
-              {t('authorName')}
-              {/* Author's (spinning 😜) profile pic - shown on hover */}
-              <Image
-                src="/me.jpg"
-                alt={t('authorAlt')}
-                className="group-hover/author:block hidden absolute -right-6 top-1 lg:-right-9 lg:top-0 rounded-full outline outline-4 outline-(--md-sys-color-primary) animate-spin size-4 lg:size-6"
-                width={24}
-                height={24}
-                priority
-              />
-            </NextLink>
-            {'.'}
-          </span>
-        </p>
-
-        {/* Footer */}
-        <footer className="absolute bottom-0 place-self-center flex flex-col items-center justify-center w-full h-auto">
-          {/* GitHub logo - Link (bouncing 🏀) */}
-          <NextLink
-            href="https://github.com/abraham-ukachi/ab-elements-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="my-4 opacity-20 transition-opacity hover:opacity-80 dark:invert animate-bounce hover:animate-none"
-          >
-            {/* GitHub - SVG */}
-            <Image
-              src="/github-logo.svg"
-              alt={t('githubAlt')}
-              className="size-8 lg:size-12"
-              width={48}
-              height={48}
-              priority
+          {/* 2️⃣ Install */}
+          <section id="install" aria-label={t('toc.install')}>
+            <AbInstallSnippet
+              pkg="ab-nextjs-core"
+              storageKey={AB_PM_STORAGE_KEY}
+              labels={{ group: tw('install.label', { pkg: 'ab-nextjs-core' }), copy: tw('install.copy'), copied: tw('install.copied') }}
             />
-          </NextLink>
-        </footer>
-      </div>
+          </section>
 
-      {/* Copyright ©️ */}
-      <p className="text-xs lg:text-sm opacity-50 mt-2 lg:mt-4">{t('copyright', { year })}</p>
-    </main>
+          {/* 3️⃣ Packages */}
+          <section id="packages" aria-labelledby="packages-title" className="flex flex-col gap-4">
+            <h2 id="packages-title" className="text-2xl font-bold flex items-center gap-2">
+              {t('packages.title')} <AbChip>{t('packages.count', { count: packages.length })}</AbChip>
+            </h2>
+            <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {packages.map((pkg) => (
+                // 🔗 the sidebar's package rows jump here (`/#package-<id>`)
+                <li key={pkg.id} id={`package-${pkg.id}`}>
+                  <AbPackageCard
+                    name={pkg.name}
+                    href={`https://www.npmjs.com/package/${pkg.name}`}
+                    version={pkg.version}
+                    description={t(`packages.${pkg.id as AbPackageId}.desc`)}
+                    icon={<AbIcon name={PACKAGE_ICONS[pkg.id]} size={24} />}
+                    badge={pkg.beta ? t('packages.beta') : undefined}
+                    headingLevel={3}
+                  />
+                </li>
+              ))}
+              {/* ➕ All packages */}
+              <li>
+                <AbCard as="div" title={t('packages.all.title')} href="#packages" description={t('packages.all.body')} />
+              </li>
+            </ul>
+          </section>
+
+          {/* 4️⃣ Guides */}
+          <section id="guides" aria-labelledby="guides-title" className="flex flex-col gap-4">
+            <h2 id="guides-title" className="text-2xl font-bold">{t('guides.title')}</h2>
+            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {GUIDES.map((id) => (
+                <li key={id}>
+                  <AbCard as="div" eyebrow={t(`guides.items.${id}.tag`)} title={t(`guides.items.${id}.title`)} />
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          {/* 5️⃣ What's new: no entries yet (D31) → hidden, with its TOC entry (§1.4 empty state) */}
+        </div>
+      </AbMainLayout>
+
+      {/* 📑 On this page */}
+      <HomeAside
+        title={ts('aside.onThisPage')}
+        items={[
+          { id: 'overview', label: t('toc.overview') },
+          { id: 'install', label: t('toc.install') },
+          { id: 'packages', label: t('toc.packages') },
+          { id: 'guides', label: t('toc.guides') },
+        ]}
+      />
+    </>
   );
 }
