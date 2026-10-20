@@ -121,7 +121,7 @@ describe('app/[locale]/(docs) route group 🗂️', () => {
 
   it('the skip link targets #main, which Home and the error boundary render ♿', () => {
     expect(readFileSync(join(dir, 'layout.tsx'), 'utf8')).toContain('href="#main"');
-    expect(readFileSync(join(dir, 'page.tsx'), 'utf8')).toContain('id="main"');
+    expect(readFileSync(join(dir, 'page.tsx'), 'utf8')).toContain('<AbMainLayout id="main" orientation="vertical"'); // 🫥 no chrome shim (empty slots are 0px)
     expect(readFileSync(join(dir, 'error.tsx'), 'utf8')).toContain('id="main"');
   });
 });
