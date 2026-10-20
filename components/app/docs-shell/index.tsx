@@ -68,6 +68,8 @@ import AbLogo from 'ab-nextjs-components/ab-logo';
 import AbChip from 'ab-nextjs-components/ab-chip';
 import AbButton from 'ab-nextjs-components/ab-button';
 import AbIcon from 'ab-nextjs-components/ab-icon';
+// import the packaged icon button (the GitHub link) 🔘
+import AbIconButton from 'ab-nextjs-components/ab-icon-button';
 // import the localized pathname helper from `ab-nextjs-i18n` 🧭
 import { localizeAbPathname } from 'ab-nextjs-i18n/config';
 
@@ -77,12 +79,14 @@ import { Link, usePathname } from '@/i18n/navigation';
 import abI18nConfig from '@/i18n/config';
 // import the rail preference (0.2.22) 🗂️
 import { useSidebarRail } from '@/lib/sidebar-rail';
+// import the repo URL (the GitHub button) 🐙
+import { GITHUB_URL } from '@/lib/nav';
 
 
 // 🏷️ every (already translated) label the shell needs, built by the server layout
 export type DocsShellLabels = Readonly<{
   brand: string; nav: string; more: string; sidebar: string; collapse: string; expand: string; version: string;
-  bottomBar: string; search: string; searchComingSoon: string; asideOpen: string; asideClose: string; language: string;
+  bottomBar: string; search: string; searchComingSoon: string; asideOpen: string; asideClose: string; language: string; github: string;
   theme: { group: string; light: string; dark: string; system: string };
 }>;
 
@@ -107,14 +111,13 @@ export type DocsShellProps = Readonly<{
 function AsideToggle({ labels }: { labels: { open: string; close: string } }) {
   // 📑 sheet on small screens, in-flow pane on laptop+ (core 0.1.6)
   const aside = useAbAsideToggle();
-  // 🔘 `aside.props` = aria-expanded + aria-controls + onClick, forwarded by AbButton (0.1.13) ♿
+  // 🔘 fidelity spec: an icon-only toggle (`«` opens, `»` hides), never the big "Hide page outline" text.
+  // AbButton keeps `label` as the accessible name ♿ and forwards aria-expanded / aria-controls; AbIconButton
+  // can't forward them yet (package gap for components), so the icon rides as AbButton's visual `children`
   return (
-    <AbButton
-      type="text"
-      label={aside.expanded ? labels.close : labels.open}
-      startIcon={<AbIcon name="toc" size={20} />}
-      {...aside.props}
-    />
+    <AbButton type="text" label={aside.expanded ? labels.close : labels.open} {...aside.props}>
+      <AbIcon name={aside.expanded ? 'keyboard_double_arrow_right' : 'keyboard_double_arrow_left'} size={20} />
+    </AbButton>
   );
 }
 
@@ -153,7 +156,7 @@ export default function DocsShell({ locale, labels, locales, sections, topLinks,
               compactActions={
                 // 📱 below 768px: just the theme switch (icon) & the globe
                 <>
-                  <AbThemeToggle variant="icon" size="sm" defaultMode="system" labels={labels.theme} />
+                  <AbThemeToggle variant="icon" size="sm" modes={['light', 'dark']} defaultMode="light" labels={labels.theme} />
                   <AbLocaleSwitcher
                     variant="icon"
                     align="end"
@@ -165,12 +168,15 @@ export default function DocsShell({ locale, labels, locales, sections, topLinks,
                 </>
               }
               actions={
+                // 🎯 fidelity spec order: [nav] · GitHub · globe · theme pill (+ the outline toggle below 1180px only)
                 <>
-                  {/* 📑 show / hide the page outline */}
-                  <AsideToggle labels={{ open: labels.asideOpen, close: labels.asideClose }} />
-                  {/* 🌗 light / system / dark */}
-                  <AbThemeToggle variant="segmented" size="sm" defaultMode="system" labels={labels.theme} />
-                  {/* 🌍 the globe menu: same page, other locale (plain links, hreflang) */}
+                  {/* 📑 show / hide the page outline: tablet widths only (the mock has none on laptop / desktop) */}
+                  <span className="contents min-[1180px]:hidden">
+                    <AsideToggle labels={{ open: labels.asideOpen, close: labels.asideClose }} />
+                  </span>
+                  {/* 🐙 the repo on GitHub */}
+                  <AbIconButton icon="github" label={labels.github} href={GITHUB_URL} />
+                  {/* 🌍 the globe menu: same page, other locale (plain links, hreflang), left of the theme pill (Decision 2) */}
                   <AbLocaleSwitcher
                     variant="icon"
                     align="end"
@@ -179,6 +185,8 @@ export default function DocsShell({ locale, labels, locales, sections, topLinks,
                     locales={locales}
                     getHref={(code) => localizeAbPathname(pathname, code, abI18nConfig)}
                   />
+                  {/* 🌗 light / dark only (the mock's 2-state pill) */}
+                  <AbThemeToggle variant="segmented" size="sm" modes={['light', 'dark']} defaultMode="light" labels={labels.theme} />
                 </>
               }
             />

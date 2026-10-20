@@ -67,6 +67,16 @@ import matchCase from 'ab-nextjs-icons/ab-icons/icons/match_case';
 import animation from 'ab-nextjs-icons/ab-icons/icons/animation';
 import webhook from 'ab-nextjs-icons/ab-icons/icons/webhook';
 import translate from 'ab-nextjs-icons/ab-icons/icons/translate';
+// 🎯 fidelity spec: the sidebar groups, the Docs tab, the app bar (GitHub, aside «/») & Home's links
+import description from 'ab-nextjs-icons/ab-icons/icons/description';
+import download from 'ab-nextjs-icons/ab-icons/icons/download';
+import bolt from 'ab-nextjs-icons/ab-icons/icons/bolt';
+import menuBook from 'ab-nextjs-icons/ab-icons/icons/menu_book';
+import github from 'ab-nextjs-icons/ab-icons/icons/github';
+import keyboardDoubleArrowLeft from 'ab-nextjs-icons/ab-icons/icons/keyboard_double_arrow_left';
+import keyboardDoubleArrowRight from 'ab-nextjs-icons/ab-icons/icons/keyboard_double_arrow_right';
+import arrowForward from 'ab-nextjs-icons/ab-icons/icons/arrow_forward';
+import northEast from 'ab-nextjs-icons/ab-icons/icons/north_east';
 
 
 // 📦 the AbIcons name of each package row / card 🗂️
@@ -85,4 +95,7 @@ export const PACKAGE_ICONS: Record<string, string> = {
 export const SHELL_ICONS: Record<string, AbIconSvgData> = {
   home, article, search, person, toc, language, computer, // 🧭 shell
   dashboard_customize: dashboardCustomize, widgets, palette, interests, match_case: matchCase, animation, webhook, translate, // 📦 packages
+  description, download, bolt, menu_book: menuBook, github, // 🗂️ sidebar groups, Docs tab & GitHub
+  keyboard_double_arrow_left: keyboardDoubleArrowLeft, keyboard_double_arrow_right: keyboardDoubleArrowRight, // «/» aside toggle
+  arrow_forward: arrowForward, north_east: northEast, // 🔗 Home's "View all →" & the TOC links
 };

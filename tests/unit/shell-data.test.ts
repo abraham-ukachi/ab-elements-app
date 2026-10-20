@@ -76,8 +76,14 @@ describe('lib/nav 🧭', () => {
 
   it('hides unbuilt items but keeps the packages section (D26) 🧹', () => {
     const ready = readyNavSections(SIDEBAR_SECTIONS);
-    expect(ready.map((section) => section.id)).toEqual(['packages']);
+    // 🎯 fidelity spec: Getting started & Guides show again, anchored on Home's sections
+    expect(ready.map((section) => section.id)).toEqual(['gettingStarted', 'packages', 'guides']);
     expect(ready.flatMap((section) => section.items).every((item) => item.ready)).toBe(true);
+  });
+
+  it('anchors the not-yet-built pages on Home (no 404s, D26) ⚓', () => {
+    const hrefs = [...TOP_LINKS, ...SIDEBAR_SECTIONS.flatMap((section) => section.items)].filter((item) => item.ready).map((item) => item.href);
+    for (const href of hrefs) expect(href === '/' || href.startsWith('/#'), href).toBe(true);
   });
 });
 

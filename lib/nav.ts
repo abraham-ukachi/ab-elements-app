@@ -63,12 +63,16 @@ export type ShellNavButton = Omit<ShellNavLink, 'href'> & Readonly<{ kind: 'butt
 export type ShellNavSection = Readonly<{ id: string; label: string; items: readonly ShellNavLink[] }>;
 
 
+// 🐙 the app's repo: the app bar's GitHub button, the TOC's "Edit this page" & "Changelog" (fidelity spec)
+export const GITHUB_URL = 'https://github.com/abraham-ukachi/ab-elements-app';
+
 // 🔝 the app-bar top links (laptop+)
+// 🎯 fidelity spec (God 20:10): all four links show; until the pages exist they point at Home's sections (no 404s, D26)
 export const TOP_LINKS: readonly ShellNavLink[] = [
-  { id: 'docs', href: '/docs', label: 'nav.docs', ready: false },
+  { id: 'docs', href: '/', label: 'nav.docs', ready: true }, // 📖 Home is the docs start page for now
   { id: 'packages', href: '/#packages', label: 'nav.packages', ready: true },
-  { id: 'guides', href: '/docs/guides', label: 'nav.guides', ready: false },
-  { id: 'changelog', href: '/changelog', label: 'nav.changelog', ready: false },
+  { id: 'guides', href: '/#guides', label: 'nav.guides', ready: true },
+  { id: 'changelog', href: '/#whats-new', label: 'nav.changelog', ready: true },
 ];
 
 // 🏠 the sidebar's first row
@@ -78,18 +82,19 @@ export const SIDEBAR_HOME: ShellNavLink = { id: 'home', href: '/', label: 'sideb
 export const SIDEBAR_SECTIONS: readonly ShellNavSection[] = [
   {
     id: 'gettingStarted', label: 'sidebar.sections.gettingStarted', items: [
-      { id: 'introduction', href: '/docs/getting-started', label: 'sidebar.items.introduction', icon: 'article', ready: false },
-      { id: 'installation', href: '/docs/installation', label: 'sidebar.items.installation', icon: 'download', ready: false },
-      { id: 'quickStart', href: '/docs/quick-start', label: 'sidebar.items.quickStart', icon: 'school', ready: false },
+      // ⚓ fidelity spec: shown now, anchored on Home's sections until the docs pages exist (D26: no 404s)
+      { id: 'introduction', href: '/#overview', label: 'sidebar.items.introduction', icon: 'description', ready: true },
+      { id: 'installation', href: '/#install', label: 'sidebar.items.installation', icon: 'download', ready: true },
+      { id: 'quickStart', href: '/#guide-install', label: 'sidebar.items.quickStart', icon: 'bolt', ready: true },
     ],
   },
   // 📦 the 8 package rows are built from `lib/packages.ts` (name + version badge), so they're not listed here
   { id: 'packages', label: 'sidebar.sections.packages', items: [] },
   {
     id: 'guides', label: 'sidebar.sections.guides', items: [
-      { id: 'themingDarkMode', href: '/docs/guides/theming', label: 'sidebar.items.themingDarkMode', icon: 'dark_mode', ready: false },
-      { id: 'iconsFonts', href: '/docs/guides/icons-fonts', label: 'sidebar.items.iconsFonts', icon: 'interests', ready: false },
-      { id: 'pwaShell', href: '/docs/guides/pwa-shell', label: 'sidebar.items.pwaShell', icon: 'deployed_code', ready: false },
+      { id: 'themingDarkMode', href: '/#guide-theming', label: 'sidebar.items.themingDarkMode', icon: 'palette', ready: true },
+      { id: 'iconsFonts', href: '/#guide-iconsFonts', label: 'sidebar.items.iconsFonts', icon: 'match_case', ready: true },
+      { id: 'pwaShell', href: '/#guide-pwaShell', label: 'sidebar.items.pwaShell', icon: 'dashboard_customize', ready: true },
     ],
   },
 ];
@@ -97,7 +102,7 @@ export const SIDEBAR_SECTIONS: readonly ShellNavSection[] = [
 // 📱 the bottom-bar tabs (mobile): Home · Docs · Search · Profile
 export const BOTTOM_TABS: readonly (ShellNavLink | ShellNavButton)[] = [
   { id: 'home', href: '/', label: 'bottomBar.home', icon: 'home', ready: true },
-  { id: 'docs', href: '/docs', label: 'bottomBar.docs', icon: 'article', ready: false },
+  { id: 'docs', href: '/docs', label: 'bottomBar.docs', icon: 'menu_book', ready: false }, // 📖 the mock's `menu_book`
   // 🔎 D24 (a): no palette before P5, so it falls back to `/docs`
   { id: 'search', kind: 'button', fallbackHref: '/docs', label: 'bottomBar.search', icon: 'search', ready: false },
   // 👤 D25 (a): shown disabled ("coming soon") until auth (P7)

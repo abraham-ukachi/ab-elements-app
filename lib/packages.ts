@@ -53,7 +53,8 @@ import { join } from 'node:path';
 
 
 // 🆔 the eight AbElements packages, in card order (D21: i18n included)
-export const AB_PACKAGE_IDS = ['core', 'components', 'theme', 'icons', 'fonts', 'animations', 'hooks', 'i18n'] as const;
+// 🎯 fidelity spec: the mock's card order (fonts → components), then i18n (Decision 1: all 8 real packages)
+export const AB_PACKAGE_IDS = ['fonts', 'icons', 'animations', 'theme', 'hooks', 'core', 'components', 'i18n'] as const;
 
 // 🆔 a package id (`'core' | 'components' | ...`)
 export type AbPackageId = (typeof AB_PACKAGE_IDS)[number];
@@ -62,6 +63,7 @@ export type AbPackageId = (typeof AB_PACKAGE_IDS)[number];
 export type AbPackage = Readonly<{
   id: AbPackageId; // 🆔
   name: string; // 📛 `ab-nextjs-<id>` (code, never translated)
+  title: string; // 🏷️ the display name (`Fonts`, `i18n`…): a product name like "AbElements", never translated
   version: string; // 🔢 the installed version (`0.3.3`)
   versionLabel: string; // 🏷️ the chip (`v0.3.x`)
   description: string | null; // 📝 npm's description (null → `Home.packages.<id>.desc` copy)
@@ -69,8 +71,8 @@ export type AbPackage = Readonly<{
   beta: boolean; // 🧪 only when God marks it
 }>;
 
-// 🧪 the packages God marked as beta (none yet)
-const BETA: readonly AbPackageId[] = [];
+// 🧪 the packages God marked as beta (fidelity spec, approved 20:10: Animations gets the `beta` chip)
+const BETA: readonly AbPackageId[] = ['animations'];
 
 
 /**
@@ -107,6 +109,7 @@ export function getAbPackages(root: string = process.cwd()): AbPackage[] {
     return {
       id,
       name,
+      title: id === 'i18n' ? 'i18n' : id[0].toUpperCase() + id.slice(1), // 🏷️ fidelity spec: the sidebar's display names
       version,
       versionLabel: toVersionLabel(version),
       description: pkg.description?.trim() || null,

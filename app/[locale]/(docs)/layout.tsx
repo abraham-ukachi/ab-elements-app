@@ -98,7 +98,8 @@ export default async function DocsLayout({ children, params }: DocsLayoutProps) 
       id: section.id,
       label: tk(section.label),
       items: section.id === 'packages'
-        ? packages.map((pkg) => ({ href: `/#package-${pkg.id}`, icon: PACKAGE_ICONS[pkg.id], label: pkg.name, badge: pkg.versionLabel }))
+        // 🏷️ fidelity spec: display names (Fonts, Icons…) + the real version; the mono `ab-nextjs-*` name stays on the cards
+        ? packages.map((pkg) => ({ href: `/#package-${pkg.id}`, icon: PACKAGE_ICONS[pkg.id], label: pkg.title, badge: pkg.versionLabel }))
         : section.items.map((item) => ({ href: item.href, icon: item.icon, label: tk(item.label) })),
     })),
   ];
@@ -123,19 +124,19 @@ export default async function DocsLayout({ children, params }: DocsLayoutProps) 
         sections={sections}
         topLinks={TOP_LINKS.filter((link) => link.ready).map((link) => ({ href: link.href, label: tk(link.label) }))}
         bottomTabs={BOTTOM_TABS.map((tab) => ('kind' in tab
-          // 🔘 Search (D24) & Profile (D25) are inert "coming soon" buttons until P5 / P7 🚧
-          ? { kind: 'button' as const, id: tab.id, icon: tab.icon ?? 'search', label: tk(tab.label), comingSoon: tw('comingSoon') }
+          // 🔘 Search (D24) & Profile (D25) stay inert until P5 / P7 🚧, but without the "Coming soon" sublabel (fidelity spec)
+          ? { kind: 'button' as const, id: tab.id, icon: tab.icon ?? 'search', label: tk(tab.label), disabled: true }
           // 🔗 unbuilt links fall back to Home's packages section (D26: no 404s)
           : tab.ready
             ? { kind: 'link' as const, href: tab.href, icon: tab.icon ?? 'home', label: tk(tab.label) }
             : tab.id === 'profile'
-              ? { kind: 'button' as const, id: tab.id, icon: tab.icon ?? 'person', label: tk(tab.label), comingSoon: tw('comingSoon') }
-              : { kind: 'link' as const, href: '/#packages', icon: tab.icon ?? 'article', label: tk(tab.label) }))}
+              ? { kind: 'button' as const, id: tab.id, icon: tab.icon ?? 'person', label: tk(tab.label), disabled: true }
+              : { kind: 'link' as const, href: '/#packages', icon: tab.icon ?? 'menu_book', label: tk(tab.label) }))}
         labels={{
           brand: t('brandLabel'), nav: t('nav.primary'), more: t('nav.more'), sidebar: t('sidebar.label'),
           collapse: t('sidebar.collapse'), expand: t('sidebar.expand'), version, bottomBar: t('bottomBar.label'),
           search: t('search.placeholder'), searchComingSoon: t('search.comingSoon'),
-          asideOpen: t('aside.toggleOpen'), asideClose: t('aside.toggleClose'), language: t('language.label'),
+          asideOpen: t('aside.toggleOpen'), asideClose: t('aside.toggleClose'), language: t('language.label'), github: t('github'),
           theme: { group: tw('theme.label'), light: tw('theme.light'), dark: tw('theme.dark'), system: tw('theme.system') },
         }}
       >
