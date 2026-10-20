@@ -235,9 +235,10 @@ function ShellBar({ topLinks }: Readonly<{ topLinks: { href: string; label: stri
       divider // ➖ the 1×20 rule before GitHub
       moreMenu={false} // 🚫 no `⋮` (P19): only the 4 links, and they fit from 1180
       brand={<AbLink href="/" aria-label={labels.brand}><AbLogo wordmark alt="" size={22} /></AbLink>}
-      // 🔎 the 300 / 360 field from 768; below 768 the bar turns it into the 34px "Search ⌘K" pill (components 0.1.15)
-      search={<AbSearchTrigger variant="field" label={labels.search} compactLabel={labels.searchShort} href="/" comingSoon comingSoonLabel={labels.searchComingSoon} />}
-      compactSearch="pill" // 💊 the mock's pill, not the icon-only circle
+      // 🔎 the 300 / 360 field from 768
+      search={<AbSearchTrigger variant="field" label={labels.search} href="/" comingSoon comingSoonLabel={labels.searchComingSoon} />}
+      // 💊 below 768: the 114×34 "Search" pill, a plain link to /docs with no ⌘K and no hotkey (God 00:37)
+      searchCompact={<AbSearchTrigger size="sm" href="/docs" label={labels.searchShort} />}
       nav={topLinks}
       labels={{ nav: labels.nav, more: labels.more }}
       compactActions={

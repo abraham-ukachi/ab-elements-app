@@ -26,11 +26,5 @@ body {
 }
 
 
-/* 📐 Home fidelity (spec §3): breakpoints, pane widths, header heights, gaps, radii AND the pane surfaces
-   (`--ab-color-pane-main`, read by core 0.2.1 itself) all come from the packages now 🎉. One token tweak is left:
-   mock 05's gapped light main pane is white, but neither theme nor core switches the surface at 1920 (package gap) 🎨 */
-@media (min-width: 1920px) {
-  :root:not(.dark) {
-    --ab-color-pane-main: var(--ab-color-card); /* 🪟 #FFFFFF */
-  }
-}
+/* 📐 Home fidelity (spec §3): breakpoints, pane widths, header heights, gaps, radii and every pane surface
+   (incl. the white ≥1920 light panes, theme 0.3.6) come from the packages, so the app sets no overrides here 🎉 */
