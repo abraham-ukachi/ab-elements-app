@@ -137,8 +137,8 @@ export default async function DocsLayout({ children, params }: DocsLayoutProps) 
         labels={{
           brand: t('brandLabel'), nav: t('nav.primary'), more: t('nav.more'), sidebar: t('sidebar.label'),
           collapse: t('sidebar.collapse'), expand: t('sidebar.expand'), docs: t('nav.docs'), version, bottomBar: t('bottomBar.label'),
-          search: t('search.placeholder'), searchComingSoon: t('search.comingSoon'),
-          asideOpen: t('aside.toggleOpen'), asideClose: t('aside.toggleClose'), language: t('language.label'), github: t('github'), breadcrumbs: t('breadcrumbs'),
+          search: t('search.placeholder'), searchShort: t('search.short'), searchComingSoon: t('search.comingSoon'),
+          asideOpen: t('aside.toggleOpen'), asideClose: t('aside.toggleClose'), language: t('language.label'), github: t('github'), breadcrumbs: t('breadcrumbs'), appDrawer: t('nav.more'),
           theme: { group: tw('theme.label'), light: tw('theme.light'), dark: tw('theme.dark'), system: tw('theme.system') },
         }}
       >

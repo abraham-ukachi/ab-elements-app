@@ -52,7 +52,7 @@
 // Tablet (768–1179) has NO app bar: each page puts `<DocsMainBar>` in its AbMainLayout `mainHeader` 📟.
 
 // REACT
-import { createContext, useContext, type ReactNode } from 'react';
+import { createContext, useContext, useId, useState, type ReactNode } from 'react';
 
 // import the packaged layout pieces from `ab-nextjs-core` (0.2.0) 🧱
 import AbAppLayout from 'ab-nextjs-core/ab-app-layout';
@@ -69,6 +69,8 @@ import AbLogo from 'ab-nextjs-components/ab-logo';
 import AbIconButton from 'ab-nextjs-components/ab-icon-button';
 import AbVersionSwitcher from 'ab-nextjs-components/ab-version-switcher';
 import AbBreadcrumbs, { type AbBreadcrumbItem } from 'ab-nextjs-components/ab-breadcrumbs';
+import AbBottomDrawer from 'ab-nextjs-components/ab-bottom-drawer';
+import { AbList, AbListItem } from 'ab-nextjs-components/ab-list';
 // import the localized pathname helper from `ab-nextjs-i18n` 🧭
 import { localizeAbPathname } from 'ab-nextjs-i18n/config';
 
@@ -85,8 +87,9 @@ import { GITHUB_URL } from '@/lib/nav';
 // 🏷️ every (already translated) label the shell needs, built by the server layout
 export type DocsShellLabels = Readonly<{
   brand: string; nav: string; more: string; sidebar: string; collapse: string; expand: string;
-  docs: string; version: string; bottomBar: string; search: string; searchComingSoon: string;
+  docs: string; version: string; bottomBar: string; search: string; searchShort: string; searchComingSoon: string;
   asideOpen: string; asideClose: string; language: string; github: string; breadcrumbs: string;
+  appDrawer: string; // 📱 the mobile app drawer's title
   theme: { group: string; light: string; dark: string; system: string };
 }>;
 
@@ -102,7 +105,7 @@ export type DocsShellProps = Readonly<{
 }>;
 
 // 🧠 what the tablet main bar needs from the shell (so a server page can drop `<DocsMainBar>` in its `mainHeader`)
-type ShellContextValue = Readonly<{ locale: string; labels: DocsShellLabels; locales: readonly AbLocaleOption[] }>;
+type ShellContextValue = Readonly<{ locale: string; labels: DocsShellLabels; locales: readonly AbLocaleOption[]; topLinks: { href: string; label: string }[] }>;
 const ShellContext = createContext<ShellContextValue | null>(null);
 
 
@@ -117,23 +120,19 @@ function useShellActions() {
   // 🧭 the locale-free path, for the other-locale hrefs
   const pathname = usePathname();
   if (!shell) throw new Error('DocsMainBar must render inside DocsShell'); // 🚨 dev mistake, not a user state
-  const { labels, locale, locales } = shell;
-  // 🌍 the globe: a menu on wide screens, the packaged bottom drawer (AbBottomDrawer) below 768px (`auto`, G56)
-  const globe = (
-    <AbLocaleSwitcher
-      variant="icon"
-      align="end"
-      presentation="auto"
-      label={labels.language}
-      current={locale}
-      locales={locales}
-      getHref={(code) => localizeAbPathname(pathname, code, abI18nConfig)}
-    />
-  );
+  const { labels, locale, locales, topLinks } = shell;
+  // 🔗 same page, other locale (plain hreflang links, so it works without JS)
+  const getHref = (code: string) => localizeAbPathname(pathname, code, abI18nConfig);
+  // 🌍 the globe menu: tablet / laptop / desktop only (on mobile the language list lives in the app drawer, God 00:08)
+  const globe = <AbLocaleSwitcher variant="icon" align="end" label={labels.language} current={locale} locales={locales} getHref={getHref} />;
+  // 📋 the same picker as a labelled list of 48px rows, LAST in the mobile app drawer, with its 1px rule above (components 0.1.15)
+  const languageList = <AbLocaleSwitcher presentation="inline" divider label={labels.language} current={locale} locales={locales} getHref={getHref} />;
   return {
     // 🐙 36×36, 20px octicon (spec §4)
     github: <AbIconButton icon="github" iconSize={20} label={labels.github} href={GITHUB_URL} />,
     globe,
+    languageList,
+    topLinks,
     // 🌗 the mock's 2-state pill with a raised thumb (P7)
     theme: <AbThemeToggle variant="segmented" appearance="thumb" size="sm" modes={['light', 'dark']} defaultMode="light" labels={labels.theme} />,
     // 🌗 mobile: one icon that shows the mode a tap switches to
@@ -196,6 +195,32 @@ export function DocsMainBar({ crumbs }: Readonly<{ crumbs: AbBreadcrumbItem[] }>
 
 
 /**
+ * `AppDrawerBody` - the mobile app drawer content (mock order): the app-bar links, the theme, then language last 📋
+ *
+ * @returns { ReactElement }
+ */
+function AppDrawerBody() {
+  // 🔘 the shared pieces
+  const { languageList, themeIcon, topLinks, labels } = useShellActions();
+  return (
+    <div className="flex flex-col gap-3">
+      {/* 🔗 Docs · Packages · Guides · Changelog as packaged link rows */}
+      <AbList label={labels.nav}>
+        {topLinks.map((link) => <AbListItem key={link.href} href={link.href} title={link.label} trailing="chevron" />)}
+      </AbList>
+      {/* 🌗 the theme switch */}
+      <div className="flex items-center justify-between px-1">
+        <span className="text-[14px] font-semibold text-(--ab-color-text)">{labels.theme.group}</span>
+        {themeIcon}
+      </div>
+      {/* 🌍 language, last, after its own 1px rule */}
+      {languageList}
+    </div>
+  );
+}
+
+
+/**
  * `ShellBar` - the app bar (mobile, laptop, desktop) 🔝
  *
  * @param { { topLinks: { href: string; label: string }[] } } props - the ready app-bar links
@@ -210,17 +235,14 @@ function ShellBar({ topLinks }: Readonly<{ topLinks: { href: string; label: stri
       divider // ➖ the 1×20 rule before GitHub
       moreMenu={false} // 🚫 no `⋮` (P19): only the 4 links, and they fit from 1180
       brand={<AbLink href="/" aria-label={labels.brand}><AbLogo wordmark alt="" size={22} /></AbLink>}
-      // 🔎 laptop / desktop field (300 / 360 from the package); the mobile pill comes from compactActions
-      search={<AbSearchTrigger variant="field" label={labels.search} href="/" comingSoon comingSoonLabel={labels.searchComingSoon} />}
+      // 🔎 the 300 / 360 field from 768; below 768 the bar turns it into the 34px "Search ⌘K" pill (components 0.1.15)
+      search={<AbSearchTrigger variant="field" label={labels.search} compactLabel={labels.searchShort} href="/" comingSoon comingSoonLabel={labels.searchComingSoon} />}
+      compactSearch="pill" // 💊 the mock's pill, not the icon-only circle
       nav={topLinks}
       labels={{ nav: labels.nav, more: labels.more }}
       compactActions={
-        // 📱 below 768px: the theme icon and the globe (opens the packaged bottom drawer); AbAppBar already
-        // turns `search` into its own compact pill here, so a second trigger would duplicate it
-        <>
-          {globe}
-          {themeIcon}
-        </>
+        // 📱 below 768px: only the theme icon (mock 01/02); NO globe, the language list is in the app drawer
+        themeIcon
       }
       // 🎯 spec order: [nav] · divider · GitHub · globe · theme pill (Decision 2: the globe sits left of the pill)
       actions={<>{github}{globe}{theme}</>}
@@ -238,12 +260,19 @@ function ShellBar({ topLinks }: Readonly<{ topLinks: { href: string; label: stri
 export default function DocsShell({ locale, labels, locales, sections, topLinks, bottomTabs, children }: DocsShellProps) {
   // 🗂️ the persisted rail (false = expanded, also the SSR / JS-off state)
   const [rail, setRail] = useSidebarRail();
+  // 📱 the mobile app drawer (opened by the bottom bar's Profile tab) + its id for aria-controls
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const drawerId = useId();
+  // 🔘 the Profile tab opens the app drawer (links · theme · language) instead of staying inert
+  const tabs = bottomTabs.map((tab): AbNavbarItem => (tab.kind === 'button' && tab.id === 'profile'
+    ? { ...tab, disabled: false, onSelect: () => setDrawerOpen(true), expanded: drawerOpen, controls: drawerId }
+    : tab));
 
   // return the shell
   return (
     // 🔗 every packaged link becomes locale-aware (G42); `locales` lets the sidebar & navbar strip `/fr` themselves 🌍
     <AbLinkProvider component={Link} locales={abI18nConfig.locales}>
-      <ShellContext.Provider value={{ locale, labels, locales }}>
+      <ShellContext.Provider value={{ locale, labels, locales, topLinks }}>
         {/* 📑 the aside (On this page) state, open by default from 1180 */}
         <AbPageProvider defaultAsideOpen asideId="ab-aside">
           {/* 🧱 the 4-breakpoint panes (core 0.2.0) */}
@@ -264,14 +293,20 @@ export default function DocsShell({ locale, labels, locales, sections, topLinks,
                 activeShape="rounded"
                 badgeVariant="text"
                 collapseButtonVariant="outlined"
+                // 🏷️ the 60px logo row: shown by the package only on tablet (768–1179) with `tabletHeader="main"`
+                logo={<AbLink href="/" aria-label={labels.brand}><AbLogo wordmark alt="" size={22} /></AbLink>}
                 header={<AbVersionSwitcher label={labels.docs} version={labels.version} />}
                 labels={{ nav: labels.sidebar, collapse: labels.collapse, expand: labels.expand }}
               />
             }
             // 📱 no pill, 25px icons, translucent + blur (P18)
-            navBar={<AbNavbar items={bottomTabs} label={labels.bottomBar} indicator="none" blur />}
+            navBar={<AbNavbar items={tabs} label={labels.bottomBar} indicator="none" blur />}
           >
             {children}
+            {/* 📱 the app drawer: an app-scope bottom sheet (focus trap, Escape / scrim close, D41 no-JS section) */}
+            <AbBottomDrawer id={drawerId} open={drawerOpen} onClose={() => setDrawerOpen(false)} title={labels.appDrawer}>
+              <AppDrawerBody />
+            </AbBottomDrawer>
           </AbAppLayout>
         </AbPageProvider>
       </ShellContext.Provider>

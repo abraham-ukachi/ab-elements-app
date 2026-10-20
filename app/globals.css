@@ -26,17 +26,11 @@ body {
 }
 
 
-/* 📐 Home fidelity (spec §3) on core 0.2.0 + theme 0.3.5: the breakpoints (768 / 1180 / 1920), pane widths
-   (248 · 260/236 · 288/272), header heights (52 / 60 / 64), gaps & radii are now the PACKAGE defaults 🎉,
-   so the old `html:root` width overrides are gone. Only one mapping is left: core's main / aside panes still
-   paint `--color-background`, so point it at the theme's Home surfaces (package gap: core should read
-   `--ab-color-pane-main` itself) 🎨 */
-:root {
-  --color-background: var(--ab-color-pane-main); /* 📄 joined panes: #FFF8F5 */
-  --color-dark-background: var(--ab-color-pane-main); /* 🌙 the .dark block re-resolves it: #1D150F */
-}
+/* 📐 Home fidelity (spec §3): breakpoints, pane widths, header heights, gaps, radii AND the pane surfaces
+   (`--ab-color-pane-main`, read by core 0.2.1 itself) all come from the packages now 🎉. One token tweak is left:
+   mock 05's gapped light main pane is white, but neither theme nor core switches the surface at 1920 (package gap) 🎨 */
 @media (min-width: 1920px) {
-  :root {
-    --color-background: var(--ab-color-card); /* 🪟 gapped light panes are white (mock 05) */
+  :root:not(.dark) {
+    --ab-color-pane-main: var(--ab-color-card); /* 🪟 #FFFFFF */
   }
 }
