@@ -28,28 +28,29 @@ body {
 
 /* 📐 Home fidelity (spec §3): pane widths & surfaces as TOKEN overrides on the packaged panes (core 0.1.6).
    No new UI here, only the custom properties AbAppLayout / AbMainLayout already read 🧱.
-   ⚠️ The joined → gapped switch itself stays at core's 1440px until core P1 (the mock wants ≥1920) */
-:root {
+   ⚠️ The joined → gapped switch itself stays at core's 1440px until core P1 (the mock wants ≥1920)
+   🎯 `html:root [data-variant="panes"]` out-ranks core's own `.abAppLayout[data-variant="panes"]` defaults (280 / 360) */
+:root, html:root [data-variant="panes"] {
   --ab-sidebar-width: 248px; /* 🗂️ tablet (768–1179) */
   --ab-aside-width: 320px; /* 📑 tablet overlay */
   --color-background: #FFF8F5; /* 🎨 light main pane = the mock's joined `--pane-main` (was #FFFFFF) */
   --color-dark-background: #1D150F; /* 🌙 dark main pane = the mock's warm `--pane-main` (was #0A0A0A) */
 }
 @media (min-width: 1180px) {
-  :root {
+  :root, html:root [data-variant="panes"] {
     --ab-sidebar-width: 260px; /* 🗂️ laptop, joined */
     --ab-aside-width: 236px; /* 📑 TOC */
   }
 }
 @media (min-width: 1440px) {
-  :root {
+  :root, html:root [data-variant="panes"] {
     --ab-pane-gap: 16px; /* 🧱 gapped panes (core switches here today) */
     --ab-pane-radius: 20px; /* 🔲 */
     --color-background: #FFFFFF; /* 🎨 the mock's gapped light panes */
   }
 }
 @media (min-width: 1920px) {
-  :root {
+  :root, html:root [data-variant="panes"] {
     --ab-sidebar-width: 288px; /* 🗂️ desktop */
     --ab-aside-width: 272px; /* 📑 */
   }

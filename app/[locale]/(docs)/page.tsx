@@ -102,9 +102,10 @@ const WHATS_NEW = [
 ] as const;
 
 // 🔠 the shared title look (spec §2): Mulish via the theme's `--ab-font-title`, heavy & tight
-const TITLE = 'font-(family-name:--ab-font-title) font-[750] tracking-[-0.032em]';
+// ❗ `!` because the theme's typography.css styles bare h1 / h2 / p outside any layer, which beats Tailwind's utilities layer
+const TITLE = 'font-(family-name:--ab-font-title)! font-[750]! tracking-[-0.032em]!';
 // 🔠 a section header's h2 (18 / 700 / −0.015em)
-const H2 = 'font-(family-name:--ab-font-title) text-[18px] font-bold tracking-[-0.015em]';
+const H2 = 'm-0! font-(family-name:--ab-font-title)! text-[18px]! font-bold! leading-[1.3]! tracking-[-0.015em]!';
 
 
 /**
@@ -163,15 +164,15 @@ export default async function Home() {
             >
               <div className="flex min-w-0 flex-col items-start">
                 <AbChip dot>{t('pill')}</AbChip>
-                {/* 🔠 h1: 29 mobile · 34 tablet · 38 laptop · 44 desktop, 750, no italics (spec §2) */}
+                {/* 🔠 h1: 29 mobile · 34 tablet · 38 laptop · 44 desktop, 750, no italics (spec §2); px breakpoints, since rem `md:` can't be ordered against `min-[1180px]:` */}
                 <h1
                   id="overview-title"
-                  className={`${TITLE} mt-3 max-w-[560px] text-[29px] leading-[1.13] md:mt-[14px] md:text-[34px] md:leading-[1.12] min-[1180px]:text-[38px] min-[1920px]:max-w-[620px] min-[1920px]:text-[44px]`}
+                  className={`${TITLE} mb-0! mt-3! min-[768px]:mt-[14px]! max-w-[560px] text-[29px]! leading-[1.13]! min-[768px]:text-[34px]! min-[768px]:leading-[1.12]! min-[1180px]:text-[38px]! min-[1920px]:max-w-[620px] min-[1920px]:text-[44px]!`}
                 >
                   {t('title')}
                 </h1>
                 {/* 📝 lede: 14.5 / 15.5 / 16.5, muted */}
-                <p className="mt-[10px] max-w-[520px] text-[14.5px] leading-[1.55] text-(--md-sys-color-on-surface-variant) md:mt-3 md:text-[15.5px] min-[1920px]:max-w-[560px] min-[1920px]:text-[16.5px]">
+                <p className="m-0! mt-[10px]! max-w-[520px] text-[14.5px]! [word-spacing:normal]! tracking-normal! leading-[1.55]! text-(--md-sys-color-on-surface-variant)! min-[768px]:mt-3! min-[768px]:text-[15.5px]! min-[1920px]:max-w-[560px] min-[1920px]:text-[16.5px]!">
                   {t('lead')}
                 </p>
                 {/* 🔘 CTAs: side by side (halves on mobile), Get started with its arrow */}
