@@ -161,8 +161,7 @@
         "pwaShell": "Shell PWA"
       },
       "collapse": "Contraer la barra lateral",
-      "expand": "Expandir la barra lateral",
-      "version": "Documentación {version}"
+      "expand": "Expandir la barra lateral"
     },
     "bottomBar": {
       "label": "Navegación principal",
@@ -195,7 +194,8 @@
     "offline": "Estás sin conexión. Mostrando páginas guardadas.",
     "profile": {
       "comingSoon": "Las cuentas llegarán pronto"
-    }
+    },
+    "breadcrumbs": "Ruta de navegación"
   },
   "Home": {
     "meta": {

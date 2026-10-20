@@ -88,8 +88,8 @@ export default async function DocsLayout({ children, params }: DocsLayoutProps) 
   const tk = (key: string): string => t(key as Parameters<typeof t>[0]);
   // 📦 the installed packages (real versions, D22)
   const packages = getAbPackages();
-  // 🏷️ the "Docs v0.2.x" badge
-  const version = t('sidebar.version', { version: `v${appPackage.version.split('.').slice(0, 2).join('.')}.x` });
+  // 🏷️ the real minor for AbVersionSwitcher's "Docs **v0.2.x**" (D3)
+  const version = `v${appPackage.version.split('.').slice(0, 2).join('.')}.x`;
 
   // 🗂️ the sidebar: Home, then the ready sections (packages filled from lib/packages, anchored on Home)
   const sections = [
@@ -97,6 +97,8 @@ export default async function DocsLayout({ children, params }: DocsLayoutProps) 
     ...readyNavSections(SIDEBAR_SECTIONS).map((section) => ({
       id: section.id,
       label: tk(section.label),
+      // 📏 the PACKAGES group uses the 30px rows + 16px icons (spec §4, P8)
+      ...(section.id === 'packages' ? { itemSize: 'sm' as const } : {}),
       items: section.id === 'packages'
         // 🏷️ fidelity spec: display names (Fonts, Icons…) + the real version; the mono `ab-nextjs-*` name stays on the cards
         ? packages.map((pkg) => ({ href: `/#package-${pkg.id}`, icon: PACKAGE_ICONS[pkg.id], label: pkg.title, badge: pkg.versionLabel }))
@@ -134,9 +136,9 @@ export default async function DocsLayout({ children, params }: DocsLayoutProps) 
               : { kind: 'link' as const, href: '/#packages', icon: tab.icon ?? 'menu_book', label: tk(tab.label) }))}
         labels={{
           brand: t('brandLabel'), nav: t('nav.primary'), more: t('nav.more'), sidebar: t('sidebar.label'),
-          collapse: t('sidebar.collapse'), expand: t('sidebar.expand'), version, bottomBar: t('bottomBar.label'),
+          collapse: t('sidebar.collapse'), expand: t('sidebar.expand'), docs: t('nav.docs'), version, bottomBar: t('bottomBar.label'),
           search: t('search.placeholder'), searchComingSoon: t('search.comingSoon'),
-          asideOpen: t('aside.toggleOpen'), asideClose: t('aside.toggleClose'), language: t('language.label'), github: t('github'),
+          asideOpen: t('aside.toggleOpen'), asideClose: t('aside.toggleClose'), language: t('language.label'), github: t('github'), breadcrumbs: t('breadcrumbs'),
           theme: { group: tw('theme.label'), light: tw('theme.light'), dark: tw('theme.dark'), system: tw('theme.system') },
         }}
       >

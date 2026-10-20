@@ -43,9 +43,10 @@
 */
 
 
-// 🏠 Home (0.2.23 + fidelity pass 1): hero (copy · install), the 8 package cards, then Guides + What's new side by side,
-// inside the packaged shell panes. Sizes / spacing follow `home-fidelity-spec.md` §2–§4 (John, approved by God 20:10).
-// Composition only: AbMainLayout + AbAsideLayout (core), AbChip / AbButton / AbInstallSnippet / AbPackageCard / AbCard (components).
+// 🏠 Home (0.2.23 + fidelity pass 2): hero (copy · install terminal), the 8 package cards, then Guides + What's new
+// as row lists, inside the packaged shell panes. Sizes / spacing follow `home-fidelity-spec.md` §2–§4 (approved by God).
+// Composition only: AbMainLayout + AbAsideLayout (core 0.2.0), AbChip / AbButton / AbInstallSnippet / AbPackageCard /
+// AbList (components 0.1.14). The theme 0.3.5 `@layer base` lets plain Tailwind utilities style h1 / h2 / p again 🧅.
 
 // NEXT types
 import type { Metadata } from 'next';
@@ -60,7 +61,7 @@ import AbChip from 'ab-nextjs-components/ab-chip';
 import AbButton from 'ab-nextjs-components/ab-button';
 import AbInstallSnippet from 'ab-nextjs-components/ab-install-snippet';
 import AbPackageCard from 'ab-nextjs-components/ab-package-card';
-import AbCard from 'ab-nextjs-components/ab-card';
+import { AbList, AbListItem } from 'ab-nextjs-components/ab-list';
 // import the server AbIcon (full icon map, no JS shipped) 🔣
 import AbIcon from 'ab-nextjs-components/server/ab-icon';
 // import the locale guard from `ab-nextjs-i18n`
@@ -79,6 +80,10 @@ import { PACKAGE_ICONS } from '@/lib/shell-icons';
 import { AB_PM_STORAGE_KEY } from '@/lib/install-pm';
 // import Home's "On this page" pane 📑
 import HomeAside from '@/components/app/home-aside';
+// import the tablet main bar (crumb · search · theme · GitHub · `<<`) of the packaged shell 📟
+import { DocsMainBar } from '@/components/app/docs-shell';
+// import the 8 card previews (content only) 🖼️
+import { PACKAGE_PREVIEWS } from '@/components/app/package-previews';
 // import the repo URL (Edit this page / Changelog) 🐙
 import { GITHUB_URL } from '@/lib/nav';
 
@@ -101,11 +106,13 @@ const WHATS_NEW = [
   { id: 'components', kind: 'new' },
 ] as const;
 
-// 🔠 the shared title look (spec §2): Mulish via the theme's `--ab-font-title`, heavy & tight
-// ❗ `!` because the theme's typography.css styles bare h1 / h2 / p outside any layer, which beats Tailwind's utilities layer
-const TITLE = 'font-(family-name:--ab-font-title)! font-[750]! tracking-[-0.032em]!';
-// 🔠 a section header's h2 (18 / 700 / −0.015em)
-const H2 = 'm-0! font-(family-name:--ab-font-title)! text-[18px]! font-bold! leading-[1.3]! tracking-[-0.015em]!';
+// 📜 each package's changelog on GitHub (the What's new rows link there) 🔗
+const changelogUrl = (id: string) => `https://github.com/abraham-ukachi/ab-nextjs-${id}/blob/main/CHANGELOG.md`;
+
+// 🔠 the shared title look (spec §2/§8): Mulish 800 via the theme's `--ab-font-title`, tight tracking
+const TITLE = 'font-(family-name:--ab-font-title) font-extrabold tracking-[-0.03em] text-(--ab-color-text)';
+// 🔠 a section header's h2 (Mulish 18 / 800)
+const H2 = `m-0 ${TITLE} text-[18px] leading-[1.3] tracking-[-0.015em]`;
 
 
 /**
@@ -150,42 +157,49 @@ export default async function Home() {
   return (
     <>
       {/* 🧱 the main pane */}
-      {/* `id="main"` = the skip link's target ♿; no mainHeader / mainBar = 0px (layout rule, core 0.1.6) 🫥 */}
-      <AbMainLayout id="main" orientation="vertical" pageName="home">
-        {/* 📏 pane padding per breakpoint (spec §3): 18×16 mobile · 30×36 tablet · 34×48 laptop · 44 / max 1060 desktop */}
-        <div className="@container px-4 pt-[18px] pb-8 md:px-9 md:py-[30px] min-[1180px]:px-12 min-[1180px]:py-[34px] min-[1920px]:px-0 min-[1920px]:py-11">
-          <div className="mx-auto flex max-w-[1060px] flex-col gap-6 md:gap-[30px] min-[1180px]:gap-[34px] min-[1920px]:gap-10">
+      {/* `id="main"` = the skip link's target ♿; `mainHeader` only shows on tablet (core 0.2.0 `tabletHeader="main"`) 📟 */}
+      <AbMainLayout
+        id="main"
+        orientation="vertical"
+        pageName="home"
+        mainHeader={<DocsMainBar crumbs={[{ label: ts('nav.docs'), href: '/' }, { label: ts('sidebar.home') }]} />}
+      >
+        {/* 📏 pane padding per breakpoint (spec §3): 18×16 (110 bottom, over the nav) · 30×36 · 34×48 · 44 / max 1060 */}
+        <div className="@container px-4 pt-[18px] pb-[110px] min-[768px]:px-9 min-[768px]:py-[30px] min-[1180px]:px-12 min-[1180px]:py-[34px] min-[1920px]:px-0 min-[1920px]:py-11">
+          <div className="mx-auto flex max-w-[1060px] flex-col gap-6 min-[768px]:gap-[30px] min-[1180px]:gap-[34px] min-[1920px]:gap-10">
 
-            {/* 1️⃣ Overview: copy left, install right from ~680px of content (stacked below), no hero art (Decision 5) */}
+            {/* 1️⃣ Overview: copy left, install terminal right from 720px of content (stacked below), no hero art (D5) */}
             <section
               id="overview"
               aria-labelledby="overview-title"
-              className="grid grid-cols-1 items-center gap-[14px] @min-[680px]:grid-cols-[minmax(0,1fr)_300px] @min-[680px]:gap-7 @min-[820px]:grid-cols-[minmax(0,1fr)_340px] @min-[820px]:gap-10 @min-[1000px]:grid-cols-[minmax(0,1fr)_380px]"
+              className="grid grid-cols-1 items-center gap-[14px] @min-[720px]:grid-cols-[minmax(0,1fr)_300px] @min-[720px]:gap-7 @min-[840px]:grid-cols-[minmax(0,1fr)_340px] @min-[840px]:gap-10 @min-[1000px]:grid-cols-[minmax(0,1fr)_380px]"
             >
               <div className="flex min-w-0 flex-col items-start">
+                {/* 🏷️ the eyebrow: 26px pill with the bronze dot */}
                 <AbChip dot>{t('pill')}</AbChip>
-                {/* 🔠 h1: 29 mobile · 34 tablet · 38 laptop · 44 desktop, 750, no italics (spec §2); px breakpoints, since rem `md:` can't be ordered against `min-[1180px]:` */}
+                {/* 🔠 h1: 29 mobile · 34 tablet · 38 laptop · 44 desktop, Mulish 800, no italics (spec §2) */}
                 <h1
                   id="overview-title"
-                  className={`${TITLE} mb-0! mt-3! min-[768px]:mt-[14px]! max-w-[560px] text-[29px]! leading-[1.13]! min-[768px]:text-[34px]! min-[768px]:leading-[1.12]! min-[1180px]:text-[38px]! min-[1920px]:max-w-[620px] min-[1920px]:text-[44px]!`}
+                  className={`${TITLE} mt-3 mb-0 max-w-[560px] text-[29px] leading-[1.13] min-[768px]:mt-[14px] min-[768px]:text-[34px] min-[768px]:leading-[1.12] min-[1180px]:text-[38px] min-[1920px]:max-w-[620px] min-[1920px]:text-[44px]`}
                 >
                   {t('title')}
                 </h1>
-                {/* 📝 lede: 14.5 / 15.5 / 16.5, muted */}
-                <p className="m-0! mt-[10px]! max-w-[520px] text-[14.5px]! [word-spacing:normal]! tracking-normal! leading-[1.55]! text-(--md-sys-color-on-surface-variant)! min-[768px]:mt-3! min-[768px]:text-[15.5px]! min-[1920px]:max-w-[560px] min-[1920px]:text-[16.5px]!">
+                {/* 📝 lede: Inter 14.5 / 15.5 / 16.5, muted */}
+                <p className="mt-[10px] mb-0 max-w-[520px] text-[14.5px] leading-[1.55] tracking-normal text-(--ab-color-muted) [word-spacing:normal] min-[768px]:mt-3 min-[768px]:text-[15.5px] min-[1920px]:max-w-[560px] min-[1920px]:text-[16.5px]">
                   {t('lead')}
                 </p>
-                {/* 🔘 CTAs: side by side (halves on mobile), Get started with its arrow */}
-                <div className="mt-4 flex w-full gap-[10px] md:mt-[22px] md:w-auto [&>*]:flex-1 md:[&>*]:flex-none">
+                {/* 🔘 CTAs: 40px rounded (44 + halves on mobile), Get started with its arrow (P16) */}
+                <div className="mt-4 flex w-full gap-[10px] min-[768px]:mt-[22px] min-[768px]:w-auto [&>*]:flex-1 min-[768px]:[&>*]:flex-none">
                   {/* D26 (a): Get started → #install until the Docs exist */}
-                  <AbButton type="filled" label={t('cta.getStarted')} href="#install" endIcon={<AbIcon name="arrow_forward" size={18} />} />
-                  <AbButton type="outlined" label={t('cta.browse')} href="#packages" />
+                  <AbButton type="filled" shape="rounded" size="md" label={t('cta.getStarted')} href="#install" endIcon={<AbIcon name="arrow_forward" size={18} />} />
+                  <AbButton type="secondary" shape="rounded" size="md" label={t('cta.browse')} href="#packages" />
                 </div>
               </div>
 
-              {/* 2️⃣ Install (the TOC's "Install" target) */}
-              <div id="install" className="min-w-0 scroll-mt-4 @min-[680px]:pt-10" aria-label={t('toc.install')} role="region">
+              {/* 2️⃣ Install (the TOC's "Install" target): ONE dark terminal, never clipped (P12) */}
+              <div id="install" className="min-w-0 scroll-mt-4" aria-label={t('toc.install')} role="region">
                 <AbInstallSnippet
+                  variant="terminal"
                   pkg="ab-nextjs-core"
                   storageKey={AB_PM_STORAGE_KEY}
                   labels={{ group: tw('install.label', { pkg: 'ab-nextjs-core' }), copy: tw('install.copy'), copied: tw('install.copied') }}
@@ -193,23 +207,27 @@ export default async function Home() {
               </div>
             </section>
 
-            {/* 3️⃣ Packages: 2 cols (gap 10) on phones, 4 cols (gap 12) from tablet; the 8 cards fill two rows (no "All packages", Decision 1) */}
-            <section id="packages" aria-labelledby="packages-title" className="flex flex-col gap-[10px] md:gap-[14px]">
+            {/* 3️⃣ Packages: 2 cols (gap 10) on phones, 4 cols (gap 12) from 560px of content; 8 cards = two rows (Decision 1) */}
+            <section id="packages" aria-labelledby="packages-title" className="flex flex-col gap-[10px] min-[768px]:gap-[14px]">
               <div className="flex items-center gap-2">
                 <h2 id="packages-title" className={H2}>{t('packages.title')}</h2>
-                <AbChip>{t('packages.count', { count: packages.length })}</AbChip>
+                {/* 🔢 the count pill: 20px, mono, tint */}
+                <AbChip size="sm" mono tone="accent">{t('packages.count', { count: packages.length })}</AbChip>
               </div>
-              <ul className="grid grid-cols-2 gap-[10px] @min-[560px]:grid-cols-4 @min-[560px]:gap-3">
+              <ul className="m-0 grid list-none grid-cols-2 gap-[10px] p-0 @min-[560px]:grid-cols-4 @min-[560px]:gap-3">
                 {packages.map((pkg) => (
                   // 🔗 the sidebar's package rows jump here (`/#package-<id>`)
                   <li key={pkg.id} id={`package-${pkg.id}`} className="min-w-0">
                     <AbPackageCard
                       name={pkg.name}
+                      title={pkg.title}
                       href={`https://www.npmjs.com/package/${pkg.name}`}
-                      version={pkg.version}
+                      version={pkg.versionLabel.replace(/^v/, '')} // 🏷️ the card adds its own `v` → "v0.2.x"
                       description={t(`packages.${pkg.id as AbPackageId}.desc`)}
+                      descriptionLines={2}
+                      preview={PACKAGE_PREVIEWS[pkg.id]}
                       icon={<AbIcon name={PACKAGE_ICONS[pkg.id]} size={18} />}
-                      badge={pkg.beta ? t('packages.beta') : undefined}
+                      tags={pkg.beta ? [t('packages.beta')] : undefined}
                       headingLevel={3}
                     />
                   </li>
@@ -217,35 +235,39 @@ export default async function Home() {
               </ul>
             </section>
 
-            {/* 4️⃣ Guides + 5️⃣ What's new: side by side (2 × 1fr, gap 24) from ~760px of content, stacked below */}
+            {/* 4️⃣ Guides + 5️⃣ What's new: two row lists side by side from 760px of content, stacked below (P13) */}
             <div className="grid grid-cols-1 gap-6 @min-[760px]:grid-cols-2">
-              <section id="guides" aria-labelledby="guides-title" className="flex min-w-0 flex-col gap-[10px] md:gap-[14px]">
+              <section id="guides" aria-labelledby="guides-title" className="flex min-w-0 flex-col gap-[10px] min-[768px]:gap-[14px]">
                 <h2 id="guides-title" className={H2}>{t('guides.title')}</h2>
-                <ul className="flex flex-col gap-2">
+                {/* 📚 no guide pages yet (D26): plain rows, no links, so no chevrons */}
+                <AbList label={t('guides.title')}>
                   {GUIDES.map(({ id, icon }) => (
-                    // ⚓ the sidebar's Guides rows jump here (`/#guide-<id>`)
-                    <li key={id} id={`guide-${id}`}>
-                      <AbCard as="div" media={<AbIcon name={icon} size={18} />} title={t(`guides.items.${id}.title`)} description={t(`guides.items.${id}.tag`)} />
-                    </li>
+                    <AbListItem
+                      key={id}
+                      media={<AbIcon name={icon} size={18} />}
+                      title={<span id={`guide-${id}`}>{t(`guides.items.${id}.title`)}</span>}
+                      meta={t(`guides.items.${id}.tag`)}
+                    />
                   ))}
-                </ul>
+                </AbList>
               </section>
 
-              <section id="whats-new" aria-labelledby="whats-new-title" className="flex min-w-0 flex-col gap-[10px] md:gap-[14px]">
+              <section id="whats-new" aria-labelledby="whats-new-title" className="flex min-w-0 flex-col gap-[10px] min-[768px]:gap-[14px]">
                 <h2 id="whats-new-title" className={H2}>{t('whatsNew.title')}</h2>
-                <ul className="flex flex-col gap-2">
+                {/* 📰 badge New / Improved · title · mono package · date → that package's changelog */}
+                <AbList label={t('whatsNew.title')}>
                   {WHATS_NEW.map(({ id, kind }) => (
-                    <li key={id}>
-                      {/* 📰 eyebrow = New / Improved, meta = the package (mono) · the month */}
-                      <AbCard
-                        as="div"
-                        eyebrow={t(`whatsNew.kind.${kind}`)}
-                        title={t(`whatsNew.items.${id}.title`)}
-                        footer={<span><code>{`ab-nextjs-${id}`}</code> · {t(`whatsNew.items.${id}.date`)}</span>}
-                      />
-                    </li>
+                    <AbListItem
+                      key={id}
+                      href={changelogUrl(id)}
+                      badge={t(`whatsNew.kind.${kind}`)}
+                      badgeTone={kind === 'new' ? 'primary' : 'tonal'}
+                      title={t(`whatsNew.items.${id}.title`)}
+                      meta={<><code>{`ab-nextjs-${id}`}</code> · {t(`whatsNew.items.${id}.date`)}</>}
+                      trailing="chevron"
+                    />
                   ))}
-                </ul>
+                </AbList>
               </section>
             </div>
           </div>

@@ -45,7 +45,7 @@
 
 'use client';
 
-// 📑 Home's "On this page" pane: the packaged aside layout (core 0.1.6) + AbToc (components 0.1.13)
+// 📑 Home's "On this page" pane: the packaged aside layout (core 0.2.0) + AbToc with its footer (components 0.1.14)
 // driven by useAbScrollSpy & scrollToAbSection (hooks 0.1.7). Composition only 🧩.
 
 // import the packaged aside pane from `ab-nextjs-core` 🧱
@@ -105,20 +105,22 @@ export default function HomeAside({ items, title, links, promo }: HomeAsideProps
   return (
     // 🫥 no asideHeader / asideBar = 0px (one banner per page ♿)
     <AbAsideLayout orientation="vertical" pageName="home">
-      {/* 📑 On this page (plain #id links without JS) */}
-      <AbToc items={items} activeId={activeId} label={title} onNavigate={(id) => scrollToAbSection(id, { container: scroller, updateHash: true })} />
-      {/* ➖ then the extras: Edit this page (GitHub) & Changelog ↗, and the "New" card (spec §4, packaged parts only) */}
-      <div className="mt-[18px] flex flex-col gap-1 border-t border-(--md-sys-color-outline-variant) px-[22px] pt-3 text-[12.5px] text-(--md-sys-color-on-surface-variant)">
-        <AbLink href={links.edit.href} className="flex items-center gap-2 py-[5px] hover:underline" target="_blank" rel="noopener">
-          <AbIcon name="github" size={15} />{links.edit.label}
-        </AbLink>
-        <AbLink href={links.changelog.href} className="flex items-center gap-2 py-[5px] hover:underline" target="_blank" rel="noopener">
-          <AbIcon name="north_east" size={15} />{links.changelog.label}
-        </AbLink>
-        <div className="mt-4">
-          <AbCard as="div" eyebrow={<AbChip>{promo.kind}</AbChip>} title={promo.title} description={promo.body} />
-        </div>
-      </div>
+      {/* 📑 On this page (plain #id links without JS) + the extras in AbToc's own footer slot (components 0.1.14, P14):
+          the package draws the 1px rule & the 12.5px link style; we only pass packaged links + the promo card 🧩 */}
+      <AbToc
+        items={items}
+        activeId={activeId}
+        label={title}
+        onNavigate={(id) => scrollToAbSection(id, { container: scroller, updateHash: true })}
+        footer={
+          <>
+            <AbLink href={links.edit.href} target="_blank" rel="noopener"><AbIcon name="github" size={15} />{links.edit.label}</AbLink>
+            <AbLink href={links.changelog.href} target="_blank" rel="noopener"><AbIcon name="north_east" size={15} />{links.changelog.label}</AbLink>
+            {/* 🆕 the "New" promo card */}
+            <AbCard as="div" eyebrow={<AbChip size="sm" shape="rounded" tone="accent">{promo.kind}</AbChip>} title={promo.title} description={promo.body} />
+          </>
+        }
+      />
     </AbAsideLayout>
   );
 }

@@ -161,8 +161,7 @@
         "pwaShell": "PWA shell"
       },
       "collapse": "Collapse sidebar",
-      "expand": "Expand sidebar",
-      "version": "Docs {version}"
+      "expand": "Expand sidebar"
     },
     "bottomBar": {
       "label": "Primary",
@@ -195,7 +194,8 @@
     "offline": "You're offline. Showing saved pages.",
     "profile": {
       "comingSoon": "Accounts are coming soon"
-    }
+    },
+    "breadcrumbs": "Breadcrumb"
   },
   "Home": {
     "meta": {

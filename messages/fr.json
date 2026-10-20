@@ -161,8 +161,7 @@
         "pwaShell": "Shell PWA"
       },
       "collapse": "Réduire la barre latérale",
-      "expand": "Développer la barre latérale",
-      "version": "Documentation {version}"
+      "expand": "Développer la barre latérale"
     },
     "bottomBar": {
       "label": "Navigation principale",
@@ -195,7 +194,8 @@
     "offline": "Vous êtes hors ligne. Pages enregistrées affichées.",
     "profile": {
       "comingSoon": "Les comptes arrivent bientôt"
-    }
+    },
+    "breadcrumbs": "Fil d’Ariane"
   },
   "Home": {
     "meta": {

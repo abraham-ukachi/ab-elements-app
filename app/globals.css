@@ -21,37 +21,22 @@
 }
 
 body {
-  background-color: var(--md-sys-color-background, light-dark(#FFF8F5, #19120C));
-  color: var(--md-sys-color-on-background, light-dark(#211A14, #EFE0D5));
+  background-color: var(--ab-color-bg, light-dark(#FFF8F5, #19120C)); /* 🧱 theme 0.3.5 Home bg */
+  color: var(--ab-color-text, light-dark(#211A16, #F4ECE5)); /* 🖋️ */
 }
 
 
-/* 📐 Home fidelity (spec §3): pane widths & surfaces as TOKEN overrides on the packaged panes (core 0.1.6).
-   No new UI here, only the custom properties AbAppLayout / AbMainLayout already read 🧱.
-   ⚠️ The joined → gapped switch itself stays at core's 1440px until core P1 (the mock wants ≥1920)
-   🎯 `html:root [data-variant="panes"]` out-ranks core's own `.abAppLayout[data-variant="panes"]` defaults (280 / 360) */
-:root, html:root [data-variant="panes"] {
-  --ab-sidebar-width: 248px; /* 🗂️ tablet (768–1179) */
-  --ab-aside-width: 320px; /* 📑 tablet overlay */
-  --color-background: #FFF8F5; /* 🎨 light main pane = the mock's joined `--pane-main` (was #FFFFFF) */
-  --color-dark-background: #1D150F; /* 🌙 dark main pane = the mock's warm `--pane-main` (was #0A0A0A) */
-}
-@media (min-width: 1180px) {
-  :root, html:root [data-variant="panes"] {
-    --ab-sidebar-width: 260px; /* 🗂️ laptop, joined */
-    --ab-aside-width: 236px; /* 📑 TOC */
-  }
-}
-@media (min-width: 1440px) {
-  :root, html:root [data-variant="panes"] {
-    --ab-pane-gap: 16px; /* 🧱 gapped panes (core switches here today) */
-    --ab-pane-radius: 20px; /* 🔲 */
-    --color-background: #FFFFFF; /* 🎨 the mock's gapped light panes */
-  }
+/* 📐 Home fidelity (spec §3) on core 0.2.0 + theme 0.3.5: the breakpoints (768 / 1180 / 1920), pane widths
+   (248 · 260/236 · 288/272), header heights (52 / 60 / 64), gaps & radii are now the PACKAGE defaults 🎉,
+   so the old `html:root` width overrides are gone. Only one mapping is left: core's main / aside panes still
+   paint `--color-background`, so point it at the theme's Home surfaces (package gap: core should read
+   `--ab-color-pane-main` itself) 🎨 */
+:root {
+  --color-background: var(--ab-color-pane-main); /* 📄 joined panes: #FFF8F5 */
+  --color-dark-background: var(--ab-color-pane-main); /* 🌙 the .dark block re-resolves it: #1D150F */
 }
 @media (min-width: 1920px) {
-  :root, html:root [data-variant="panes"] {
-    --ab-sidebar-width: 288px; /* 🗂️ desktop */
-    --ab-aside-width: 272px; /* 📑 */
+  :root {
+    --color-background: var(--ab-color-card); /* 🪟 gapped light panes are white (mock 05) */
   }
 }
