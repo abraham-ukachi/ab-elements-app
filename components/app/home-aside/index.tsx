@@ -47,6 +47,8 @@
 
 // 📑 Home's "On this page" pane: the packaged aside layout (core 0.2.0) + AbToc with its footer (components 0.1.14)
 // driven by useAbScrollSpy & scrollToAbSection (hooks 0.1.7). Composition only 🧩.
+// ➡️ Below 1180 the aside pane is hidden, so the SAME outline lives in AbTocDrawer, opened by a right-to-left edge
+// swipe (≤ 1179px, God 02:44) or the tablet `<<` toggle; it shares the shell's one-drawer-at-a-time state 🗄️.
 
 // import the packaged aside pane from `ab-nextjs-core` 🧱
 import AbAsideLayout from 'ab-nextjs-core/ab-aside-layout';
@@ -63,8 +65,15 @@ import { getAbMainScroller } from 'ab-nextjs-components/ab-toc';
 // import the packaged link, icon, chip & card for the TOC extras (fidelity spec §4) 🔗
 import { AbLink } from 'ab-nextjs-components/ab-link';
 import AbIcon from 'ab-nextjs-components/ab-icon';
-import AbChip from 'ab-nextjs-components/ab-chip';
-import AbCard from 'ab-nextjs-components/ab-card';
+// import the packaged "New" promo card (components 0.2.0) 🆕
+import { AbTocPromo } from 'ab-nextjs-components/ab-toc';
+// import the packaged right drawer & edge swipe (components 0.2.0 / 0.2.1 `maxWidth`) ➡️
+import AbTocDrawer from 'ab-nextjs-components/ab-toc-drawer';
+import { useAbEdgeSwipe, AB_ASIDE_DRAWER_MAX_WIDTH } from 'ab-nextjs-components/ab-drawer';
+// import the client translations (the drawer's close label) 🌐
+import { useAbTranslations } from 'ab-nextjs-i18n';
+// import the shell's drawer state & the outline drawer's id 🗄️
+import { useShellDrawer, TOC_DRAWER_ID } from '@/components/app/docs-shell';
 
 
 // 🧾 the props of `HomeAside`
@@ -94,6 +103,12 @@ export default function HomeAside({ items, title, links, promo }: HomeAsideProps
   }, [mainScrollElement]);
   // 🎯 the published scroller wins, the DOM lookup fills the gap
   const scroller = mainScrollElement ?? foundScroller;
+  // 🗄️ the shell's drawer state (one drawer at a time)
+  const { open, setOpen } = useShellDrawer();
+  // 🌐 the drawer's close label
+  const t = useAbTranslations('Shell');
+  // ➡️ a right-to-left swipe from the right edge opens the outline, only while the aside isn't a column (≤ 1179)
+  useAbEdgeSwipe({ edge: 'right', width: 296, maxWidth: AB_ASIDE_DRAWER_MAX_WIDTH, onOpen: () => setOpen('toc'), enabled: open === '' });
   // 🔭 the section currently in view (first one before any scroll, the last one at the bottom)
   const activeId = useAbScrollSpy(items.map((item) => item.id), {
     root: scroller,
@@ -116,10 +131,24 @@ export default function HomeAside({ items, title, links, promo }: HomeAsideProps
           <>
             <AbLink href={links.edit.href} target="_blank" rel="noopener"><AbIcon name="github" size={15} />{links.edit.label}</AbLink>
             <AbLink href={links.changelog.href} target="_blank" rel="noopener"><AbIcon name="north_east" size={15} />{links.changelog.label}</AbLink>
-            {/* 🆕 the "New" promo card */}
-            <AbCard as="div" eyebrow={<AbChip size="sm" shape="rounded" tone="accent">{promo.kind}</AbChip>} title={promo.title} description={promo.body} />
+            {/* 🆕 the packaged "New" promo card */}
+            <AbTocPromo title={promo.title} badge={promo.kind}>{promo.body}</AbTocPromo>
           </>
         }
+      />
+      {/* ➡️ the same outline as a right drawer below 1180 (closes itself after a heading is chosen) */}
+      <AbTocDrawer
+        id={TOC_DRAWER_ID}
+        open={open === 'toc'}
+        onClose={() => setOpen('')}
+        items={items}
+        activeId={activeId}
+        onNavigate={(id) => scrollToAbSection(id, { container: scroller, updateHash: true })}
+        links={[
+          { href: links.edit.href, label: links.edit.label, icon: 'github', external: true },
+          { href: links.changelog.href, label: links.changelog.label, icon: 'north_east', external: true },
+        ]}
+        labels={{ title, close: t('drawers.closeOutline') }}
       />
     </AbAsideLayout>
   );

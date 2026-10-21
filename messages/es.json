@@ -215,6 +215,8 @@
       "noResultsFor": "Sin resultados para «{query}»",
       "hint": "Revisa la ortografía o prueba un nombre de paquete como components o hooks.",
       "didYouMean": "¿Quisiste decir",
+      "profile": "Perfil y ajustes",
+      "closeOutline": "Cerrar el índice",
       "changeLanguage": "Cambiar idioma",
       "toDark": "Cambiar al tema oscuro",
       "toLight": "Cambiar al tema claro",

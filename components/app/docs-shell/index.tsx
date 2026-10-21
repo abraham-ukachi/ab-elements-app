@@ -50,7 +50,10 @@
 // `tabletHeader="main"` + `mobileHeader="main"`) with the compact AbAppBar (laptop+), AbSidebar, the blurred AbNavbar
 // (mobile 📱) and John's approved drawers (God 01:22 / 01:27):
 //   ⚙️ AbSettingsDrawer (theme + language) · ⬅️ AbNavDrawer (the mobile sidebar, left edge swipe) · 🔎 AbSearchDrawer.
-//   ➡️ AbTocDrawer is NOT wired: only pages with an aside get it, and Home has none on mobile (drawer spec §3).
+//   ➡️ AbTocDrawer belongs to the page that has an aside (Home's HomeAside renders it + the right edge swipe ≤ 1179px,
+//      God 02:44); the shell only keeps the one-drawer-at-a-time state (`useShellDrawer`) and the tablet `<<` toggle.
+//   👤 AbSidebar's `profile` = AbSidebarProfileButton at the bottom left (≥ 1180px), which opens its own Settings drawer.
+//   ↩️ Every drawer returns focus to the header logo by itself (components 0.2.1 AB_DRAWER_RETURN_FOCUS): no overrides.
 // Each page puts `<DocsMainBar>` in its AbMainLayout `mainHeader`: the mobile header below 768, the tablet bar 768–1179 📟.
 
 // REACT
@@ -60,7 +63,7 @@ import { useRouter } from 'next/navigation';
 
 // import the packaged layout pieces from `ab-nextjs-core` 🧱
 import AbAppLayout from 'ab-nextjs-core/ab-app-layout';
-import AbPageProvider, { useAbAsideToggle } from 'ab-nextjs-core/ab-page-provider';
+import AbPageProvider from 'ab-nextjs-core/ab-page-provider';
 // import the packaged UI from `ab-nextjs-components` 🧩
 import { AbLinkProvider, AbLink } from 'ab-nextjs-components/ab-link';
 import AbAppBar from 'ab-nextjs-components/ab-app-bar';
@@ -122,7 +125,7 @@ export type DocsShellProps = Readonly<{
 }>;
 
 // 🗄️ which drawer is open (only one at a time, drawer spec "Z-order")
-type OpenDrawer = '' | 'settings' | 'nav' | 'search';
+export type OpenDrawer = '' | 'settings' | 'nav' | 'search' | 'toc';
 
 // 🧠 what the main bar (a page's `mainHeader`) needs from the shell
 type ShellContextValue = Readonly<{
@@ -132,8 +135,8 @@ type ShellContextValue = Readonly<{
 }>;
 const ShellContext = createContext<ShellContextValue | null>(null);
 
-// 🏠 where focus lands after a swipe-opened drawer closes (drawer spec "Focus and keys")
-const LOGO_ID = 'ab-mobile-logo';
+// 🆔 the page outline drawer's id (the tablet `<<` toggle's aria-controls target)
+export const TOC_DRAWER_ID = 'ab-toc-drawer';
 
 
 /**
@@ -145,6 +148,17 @@ function useShell(): ShellContextValue {
   const shell = useContext(ShellContext);
   if (!shell) throw new Error('DocsMainBar must render inside DocsShell'); // 🚨 dev mistake, not a user state
   return shell;
+}
+
+
+/**
+ * `useShellDrawer` - the shell's one-drawer-at-a-time state, for a page's own drawer (Home's AbTocDrawer) 🗄️
+ *
+ * @returns { { open: OpenDrawer; setOpen: (next: OpenDrawer) => void } }
+ */
+export function useShellDrawer(): Readonly<{ open: OpenDrawer; setOpen: (next: OpenDrawer) => void }> {
+  const { open, setOpen } = useShell();
+  return { open, setOpen };
 }
 
 
@@ -188,21 +202,22 @@ function editDistance(a: string, b: string): number {
 
 
 /**
- * `AsideToggle` - the packaged aside toggle hook on a packaged icon button (tablet only) 📑
+ * `AsideToggle` - the tablet `<<` (768–1179): opens the page outline drawer, the aside's only form below 1180 📑
  *
  * @returns { ReactElement }
  */
 function AsideToggle() {
-  // 🧠 the open / close labels
-  const { labels } = useShell();
-  // 📑 sheet below 1180, in-flow pane from 1180 (core); returns aria-expanded / aria-controls / onClick
-  const aside = useAbAsideToggle();
+  // 🧠 the open / close labels & the drawer state
+  const { labels, open, setOpen } = useShell();
+  const expanded = open === 'toc';
   return (
     <AbIconButton
-      icon={aside.expanded ? 'keyboard_double_arrow_right' : 'keyboard_double_arrow_left'}
+      icon={expanded ? 'keyboard_double_arrow_right' : 'keyboard_double_arrow_left'}
       iconSize={20}
-      label={aside.expanded ? labels.asideClose : labels.asideOpen}
-      {...aside.props}
+      label={expanded ? labels.asideClose : labels.asideOpen}
+      aria-expanded={expanded}
+      aria-controls={TOC_DRAWER_ID}
+      onClick={() => setOpen(expanded ? '' : 'toc')}
     />
   );
 }
@@ -242,7 +257,7 @@ export function DocsMainBar({ crumbs }: Readonly<{ crumbs: AbBreadcrumbItem[] }>
       {/* 📱 the mobile header (drawer spec "Mobile header") */}
       <div className="contents min-[768px]:hidden">
         <AbMobileHeader
-          logo={<AbLink href="/" id={LOGO_ID} aria-label={labels.brand}><AbLogo wordmark alt="" size={22} /></AbLink>}
+          logo={<AbLink href="/" aria-label={labels.brand}><AbLogo wordmark alt="" size={22} /></AbLink>}
           theme={theme.resolvedTheme === 'dark' ? 'dark' : 'light'}
           onThemeChange={theme.setMode}
           onLanguage={() => setOpen('settings')}
@@ -326,6 +341,15 @@ export default function DocsShell({ locale, labels, locales, sections, topLinks,
   const mobile = useIsMobile();
   useAbEdgeSwipe({ edge: 'left', onOpen: () => setOpen('nav'), enabled: mobile && open === '' });
 
+  // ⚙️ the Settings drawer's data, shared by the mobile drawer & the sidebar profile button
+  const settingsLocales = locales.map((l) => ({ code: l.code, label: l.label }));
+  const switchLocale = (code: string) => { if (code !== locale) router.replace(localizeAbPathname(pathname, code, abI18nConfig), { scroll: false }); };
+  const settingsLabels = {
+    title: t('drawers.settings'), theme: t('drawers.theme'), language: t('drawers.language'),
+    light: labels.theme.light, dark: labels.theme.dark, system: labels.theme.system,
+    close: t('drawers.closeSettings'), expand: t('drawers.expandSettings'), collapse: t('drawers.collapseSettings'),
+  };
+
   // 🔘 the two button tabs: Search → the search drawer · Profile → Settings (drawer spec §1) until accounts (P7)
   const tabs = bottomTabs.map((tab): AbNavbarItem => {
     if (tab.kind !== 'button') return tab;
@@ -390,7 +414,17 @@ export default function DocsShell({ locale, labels, locales, sections, topLinks,
                 collapseButtonVariant="outlined"
                 logo={<AbLink href="/" aria-label={labels.brand}><AbLogo wordmark alt="" size={22} /></AbLink>}
                 header={<AbVersionSwitcher version={labels.version} />}
-                labels={{ nav: labels.sidebar, collapse: labels.collapse, expand: labels.expand }}
+                // 👤 bottom left (≥ 1180): signed out (the profile glyph) until real auth exists; opens Settings
+                profile={{
+                  user: null,
+                  theme: theme.mode as AbSettingsTheme,
+                  onThemeChange: theme.setMode,
+                  locales: settingsLocales,
+                  locale,
+                  onLocaleChange: switchLocale,
+                  labels: settingsLabels,
+                }}
+                labels={{ nav: labels.sidebar, collapse: labels.collapse, expand: labels.expand, profile: t('drawers.profile') }}
               />
             }
             // 📱 Home · Packages · Search · Profile: no pill, 25px icons, translucent + blur
@@ -405,15 +439,10 @@ export default function DocsShell({ locale, labels, locales, sections, topLinks,
             onClose={close}
             theme={theme.mode as AbSettingsTheme}
             onThemeChange={theme.setMode}
-            locales={locales.map((l) => ({ code: l.code, label: l.label }))}
+            locales={settingsLocales}
             locale={locale}
-            onLocaleChange={(code) => { if (code !== locale) router.replace(localizeAbPathname(pathname, code, abI18nConfig), { scroll: false }); }}
-            returnFocus={`#${LOGO_ID}`}
-            labels={{
-              title: t('drawers.settings'), theme: t('drawers.theme'), language: t('drawers.language'),
-              light: labels.theme.light, dark: labels.theme.dark, system: labels.theme.system,
-              close: t('drawers.closeSettings'), expand: t('drawers.expandSettings'), collapse: t('drawers.collapseSettings'),
-            }}
+            onLocaleChange={switchLocale}
+            labels={settingsLabels}
           />
           {/* ⬅️ the mobile sidebar (left edge swipe); "Settings ›" closes it, then raises Settings */}
           <AbNavDrawer
@@ -425,7 +454,6 @@ export default function DocsShell({ locale, labels, locales, sections, topLinks,
             activeHref={pathname}
             footer={[{ href: '/#whats-new', label: topLinks.find((link) => link.href === '/#whats-new')?.label ?? 'Changelog', icon: 'north_east' }]}
             onSettings={() => setTimeout(() => setOpen('settings'), 0)}
-            returnFocus={`#${LOGO_ID}`}
             labels={{ title: t('drawers.siteNav'), close: t('drawers.closeNav'), settings: t('drawers.settings') }}
           />
           {/* 🔎 search (the Search tab, the tablet / laptop field) */}
@@ -434,7 +462,6 @@ export default function DocsShell({ locale, labels, locales, sections, topLinks,
             onClose={close}
             search={search}
             suggest={suggest}
-            returnFocus={`#${LOGO_ID}`}
             labels={{
               title: t('drawers.search'), close: t('drawers.closeSearch'), placeholder: t('drawers.searchPlaceholder'),
               clear: t('drawers.clearSearch'), recent: t('drawers.recent'), remove: (term) => t('drawers.remove', { term }),

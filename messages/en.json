@@ -215,6 +215,8 @@
       "noResultsFor": "No results for “{query}”",
       "hint": "Check the spelling or try a package name like components or hooks.",
       "didYouMean": "Did you mean",
+      "profile": "Profile and settings",
+      "closeOutline": "Close outline",
       "changeLanguage": "Change language",
       "toDark": "Switch to dark theme",
       "toLight": "Switch to light theme",

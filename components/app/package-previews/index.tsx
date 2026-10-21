@@ -45,6 +45,8 @@
 
 // 🖼️ The 8 tiny package previews of the Home cards (spec §4 "Previews"). AbPackageCard (components 0.1.14, P10)
 // owns the 56 / 44px tile, radius and surface; the app only passes the CONTENT, which is page copy, not UI 🧩.
+// Animations, Hooks, Core & Components use the PACKAGED previews (components 0.2.0: AbPackagePreviewCurve /
+// AbPackagePreviewCode / AbPackagePreviewComponents); only Fonts, Icons, Theme & i18n are still app copy here.
 // Everything is decorative (`aria-hidden`): the card's title + description carry the meaning ♿.
 
 // REACT types
@@ -52,6 +54,8 @@ import type { ReactNode } from 'react';
 
 // import the server AbIcon (no JS shipped) 🔣
 import AbIcon from 'ab-nextjs-components/server/ab-icon';
+// import the packaged previews (0.2.0) 🧩
+import { AbPackagePreviewCurve, AbPackagePreviewCode, AbPackagePreviewComponents } from 'ab-nextjs-components/ab-package-card';
 // import the package ids 📦
 import type { AbPackageId } from '@/lib/packages';
 
@@ -82,33 +86,20 @@ export const PACKAGE_PREVIEWS: Record<AbPackageId, ReactNode> = {
       <AbIcon name="bolt" size={20} filled /><AbIcon name="person" size={20} />
     </Row>
   ),
-  // 🎞️ an ease-out curve (120 × 44, stroke 2.2) + its name
-  animations: (
-    <Row className="gap-1">
-      <svg width="96" height="40" viewBox="0 0 120 44" fill="none">
-        <path d="M4 40 C 34 6, 70 4, 116 4" stroke="var(--ab-color-accent)" strokeWidth="2.2" strokeLinecap="round" />
-      </svg>
-      <span className={`${MONO} text-[9.5px]`}>ease-out</span>
-    </Row>
-  ),
+  // 🎞️ the packaged ease-out curve + its name
+  animations: <AbPackagePreviewCurve />,
   // 🎨 6 swatches, 20 × 28, radius 6
   theme: (
     <Row className="gap-[5px]">
       {SWATCHES.map((c) => <span key={c} className="h-7 w-5 rounded-[6px] border border-(--ab-color-border)" style={{ background: c }} />)}
     </Row>
   ),
-  // 🪝 two hook calls
-  hooks: <Row className={`${MONO} flex-col gap-0.5`}><span>useTheme()</span><span>useMedia()</span></Row>,
-  // 🧱 the provider
-  core: <Row className={`${MONO} flex-col gap-0.5`}><span>{'<AbProvider>'}</span><span>{'  {children}'}</span></Row>,
-  // 🧩 a button chip, a switch & a chip
-  components: (
-    <Row className="gap-2 text-[11px] font-semibold">
-      <span className="flex h-[22px] items-center rounded-[6px] bg-(--ab-color-btn) px-2 text-(--ab-color-btn-text)">Button</span>
-      <span className="relative h-[17px] w-[30px] rounded-full bg-(--ab-color-accent)"><span className="absolute top-[2px] right-[2px] size-[13px] rounded-full bg-white" /></span>
-      <span className="flex h-[22px] items-center rounded-[6px] bg-(--ab-color-tint) px-2 text-(--ab-color-accent-text)">Chip</span>
-    </Row>
-  ),
+  // 🪝 two hook calls (`*kw*` = an accent keyword)
+  hooks: <AbPackagePreviewCode lines={['*use*Theme()', '*use*Media()']} />,
+  // 🧱 the provider (`~` = a dim line)
+  core: <AbPackagePreviewCode lines={['<*AbProvider*>', '~  {children}']} />,
+  // 🧩 the packaged button, on switch & chip
+  components: <AbPackagePreviewComponents />,
   // 🌍 the 4 shipped locales as mono chips (Decision 1)
   i18n: (
     <Row className="gap-[5px]">
