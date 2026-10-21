@@ -46,6 +46,7 @@
 'use client';
 
 // 🌍 Welcome globe: the packaged `AbLocaleSwitcher` with real links (works as plain `<a hreflang>`).
+// 🗄️ 0.2.21 (D40): `presentation="auto"` = the packaged bottom app drawer (AbDrawerList) below 768px, the popover menu above.
 // Composition only: this file just builds each locale's `/welcome` URL and keeps the slide (`?s=`) 🔗.
 
 // import the React hooks (state + effect) ⚛️
@@ -99,6 +100,7 @@ export default function WelcomeLocaleSwitcher({ current, label, locales }: Welco
     <AbLocaleSwitcher
       variant="icon" // 🌐 globe only
       align="end" // ↔️ under the right edge
+      presentation="auto" // 🗄️ drawer on phones, menu on tablet / desktop (resolved at open time: no hydration flip)
       label={label} // 🏷️ "Language"
       current={current} // ✅
       locales={locales} // 🗣️
