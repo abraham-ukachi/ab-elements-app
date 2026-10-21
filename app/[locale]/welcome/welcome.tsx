@@ -93,6 +93,8 @@ import WelcomeLocaleSwitcher from './_components/welcome-locale-switcher';
 import { WELCOME_SCENES } from './welcome-scenes';
 // import every Welcome-only style 🎨
 import styles from './welcome.module.css';
+// import the shared package-manager key (`ab-pm`, D27: one choice for the whole app 📦)
+import { AB_PM_STORAGE_KEY } from '@/lib/install-pm';
 
 
 // ===== WELCOME - DATA ===== //
@@ -243,11 +245,11 @@ export default async function Welcome({ locale }: WelcomeProps) {
               </ul>
             )}
 
-            {/* s02–s08: the install box (pnpm / npm / yarn / bun + copy; the choice persists across slides) 💻 */}
+            {/* s02–s08: the install box (pnpm / npm / yarn / bun + copy; the choice persists across slides & the whole app via `ab-pm`) 💻 */}
             {slide.pkg && (
               <AbInstallSnippet
                 pkg={slide.pkg}
-                storageKey="ab-welcome-pm"
+                storageKey={AB_PM_STORAGE_KEY}
                 className={styles.install}
                 labels={{ group: t('install.label', { pkg: slide.pkg }), copy: t('install.copy'), copied: t('install.copied') }}
               />

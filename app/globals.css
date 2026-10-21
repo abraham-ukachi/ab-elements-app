@@ -4,8 +4,11 @@
 @import "ab-nextjs-theme/styles.css";
 /* chrome (toast, dialog, spinner, logo, doodle) from `ab-nextjs-components` — requires >= 0.1.8 */
 @import "ab-nextjs-components/styles.css";
-/* the Inter font from `ab-nextjs-fonts` */
+/* the fonts from `ab-nextjs-fonts` 🔤 (fidelity spec, God 20:10): Inter (body), Mulish (titles, `--ab-font-title`)
+   & Roboto Mono (code, `--ab-font-code`); the theme tokens already point at these three families */
 @import "ab-nextjs-fonts/inter/styles.css";
+@import "ab-nextjs-fonts/mulish/styles.css";
+@import "ab-nextjs-fonts/roboto-mono/styles.css";
 
 
 /* follow the Ab theme set on `<html>` (`.dark` / `.light`) instead of the media query */
@@ -18,6 +21,10 @@
 }
 
 body {
-  background-color: var(--md-sys-color-background, light-dark(#FFF8F5, #19120C));
-  color: var(--md-sys-color-on-background, light-dark(#211A14, #EFE0D5));
+  background-color: var(--ab-color-bg, light-dark(#FFF8F5, #19120C)); /* 🧱 theme 0.3.5 Home bg */
+  color: var(--ab-color-text, light-dark(#211A16, #F4ECE5)); /* 🖋️ */
 }
+
+
+/* 📐 Home fidelity (spec §3): breakpoints, pane widths, header heights, gaps, radii and every pane surface
+   (incl. the white ≥1920 light panes, theme 0.3.6) come from the packages, so the app sets no overrides here 🎉 */

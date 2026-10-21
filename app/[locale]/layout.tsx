@@ -56,6 +56,9 @@ import { notFound } from 'next/navigation';
 // import the Inter font class names from `ab-nextjs-fonts`
 import { interStyles } from 'ab-nextjs-fonts';
 
+// import the (pre-paint 🚦) theme script builder from `ab-nextjs-hooks` (0.1.7) 🌗
+import { getAbThemeScript } from 'ab-nextjs-hooks/abThemeScript';
+
 // import the i18n provider (client translations) from `ab-nextjs-i18n`
 import { AbI18nProvider } from 'ab-nextjs-i18n';
 // import the locale guard from `ab-nextjs-i18n`
@@ -71,6 +74,8 @@ import { StaticViewport } from '../viewport';
 
 // import the Splash overlay & its (pre-paint 🚦) gate script
 import Splash, { abSplashGateScript } from '@/components/app/splash';
+// import the (pre-paint 🚦) package-manager key migration (`ab-welcome-pm` → `ab-pm`, D27 📦)
+import { abPmMigrationScript } from '@/lib/install-pm';
 
 // import the global styles 🎨
 import '../globals.css';
@@ -115,25 +120,12 @@ export const generateStaticParams = () => generateAbStaticParams(abI18nConfig);
 
 
 /**
- * `themeScript`
+ * `themeScript` 🌗
  *
- * Runs before the first paint to put the right Ab theme (`light` or `dark`) on `<html>`,
- * from the saved `theme` preference or the system's color scheme, so there's no theme flash.
- * A saved `system` mode (the 3-state theme switch 🌗) follows the OS and is kept in `data-theme-mode`.
+ * The packaged no-flash theme script (hooks 0.1.7), replacing the app's own copy: it reads the saved `theme`
+ * (and migrates the legacy `abTheme` key), else follows the OS (`system`, like the 3-state theme switch).
  */
-const themeScript: string = `(function () {
-  try {
-    var saved = localStorage.getItem('theme');
-    var theme = saved === 'light' || saved === 'dark'
-      ? saved
-      : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-    var root = document.documentElement;
-    root.dataset.theme = theme;
-    root.dataset.themeMode = saved === 'system' ? 'system' : theme;
-    root.classList.add(theme);
-    root.style.colorScheme = theme;
-  } catch (e) {}
-})();`;
+const themeScript: string = getAbThemeScript({ defaultTheme: 'system' });
 
 
 /**
@@ -159,6 +151,8 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
         {/* the Splash gate (standalone launch / first visit 💦) */}
         <script dangerouslySetInnerHTML={{ __html: abSplashGateScript }} />
+        {/* the package-manager key migration, before any install box reads it 📦 */}
+        <script dangerouslySetInnerHTML={{ __html: abPmMigrationScript }} />
       </head>
       {/* Body - with the Inter font & the i18n provider */}
       <body className={interStyles.regular}>

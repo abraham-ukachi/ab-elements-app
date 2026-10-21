@@ -132,5 +132,204 @@
         "illustrationAlt": "Diagram: the eight packages, the docs and the PWA all connect to AbElements."
       }
     }
+  },
+  "Shell": {
+    "skipToContent": "Skip to content",
+    "brandLabel": "AbElements home",
+    "nav": {
+      "primary": "Main",
+      "packages": "Packages",
+      "guides": "Guides",
+      "changelog": "Changelog",
+      "more": "More"
+    },
+    "sidebar": {
+      "label": "Documentation",
+      "home": "Home",
+      "sections": {
+        "gettingStarted": "Getting started",
+        "packages": "Packages",
+        "guides": "Guides"
+      },
+      "items": {
+        "introduction": "Introduction",
+        "installation": "Installation",
+        "quickStart": "Quick start",
+        "themingDarkMode": "Theming & dark mode",
+        "iconsFonts": "Icons & fonts",
+        "pwaShell": "PWA shell"
+      },
+      "collapse": "Collapse sidebar",
+      "expand": "Expand sidebar"
+    },
+    "bottomBar": {
+      "label": "Primary",
+      "home": "Home",
+      "search": "Search",
+      "profile": "Profile",
+      "packages": "Packages"
+    },
+    "search": {
+      "placeholder": "Search docs…",
+      "short": "Search",
+      "shortcut": "{key} K",
+      "comingSoon": "Search is coming soon"
+    },
+    "aside": {
+      "toggleOpen": "Show page outline",
+      "toggleClose": "Hide page outline",
+      "onThisPage": "On this page",
+      "editPage": "Edit this page",
+      "changelog": "Changelog"
+    },
+    "github": "AbElements on GitHub",
+    "language": {
+      "label": "Language"
+    },
+    "error": {
+      "title": "Something went wrong",
+      "retry": "Try again"
+    },
+    "offline": "You're offline. Showing saved pages.",
+    "profile": {
+      "comingSoon": "Accounts are coming soon"
+    },
+    "breadcrumbs": "Breadcrumb",
+    "drawers": {
+      "settings": "Settings",
+      "theme": "Theme",
+      "language": "Language",
+      "closeSettings": "Close settings",
+      "expandSettings": "Expand settings",
+      "collapseSettings": "Collapse settings",
+      "siteNav": "Site navigation",
+      "closeNav": "Close navigation",
+      "search": "Search",
+      "closeSearch": "Close search",
+      "searchPlaceholder": "Search packages, components, hooks…",
+      "clearSearch": "Clear search",
+      "recent": "Recent",
+      "remove": "Remove {term}",
+      "results": "{count, plural, one {# result} other {# results}}",
+      "noResults": "No results",
+      "noResultsFor": "No results for “{query}”",
+      "hint": "Check the spelling or try a package name like components or hooks.",
+      "didYouMean": "Did you mean",
+      "profile": "Profile and settings",
+      "closeOutline": "Close outline",
+      "changeLanguage": "Change language",
+      "toDark": "Switch to dark theme",
+      "toLight": "Switch to light theme",
+      "mobileHeader": "Main header",
+      "packagesGroup": "Packages",
+      "sidebarGroup": "Pages"
+    }
+  },
+  "Home": {
+    "previews": {
+      "button": "Button",
+      "chip": "Chip",
+      "switch": "Switch"
+    },
+    "meta": {
+      "title": "AbElements · Next.js UI library",
+      "description": "Docs, live examples and an installable PWA for the eight AbElements packages."
+    },
+    "pill": "AbElements docs",
+    "title": "Build Next.js UIs with AbElements",
+    "lead": "Eight focused packages — fonts, icons, animations, theme, hooks, core, components and i18n — documented with live examples.",
+    "cta": {
+      "getStarted": "Get started",
+      "browse": "Browse packages"
+    },
+    "packages": {
+      "title": "Packages",
+      "viewAll": "View all",
+      "count": "{count, number}",
+      "core": {
+        "desc": "Screen, main and aside layouts, plus the page provider."
+      },
+      "components": {
+        "desc": "Accessible UI built on core and theme."
+      },
+      "theme": {
+        "desc": "Design tokens, light and dark modes, CSS variables."
+      },
+      "icons": {
+        "desc": "AbIcons as SVG and CSS, outlined and filled."
+      },
+      "fonts": {
+        "desc": "Font presets for next/font, zero layout shift."
+      },
+      "animations": {
+        "desc": "Animation presets and easings, reduced-motion aware."
+      },
+      "hooks": {
+        "desc": "Typed React hooks for theme, media and storage."
+      },
+      "i18n": {
+        "desc": "Routing and messages in four languages."
+      },
+      "beta": "beta",
+      "all": {
+        "title": "All packages",
+        "body": "Compare, install and read the API reference.",
+        "cta": "Browse packages"
+      }
+    },
+    "guides": {
+      "title": "Guides",
+      "all": "All guides",
+      "items": {
+        "install": {
+          "title": "Install AbElements in a Next.js app",
+          "tag": "Getting started"
+        },
+        "theming": {
+          "title": "Theming with tokens and dark mode",
+          "tag": "Theme"
+        },
+        "iconsFonts": {
+          "title": "Icons and fonts without layout shift",
+          "tag": "Icons · Fonts"
+        },
+        "pwaShell": {
+          "title": "Build a PWA docs shell",
+          "tag": "Components"
+        }
+      }
+    },
+    "whatsNew": {
+      "title": "What's new",
+      "changelog": "Changelog",
+      "kind": {
+        "new": "New",
+        "improved": "Improved",
+        "fixed": "Fixed"
+      },
+      "asideLabel": "Now in {pkg}",
+      "items": {
+        "core": {
+          "title": "Panes that scroll on their own (the layout rule)",
+          "date": "Oct 2026"
+        },
+        "hooks": {
+          "title": "useAbScrollSpy and the no-flash theme script",
+          "date": "Oct 2026"
+        },
+        "components": {
+          "title": "Table of contents, app bar and package cards",
+          "date": "Oct 2026"
+        }
+      },
+      "promo": "Table of contents & app bar"
+    },
+    "toc": {
+      "overview": "Overview",
+      "install": "Install",
+      "packages": "Packages",
+      "guides": "Guides",
+      "whatsNew": "What's new"
+    }
   }
 }

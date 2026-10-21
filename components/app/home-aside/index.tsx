@@ -1,0 +1,155 @@
+/* 
+* @license MIT
+* ~~~~~~~~~~~~
+* ab-elements-app
+* ~~~~~~~~~~~~
+* Copyright (c) 2026 Abraham Ukachi. The abElements Project.
+*
+* Permission is hereby granted, free of charge, to any person obtaining a copy
+* of this software and associated documentation files (the 'Software'), to deal
+* in the Software without restriction, including without limitation the rights
+* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+* copies of the Software, and to permit persons to whom the Software is
+* furnished to do so, subject to the following conditions:
+*
+* The above copyright notice and this permission notice shall be included in all
+* copies or substantial portions of the Software.
+*
+* THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+* SOFTWARE.
+*
+* @project: ab-elements-app
+* @name: abElements Home Aside
+* @file: components/app/home-aside/index.tsx
+* @type: TypeScript + JSX
+* @authors: Abraham Ukachi <abrahamukachi@gmail.com>
+*
+* Example usage:
+*   1+|> <HomeAside items={[{ id: 'overview', label: 'Overview' }]} title="On this page" />
+*    -|>
+*
+*/
+
+
+/*
+* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+* MOTTO: We'll always do more 😜!!!
+* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+*/
+
+
+'use client';
+
+// 📑 Home's "On this page" pane: the packaged aside layout (core 0.2.0) + AbToc with its footer (components 0.1.14)
+// driven by useAbScrollSpy & scrollToAbSection (hooks 0.1.7). Composition only 🧩.
+// ➡️ Below 1180 the aside pane is hidden, so the SAME outline lives in AbTocDrawer, opened by a right-to-left edge
+// swipe (≤ 1179px, God 02:44) or the tablet `<<` toggle; it shares the shell's one-drawer-at-a-time state 🗄️.
+
+// import the packaged aside pane from `ab-nextjs-core` 🧱
+import AbAsideLayout from 'ab-nextjs-core/ab-aside-layout';
+// import the packaged table of contents from `ab-nextjs-components` 📑
+import AbToc, { type AbTocItem } from 'ab-nextjs-components/ab-toc';
+// import the scroll spy & the smooth (reduced-motion safe) section scroll from `ab-nextjs-hooks` 🔭
+import { scrollToAbSection, useAbScrollSpy } from 'ab-nextjs-hooks/useAbScrollSpy';
+// import React's state & effect hooks ⚛️
+import { useEffect, useState } from 'react';
+// import the page state (the main pane's own scroller) from `ab-nextjs-core` 📜
+import { useAbPage } from 'ab-nextjs-core/ab-page-provider';
+// import the DOM lookup for the main scroller from `ab-nextjs-components` 🔎 (effects only)
+import { getAbMainScroller } from 'ab-nextjs-components/ab-toc';
+// import the packaged link, icon, chip & card for the TOC extras (fidelity spec §4) 🔗
+import { AbLink } from 'ab-nextjs-components/ab-link';
+import AbIcon from 'ab-nextjs-components/ab-icon';
+// import the packaged "New" promo card (components 0.2.0) 🆕
+import { AbTocPromo } from 'ab-nextjs-components/ab-toc';
+// import the packaged right drawer & edge swipe (components 0.2.0 / 0.2.1 `maxWidth`) ➡️
+import AbTocDrawer from 'ab-nextjs-components/ab-toc-drawer';
+import { useAbEdgeSwipe, AB_ASIDE_DRAWER_MAX_WIDTH } from 'ab-nextjs-components/ab-drawer';
+// import the client translations (the drawer's close label) 🌐
+import { useAbTranslations } from 'ab-nextjs-i18n';
+// import the shell's drawer state & the outline drawer's id 🗄️
+import { useShellDrawer, TOC_DRAWER_ID } from '@/components/app/docs-shell';
+
+
+// 🧾 the props of `HomeAside`
+export type HomeAsideProps = Readonly<{
+  items: AbTocItem[]; // 📑 the sections
+  title: string; // 🏷️ "On this page"
+  links: { edit: { href: string; label: string }; changelog: { href: string; label: string } }; // 🔗 the TOC extras (spec §4)
+  promo: { kind: string; title: string; body: string }; // 🆕 the "New" card
+}>;
+
+
+/**
+ * `HomeAside` - Client Component 📑
+ *
+ * @param { HomeAsideProps } props - the TOC items (section ids + labels) & the title
+ * @returns { ReactElement }
+ */
+export default function HomeAside({ items, title, links, promo }: HomeAsideProps) {
+  // 📜 the main pane scrolls on its own (the page never does), so it's the spy root & the scroll container
+  const { mainScrollElement } = useAbPage();
+  // 🔎 fallback: look the scroller up in the DOM after mount (never during render / SSR)
+  const [foundScroller, setFoundScroller] = useState<HTMLElement | null>(null);
+  useEffect(() => {
+    if (mainScrollElement) return; // ✅ already published
+    const frame = requestAnimationFrame(() => setFoundScroller(getAbMainScroller())); // 🖼️ after paint
+    return () => cancelAnimationFrame(frame); // 🧹
+  }, [mainScrollElement]);
+  // 🎯 the published scroller wins, the DOM lookup fills the gap
+  const scroller = mainScrollElement ?? foundScroller;
+  // 🗄️ the shell's drawer state (one drawer at a time)
+  const { open, setOpen } = useShellDrawer();
+  // 🌐 the drawer's close label
+  const t = useAbTranslations('Shell');
+  // ➡️ a right-to-left swipe from the right edge opens the outline, only while the aside isn't a column (≤ 1179)
+  useAbEdgeSwipe({ edge: 'right', width: 296, maxWidth: AB_ASIDE_DRAWER_MAX_WIDTH, onOpen: () => setOpen('toc'), enabled: open === '' });
+  // 🔭 the section currently in view (first one before any scroll, the last one at the bottom)
+  const activeId = useAbScrollSpy(items.map((item) => item.id), {
+    root: scroller,
+    lastAtBottom: true,
+    initialId: items[0]?.id ?? null,
+  });
+
+  // return the aside pane
+  return (
+    // 🫥 no asideHeader / asideBar = 0px (one banner per page ♿)
+    <AbAsideLayout orientation="vertical" pageName="home">
+      {/* 📑 On this page (plain #id links without JS) + the extras in AbToc's own footer slot (components 0.1.14, P14):
+          the package draws the 1px rule & the 12.5px link style; we only pass packaged links + the promo card 🧩 */}
+      <AbToc
+        items={items}
+        activeId={activeId}
+        label={title}
+        onNavigate={(id) => scrollToAbSection(id, { container: scroller, updateHash: true })}
+        footer={
+          <>
+            <AbLink href={links.edit.href} target="_blank" rel="noopener"><AbIcon name="github" size={15} />{links.edit.label}</AbLink>
+            <AbLink href={links.changelog.href} target="_blank" rel="noopener"><AbIcon name="north_east" size={15} />{links.changelog.label}</AbLink>
+            {/* 🆕 the packaged "New" promo card */}
+            <AbTocPromo title={promo.title} badge={promo.kind}>{promo.body}</AbTocPromo>
+          </>
+        }
+      />
+      {/* ➡️ the same outline as a right drawer below 1180 (closes itself after a heading is chosen) */}
+      <AbTocDrawer
+        id={TOC_DRAWER_ID}
+        open={open === 'toc'}
+        onClose={() => setOpen('')}
+        items={items}
+        activeId={activeId}
+        onNavigate={(id) => scrollToAbSection(id, { container: scroller, updateHash: true })}
+        links={[
+          { href: links.edit.href, label: links.edit.label, icon: 'github', external: true },
+          { href: links.changelog.href, label: links.changelog.label, icon: 'north_east', external: true },
+        ]}
+        labels={{ title, close: t('drawers.closeOutline') }}
+      />
+    </AbAsideLayout>
+  );
+}

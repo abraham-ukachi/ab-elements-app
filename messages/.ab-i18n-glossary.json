@@ -25,7 +25,24 @@
     "Common.lit",
     "Common.flutter",
     "Welcome.counter",
-    "Welcome.slides.s04.chips.tokens"
+    "Welcome.slides.s04.chips.tokens",
+    "Home.guides.items.pwaShell.tag",
+    "Home.guides.title",
+    "Home.packages.beta",
+    "Home.packages.count",
+    "Home.packages.title",
+    "Home.toc.guides",
+    "Home.toc.packages",
+    "Shell.bottomBar.docs",
+    "Shell.nav.docs",
+    "Shell.nav.guides",
+    "Shell.nav.packages",
+    "Shell.search.shortcut",
+    "Shell.sidebar.items.installation",
+    "Shell.sidebar.items.introduction",
+    "Shell.sidebar.label",
+    "Shell.sidebar.sections.guides",
+    "Shell.sidebar.sections.packages"
   ],
   "terms": {}
 }

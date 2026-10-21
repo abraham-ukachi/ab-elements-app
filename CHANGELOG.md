@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.20](https://github.com/abraham-ukachi/ab-elements-app/compare/v0.2.19...v0.2.20) (2026-10-21)
+
+* :sparkles: :iphone: Build the docs shell from packaged pieces only: the compact app bar, the sidebar (rail, version switcher, profile button), the bottom nav (Home · Packages · Search · Profile) and the 768 / 1180 / 1920 panes, where only the main pane scrolls
+* :sparkles: Build Home with the packaged package cards & previews, Guides, What's new and a scroll-spied "On this page" aside with the "New" promo
+* :card_file_box: Add the drawers: the mobile header (logo · language · theme), Settings (theme & language), the nav drawer (left edge swipe), the search drawer (components & hooks grouped by package, "Did you mean") and the outline drawer (right edge swipe below 1180, or the tablet `<<`)
+* :sparkles: Share one `ab-pm` install key across the app & migrate the Welcome's `ab-welcome-pm`
+* :globe_with_meridians: Add the Shell & Home messages in en, fr, es & ru, including the drawer and Components preview labels
+* :recycle: Use the packaged `abThemeScript` instead of the app's own theme script
+* :art: Load Mulish & Roboto Mono and set the Home pane widths & surfaces as token overrides
+* :arrow_up: Pin the published ab-nextjs-theme 0.3.6, ab-nextjs-core ^0.2.2 & ab-nextjs-components 0.2.2 (plus hooks 0.1.7, icons 0.2.4 & fonts 0.2.6), with exact release-age pins that expire 24h after each publish
+* :white_check_mark: Test the docs shell, the shell data & messages, the theme script, the shell icons and the release-age pins
+
 ### [0.2.19](https://github.com/abraham-ukachi/ab-elements-app/compare/v0.2.18...v0.2.19) (2026-10-16)
 
 * :globe_with_meridians: Polish & refine the Welcome translations in fr, es & ru

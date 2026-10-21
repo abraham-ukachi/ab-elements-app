@@ -132,5 +132,204 @@
         "illustrationAlt": "Diagrama: los ocho paquetes, la documentación y la PWA conectados a AbElements."
       }
     }
+  },
+  "Shell": {
+    "skipToContent": "Ir al contenido",
+    "brandLabel": "Inicio de AbElements",
+    "nav": {
+      "primary": "Principal",
+      "packages": "Paquetes",
+      "guides": "Guías",
+      "changelog": "Registro de cambios",
+      "more": "Más"
+    },
+    "sidebar": {
+      "label": "Documentación",
+      "home": "Inicio",
+      "sections": {
+        "gettingStarted": "Primeros pasos",
+        "packages": "Paquetes",
+        "guides": "Guías"
+      },
+      "items": {
+        "introduction": "Introducción",
+        "installation": "Instalación",
+        "quickStart": "Inicio rápido",
+        "themingDarkMode": "Temas y modo oscuro",
+        "iconsFonts": "Iconos y fuentes",
+        "pwaShell": "Shell PWA"
+      },
+      "collapse": "Contraer la barra lateral",
+      "expand": "Expandir la barra lateral"
+    },
+    "bottomBar": {
+      "label": "Navegación principal",
+      "home": "Inicio",
+      "search": "Buscar",
+      "profile": "Perfil",
+      "packages": "Paquetes"
+    },
+    "search": {
+      "placeholder": "Buscar en la documentación…",
+      "short": "Buscar",
+      "shortcut": "{key} K",
+      "comingSoon": "La búsqueda llegará pronto"
+    },
+    "aside": {
+      "toggleOpen": "Mostrar el índice de la página",
+      "toggleClose": "Ocultar el índice de la página",
+      "onThisPage": "En esta página",
+      "editPage": "Editar esta página",
+      "changelog": "Registro de cambios"
+    },
+    "github": "AbElements en GitHub",
+    "language": {
+      "label": "Idioma"
+    },
+    "error": {
+      "title": "Algo salió mal",
+      "retry": "Reintentar"
+    },
+    "offline": "Estás sin conexión. Mostrando páginas guardadas.",
+    "profile": {
+      "comingSoon": "Las cuentas llegarán pronto"
+    },
+    "breadcrumbs": "Ruta de navegación",
+    "drawers": {
+      "settings": "Ajustes",
+      "theme": "Tema",
+      "language": "Idioma",
+      "closeSettings": "Cerrar ajustes",
+      "expandSettings": "Ampliar ajustes",
+      "collapseSettings": "Contraer ajustes",
+      "siteNav": "Navegación del sitio",
+      "closeNav": "Cerrar navegación",
+      "search": "Buscar",
+      "closeSearch": "Cerrar búsqueda",
+      "searchPlaceholder": "Buscar paquetes, componentes, hooks…",
+      "clearSearch": "Borrar búsqueda",
+      "recent": "Recientes",
+      "remove": "Quitar {term}",
+      "results": "{count, plural, one {# resultado} many {# resultados} other {# resultados}}",
+      "noResults": "Sin resultados",
+      "noResultsFor": "Sin resultados para «{query}»",
+      "hint": "Revisa la ortografía o prueba un nombre de paquete como components o hooks.",
+      "didYouMean": "¿Quisiste decir",
+      "profile": "Perfil y ajustes",
+      "closeOutline": "Cerrar el índice",
+      "changeLanguage": "Cambiar idioma",
+      "toDark": "Cambiar al tema oscuro",
+      "toLight": "Cambiar al tema claro",
+      "mobileHeader": "Encabezado principal",
+      "packagesGroup": "Paquetes",
+      "sidebarGroup": "Secciones"
+    }
+  },
+  "Home": {
+    "previews": {
+      "button": "Botón",
+      "chip": "Etiqueta",
+      "switch": "Interruptor"
+    },
+    "meta": {
+      "title": "AbElements · Biblioteca de UI para Next.js",
+      "description": "Documentación, ejemplos en vivo y una PWA instalable para los ocho paquetes de AbElements."
+    },
+    "pill": "Documentación de AbElements",
+    "title": "Crea interfaces Next.js con AbElements",
+    "lead": "Ocho paquetes enfocados — fuentes, iconos, animaciones, tema, hooks, core, componentes e i18n — documentados con ejemplos en vivo.",
+    "cta": {
+      "getStarted": "Empezar",
+      "browse": "Explorar paquetes"
+    },
+    "packages": {
+      "title": "Paquetes",
+      "viewAll": "Ver todo",
+      "count": "{count, number}",
+      "core": {
+        "desc": "Diseños de pantalla, principal y lateral, más el proveedor de página."
+      },
+      "components": {
+        "desc": "UI accesible construida sobre core y theme."
+      },
+      "theme": {
+        "desc": "Tokens de diseño, modos claro y oscuro, variables CSS."
+      },
+      "icons": {
+        "desc": "AbIcons en SVG y CSS, con contorno y rellenos."
+      },
+      "fonts": {
+        "desc": "Ajustes de fuentes para next/font, sin saltos de diseño."
+      },
+      "animations": {
+        "desc": "Ajustes de animación y curvas, compatibles con movimiento reducido."
+      },
+      "hooks": {
+        "desc": "Hooks de React tipados para tema, medios y almacenamiento."
+      },
+      "i18n": {
+        "desc": "Rutas y mensajes en cuatro idiomas."
+      },
+      "beta": "beta",
+      "all": {
+        "title": "Todos los paquetes",
+        "body": "Compara, instala y lee la referencia de la API.",
+        "cta": "Explorar paquetes"
+      }
+    },
+    "guides": {
+      "title": "Guías",
+      "all": "Todas las guías",
+      "items": {
+        "install": {
+          "title": "Instalar AbElements en una app Next.js",
+          "tag": "Primeros pasos"
+        },
+        "theming": {
+          "title": "Temas con tokens y modo oscuro",
+          "tag": "Tema"
+        },
+        "iconsFonts": {
+          "title": "Iconos y fuentes sin saltos de diseño",
+          "tag": "Iconos · Fuentes"
+        },
+        "pwaShell": {
+          "title": "Crear un shell de docs PWA",
+          "tag": "Componentes"
+        }
+      }
+    },
+    "whatsNew": {
+      "title": "Novedades",
+      "changelog": "Registro de cambios",
+      "kind": {
+        "new": "Nuevo",
+        "improved": "Mejorado",
+        "fixed": "Corregido"
+      },
+      "asideLabel": "Novedad en {pkg}",
+      "items": {
+        "core": {
+          "title": "Paneles que se desplazan solos (la regla de diseño)",
+          "date": "oct 2026"
+        },
+        "hooks": {
+          "title": "useAbScrollSpy y el script de tema sin destellos",
+          "date": "oct 2026"
+        },
+        "components": {
+          "title": "Tabla de contenidos, barra de app y tarjetas de paquetes",
+          "date": "oct 2026"
+        }
+      },
+      "promo": "Tabla de contenidos y barra de app"
+    },
+    "toc": {
+      "overview": "Resumen",
+      "install": "Instalación",
+      "packages": "Paquetes",
+      "guides": "Guías",
+      "whatsNew": "Novedades"
+    }
   }
 }
