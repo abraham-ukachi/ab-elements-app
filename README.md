@@ -41,7 +41,7 @@
 
 Imagine a cozy little workshop 🛠️ where every shelf holds a beautifully labeled box 📦: **fonts** ✏️, **icons** ⭐️, **animations** 💫, **theme** 🎨, **hooks** 🪝, **core** layouts 🌱 and **components** 🧱. That workshop is **abElements**!
 
-It's the **docs site + Progressive Web App** 📱💻 for [Abraham Ukachi](https://github.com/abraham-ukachi)'s `ab-nextjs-*` packages on npm. Browse the catalog 🗂️, read the docs 📖, poke at live previews 👀, flip between `pnpm`, `npm`, `yarn` and `bun` install snippets in one click 📋, and hit **`Ctrl/⌘ + K`** to find *anything* in a blink ⚡️.
+It's the **docs site + Progressive Web App** 📱💻 for [Abraham Ukachi](https://github.com/abraham-ukachi)'s `ab-nextjs-*` packages on npm. Browse the catalog 🗂️, read the docs 📖, poke at live previews 👀, flip between `pnpm`, `npm`, `yarn` and `bun` install snippets in one click 📋, and open **Search** to find *anything* in a blink ⚡️.
 
 Sign in with your **email + password**, a ✨ **magic link**, or **GitHub** 🐙 and abElements remembers your **theme** 🌗, **accent color** 🎨, **density**, **font size**, **reduced motion** 🧘 preference, favorite **package manager**, **bookmarks** 🔖 and **recently viewed** pages 🕘, on every device you sign in to.
 
@@ -76,7 +76,7 @@ Based on the approved UI/UX designs (light + dark, mobile, tablet, laptop and de
 | 7 | *`Profile`* | `/profile` | Avatar + name + `@handle`, joined date, **Connected accounts** (GitHub, Email), **Bookmarked docs**, **Recently viewed**, Sign out. | `AbAvatar`, `AbButton`, `AbBadge` |
 | 8 | *`Settings`* | `/settings` | **Appearance** (theme System/Light/Dark, accent color, density, font size), **Accessibility** (reduced motion, focus rings), **Docs preferences** (package manager, language), **Notifications** (What's new emails), **Account** (email, password, delete account). Synced to the account. | `AbButton`, `AbInput`, `useAbTheme` |
 | 9 | *`404`* | `not-found.tsx` | Big "404", "Did you mean `/docs/components/button`?", search, **Back to home** / **Browse docs**, suggested + popular pages. | `AbSearchbar`, `AbButton` |
-| 10 | *`Cmd/Ctrl + K`* | overlay (not a route) | Command palette: grouped results (Components, Props, Guides), filters, recent searches, keyboard hints. On mobile it opens from the **Search** tab as a full screen. | `AbSearchbar`, `AbSearchResult`, `useAbDialog` |
+| 10 | *`Search drawer`* | drawer (not a route) | Search input, recent searches, results grouped by package, "Did you mean …?" when nothing matches, full keyboard navigation. On mobile the bottom-nav **Search** tab opens it as a bottom drawer; on laptop the search pill opens it centred in the main column. Spec: [`docs/design/search/`](./docs/design/search/README.md). | `AbSearchDrawer`, `AbSearchTrigger` |
 
 > NOTE: A selection of the approved mockups is shown in [Screenshots](#screenshots-); the full set stays in the private design workspace.
 
@@ -85,7 +85,7 @@ Based on the approved UI/UX designs (light + dark, mobile, tablet, laptop and de
 
 | Breakpoint | Layout |
 |:-----------|:-------|
-| 📱 **Mobile** | Bottom bar (**Home · Docs · Search · Profile**) + main. Sidebar and aside hidden by default; the aside opens at 100% width. **Search** opens the `Ctrl/⌘ + K` overlay. |
+| 📱 **Mobile** | Bottom bar (**Home · Packages · Search · Profile**) + main. Sidebar and aside hidden by default; the aside opens at 100% width. **Search** opens the search drawer. |
 | 📲 **Tablet** | Sidebar + main, no bottom bar. The aside ("On this page") is fixed right, hidden by default, and toggled from the app bar (`<<` / `>>`) at ~30-40% width. |
 | 💻 **Laptop** | Sidebar + main + aside **joined**: no gaps, no rounded corners, faint dividers. |
 | 🖥️ **Desktop** | Sidebar + main + aside as **gapped panes** with rounded corners and no dividers. |
@@ -145,8 +145,8 @@ What the approved designs use that the packages don't ship yet. Each one gets bu
 | Home, Docs | `ab-nextjs-components` | `AbCard` (package / suggestion cards) | Pending |
 | Docs | `ab-nextjs-components` | `AbChip` (package, version, `client` / `server` chips) | Pending |
 | Docs, Mobile | `ab-nextjs-components` | `AbSheet` (aside at 100% width, mobile bottom sheet) | Pending |
-| Mobile | `ab-nextjs-components` | `AbBottomNav` (Home · Docs · Search · Profile) | Pending |
-| Cmd/Ctrl+K | `ab-nextjs-components` | `AbDialog` / `AbCommandPalette` (+ `AbKbd`) | Pending |
+| Mobile | `ab-nextjs-components` | `AbBottomNav` (Home · Packages · Search · Profile) | Pending |
+| Search | `ab-nextjs-components` | `AbSearchDrawer` (+ `AbSearchTrigger`) | Pending |
 | Settings, Login | `ab-nextjs-components` | `AbSwitch`, `AbSegmentedControl`, `AbCheckbox`, `AbRadioCard`, `AbSelect` | Pending |
 | Docs | `ab-nextjs-components` | `AbCodeBlock` (package-manager tabs + copy), `AbBreadcrumbs`, `AbToc` (On This Page), `AbPropsTable` | Pending |
 | Shell | `ab-nextjs-hooks` | `useAbMedia` / breakpoints, `useAbHotkey` (Cmd/Ctrl+K), `useAbScrollSpy` (TOC), `useAbClipboard` | Pending |
@@ -236,7 +236,7 @@ Environment variables (planned, for auth + database; never commit them):
 └── public
 ```
 
-> NOTE: The old `demo` and `search` pages are gone from the plan: search is the `Ctrl/⌘ + K` overlay, and there is no demo screen in the designs. The old `components/`, `core/` and `hooks/` folders are replaced by the npm packages.
+> NOTE: The old `demo` and `search` pages are gone from the plan: search is the search drawer, and there is no demo screen in the designs. The old `components/`, `core/` and `hooks/` folders are replaced by the npm packages.
 
 
 ---
@@ -335,8 +335,8 @@ erDiagram
 |:------|:--------|:------------|:----------|:-------|
 | `packages` | The npm packages (7 + `ab-nextjs-i18n` planned). | `slug`, `npm_name`, `display_name`, `framework`, `tagline`, `icon_name`, `github_repo`, `status` (planned / pending / beta / stable / deprecated), `latest_version` | Parent of `package_versions`, `elements`, `doc_pages` | Home "Packages (7)" grid, sidebar Packages list, version badges, "beta" tag |
 | `package_versions` | Releases. | `version`, `release_line` ('v1.x'), `channel`, `is_latest`, `changelog_md`, `next_peer_range`, `released_at` | N:1 `packages` (RESTRICT) | Changelog, What's new, version badges, compatibility notes |
-| `elements` | Everything a package exports. | `export_name` ('AbButton', 'useAbTheme', 'popIn'), `kind` (component / layout / hook / icon / animation / font / theme_token...), `rendering` (client / server / universal), `import_path`, `source_path`, `status` | N:1 `packages` (CASCADE) | Docs element pages, `client` / `server` chip, "Source" link, Cmd+K Components group |
-| `element_props` | Props reference. | `name`, `type_signature`, `default_value`, `is_required`, `description` | N:1 `elements` (CASCADE) | Docs > Props table, Cmd+K "PROPS" group |
+| `elements` | Everything a package exports. | `export_name` ('AbButton', 'useAbTheme', 'popIn'), `kind` (component / layout / hook / icon / animation / font / theme_token...), `rendering` (client / server / universal), `import_path`, `source_path`, `status` | N:1 `packages` (CASCADE) | Docs element pages, `client` / `server` chip, "Source" link, search drawer Components group |
+| `element_props` | Props reference. | `name`, `type_signature`, `default_value`, `is_required`, `description` | N:1 `elements` (CASCADE) | Docs > Props table, search drawer "PROPS" group |
 | `element_examples` | Code + live preview examples. | `slug`, `title`, `filename` ('toolbar.tsx'), `language`, `code`, `preview_key` | N:1 `elements` (CASCADE) | Docs > Preview / Code tabs, Usage snippets |
 
 #### 4. Docs content 📖
@@ -355,8 +355,8 @@ erDiagram
 
 | Table | Purpose | Key columns | Relations | Powers |
 |:------|:--------|:------------|:----------|:-------|
-| `search_documents` | Denormalised search index, rebuilt on deploy. | `entity_type` (package / element / prop / page / heading / guide), `entity_id`, `title`, `breadcrumb`, `url`, `keywords`, `excerpt`, `weight` | N:1 `doc_versions`, `doc_pages` (CASCADE) | Cmd/Ctrl+K results + group counts, 404 search |
-| `search_queries` | Search history. | `query`, `scope`, `source` (cmdk / searchbar / not_found), `results_count`, `selected_url`, `anon_id`, `cleared_at` | N:1 `users` (CASCADE, NULL when signed out); N:1 `search_documents` (SET NULL) | Cmd+K "Recent searches" + Clear, search analytics |
+| `search_documents` | Denormalised search index, rebuilt on deploy. | `entity_type` (package / element / prop / page / heading / guide), `entity_id`, `title`, `breadcrumb`, `url`, `keywords`, `excerpt`, `weight` | N:1 `doc_versions`, `doc_pages` (CASCADE) | Search drawer results + group counts, 404 search |
+| `search_queries` | Search history. | `query`, `scope`, `source` (cmdk / searchbar / not_found), `results_count`, `selected_url`, `anon_id`, `cleared_at` | N:1 `users` (CASCADE, NULL when signed out); N:1 `search_documents` (SET NULL) | Search drawer "Recent searches", search analytics |
 | `bookmarks` | Favorites. | (`user_id`, `page_id`), `note`, `created_at` | N:M `users` x `doc_pages` (CASCADE) | Profile "Bookmarked docs", "All bookmarks", bookmark icon |
 | `recently_viewed` | Per-user history (upsert). | (`user_id`, `page_id`), `view_count`, `last_viewed_at` | N:M `users` x `doc_pages` (CASCADE) | Profile "Recently viewed" ("2h ago", "Yesterday") + Clear |
 
@@ -391,7 +391,7 @@ Jobs related to this `ab-elements-app` project - a list of some specific files t
 | 7 | *`Profile - Page`* | **app/(docs)/(account)/profile/page.tsx** | Pending |
 | 8 | *`Settings - Page`* | **app/(docs)/(account)/settings/page.tsx** | Pending |
 | 9 | *`Not Found - Page`* | **app/not-found.tsx** | Pending |
-| 10 | *`Command Palette - Overlay`* | **Cmd/Ctrl + K** (built in `ab-nextjs-components` first) | Pending |
+| 10 | *`Search - Drawer`* | **Search** tab / search pill (built in `ab-nextjs-components` first) | Pending |
 | 11 | *`Docs - Layout`* | **app/(docs)/layout.tsx** | Pending |
 | 12 | *`Auth - Layout`* | **app/(auth)/layout.tsx** | Pending |
 | 13 | *`Root / App - Layout`* | [app/layout.tsx](./app/layout.tsx) | Done\* |
@@ -566,6 +566,30 @@ You can check out [the abElements GitHub repository](https://github.com/abraham-
 ---
 
 
+## Search design 🔎
+
+Search opens a **search drawer** (from the bottom-nav **Search** tab on mobile and the search field on laptop), with recent searches, results grouped by package and a "Did you mean …?" fallback. Full spec: [`docs/design/search/`](./docs/design/search/README.md).
+
+### Current: search drawer
+
+| Light Mode | Dark Mode | Tags |
+|:-----------|:----------|:-----|
+| ![Search Drawer - Mobile - Light / Mockup](./.github/screenshots/mobile/search-drawer-mobile-light.png) | ![Search Drawer - Mobile - Dark / Mockup](./.github/screenshots/mobile/search-drawer-mobile-dark.png) | **Search drawer** (mobile): recents + grouped results <br/> #search, #drawer, #design, #current |
+| ![Search Drawer No Results - Mobile - Light / Mockup](./.github/screenshots/mobile/search-drawer-empty-mobile-light.png) | ![Search Drawer No Results - Mobile - Dark / Mockup](./.github/screenshots/mobile/search-drawer-empty-mobile-dark.png) | **Search drawer** (mobile): no results + "Did you mean …?" <br/> #search, #drawer, #design, #current |
+| ![Search Drawer - Laptop - Light / Mockup](./.github/screenshots/laptop/search-drawer-laptop-light.png) | ![Search Drawer - Laptop - Dark / Mockup](./.github/screenshots/laptop/search-drawer-laptop-dark.png) | **Search drawer** (laptop): centred, keyboard navigable <br/> #search, #drawer, #design, #current |
+
+### Previous: `Ctrl/⌘ + K` command palette
+
+| Light Mode | Dark Mode | Tags |
+|:-----------|:----------|:-----|
+| ![Cmd/Ctrl + K Overlay - Laptop - Light / Mockup](./.github/screenshots/laptop/cmdk-overlay-laptop-light.png) | ![Cmd/Ctrl + K Overlay - Laptop - Dark / Mockup](./.github/screenshots/laptop/cmdk-overlay-laptop-dark.png) | **Previous** `Ctrl/⌘ + K` command palette, kept for reference <br/> #search, #overlay, #design, #previous |
+
+> NOTE: The search drawer supersedes the `Ctrl/⌘ + K` palette as the current search design.
+
+
+---
+
+
 ## Screenshots 📸
 
 A selection of the approved abElements designs (concept mockups, not production captures yet), in ☀️ light and 🌙 dark.
@@ -589,7 +613,7 @@ A selection of the approved abElements designs (concept mockups, not production 
 | ![Home Page - Laptop - Light / Mockup](./.github/screenshots/laptop/home-page-laptop-light.png) | ![Home Page - Laptop - Dark / Mockup](./.github/screenshots/laptop/home-page-laptop-dark.png) | **Home**: docs catalog <br/> #home, #page, #design, #concept |
 | ![Docs Page - Laptop - Light / Mockup](./.github/screenshots/laptop/docs-page-laptop-light.png) | ![Docs Page - Laptop - Dark / Mockup](./.github/screenshots/laptop/docs-page-laptop-dark.png) | **Docs**: preview, code + On This Page <br/> #docs, #page, #design, #concept |
 | ![Profile Page - Laptop - Light / Mockup](./.github/screenshots/laptop/profile-page-laptop-light.png) | ![Profile Page - Laptop - Dark / Mockup](./.github/screenshots/laptop/profile-page-laptop-dark.png) | **Profile**: accounts, bookmarks & recents <br/> #profile, #page, #user, #design |
-| ![Cmd/Ctrl + K Overlay - Laptop - Light / Mockup](./.github/screenshots/laptop/cmdk-overlay-laptop-light.png) | ![Cmd/Ctrl + K Overlay - Laptop - Dark / Mockup](./.github/screenshots/laptop/cmdk-overlay-laptop-dark.png) | **`Ctrl/⌘ + K`**: command palette <br/> #search, #overlay, #design, #concept |
+| ![Cmd/Ctrl + K Overlay - Laptop - Light / Mockup](./.github/screenshots/laptop/cmdk-overlay-laptop-light.png) | ![Cmd/Ctrl + K Overlay - Laptop - Dark / Mockup](./.github/screenshots/laptop/cmdk-overlay-laptop-dark.png) | **`Ctrl/⌘ + K`** (previous): command palette, see [Search design](#search-design-) <br/> #search, #overlay, #design, #previous |
 | ![404 Page - Laptop - Light / Mockup](./.github/screenshots/laptop/404-page-laptop-light.png) | ![404 Page - Laptop - Dark / Mockup](./.github/screenshots/laptop/404-page-laptop-dark.png) | **404**: "Did you mean...?" + search <br/> #404, #page, #design, #concept |
 
 > NOTE: The full set of mockups (incl. register, tablet & desktop) stays in the private design workspace.
