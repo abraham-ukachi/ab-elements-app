@@ -47,21 +47,17 @@
 /* Colors & fonts come from the theme tokens only (`var(--md-sys-color-*)`, `var(--ab-*)`), never a hard-coded hex. */
 /* Titles use `--ab-font-title` (Mulish, Cyrillic-ready) and small bronze text uses `--ab-color-bronze-text` (theme 0.3.1) 🥉 */
 
-/* 🎬 the Welcome page: top bar + carousel, full viewport */
-.welcome {
-  /* a column: top bar, then the carousel */
-  display: flex;
-  /* stacked */
-  flex-direction: column;
-  /* exactly one viewport high (the slides scroll inside, the footer stays visible) */
-  height: 100dvh;
+/* 🧱 0.2.21: the frame is core's AbAppLayout `panes` (100dvh, the document never scrolls); we only set its tokens */
+.app {
+  /* 🔝 the v6 top bar heights (core's header row reads this token): 48px on phones */
+  --ab-header-height: 48px;
   /* the warm page background */
   background: var(--md-sys-color-background);
   /* the body text color */
   color: var(--md-sys-color-on-background);
 }
 
-/* 🔝 top bar: logo left, utilities right */
+/* 🔝 top bar: logo left, utilities right (it fills core's header row) */
 .topBar {
   /* a row */
   display: flex;
@@ -69,10 +65,10 @@
   justify-content: space-between;
   /* vertically centered */
   align-items: center;
-  /* mobile height (48px) */
-  height: 48px;
-  /* never shrinks */
-  flex: none;
+  /* the whole row (core sizes it from --ab-header-height) */
+  height: 100%;
+  /* the border sits inside the row */
+  box-sizing: border-box;
   /* side padding */
   padding: 0 16px;
   /* the divider under it */
@@ -89,30 +85,24 @@
   gap: 8px;
 }
 
-/* 🎞️ main: holds the carousel, fills the rest of the page */
+/* 🎞️ main: core's AbMainLayout (counter row · THE scroller · dots + arrows); just the surface here */
 .main {
-  /* fill the remaining height */
-  flex: 1;
-  /* a column (so the carousel can stretch) */
-  display: flex;
-  /* stacked */
-  flex-direction: column;
-  /* allow shrinking */
-  min-height: 0;
-  /* nothing spills out of it */
-  overflow: hidden;
+  /* the page background (core's pane surface would be a card colour) */
+  background: var(--md-sys-color-background);
 }
 
-/* 🎠 the carousel region: counter row, track, footer */
+/* 🎠 the carousel region wraps the main pane: it fills the app's content row */
 .carousel {
-  /* fill main */
+  /* fill the content row */
   flex: 1;
-  /* a column */
+  /* a column (the main pane stretches) */
   display: flex;
   /* stacked */
   flex-direction: column;
-  /* allow shrinking */
+  /* allow shrinking (the main content scrolls, never the page) */
   min-height: 0;
+  /* full width of the row */
+  min-width: 0;
 }
 
 /* 🔢⏩ counter row: `02 / 09` left, Skip right */
@@ -149,22 +139,18 @@
   color: var(--ab-color-bronze-text);
 }
 
-/* 🛤️ the track fills the space between the counter row and the footer */
+/* 🛤️ the track lives in the main scroller: at least the scroller's height, taller when a slide is (it scrolls) */
 .track {
-  /* fill */
-  flex: 1;
-  /* allow shrinking */
-  min-height: 0;
-  /* one row that fits the space (not the tallest slide) */
-  grid-template-rows: minmax(0, 1fr);
+  /* never shrinks inside the scroller */
+  flex: none;
+  /* fill the visible area (the laptop aside's divider runs full height) */
+  min-height: 100%;
 }
 
-/* 🖼️ one slide */
+/* 🖼️ one slide (the packaged track stacks them in one cell) */
 .slide {
-  /* fill the track cell */
-  height: 100%;
-  /* the scrolling happens one level down, in the focusable `.slideBody` region ♿ */
-  overflow: hidden;
+  /* nothing to clip: the main pane scrolls */
+  min-width: 0;
 }
 
 /* 🧩 a slide's body: illustration above the text (mobile), side by side (laptop) */
@@ -175,10 +161,8 @@
   flex-direction: column;
   /* 16px apart */
   gap: 16px;
-  /* exactly the slide's height... */
-  height: 100%;
-  /* ...and a long slide scrolls inside it (keyboard-scrollable: the region is focusable ♿⌨️) */
-  overflow-y: auto;
+  /* at least the visible area; a long slide grows and the MAIN pane scrolls (0.2.21) */
+  min-height: 100%;
 }
 
 /* 📝 the text pane */
@@ -401,7 +385,8 @@
 /* 📱➡️💻 tablet (640–1023): roomier, one-liners back */
 @media (min-width: 640px) {
   /* a taller top bar */
-  .topBar { height: 56px; padding: 0 32px; }
+  .app { --ab-header-height: 56px; }
+  .topBar { padding: 0 32px; }
   /* roomier counter row & footer */
   .counterRow, .footer { padding-left: 32px; padding-right: 32px; }
   /* roomier text */
@@ -415,9 +400,9 @@
 /* 💻 laptop (≥1024): text left, illustration right (45%) */
 @media (min-width: 1024px) {
   /* the laptop top bar */
-  .topBar { height: 60px; }
+  .app { --ab-header-height: 60px; }
   /* side by side */
-  .slideBody { flex-direction: row; gap: 0; height: 100%; }
+  .slideBody { flex-direction: row; gap: 0; }
   /* text left, illustration right */
   .textPane { order: 1; flex: 1; }
   .aside { order: 2; }
@@ -436,3 +421,16 @@
 }
 
 /* 🧘 reduced motion: nothing here animates on its own (the packages & the theme calm their own motion) */
+
+/* 🧹 core's legacy ≥1536px rule `.abAppLayout__contentWrapper > *:nth-child(1)` (margin: auto 0, a 100vh cap)
+   is only reset for [data-ab-part=main|sidebar|aside] panes. The carousel wrapper is the row's first child,
+   so it inherits those margins and the main pane collapses to a 120px band at 1920. Scoped under .app so
+   (+ :first-child) it outranks the (0,2,0) legacy selector, which loads later. Gap: core's panes reset should cover any first-child wrapper. */
+.app .carousel:first-child {
+  /* 🚫 legacy auto margins */
+  margin: 0;
+  /* 🧹 legacy 100vh cap */
+  max-height: none;
+  /* 🧹 legacy first-child radius */
+  border-radius: 0;
+}

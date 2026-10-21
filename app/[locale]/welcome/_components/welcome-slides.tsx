@@ -30,7 +30,7 @@
 * @authors: Abraham Ukachi <abrahamukachi@gmail.com>
 *
 * Example usage:
-*   1+|> <WelcomeSlides slides={slides} labels={labels} />
+*   1+|> <WelcomeSlides slides={slides} labels={labels} /> // 🧱 renders the carousel AROUND core's AbMainLayout (0.2.21)
 *    -|> 
 *
 */
@@ -66,6 +66,10 @@ import {
 } from 'ab-nextjs-components/ab-carousel';
 // import the packaged (client) button from `ab-nextjs-components` (the Skip button) 🔘
 import AbButton from 'ab-nextjs-components/ab-button';
+// import the packaged main pane (core 0.2.x layout rule: header · ONE scroller · bar, empty slots = 0px) 🧱
+import AbMainLayout from 'ab-nextjs-core/ab-main-layout';
+// import the page state: the main pane's own scroller (reset to the top on every slide change) 📜
+import { useAbPage } from 'ab-nextjs-core/ab-page-provider';
 
 // import every Welcome-only style 🎨
 import styles from '../welcome.module.css';
@@ -150,10 +154,29 @@ function WelcomeArrows({ back, next }: { back: string; next: string }) {
 
 
 /**
+ * `WelcomeScrollReset` - puts the main scroller back at the top whenever the slide changes 📜
+ * (the main pane is ONE scroller for every slide now, so a long slide must not leave the next one scrolled)
+ *
+ * @returns { null }
+ */
+function WelcomeScrollReset() {
+  // 🎠 the active slide
+  const { index } = useAbCarousel();
+  // 📜 core publishes the main pane's scroller (G55)
+  const { mainScrollElement } = useAbPage();
+  // ⬆️ back to the top on every change (instant: the slide motion is the transition)
+  useEffect(() => { mainScrollElement?.scrollTo({ top: 0 }); }, [index, mainScrollElement]);
+  return null;
+}
+
+
+/**
  * `WelcomeSlides` - Client Component 🎞️
  *
- * The packaged `AbCarousel` around the server-rendered slides, with the counter + Skip row,
- * the dots + arrows footer and the `?s=` URL state.
+ * The packaged `AbCarousel` around core's `AbMainLayout` (0.2.21, the layout rule):
+ *   🔢 counter + Skip → `mainHeader` · 🛤️ the slides → the main content (THE scroller) · ⚫⏮️⏭️ dots + arrows → `mainBar`.
+ * The carousel has to wrap the whole pane because its parts share one context (gap: no provider-only mode yet).
+ * Plus the `?s=` URL state.
  *
  * @param { WelcomeSlidesProps } props - the slides and their labels
  * @returns { ReactElement }
@@ -203,35 +226,49 @@ export default function WelcomeSlides({ slides, labels }: WelcomeSlidesProps) {
       label={labels.carousel} // 🏷️ region name
       index={index} // 🎛️ controlled (for `?s=`)
       onIndexChange={onIndexChange} // 📣 changes
+      count={count} // 🔢 explicit: the track sits inside AbMainLayout's `content`, so the carousel can't count it from its children
       titles={slides.map((slide) => slide.title)} // 🏷️ dots + announcements
       slideLabel={(n, total) => fillWelcomePattern(labels.slide, { n, total })} // ♿ "3 of 9"
       announce={(n, total, title) => fillWelcomePattern(labels.announce, { n, total, title: title ?? '' })} // 📣
       className={styles.carousel} // 🎨
     >
-      {/* Counter row - `02 / 09` left, Skip right 🔢⏩ */}
-      <div className={styles.counterRow}>
-        <AbCarouselCounter
-          className={styles.counter}
-          format={(current, total) => fillWelcomePattern(labels.counter, { current: pad(current), total: pad(total) })}
-        />
-        <WelcomeSkip label={labels.skip} />
-      </div>
-
-      {/* Track - the 9 slides 🛤️ */}
-      <AbCarouselTrack className={styles.track}>
-        {slides.map((slide, i) => (
-          // one slide (the label is "n of total" ♿)
-          <AbCarouselSlide key={slide.id} className={styles.slide} label={fillWelcomePattern(labels.slide, { n: i + 1, total: count })}>
-            {slide.content}
-          </AbCarouselSlide>
-        ))}
-      </AbCarouselTrack>
-
-      {/* Footer - dots left, arrows right ⚫⏮️⏭️ */}
-      <footer className={styles.footer}>
-        <AbCarouselDots label={labels.carousel} dotLabel={(n, _total, title) => fillWelcomePattern(labels.goTo, { n, title: title ?? '' })} />
-        <WelcomeArrows back={labels.back} next={labels.next} />
-      </footer>
+      {/* ⬆️ a new slide starts at the top of the main scroller */}
+      <WelcomeScrollReset />
+      {/* 🧱 the main pane: `id="main"` (the skip target ♿), header · content · bar from core */}
+      <AbMainLayout
+        id="main"
+        orientation="vertical"
+        pageName="welcome"
+        className={styles.main}
+        chrome={false} // 🧰 no legacy backdrop / menus / progress layers (0.1.5)
+        // 🔢 Counter row - `02 / 09` left, Skip right
+        mainHeader={
+          <div className={styles.counterRow}>
+            <AbCarouselCounter
+              className={styles.counter}
+              format={(current, total) => fillWelcomePattern(labels.counter, { current: pad(current), total: pad(total) })}
+            />
+            <WelcomeSkip label={labels.skip} />
+          </div>
+        }
+        // ⚫⏮️⏭️ Bar - dots left, arrows right (core renders the <footer>)
+        mainBar={
+          <div className={styles.footer}>
+            <AbCarouselDots label={labels.carousel} dotLabel={(n, _total, title) => fillWelcomePattern(labels.goTo, { n, title: title ?? '' })} />
+            <WelcomeArrows back={labels.back} next={labels.next} />
+          </div>
+        }
+        // 🛤️ Track - the 9 slides, inside the main scroller
+        content={
+          <AbCarouselTrack className={styles.track}>
+            {slides.map((slide, i) => (
+              <AbCarouselSlide key={slide.id} className={styles.slide} label={fillWelcomePattern(labels.slide, { n: i + 1, total: count })}>
+                {slide.content}
+              </AbCarouselSlide>
+            ))}
+          </AbCarouselTrack>
+        }
+      />
     </AbCarousel>
   );
 }

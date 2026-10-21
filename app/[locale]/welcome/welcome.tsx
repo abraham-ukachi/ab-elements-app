@@ -46,9 +46,16 @@
 // 🎬 Welcome v6: THE single entry component of the Welcome (a server component).
 // Composition only: every piece of UI comes from the ab-nextjs-* packages, this file just wires
 // the `Welcome` messages, the slide data and the scenes together. A redesign swaps this folder + the messages 🔁.
+// 🧱 0.2.21 (the layout rule): core's AbAppLayout `panes` owns the 100dvh frame (the document never scrolls).
+//   top bar → the app `header` row · counter → `mainHeader` · slide → the main content (THE scroller) · dots + arrows
+//   → `mainBar` (see WelcomeSlides). No sidebar, aside or bottom nav on the Welcome: those slots are empty = 0px.
 
 // REACT types
 import type { ReactNode } from 'react';
+
+// import the packaged app frame & page state from `ab-nextjs-core` (0.2.x panes) 🧱
+import AbAppLayout from 'ab-nextjs-core/ab-app-layout';
+import AbPageProvider from 'ab-nextjs-core/ab-page-provider';
 
 // import the class names helper
 import clsx from 'clsx';
@@ -198,7 +205,8 @@ export default async function Welcome({ locale }: WelcomeProps) {
         <div
           id={`welcome-${slide.id}`}
           className={clsx(styles.slideBody, slide.id === 's09' && styles.slideEnd)}
-          // ♿ a long slide scrolls in here: make it a named, keyboard-focusable region (axe `scrollable-region-focusable`) ⌨️
+          // ♿ a named, focusable region per slide: the MAIN pane scrolls now (0.2.21), and core's main scroller isn't
+          // focusable itself, so this tab stop is how a keyboard reaches & arrow-scrolls a long slide (axe `scrollable-region-focusable`) ⌨️
           role="region"
           aria-labelledby={`welcome-${slide.id}-title`}
           tabIndex={0}
@@ -302,47 +310,58 @@ export default async function Welcome({ locale }: WelcomeProps) {
 
   // return the Welcome
   return (
-    <div className={styles.welcome}>
+    <>
       {/* No-JS: all slides stacked, carousel controls hidden 🧯 */}
       <noscript>
         <style>{AB_CAROUSEL_NOSCRIPT_CSS}</style>
       </noscript>
 
-      {/* Top Bar - logo + utilities */}
-      <header className={styles.topBar}>
-        {/* abElements wordmark 🅰️ */}
-        <AbLogo wordmark size={24} alt="abElements" />
-        {/* Utilities - theme + globe */}
-        <div className={styles.utilities}>
-          {/* 3-state theme switch (light / dark / system; follows the OS until the visitor picks) 🌗 */}
-          <AbThemeToggle
-            variant="segmented"
-            size="sm"
-            defaultMode="system"
-            labels={{ group: t('theme.label'), light: t('theme.light'), dark: t('theme.dark'), system: t('theme.system') }}
-          />
-          {/* the globe (language) menu 🌍 */}
-          <WelcomeLocaleSwitcher current={locale} label={t('language')} locales={WELCOME_LOCALES} />
-        </div>
-      </header>
-
-      {/* Main - the carousel 🎞️ */}
-      <main className={styles.main}>
-        <WelcomeSlides
-          slides={slides}
-          labels={{
-            carousel: t('carouselLabel'),
-            skip: t('skip'),
-            back: t('back'),
-            next: t('next'),
-            // ICU patterns, filled on the client (raw: no arguments here) 🧩
-            slide: t.raw('slideLabel') as string,
-            goTo: t.raw('goTo') as string,
-            announce: t.raw('announce') as string,
-            counter: t.raw('counter') as string,
-          }}
+      {/* 📑 the page state (publishes the main scroller); the Welcome has no aside */}
+      <AbPageProvider defaultAsideOpen={false}>
+        {/* 🧱 the frame: header row · main pane (no sidebar / aside / bottom nav = 0px) */}
+        <AbAppLayout
+          orientation="vertical"
+          variant="panes"
+          pageName="welcome"
+          className={styles.app}
+          // 🔝 Top Bar - logo + utilities (core renders the row; its height is the v6 48 / 56 / 60px via a token)
+          header={
+            <div className={styles.topBar}>
+              {/* abElements wordmark 🅰️ */}
+              <AbLogo wordmark size={24} alt="abElements" />
+              {/* Utilities - theme + globe */}
+              <div className={styles.utilities}>
+                {/* 3-state theme switch (light / dark / system; follows the OS until the visitor picks) 🌗 */}
+                <AbThemeToggle
+                  variant="segmented"
+                  size="sm"
+                  defaultMode="system"
+                  labels={{ group: t('theme.label'), light: t('theme.light'), dark: t('theme.dark'), system: t('theme.system') }}
+                />
+                {/* the globe: a bottom app drawer below 768px, the popover menu above (D40) 🌍 */}
+                <WelcomeLocaleSwitcher current={locale} label={t('language')} locales={WELCOME_LOCALES} />
+              </div>
+            </div>
+          }
+          // 🎞️ the carousel around the main pane
+          content={
+            <WelcomeSlides
+              slides={slides}
+              labels={{
+                carousel: t('carouselLabel'),
+                skip: t('skip'),
+                back: t('back'),
+                next: t('next'),
+                // ICU patterns, filled on the client (raw: no arguments here) 🧩
+                slide: t.raw('slideLabel') as string,
+                goTo: t.raw('goTo') as string,
+                announce: t.raw('announce') as string,
+                counter: t.raw('counter') as string,
+              }}
+            />
+          }
         />
-      </main>
-    </div>
+      </AbPageProvider>
+    </>
   );
 }
