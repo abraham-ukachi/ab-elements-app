@@ -226,6 +226,11 @@
     }
   },
   "Home": {
+    "previews": {
+      "button": "Button",
+      "chip": "Chip",
+      "switch": "Switch"
+    },
     "meta": {
       "title": "AbElements · Next.js UI library",
       "description": "Docs, live examples and an installable PWA for the eight AbElements packages."

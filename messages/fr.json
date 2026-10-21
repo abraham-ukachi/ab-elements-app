@@ -226,6 +226,11 @@
     }
   },
   "Home": {
+    "previews": {
+      "button": "Bouton",
+      "chip": "Puce",
+      "switch": "Interrupteur"
+    },
     "meta": {
       "title": "AbElements · Bibliothèque UI pour Next.js",
       "description": "Docs, exemples en direct et une PWA installable pour les huit packages AbElements."

@@ -83,7 +83,7 @@ import HomeAside from '@/components/app/home-aside';
 // import the tablet main bar (crumb · search · theme · GitHub · `<<`) of the packaged shell 📟
 import { DocsMainBar } from '@/components/app/docs-shell';
 // import the 8 card previews (content only) 🖼️
-import { PACKAGE_PREVIEWS } from '@/components/app/package-previews';
+import { getPackagePreviews } from '@/components/app/package-previews';
 // import the repo URL (Edit this page / Changelog) 🐙
 import { GITHUB_URL } from '@/lib/nav';
 
@@ -146,6 +146,8 @@ export async function generateMetadata({ params }: HomeProps): Promise<Metadata>
 export default async function Home() {
   // get the translations of the `Home` messages of the current locale 🌐
   const t = await getAbTranslations('Home');
+  // 🧩 the package previews, with the Components tile's words in this locale (components 0.2.2)
+  const previews = getPackagePreviews({ button: t('previews.button'), chip: t('previews.chip'), switch: t('previews.switch') });
   // the install box labels still live in `Welcome.install` 💻
   const tw = await getAbTranslations('Welcome');
   // the aside title lives in `Shell.aside` 📑
@@ -225,7 +227,7 @@ export default async function Home() {
                       version={pkg.versionLabel.replace(/^v/, '')} // 🏷️ the card adds its own `v` → "v0.2.x"
                       description={t(`packages.${pkg.id as AbPackageId}.desc`)}
                       descriptionLines={2}
-                      preview={PACKAGE_PREVIEWS[pkg.id]}
+                      preview={previews[pkg.id]}
                       icon={<AbIcon name={PACKAGE_ICONS[pkg.id]} size={18} />}
                       tags={pkg.beta ? [t('packages.beta')] : undefined}
                       headingLevel={3}

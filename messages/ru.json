@@ -226,6 +226,11 @@
     }
   },
   "Home": {
+    "previews": {
+      "button": "Кнопка",
+      "chip": "Метка",
+      "switch": "Переключатель"
+    },
     "meta": {
       "title": "AbElements · UI-библиотека для Next.js",
       "description": "Документация, живые примеры и устанавливаемое PWA для восьми пакетов AbElements."

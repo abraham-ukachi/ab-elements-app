@@ -30,7 +30,7 @@
 * @authors: Abraham Ukachi <abrahamukachi@gmail.com>
 *
 * Example usage:
-*   1+|> <AbPackageCard preview={PACKAGE_PREVIEWS.fonts} … />
+*   1+|> <AbPackageCard preview={getPackagePreviews(labels).fonts} … />
 *    -|>
 *
 */
@@ -69,8 +69,17 @@ const Row = ({ children, className = '' }: { children: ReactNode; className?: st
   <span aria-hidden="true" className={`flex h-full w-full items-center justify-center gap-2 ${className}`}>{children}</span>
 );
 
-// 🗺️ id → preview node
-export const PACKAGE_PREVIEWS: Record<AbPackageId, ReactNode> = {
+// 🏷️ the translated words inside the Components tile (components 0.2.2 `labels`)
+export type PackagePreviewLabels = Readonly<{ button: string; chip: string; switch: string }>;
+
+
+/**
+ * `getPackagePreviews` - id → preview node, with the Components tile's words translated 🗺️
+ *
+ * @param { PackagePreviewLabels } labels - "Button", "Chip" & "Switch" in the current locale
+ * @returns { Record<AbPackageId, ReactNode> }
+ */
+export const getPackagePreviews = (labels: PackagePreviewLabels): Record<AbPackageId, ReactNode> => ({
   // 🔤 the three shipped families: Mulish 800 · Inter 400 · Roboto Mono (accent)
   fonts: (
     <Row className="gap-3 text-[24px] leading-none text-(--ab-color-text)">
@@ -98,12 +107,12 @@ export const PACKAGE_PREVIEWS: Record<AbPackageId, ReactNode> = {
   hooks: <AbPackagePreviewCode lines={['*use*Theme()', '*use*Media()']} />,
   // 🧱 the provider (`~` = a dim line)
   core: <AbPackagePreviewCode lines={['<*AbProvider*>', '~  {children}']} />,
-  // 🧩 the packaged button, on switch & chip
-  components: <AbPackagePreviewComponents />,
+  // 🧩 the packaged button, on switch & chip (translated, 0.2.2)
+  components: <AbPackagePreviewComponents labels={labels} />,
   // 🌍 the 4 shipped locales as mono chips (Decision 1)
   i18n: (
     <Row className="gap-[5px]">
       {['EN', 'FR', 'ES', 'RU'].map((l) => <span key={l} className={`${MONO} rounded-[5px] bg-(--ab-color-tint) px-[5px] py-px text-[10.5px] font-semibold text-(--ab-color-accent-text)`}>{l}</span>)}
     </Row>
   ),
-};
+});
