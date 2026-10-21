@@ -43,7 +43,7 @@
   "packageManager": "pnpm@11.3.0",
   "dependencies": {
     "ab-nextjs-animations": "^0.2.4",
-    "ab-nextjs-components": "0.2.1",
+    "ab-nextjs-components": "0.2.2",
     "ab-nextjs-core": "^0.2.2",
     "ab-nextjs-fonts": "0.2.6",
     "ab-nextjs-hooks": "0.1.7",
