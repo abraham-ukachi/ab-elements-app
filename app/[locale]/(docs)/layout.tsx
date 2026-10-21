@@ -30,7 +30,7 @@
 * @authors: Abraham Ukachi <abrahamukachi@gmail.com>
 *
 * Example usage:
-*   1+|> // wraps `/`, `/fr`, ... (and Docs, Icons, Profile, Settings later)
+*   1+|> // wraps `/`, `/fr`, ... (and the package pages later)
 *    -|>
 *
 */
@@ -57,13 +57,13 @@ import { getAbTranslations } from 'ab-nextjs-i18n/server';
 import DocsShell from '@/components/app/docs-shell';
 // import the nav & package data 🗂️📦
 import { BOTTOM_TABS, SIDEBAR_HOME, SIDEBAR_SECTIONS, TOP_LINKS, readyNavSections } from '@/lib/nav';
-import { getAbPackages } from '@/lib/packages';
+import { getAbPackages, getAbPackageSymbols } from '@/lib/packages';
 import { PACKAGE_ICONS, SHELL_ICONS } from '@/lib/shell-icons';
 // import the packaged, server-safe icon registration (components 0.1.13) 🔣
 import AbIconRegistrar from 'ab-nextjs-components/ab-icon/registrar';
 // import the locale endonyms (shared with the Welcome globe) 🗣️
 import { WELCOME_LOCALES } from '@/app/[locale]/welcome/welcome';
-// import the app version (the "Docs v0.2.x" badge, D23 (a)) 🏷️
+// import the app version (the "v0.2.x" version switcher, D23 (a)) 🏷️
 import appPackage from '@/package.json';
 
 
@@ -84,11 +84,13 @@ export default async function DocsLayout({ children, params }: DocsLayoutProps) 
   const t = await getAbTranslations('Shell');
   // the theme labels still live in `Welcome.theme` (D30 moves them to `Common` later) 🌗
   const tw = await getAbTranslations('Welcome');
+  // the package one-liners (the search drawer's descriptions) live in `Home.packages` 📦
+  const th = await getAbTranslations('Home');
   // 🔑 lib/nav keys are plain strings (checked by tests/unit/shell-data.test.ts), so widen them once
   const tk = (key: string): string => t(key as Parameters<typeof t>[0]);
   // 📦 the installed packages (real versions, D22)
   const packages = getAbPackages();
-  // 🏷️ the real minor for AbVersionSwitcher's "Docs **v0.2.x**" (D3)
+  // 🏷️ the real minor for AbVersionSwitcher & the nav drawer chip: "v0.2.x" (D3; no "Docs" label, God 01:27)
   const version = `v${appPackage.version.split('.').slice(0, 2).join('.')}.x`;
 
   // 🗂️ the sidebar: Home, then the ready sections (packages filled from lib/packages, anchored on Home)
@@ -125,20 +127,22 @@ export default async function DocsLayout({ children, params }: DocsLayoutProps) 
         locales={WELCOME_LOCALES}
         sections={sections}
         topLinks={TOP_LINKS.filter((link) => link.ready).map((link) => ({ href: link.href, label: tk(link.label) }))}
+        // 📱 Home · Packages · Search · Profile; the shell wires the two buttons (Search → search drawer, Profile → Settings)
         bottomTabs={BOTTOM_TABS.map((tab) => ('kind' in tab
-          // 🔘 Search (D24) & Profile (D25) stay inert until P5 / P7 🚧, but without the "Coming soon" sublabel (fidelity spec)
-          ? { kind: 'button' as const, id: tab.id, icon: tab.icon ?? 'search', label: tk(tab.label), disabled: true }
-          // 🔗 unbuilt links fall back to Home's packages section (D26: no 404s)
-          : tab.ready
-            ? { kind: 'link' as const, href: tab.href, icon: tab.icon ?? 'home', label: tk(tab.label) }
-            : tab.id === 'profile'
-              ? { kind: 'button' as const, id: tab.id, icon: tab.icon ?? 'person', label: tk(tab.label), disabled: true }
-              : { kind: 'link' as const, href: '/#packages', icon: tab.icon ?? 'menu_book', label: tk(tab.label) }))}
+          ? { kind: 'button' as const, id: tab.id, icon: tab.icon ?? 'search', label: tk(tab.label) }
+          : { kind: 'link' as const, href: tab.href, icon: tab.icon ?? 'home', label: tk(tab.label) }))}
+        // 🔎 what the search drawer searches (the 8 packages + the sidebar pages), already translated
+        searchIndex={{
+          packages: packages.map((pkg) => ({ id: pkg.id, href: `/#package-${pkg.id}`, title: pkg.title, name: pkg.name, description: th(`packages.${pkg.id}.desc`), meta: pkg.versionLabel, icon: PACKAGE_ICONS[pkg.id] })),
+          // 🧩 the exported components & hooks, grouped by package ("button" → AbButton · ab-nextjs-components)
+          symbols: packages.map((pkg) => ({ id: pkg.id, label: pkg.title, meta: pkg.name, items: getAbPackageSymbols(pkg.id).map((symbol) => ({ id: `${pkg.id}-${symbol}`, href: `/#package-${pkg.id}`, title: symbol, meta: pkg.versionLabel, icon: PACKAGE_ICONS[pkg.id] })) })),
+          pages: sections.filter((section) => section.id !== 'packages').flatMap((section) => section.items.map((item) => ({ id: `page-${item.href}`, href: item.href, title: item.label, icon: item.icon }))),
+        }}
         labels={{
           brand: t('brandLabel'), nav: t('nav.primary'), more: t('nav.more'), sidebar: t('sidebar.label'),
-          collapse: t('sidebar.collapse'), expand: t('sidebar.expand'), docs: t('nav.docs'), version, bottomBar: t('bottomBar.label'),
+          collapse: t('sidebar.collapse'), expand: t('sidebar.expand'), version, bottomBar: t('bottomBar.label'),
           search: t('search.placeholder'), searchShort: t('search.short'), searchComingSoon: t('search.comingSoon'),
-          asideOpen: t('aside.toggleOpen'), asideClose: t('aside.toggleClose'), language: t('language.label'), github: t('github'), breadcrumbs: t('breadcrumbs'), appDrawer: t('nav.more'),
+          asideOpen: t('aside.toggleOpen'), asideClose: t('aside.toggleClose'), language: t('language.label'), github: t('github'), breadcrumbs: t('breadcrumbs'),
           theme: { group: tw('theme.label'), light: tw('theme.light'), dark: tw('theme.dark'), system: tw('theme.system') },
         }}
       >

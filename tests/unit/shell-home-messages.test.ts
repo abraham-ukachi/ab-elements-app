@@ -121,7 +121,7 @@ describe('messages: the Shell & Home namespaces 🧭', () => {
     const messages = load(locale);
 
     it(`${locale}: bottom-bar labels stay ≤ ${MAX_BOTTOM_BAR_CHARS} characters 📱`, () => {
-      for (const key of ['home', 'docs', 'search', 'profile']) expect(messages[`Shell.bottomBar.${key}`].length, key).toBeLessThanOrEqual(MAX_BOTTOM_BAR_CHARS);
+      for (const key of ['home', 'packages', 'search', 'profile']) expect(messages[`Shell.bottomBar.${key}`].length, key).toBeLessThanOrEqual(MAX_BOTTOM_BAR_CHARS);
     });
 
     it(`${locale}: section labels aren't uppercased in the messages (CSS does it) 🔠`, () => {

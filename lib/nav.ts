@@ -56,8 +56,8 @@ export type ShellNavLink = Readonly<{
   ready: boolean; // ✅ the page is built (D26)
 }>;
 
-// 🔘 a button tab (Search opens the palette from P5, until then it links to `/docs`, D24)
-export type ShellNavButton = Omit<ShellNavLink, 'href'> & Readonly<{ kind: 'button'; fallbackHref: string }>;
+// 🔘 a button tab: the shell wires its action (Search → the search drawer, Profile → the Settings drawer; God 01:27)
+export type ShellNavButton = Omit<ShellNavLink, 'href'> & Readonly<{ kind: 'button' }>;
 
 // 🗂️ a sidebar section
 export type ShellNavSection = Readonly<{ id: string; label: string; items: readonly ShellNavLink[] }>;
@@ -67,9 +67,8 @@ export type ShellNavSection = Readonly<{ id: string; label: string; items: reado
 export const GITHUB_URL = 'https://github.com/abraham-ukachi/ab-elements-app';
 
 // 🔝 the app-bar top links (laptop+)
-// 🎯 fidelity spec (God 20:10): all four links show; until the pages exist they point at Home's sections (no 404s, D26)
+// 🎯 no "Docs" link anywhere (God 01:27: the app IS the docs); until the pages exist they point at Home's sections (D26)
 export const TOP_LINKS: readonly ShellNavLink[] = [
-  { id: 'docs', href: '/', label: 'nav.docs', ready: true }, // 📖 Home is the docs start page for now
   { id: 'packages', href: '/#packages', label: 'nav.packages', ready: true },
   { id: 'guides', href: '/#guides', label: 'nav.guides', ready: true },
   { id: 'changelog', href: '/#whats-new', label: 'nav.changelog', ready: true },
@@ -99,14 +98,12 @@ export const SIDEBAR_SECTIONS: readonly ShellNavSection[] = [
   },
 ];
 
-// 📱 the bottom-bar tabs (mobile): Home · Docs · Search · Profile
+// 📱 the bottom-bar tabs (mobile, drawers v2 spec): Home · Packages · Search · Profile (no Docs, God 01:27)
 export const BOTTOM_TABS: readonly (ShellNavLink | ShellNavButton)[] = [
   { id: 'home', href: '/', label: 'bottomBar.home', icon: 'home', ready: true },
-  { id: 'docs', href: '/docs', label: 'bottomBar.docs', icon: 'menu_book', ready: false }, // 📖 the mock's `menu_book`
-  // 🔎 D24 (a): no palette before P5, so it falls back to `/docs`
-  { id: 'search', kind: 'button', fallbackHref: '/docs', label: 'bottomBar.search', icon: 'search', ready: false },
-  // 👤 D25 (a): shown disabled ("coming soon") until auth (P7)
-  { id: 'profile', href: '/profile', label: 'bottomBar.profile', icon: 'person', ready: false },
+  { id: 'packages', href: '/#packages', label: 'bottomBar.packages', icon: 'package_2', ready: true }, // 📦 Home's packages grid
+  { id: 'search', kind: 'button', label: 'bottomBar.search', icon: 'search', ready: true }, // 🔎 opens the search drawer
+  { id: 'profile', kind: 'button', label: 'bottomBar.profile', icon: 'person', ready: true }, // 👤 Profile → Settings (spec §1) until accounts (P7)
 ];
 
 

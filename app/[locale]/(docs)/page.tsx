@@ -162,7 +162,7 @@ export default async function Home() {
         id="main"
         orientation="vertical"
         pageName="home"
-        mainHeader={<DocsMainBar crumbs={[{ label: ts('nav.docs'), href: '/' }, { label: ts('sidebar.home') }]} />}
+        mainHeader={<DocsMainBar crumbs={[{ label: ts('sidebar.home') }]} />}
       >
         {/* 📏 pane padding per breakpoint (spec §3): 18×16 (110 bottom, over the nav) · 30×36 · 34×48 · 44 / max 1060 */}
         <div className="@container px-4 pt-[18px] pb-[110px] min-[768px]:px-9 min-[768px]:py-[30px] min-[1180px]:px-12 min-[1180px]:py-[34px] min-[1920px]:px-0 min-[1920px]:py-11">
@@ -190,7 +190,7 @@ export default async function Home() {
                 </p>
                 {/* 🔘 CTAs: 40px rounded (44 + halves on mobile), Get started with its arrow (P16) */}
                 <div className="mt-4 flex w-full gap-[10px] min-[768px]:mt-[22px] min-[768px]:w-auto [&>*]:flex-1 min-[768px]:[&>*]:flex-none">
-                  {/* D26 (a): Get started → #install until the Docs exist */}
+                  {/* D26 (a): Get started → #install until the getting-started pages exist */}
                   <AbButton type="filled" shape="rounded" size="md" label={t('cta.getStarted')} href="#install" endIcon={<AbIcon name="arrow_forward" size={18} />} />
                   <AbButton type="secondary" shape="rounded" size="md" label={t('cta.browse')} href="#packages" />
                 </div>

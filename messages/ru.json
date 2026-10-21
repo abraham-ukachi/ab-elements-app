@@ -138,7 +138,6 @@
     "brandLabel": "Главная AbElements",
     "nav": {
       "primary": "Основное",
-      "docs": "Документация",
       "packages": "Пакеты",
       "guides": "Руководства",
       "changelog": "Изменения",
@@ -166,9 +165,9 @@
     "bottomBar": {
       "label": "Основная навигация",
       "home": "Главная",
-      "docs": "Доки",
       "search": "Поиск",
-      "profile": "Профиль"
+      "profile": "Профиль",
+      "packages": "Пакеты"
     },
     "search": {
       "placeholder": "Поиск по документации…",
@@ -195,7 +194,34 @@
     "profile": {
       "comingSoon": "Аккаунты скоро появятся"
     },
-    "breadcrumbs": "Навигационная цепочка"
+    "breadcrumbs": "Навигационная цепочка",
+    "drawers": {
+      "settings": "Настройки",
+      "theme": "Тема",
+      "language": "Язык",
+      "closeSettings": "Закрыть настройки",
+      "expandSettings": "Развернуть настройки",
+      "collapseSettings": "Свернуть настройки",
+      "siteNav": "Навигация по сайту",
+      "closeNav": "Закрыть навигацию",
+      "search": "Поиск",
+      "closeSearch": "Закрыть поиск",
+      "searchPlaceholder": "Поиск пакетов, компонентов, хуков…",
+      "clearSearch": "Очистить поиск",
+      "recent": "Недавние",
+      "remove": "Удалить {term}",
+      "results": "{count, plural, one {# результат} few {# результата} many {# результатов} other {# результата}}",
+      "noResults": "Ничего не найдено",
+      "noResultsFor": "Ничего не найдено по запросу «{query}»",
+      "hint": "Проверьте написание или попробуйте название пакета, например components или hooks.",
+      "didYouMean": "Возможно, вы имели в виду",
+      "changeLanguage": "Сменить язык",
+      "toDark": "Включить тёмную тему",
+      "toLight": "Включить светлую тему",
+      "mobileHeader": "Главный заголовок",
+      "packagesGroup": "Пакеты",
+      "sidebarGroup": "Разделы"
+    }
   },
   "Home": {
     "meta": {

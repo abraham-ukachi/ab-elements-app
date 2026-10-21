@@ -113,8 +113,32 @@ export function getAbPackages(root: string = process.cwd()): AbPackage[] {
       version,
       versionLabel: toVersionLabel(version),
       description: pkg.description?.trim() || null,
-      href: `/docs/packages/${id}`,
+      href: `/#package-${id}`, // 🔗 the Home card anchor (no /docs, God 01:27)
       beta: BETA.includes(id),
     };
   });
+}
+
+
+/**
+ * `getAbPackageSymbols` - the public `Ab*` components & `useAb*` hooks a package exports (the search drawer's index) 🔎
+ * Read from the installed package's root `index.ts` (or `index.js`); a package without one simply has no symbols.
+ *
+ * @param { AbPackageId } id - the package id (e.g. `components`)
+ * @param { string } root - the app root (defaults to the cwd)
+ * @returns { string[] } - unique names, in export order (e.g. `['AbIcon', 'AbButton', ...]`)
+ */
+export function getAbPackageSymbols(id: AbPackageId, root: string = process.cwd()): string[] {
+  for (const file of ['index.ts', 'index.tsx', 'index.js']) {
+    try {
+      const source = readFileSync(join(root, 'node_modules', `ab-nextjs-${id}`, file), 'utf8');
+      // 🧩 every `export { ... }` / `export const|function` name that looks like a component or a hook
+      const names = [...source.matchAll(/^export\s+(?:\{([^}]*)\}|(?:const|function)\s+(\w+))/gm)]
+        .flatMap((m) => (m[1] ? m[1].split(',').map((part) => part.trim().split(/\s+as\s+/).pop() ?? '') : [m[2]]))
+        .map((name) => name.replace(/^type\s+/, '').trim())
+        .filter((name) => /^(Ab[A-Z]\w*|useAb\w+)$/.test(name) && !/(Props|Item|Option|Section|Group|Snap|Tier|Side|Scope)$/.test(name));
+      return [...new Set(names)];
+    } catch { /* 🤷 try the next entry file */ }
+  }
+  return [];
 }

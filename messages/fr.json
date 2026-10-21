@@ -138,7 +138,6 @@
     "brandLabel": "Accueil AbElements",
     "nav": {
       "primary": "Principal",
-      "docs": "Docs",
       "packages": "Packages",
       "guides": "Guides",
       "changelog": "Journal des modifications",
@@ -166,9 +165,9 @@
     "bottomBar": {
       "label": "Navigation principale",
       "home": "Accueil",
-      "docs": "Docs",
       "search": "Rechercher",
-      "profile": "Profil"
+      "profile": "Profil",
+      "packages": "Paquets"
     },
     "search": {
       "placeholder": "Rechercher dans la doc …",
@@ -195,7 +194,34 @@
     "profile": {
       "comingSoon": "Les comptes arrivent bientôt"
     },
-    "breadcrumbs": "Fil d’Ariane"
+    "breadcrumbs": "Fil d’Ariane",
+    "drawers": {
+      "settings": "Réglages",
+      "theme": "Thème",
+      "language": "Langue",
+      "closeSettings": "Fermer les réglages",
+      "expandSettings": "Agrandir les réglages",
+      "collapseSettings": "Réduire les réglages",
+      "siteNav": "Navigation du site",
+      "closeNav": "Fermer la navigation",
+      "search": "Rechercher",
+      "closeSearch": "Fermer la recherche",
+      "searchPlaceholder": "Rechercher des paquets, composants, hooks …",
+      "clearSearch": "Effacer la recherche",
+      "recent": "Récent",
+      "remove": "Retirer {term}",
+      "results": "{count, plural, one {# résultat} many {# résultats} other {# résultats}}",
+      "noResults": "Aucun résultat",
+      "noResultsFor": "Aucun résultat pour « {query} »",
+      "hint": "Vérifiez l’orthographe ou essayez un nom de paquet comme components ou hooks.",
+      "didYouMean": "Vouliez-vous dire",
+      "changeLanguage": "Changer de langue",
+      "toDark": "Passer au thème sombre",
+      "toLight": "Passer au thème clair",
+      "mobileHeader": "En-tête principal",
+      "packagesGroup": "Paquets",
+      "sidebarGroup": "Rubriques"
+    }
   },
   "Home": {
     "meta": {

@@ -138,7 +138,6 @@
     "brandLabel": "AbElements home",
     "nav": {
       "primary": "Main",
-      "docs": "Docs",
       "packages": "Packages",
       "guides": "Guides",
       "changelog": "Changelog",
@@ -166,9 +165,9 @@
     "bottomBar": {
       "label": "Primary",
       "home": "Home",
-      "docs": "Docs",
       "search": "Search",
-      "profile": "Profile"
+      "profile": "Profile",
+      "packages": "Packages"
     },
     "search": {
       "placeholder": "Search docs…",
@@ -195,7 +194,34 @@
     "profile": {
       "comingSoon": "Accounts are coming soon"
     },
-    "breadcrumbs": "Breadcrumb"
+    "breadcrumbs": "Breadcrumb",
+    "drawers": {
+      "settings": "Settings",
+      "theme": "Theme",
+      "language": "Language",
+      "closeSettings": "Close settings",
+      "expandSettings": "Expand settings",
+      "collapseSettings": "Collapse settings",
+      "siteNav": "Site navigation",
+      "closeNav": "Close navigation",
+      "search": "Search",
+      "closeSearch": "Close search",
+      "searchPlaceholder": "Search packages, components, hooks…",
+      "clearSearch": "Clear search",
+      "recent": "Recent",
+      "remove": "Remove {term}",
+      "results": "{count, plural, one {# result} other {# results}}",
+      "noResults": "No results",
+      "noResultsFor": "No results for “{query}”",
+      "hint": "Check the spelling or try a package name like components or hooks.",
+      "didYouMean": "Did you mean",
+      "changeLanguage": "Change language",
+      "toDark": "Switch to dark theme",
+      "toLight": "Switch to light theme",
+      "mobileHeader": "Main header",
+      "packagesGroup": "Packages",
+      "sidebarGroup": "Pages"
+    }
   },
   "Home": {
     "meta": {

@@ -138,7 +138,6 @@
     "brandLabel": "Inicio de AbElements",
     "nav": {
       "primary": "Principal",
-      "docs": "Documentación",
       "packages": "Paquetes",
       "guides": "Guías",
       "changelog": "Registro de cambios",
@@ -166,9 +165,9 @@
     "bottomBar": {
       "label": "Navegación principal",
       "home": "Inicio",
-      "docs": "Docs",
       "search": "Buscar",
-      "profile": "Perfil"
+      "profile": "Perfil",
+      "packages": "Paquetes"
     },
     "search": {
       "placeholder": "Buscar en la documentación…",
@@ -195,7 +194,34 @@
     "profile": {
       "comingSoon": "Las cuentas llegarán pronto"
     },
-    "breadcrumbs": "Ruta de navegación"
+    "breadcrumbs": "Ruta de navegación",
+    "drawers": {
+      "settings": "Ajustes",
+      "theme": "Tema",
+      "language": "Idioma",
+      "closeSettings": "Cerrar ajustes",
+      "expandSettings": "Ampliar ajustes",
+      "collapseSettings": "Contraer ajustes",
+      "siteNav": "Navegación del sitio",
+      "closeNav": "Cerrar navegación",
+      "search": "Buscar",
+      "closeSearch": "Cerrar búsqueda",
+      "searchPlaceholder": "Buscar paquetes, componentes, hooks…",
+      "clearSearch": "Borrar búsqueda",
+      "recent": "Recientes",
+      "remove": "Quitar {term}",
+      "results": "{count, plural, one {# resultado} many {# resultados} other {# resultados}}",
+      "noResults": "Sin resultados",
+      "noResultsFor": "Sin resultados para «{query}»",
+      "hint": "Revisa la ortografía o prueba un nombre de paquete como components o hooks.",
+      "didYouMean": "¿Quisiste decir",
+      "changeLanguage": "Cambiar idioma",
+      "toDark": "Cambiar al tema oscuro",
+      "toLight": "Cambiar al tema claro",
+      "mobileHeader": "Encabezado principal",
+      "packagesGroup": "Paquetes",
+      "sidebarGroup": "Secciones"
+    }
   },
   "Home": {
     "meta": {

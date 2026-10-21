@@ -45,19 +45,23 @@
 
 'use client';
 
-// 🧭 The docs shell (0.2.21–0.2.22, Home fidelity pass 2): composition ONLY of packaged pieces (no app-local UI).
-// AbLinkProvider (locale-aware links 🌍) → AbPageProvider (aside state 📑) → AbAppLayout panes (core 0.2.0 🧱:
-// 768 / 1180 / 1920, `tabletHeader="main"`) with the compact AbAppBar, AbSidebar (compact, rounded rows, the
-// AbVersionSwitcher on top, the persisted rail `ab-sidebar-rail` 🗂️) and the blurred AbNavbar on mobile 📱.
-// Tablet (768–1179) has NO app bar: each page puts `<DocsMainBar>` in its AbMainLayout `mainHeader` 📟.
+// 🧭 The docs shell (0.2.21–0.2.22, Home fidelity + drawers v2): composition ONLY of packaged pieces (no app-local UI).
+// AbLinkProvider (locale-aware links 🌍) → AbPageProvider (aside state 📑) → AbAppLayout panes (core 🧱: 768 / 1180 / 1920,
+// `tabletHeader="main"` + `mobileHeader="main"`) with the compact AbAppBar (laptop+), AbSidebar, the blurred AbNavbar
+// (mobile 📱) and John's approved drawers (God 01:22 / 01:27):
+//   ⚙️ AbSettingsDrawer (theme + language) · ⬅️ AbNavDrawer (the mobile sidebar, left edge swipe) · 🔎 AbSearchDrawer.
+//   ➡️ AbTocDrawer is NOT wired: only pages with an aside get it, and Home has none on mobile (drawer spec §3).
+// Each page puts `<DocsMainBar>` in its AbMainLayout `mainHeader`: the mobile header below 768, the tablet bar 768–1179 📟.
 
 // REACT
-import { createContext, useContext, useId, useState, type ReactNode } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
+// NEXT (a plain router: `localizeAbPathname` already returns the prefixed path)
+import { useRouter } from 'next/navigation';
 
-// import the packaged layout pieces from `ab-nextjs-core` (0.2.0) 🧱
+// import the packaged layout pieces from `ab-nextjs-core` 🧱
 import AbAppLayout from 'ab-nextjs-core/ab-app-layout';
 import AbPageProvider, { useAbAsideToggle } from 'ab-nextjs-core/ab-page-provider';
-// import the packaged UI from `ab-nextjs-components` (0.1.14) 🧩
+// import the packaged UI from `ab-nextjs-components` 🧩
 import { AbLinkProvider, AbLink } from 'ab-nextjs-components/ab-link';
 import AbAppBar from 'ab-nextjs-components/ab-app-bar';
 import AbSearchTrigger from 'ab-nextjs-components/ab-search-trigger';
@@ -69,9 +73,16 @@ import AbLogo from 'ab-nextjs-components/ab-logo';
 import AbIconButton from 'ab-nextjs-components/ab-icon-button';
 import AbVersionSwitcher from 'ab-nextjs-components/ab-version-switcher';
 import AbBreadcrumbs, { type AbBreadcrumbItem } from 'ab-nextjs-components/ab-breadcrumbs';
-import AbBottomDrawer from 'ab-nextjs-components/ab-bottom-drawer';
-import { AbList, AbListItem } from 'ab-nextjs-components/ab-list';
-// import the localized pathname helper from `ab-nextjs-i18n` 🧭
+// import the drawers v2 pieces (components 0.2.0) 🗄️
+import AbMobileHeader from 'ab-nextjs-components/ab-mobile-header';
+import AbSettingsDrawer, { type AbSettingsTheme } from 'ab-nextjs-components/ab-settings-drawer';
+import AbNavDrawer from 'ab-nextjs-components/ab-nav-drawer';
+import AbSearchDrawer, { type AbSearchDrawerGroup } from 'ab-nextjs-components/ab-search-drawer';
+import { useAbEdgeSwipe } from 'ab-nextjs-components/ab-drawer';
+// import the ONE theme engine every toggle shares (so the pill, the mobile icon & Settings never disagree) 🌗
+import { useAbThemeMode } from 'ab-nextjs-hooks/useAbTheme';
+// import the client translations & the localized pathname helper from `ab-nextjs-i18n` 🌐
+import { useAbTranslations } from 'ab-nextjs-i18n';
 import { localizeAbPathname } from 'ab-nextjs-i18n/config';
 
 // import the locale-aware `Link` & the locale-free pathname (app-bar active link + locale switcher hrefs) 🌍
@@ -87,11 +98,16 @@ import { GITHUB_URL } from '@/lib/nav';
 // 🏷️ every (already translated) label the shell needs, built by the server layout
 export type DocsShellLabels = Readonly<{
   brand: string; nav: string; more: string; sidebar: string; collapse: string; expand: string;
-  docs: string; version: string; bottomBar: string; search: string; searchShort: string; searchComingSoon: string;
+  version: string; bottomBar: string; search: string; searchShort: string; searchComingSoon: string;
   asideOpen: string; asideClose: string; language: string; github: string; breadcrumbs: string;
-  appDrawer: string; // 📱 the mobile app drawer's title
   theme: { group: string; light: string; dark: string; system: string };
 }>;
+
+// 🔎 one searchable entry (a package or a sidebar page), already translated
+export type DocsSearchEntry = Readonly<{ id: string; href: string; title: string; name?: string; description?: string; meta?: string; icon?: string }>;
+
+// 🧩 one package's exported components & hooks (a search group)
+export type DocsSearchSymbols = Readonly<{ id: string; label: string; meta?: string; items: readonly DocsSearchEntry[] }>;
 
 // 🧾 the props of `DocsShell`
 export type DocsShellProps = Readonly<{
@@ -100,59 +116,87 @@ export type DocsShellProps = Readonly<{
   locales: readonly AbLocaleOption[]; // 🗣️ code + endonym
   sections: AbSidebarSection[]; // 🗂️ resolved sidebar sections (lib/nav + lib/packages)
   topLinks: { href: string; label: string }[]; // 🔝 ready app-bar links (D26)
-  bottomTabs: AbNavbarItem[]; // 📱 bottom-bar items
+  bottomTabs: AbNavbarItem[]; // 📱 bottom-bar items (the `search` & `profile` buttons are wired here)
+  searchIndex: Readonly<{ packages: readonly DocsSearchEntry[]; symbols: readonly DocsSearchSymbols[]; pages: readonly DocsSearchEntry[] }>; // 🔎
   children: ReactNode; // 📄 the page (AbMainLayout + AbAsideLayout)
 }>;
 
-// 🧠 what the tablet main bar needs from the shell (so a server page can drop `<DocsMainBar>` in its `mainHeader`)
-type ShellContextValue = Readonly<{ locale: string; labels: DocsShellLabels; locales: readonly AbLocaleOption[]; topLinks: { href: string; label: string }[] }>;
+// 🗄️ which drawer is open (only one at a time, drawer spec "Z-order")
+type OpenDrawer = '' | 'settings' | 'nav' | 'search';
+
+// 🧠 what the main bar (a page's `mainHeader`) needs from the shell
+type ShellContextValue = Readonly<{
+  locale: string; labels: DocsShellLabels; locales: readonly AbLocaleOption[];
+  theme: ReturnType<typeof useAbThemeMode>; // 🌗 the shared engine
+  open: OpenDrawer; setOpen: (next: OpenDrawer) => void; // 🗄️
+}>;
 const ShellContext = createContext<ShellContextValue | null>(null);
+
+// 🏠 where focus lands after a swipe-opened drawer closes (drawer spec "Focus and keys")
+const LOGO_ID = 'ab-mobile-logo';
 
 
 /**
- * `useShellActions` - the shared action pieces (GitHub · globe · theme pill) 🔘
+ * `useShell` - the shell context, or a loud dev error 🧠
  *
- * @returns { { github: ReactElement; globe: ReactElement; theme: ReactElement; themeIcon: ReactElement } }
+ * @returns { ShellContextValue }
  */
-function useShellActions() {
-  // 🧠 labels + locales from the shell
+function useShell(): ShellContextValue {
   const shell = useContext(ShellContext);
-  // 🧭 the locale-free path, for the other-locale hrefs
-  const pathname = usePathname();
   if (!shell) throw new Error('DocsMainBar must render inside DocsShell'); // 🚨 dev mistake, not a user state
-  const { labels, locale, locales, topLinks } = shell;
-  // 🔗 same page, other locale (plain hreflang links, so it works without JS)
-  const getHref = (code: string) => localizeAbPathname(pathname, code, abI18nConfig);
-  // 🌍 the globe menu: tablet / laptop / desktop only (on mobile the language list lives in the app drawer, God 00:08)
-  const globe = <AbLocaleSwitcher variant="icon" align="end" label={labels.language} current={locale} locales={locales} getHref={getHref} />;
-  // 📋 the same picker as a labelled list of 48px rows, LAST in the mobile app drawer, with its 1px rule above (components 0.1.15)
-  const languageList = <AbLocaleSwitcher presentation="inline" divider label={labels.language} current={locale} locales={locales} getHref={getHref} />;
-  return {
-    // 🐙 36×36, 20px octicon (spec §4)
-    github: <AbIconButton icon="github" iconSize={20} label={labels.github} href={GITHUB_URL} />,
-    globe,
-    languageList,
-    topLinks,
-    // 🌗 the mock's 2-state pill with a raised thumb (P7)
-    theme: <AbThemeToggle variant="segmented" appearance="thumb" size="sm" modes={['light', 'dark']} defaultMode="light" labels={labels.theme} />,
-    // 🌗 mobile: one icon that shows the mode a tap switches to
-    themeIcon: <AbThemeToggle variant="icon" appearance="thumb" modes={['light', 'dark']} defaultMode="light" labels={labels.theme} />,
-    labels,
-  };
+  return shell;
 }
 
 
 /**
- * `AsideToggle` - the packaged aside toggle hook on a packaged icon button 📑
+ * `useIsMobile` - true below 768px (after mount; false on the server and without JS) 📱
+ *
+ * @returns { boolean }
+ */
+function useIsMobile(): boolean {
+  const [mobile, setMobile] = useState(false);
+  useEffect(() => {
+    const query = window.matchMedia('(max-width: 767px)'); // 📐 core's mobile breakpoint
+    const sync = () => setMobile(query.matches);
+    sync();
+    query.addEventListener('change', sync);
+    return () => query.removeEventListener('change', sync); // 🧹
+  }, []);
+  return mobile;
+}
+
+
+/**
+ * `editDistance` - Levenshtein distance, for the search drawer's "Did you mean …?" 💡
+ *
+ * @param { string } a - one word
+ * @param { string } b - the other
+ * @returns { number }
+ */
+function editDistance(a: string, b: string): number {
+  const row = Array.from({ length: b.length + 1 }, (_, i) => i);
+  for (let i = 1; i <= a.length; i++) {
+    let prev = row[0]; row[0] = i;
+    for (let j = 1; j <= b.length; j++) {
+      const keep = row[j];
+      row[j] = Math.min(row[j] + 1, row[j - 1] + 1, prev + (a[i - 1] === b[j - 1] ? 0 : 1));
+      prev = keep;
+    }
+  }
+  return row[b.length];
+}
+
+
+/**
+ * `AsideToggle` - the packaged aside toggle hook on a packaged icon button (tablet only) 📑
  *
  * @returns { ReactElement }
  */
 function AsideToggle() {
   // 🧠 the open / close labels
-  const { labels } = useShellActions();
-  // 📑 sheet below 1180, in-flow pane from 1180 (core 0.2.0); returns aria-expanded / aria-controls / onClick
+  const { labels } = useShell();
+  // 📑 sheet below 1180, in-flow pane from 1180 (core); returns aria-expanded / aria-controls / onClick
   const aside = useAbAsideToggle();
-  // 🔘 `<<` opens, `>>` hides (spec §4); AbIconButton forwards the aria props since components 0.1.14 ♿
   return (
     <AbIconButton
       icon={aside.expanded ? 'keyboard_double_arrow_right' : 'keyboard_double_arrow_left'}
@@ -165,88 +209,95 @@ function AsideToggle() {
 
 
 /**
- * `DocsMainBar` - Client Component 📟: the tablet (768–1179) main-pane bar, put in AbMainLayout's `mainHeader`.
- * Core 0.2.0 shows it ONLY on tablet (`tabletHeader="main"`) and hides the app bar there.
- * Crumb · grow · search 260 · theme pill · GitHub · divider · `<<` (spec §3), all packaged pieces.
+ * `ThemePill` - the 2-state pill with a raised thumb, on the shared theme engine 🌗
+ *
+ * @returns { ReactElement }
+ */
+function ThemePill() {
+  const { labels, theme } = useShell();
+  return (
+    <AbThemeToggle variant="segmented" appearance="thumb" size="sm" modes={['light', 'dark']} value={theme.mode as 'light' | 'dark'} onChange={theme.setMode} labels={labels.theme} />
+  );
+}
+
+
+/**
+ * `DocsMainBar` - Client Component 📟: a page's AbMainLayout `mainHeader`. Core shows it below 1180 only
+ * (`mobileHeader="main"` + `tabletHeader="main"`), and hides the app bar there.
+ *   📱 < 768: AbMobileHeader (logoname · globe → Settings with the language list · theme), no search (the tab has it)
+ *   📟 768–1179: crumb · grow · search · globe · theme pill · GitHub · divider · `<<` (spec §3)
  *
  * @param { { crumbs: AbBreadcrumbItem[] } } props - the breadcrumb trail (last = current page)
  * @returns { ReactElement }
  */
 export function DocsMainBar({ crumbs }: Readonly<{ crumbs: AbBreadcrumbItem[] }>) {
-  // 🔘 the shared actions
-  const { github, globe, theme, labels } = useShellActions();
+  // 🧠 the shell
+  const { labels, locale, locales, theme, open, setOpen } = useShell();
+  // 🌐 the drawer strings
+  const t = useAbTranslations('Shell');
+  // 🧭 the locale-free path, for the globe menu's other-locale hrefs
+  const pathname = usePathname();
   return (
-    // 📏 fills core's main-header row (spec §3 padding 0 12 0 28); core owns the row height & rule
-    <div className="flex h-full items-center gap-2 pr-3 pl-7">
-      {/* 🍞 Docs › Home */}
-      <AbBreadcrumbs items={crumbs} label={labels.breadcrumbs} />
-      <span className="grow" aria-hidden="true" />
-      {/* 🔎 the 36px field, 260 wide on tablet */}
-      <div className="w-[260px]"><AbSearchTrigger variant="field" label={labels.search} href="/" comingSoon comingSoonLabel={labels.searchComingSoon} /></div>
-      {globe}
-      {theme}
-      {github}
-      {/* ➖ 1×20 divider before the outline toggle (decorative) */}
-      <span aria-hidden="true" className="mx-1 h-5 w-px bg-(--ab-color-div)" />
-      <AsideToggle />
-    </div>
-  );
-}
-
-
-/**
- * `AppDrawerBody` - the mobile app drawer content (mock order): the app-bar links, the theme, then language last 📋
- *
- * @returns { ReactElement }
- */
-function AppDrawerBody() {
-  // 🔘 the shared pieces
-  const { languageList, themeIcon, topLinks, labels } = useShellActions();
-  return (
-    <div className="flex flex-col gap-3">
-      {/* 🔗 Docs · Packages · Guides · Changelog as packaged link rows */}
-      <AbList label={labels.nav}>
-        {topLinks.map((link) => <AbListItem key={link.href} href={link.href} title={link.label} trailing="chevron" />)}
-      </AbList>
-      {/* 🌗 the theme switch */}
-      <div className="flex items-center justify-between px-1">
-        <span className="text-[14px] font-semibold text-(--ab-color-text)">{labels.theme.group}</span>
-        {themeIcon}
+    <>
+      {/* 📱 the mobile header (drawer spec "Mobile header") */}
+      <div className="contents min-[768px]:hidden">
+        <AbMobileHeader
+          logo={<AbLink href="/" id={LOGO_ID} aria-label={labels.brand}><AbLogo wordmark alt="" size={22} /></AbLink>}
+          theme={theme.resolvedTheme === 'dark' ? 'dark' : 'light'}
+          onThemeChange={theme.setMode}
+          onLanguage={() => setOpen('settings')}
+          languageExpanded={open === 'settings'}
+          labels={{ language: t('drawers.changeLanguage'), toDark: t('drawers.toDark'), toLight: t('drawers.toLight'), header: t('drawers.mobileHeader') }}
+        />
       </div>
-      {/* 🌍 language, last, after its own 1px rule */}
-      {languageList}
-    </div>
+      {/* 📟 the tablet bar */}
+      <div className="hidden h-full items-center gap-2 pr-3 pl-7 min-[768px]:flex">
+        {/* 🍞 Home (no "Docs" crumb, God 01:27) */}
+        <AbBreadcrumbs items={crumbs} label={labels.breadcrumbs} />
+        <span className="grow" aria-hidden="true" />
+        {/* 🔎 the field opens the search drawer (no ⌘K, no hotkey) */}
+        <div className="w-[260px]"><AbSearchTrigger variant="field" label={labels.search} onOpen={() => setOpen('search')} hotkey={false} /></div>
+        <AbLocaleSwitcher variant="icon" align="end" label={labels.language} current={locale} locales={locales} getHref={(code) => localizeAbPathname(pathname, code, abI18nConfig)} />
+        <ThemePill />
+        <AbIconButton icon="github" iconSize={20} label={labels.github} href={GITHUB_URL} />
+        {/* ➖ 1×20 divider before the outline toggle (decorative) */}
+        <span aria-hidden="true" className="mx-1 h-5 w-px bg-(--ab-color-div)" />
+        <AsideToggle />
+      </div>
+    </>
   );
 }
 
 
 /**
- * `ShellBar` - the app bar (mobile, laptop, desktop) 🔝
+ * `ShellBar` - the app bar (laptop & desktop; core hides it below 1180) 🔝
  *
  * @param { { topLinks: { href: string; label: string }[] } } props - the ready app-bar links
  * @returns { ReactElement }
  */
 function ShellBar({ topLinks }: Readonly<{ topLinks: { href: string; label: string }[] }>) {
-  // 🔘 the shared actions
-  const { github, globe, theme, themeIcon, labels } = useShellActions();
+  // 🧠 the shell
+  const { labels, locale, locales, setOpen } = useShell();
+  // 🧭 the locale-free path, for the globe menu's other-locale hrefs
+  const pathname = usePathname();
   return (
     <AbAppBar
-      density="compact" // 📏 height from core's --ab-header-height (52 / 60 / 64), 13.5px links, 236 / 270 brand column
+      density="compact" // 📏 60 / 64px, 13.5px links, 236 / 270 brand column
       divider // ➖ the 1×20 rule before GitHub
-      moreMenu={false} // 🚫 no `⋮` (P19): only the 4 links, and they fit from 1180
+      moreMenu={false} // 🚫 no `⋮`
       brand={<AbLink href="/" aria-label={labels.brand}><AbLogo wordmark alt="" size={22} /></AbLink>}
-      // 🔎 the 300 / 360 field from 768
-      search={<AbSearchTrigger variant="field" label={labels.search} href="/" comingSoon comingSoonLabel={labels.searchComingSoon} />}
-      // 💊 below 768: the 114×34 "Search" pill, a plain link to /docs with no ⌘K and no hotkey (God 00:37)
-      searchCompact={<AbSearchTrigger size="sm" href="/docs" label={labels.searchShort} />}
+      // 🔎 the 300 / 360 field opens the search drawer (drawer spec §4: no shortcut hint anywhere)
+      search={<AbSearchTrigger variant="field" label={labels.search} onOpen={() => setOpen('search')} hotkey={false} />}
       nav={topLinks}
       labels={{ nav: labels.nav, more: labels.more }}
-      compactActions={
-        // 📱 below 768px: only the theme icon (mock 01/02); NO globe, the language list is in the app drawer
-        themeIcon
+      // 🎯 spec order: [nav] · divider · GitHub · globe · theme pill
+      actions={
+        <>
+          <AbIconButton icon="github" iconSize={20} label={labels.github} href={GITHUB_URL} />
+          <AbLocaleSwitcher variant="icon" align="end" label={labels.language} current={locale} locales={locales} getHref={(code) => localizeAbPathname(pathname, code, abI18nConfig)} />
+          <ThemePill />
+        </>
       }
-      // 🎯 spec order: [nav] · divider · GitHub · globe · theme pill (Decision 2: the globe sits left of the pill)
-      actions={<>{github}{globe}{theme}</>}
     />
   );
 }
@@ -258,34 +309,77 @@ function ShellBar({ topLinks }: Readonly<{ topLinks: { href: string; label: stri
  * @param { DocsShellProps } props - see `DocsShellProps`
  * @returns { ReactElement }
  */
-export default function DocsShell({ locale, labels, locales, sections, topLinks, bottomTabs, children }: DocsShellProps) {
+export default function DocsShell({ locale, labels, locales, sections, topLinks, bottomTabs, searchIndex, children }: DocsShellProps) {
   // 🗂️ the persisted rail (false = expanded, also the SSR / JS-off state)
   const [rail, setRail] = useSidebarRail();
-  // 📱 the mobile app drawer (opened by the bottom bar's Profile tab) + its id for aria-controls
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  const drawerId = useId();
-  // 🔘 the Profile tab opens the app drawer (links · theme · language) instead of staying inert
-  const tabs = bottomTabs.map((tab): AbNavbarItem => (tab.kind === 'button' && tab.id === 'profile'
-    ? { ...tab, disabled: false, onSelect: () => setDrawerOpen(true), expanded: drawerOpen, controls: drawerId }
-    : tab));
+  // 🌗 ONE theme engine for the pill, the mobile icon & Settings
+  const theme = useAbThemeMode('light');
+  // 🗄️ the open drawer (one at a time)
+  const [open, setOpen] = useState<OpenDrawer>('');
+  const close = useCallback(() => setOpen(''), []);
+  // 🌐 the drawer strings
+  const t = useAbTranslations('Shell');
+  // 🧭 locale switch = same page, other locale (a plain router: the path is already prefixed)
+  const router = useRouter();
+  const pathname = usePathname();
+  // 📱 the left edge swipe opens the nav drawer, on phones only, while nothing else is open
+  const mobile = useIsMobile();
+  useAbEdgeSwipe({ edge: 'left', onOpen: () => setOpen('nav'), enabled: mobile && open === '' });
+
+  // 🔘 the two button tabs: Search → the search drawer · Profile → Settings (drawer spec §1) until accounts (P7)
+  const tabs = bottomTabs.map((tab): AbNavbarItem => {
+    if (tab.kind !== 'button') return tab;
+    if (tab.id === 'search') return { ...tab, onSelect: () => setOpen('search'), expanded: open === 'search' };
+    if (tab.id === 'profile') return { ...tab, onSelect: () => setOpen('settings'), expanded: open === 'settings' };
+    return tab;
+  });
+
+  // ⬅️ the nav drawer = the laptop sidebar's content (versions as mono meta)
+  const navSections = useMemo(() => sections.map((section) => ({
+    id: section.id ?? section.label ?? 'nav',
+    label: section.label,
+    items: section.items.map((item) => ({ href: item.href, label: String(item.label ?? ''), icon: item.icon, meta: typeof item.badge === 'string' ? item.badge : undefined })),
+  })), [sections]);
+
+  // 🔎 search: packages first, then pages; title, `ab-nextjs-*` name or one-liner contains the query
+  const search = useCallback((query: string): AbSearchDrawerGroup[] => {
+    const q = query.trim().toLowerCase();
+    const hit = (entry: DocsSearchEntry) => [entry.title, entry.name, entry.description].some((text) => text?.toLowerCase().includes(q));
+    const groups: AbSearchDrawerGroup[] = [
+      // 🧩 one group per package (drawer spec §4: results grouped by package)
+      ...searchIndex.symbols.map((group) => ({ id: group.id, label: group.label, meta: group.meta, items: group.items.filter(hit) })),
+      { id: 'packages', label: t('drawers.packagesGroup'), items: searchIndex.packages.filter(hit) },
+      { id: 'pages', label: t('drawers.sidebarGroup'), items: searchIndex.pages.filter(hit) },
+    ];
+    return groups.filter((group) => group.items.length > 0);
+  }, [searchIndex, t]);
+  // 💡 "Did you mean …?": the closest package / page title within 2 edits
+  const suggest = useCallback((query: string): string | null => {
+    const q = query.trim().toLowerCase();
+    const best = [...searchIndex.symbols.flatMap((group) => group.items), ...searchIndex.packages, ...searchIndex.pages]
+      .map((entry) => ({ title: entry.title, d: Math.min(editDistance(q, entry.title.toLowerCase()), editDistance(q, entry.title.toLowerCase().replace(/^(ab|useab)/, ''))) }))
+      .sort((a, b) => a.d - b.d)[0];
+    return best && best.d > 0 && best.d <= 2 ? best.title : null;
+  }, [searchIndex]);
 
   // return the shell
   return (
     // 🔗 every packaged link becomes locale-aware (G42); `locales` lets the sidebar & navbar strip `/fr` themselves 🌍
     <AbLinkProvider component={Link} locales={abI18nConfig.locales}>
-      <ShellContext.Provider value={{ locale, labels, locales, topLinks }}>
+      <ShellContext.Provider value={{ locale, labels, locales, theme, open, setOpen }}>
         {/* 📑 the aside (On this page) state, open by default from 1180 */}
         <AbPageProvider defaultAsideOpen asideId="ab-aside">
-          {/* 🧱 the 4-breakpoint panes (core 0.2.0) */}
+          {/* 🧱 the 4-breakpoint panes */}
           <AbAppLayout
             orientation="vertical"
             variant="panes"
-            tabletHeader="main" // 📟 768–1179: no app bar, the page's `mainHeader` (DocsMainBar) is the bar
+            tabletHeader="main" // 📟 768–1179: the page's `mainHeader` (DocsMainBar) is the bar
+            mobileHeader="main" // 📱 < 768: no app header either, the mainHeader is AbMobileHeader (drawers v2)
             railCollapsed={rail}
             pageName="docs"
             header={<ShellBar topLinks={topLinks} />}
             sideBar={
-              // 🗂️ the compact sidebar (P8) + the version switcher (P9) + the outlined `<<` collapse
+              // 🗂️ the compact sidebar + the version switcher (no "Docs" label, God 01:27) + the tablet logo row
               <AbSidebar
                 sections={sections}
                 collapsed={rail}
@@ -294,21 +388,60 @@ export default function DocsShell({ locale, labels, locales, sections, topLinks,
                 activeShape="rounded"
                 badgeVariant="text"
                 collapseButtonVariant="outlined"
-                // 🏷️ the 60px logo row: shown by the package only on tablet (768–1179) with `tabletHeader="main"`
                 logo={<AbLink href="/" aria-label={labels.brand}><AbLogo wordmark alt="" size={22} /></AbLink>}
-                header={<AbVersionSwitcher label={labels.docs} version={labels.version} />}
+                header={<AbVersionSwitcher version={labels.version} />}
                 labels={{ nav: labels.sidebar, collapse: labels.collapse, expand: labels.expand }}
               />
             }
-            // 📱 no pill, 25px icons, translucent + blur (P18)
+            // 📱 Home · Packages · Search · Profile: no pill, 25px icons, translucent + blur
             navBar={<AbNavbar items={tabs} label={labels.bottomBar} indicator="none" blur />}
           >
             {children}
-            {/* 📱 the app drawer: an app-scope bottom sheet (focus trap, Escape / scrim close, D41 no-JS section) */}
-            <AbBottomDrawer id={drawerId} open={drawerOpen} onClose={() => setDrawerOpen(false)} title={labels.appDrawer}>
-              <AppDrawerBody />
-            </AbBottomDrawer>
           </AbAppLayout>
+
+          {/* ⚙️ Settings: theme + language, the 70% sheet (globe, Profile, the nav drawer's Settings row) */}
+          <AbSettingsDrawer
+            open={open === 'settings'}
+            onClose={close}
+            theme={theme.mode as AbSettingsTheme}
+            onThemeChange={theme.setMode}
+            locales={locales.map((l) => ({ code: l.code, label: l.label }))}
+            locale={locale}
+            onLocaleChange={(code) => { if (code !== locale) router.replace(localizeAbPathname(pathname, code, abI18nConfig), { scroll: false }); }}
+            returnFocus={`#${LOGO_ID}`}
+            labels={{
+              title: t('drawers.settings'), theme: t('drawers.theme'), language: t('drawers.language'),
+              light: labels.theme.light, dark: labels.theme.dark, system: labels.theme.system,
+              close: t('drawers.closeSettings'), expand: t('drawers.expandSettings'), collapse: t('drawers.collapseSettings'),
+            }}
+          />
+          {/* ⬅️ the mobile sidebar (left edge swipe); "Settings ›" closes it, then raises Settings */}
+          <AbNavDrawer
+            open={open === 'nav'}
+            onClose={close}
+            logo={<AbLink href="/" aria-label={labels.brand}><AbLogo wordmark alt="" size={22} /></AbLink>}
+            version={labels.version}
+            sections={navSections}
+            activeHref={pathname}
+            footer={[{ href: '/#whats-new', label: topLinks.find((link) => link.href === '/#whats-new')?.label ?? 'Changelog', icon: 'north_east' }]}
+            onSettings={() => setTimeout(() => setOpen('settings'), 0)}
+            returnFocus={`#${LOGO_ID}`}
+            labels={{ title: t('drawers.siteNav'), close: t('drawers.closeNav'), settings: t('drawers.settings') }}
+          />
+          {/* 🔎 search (the Search tab, the tablet / laptop field) */}
+          <AbSearchDrawer
+            open={open === 'search'}
+            onClose={close}
+            search={search}
+            suggest={suggest}
+            returnFocus={`#${LOGO_ID}`}
+            labels={{
+              title: t('drawers.search'), close: t('drawers.closeSearch'), placeholder: t('drawers.searchPlaceholder'),
+              clear: t('drawers.clearSearch'), recent: t('drawers.recent'), remove: (term) => t('drawers.remove', { term }),
+              results: (count) => t('drawers.results', { count }), noResults: t('drawers.noResults'),
+              noResultsFor: (query) => t('drawers.noResultsFor', { query }), hint: t('drawers.hint'), didYouMean: t('drawers.didYouMean'),
+            }}
+          />
         </AbPageProvider>
       </ShellContext.Provider>
     </AbLinkProvider>
