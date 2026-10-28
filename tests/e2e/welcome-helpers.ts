@@ -119,7 +119,9 @@ export async function openWelcome(page: Page, locale = 'en', slide = 1): Promise
 
 
 // the counter (`02 / 09`) 🔢
-export const counter = (page: Page) => page.locator('[data-ab-part="counter"]');
+// 📱 0.2.3: the counter row lives in AbMobileHeader's `row` below 768px and atop the slides at 768px+ (one is
+//    display:none), so target the VISIBLE one
+export const counter = (page: Page) => page.locator('[data-ab-part="counter"]:visible');
 // the carousel region 🎠
 export const carousel = (page: Page) => page.locator('[data-ab-part="carousel"]');
 // the dots (one button per slide) ⚫

@@ -91,18 +91,37 @@
   background: var(--md-sys-color-background);
 }
 
-/* 🎠 the carousel region wraps the main pane: it fills the app's content row */
-.carousel {
-  /* fill the content row */
-  flex: 1;
-  /* a column (the main pane stretches) */
+/* 🎠 OUR carousel region (headless, 0.2.3): it fills the main scroller's visible area and is a size container,
+   so a slide can be "at least the visible area" (100cqh) while the track's height follows the ACTIVE slide.
+   A taller slide overflows it and the MAIN pane scrolls (the layout rule: one scroller) */
+.region {
+  /* the visible area of the main scroller */
+  height: 100%;
+  /* a column: the 768px+ counter row, then the track */
   display: flex;
-  /* stacked */
   flex-direction: column;
-  /* allow shrinking (the main content scrolls, never the page) */
-  min-height: 0;
-  /* full width of the row */
-  min-width: 0;
+  /* 📐 the slides measure against this box (cqh), not against the (auto-height) track */
+  container-type: size;
+  /* ⌨️ no outline of its own (the focusable scroller is core's main content) */
+  outline: none;
+}
+
+/* 🔢 the counter row atop the slides: 768px+ only (below 768px it lives in AbMobileHeader's `row`) */
+.counterWide {
+  /* hidden on phones */
+  display: none;
+  /* never shrinks */
+  flex: none;
+}
+@media (min-width: 768px) {
+  .counterWide {
+    /* shown from 768px */
+    display: block;
+  }
+  .region {
+    /* 📏 the counter row's height (48px), taken off the slides' 100cqh floor */
+    --welcome-counter-h: 48px;
+  }
 }
 
 /* 🔢⏩ counter row: `02 / 09` left, Skip right */
@@ -143,8 +162,8 @@
 .track {
   /* never shrinks inside the scroller */
   flex: none;
-  /* fill the visible area (the laptop aside's divider runs full height) */
-  min-height: 100%;
+  /* 📏 autoHeight (0.2.3) sets the active slide's height inline; nothing to add here */
+  min-width: 0;
 }
 
 /* 🖼️ one slide (the packaged track stacks them in one cell) */
@@ -161,8 +180,11 @@
   flex-direction: column;
   /* 16px apart */
   gap: 16px;
-  /* at least the visible area; a long slide grows and the MAIN pane scrolls (0.2.21) */
-  min-height: 100%;
+  /* 📐 at least the visible area (the region's 100cqh, minus the 768px+ counter row) so the laptop aside's divider
+     still runs full height; a long slide grows and the MAIN pane scrolls. Short slides: no blank scroll (0.2.3) */
+  min-height: calc(100cqh - var(--welcome-counter-h, 0px));
+  /* the borders sit inside it */
+  box-sizing: border-box;
 }
 
 /* 📝 the text pane */
@@ -422,15 +444,14 @@
 
 /* 🧘 reduced motion: nothing here animates on its own (the packages & the theme calm their own motion) */
 
-/* 🧹 core's legacy ≥1536px rule `.abAppLayout__contentWrapper > *:nth-child(1)` (margin: auto 0, a 100vh cap)
-   is only reset for [data-ab-part=main|sidebar|aside] panes. The carousel wrapper is the row's first child,
-   so it inherits those margins and the main pane collapses to a 120px band at 1920. Scoped under .app so
-   (+ :first-child) it outranks the (0,2,0) legacy selector, which loads later. Gap: core's panes reset should cover any first-child wrapper. */
-.app .carousel:first-child {
-  /* 🚫 legacy auto margins */
-  margin: 0;
-  /* 🧹 legacy 100vh cap */
-  max-height: none;
-  /* 🧹 legacy first-child radius */
-  border-radius: 0;
+/* 📱 the counter row inside AbMobileHeader's `row` (below 768px): it fills the row (Skip at the right end, as in v6);
+   the row already pads 16px at the sides and 8px below, so ours drops its own padding. Last in the file, so it
+   wins over `.counterRow` and its 640px+ side padding */
+.counterRowInHeader {
+  /* the whole row */
+  flex: 1 1 auto;
+  /* AbMobileHeader's row pads it */
+  padding: 0;
+  /* the Skip target height (the v6 row read 48px with its 8px top pad) */
+  min-height: 40px;
 }

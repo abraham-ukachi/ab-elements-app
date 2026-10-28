@@ -74,6 +74,15 @@ const LABELS: WelcomeSlidesLabels = {
   goTo: en.Welcome.goTo, // ⚫
   announce: en.Welcome.announce, // 📣
   counter: en.Welcome.counter, // 🔢
+  mainContent: en.Welcome.mainContent, // ⌨️ 0.2.3 the main scroller's name
+};
+
+// the phone header's pieces (0.2.3 AbMobileHeader + the language sheet) 📱
+const MOBILE_HEADER = {
+  logo: <span>abElements</span>, // 🅰️
+  current: 'en', // ✅
+  locales: [{ code: 'en', label: 'English' }, { code: 'fr', label: 'Français' }], // 🗣️
+  labels: { ...en.Welcome.mobileHeader, languageTitle: en.Welcome.language }, // 🌐
 };
 
 // render the client carousel with 9 simple slides (each with its focusable title) 🖨️
@@ -81,7 +90,7 @@ function renderSlides(): string {
   // the 9 slides: an id, a plain title and a tiny markup
   const slides = IDS.map((id) => ({ id, title: `Title ${id}`, content: <h2 id={`welcome-${id}-title`} tabIndex={-1}>{`Title ${id}`}</h2> }));
   // render them to static HTML (the SSR / no-JS output)
-  return renderToStaticMarkup(<WelcomeSlides slides={slides} labels={LABELS} />);
+  return renderToStaticMarkup(<WelcomeSlides slides={slides} labels={LABELS} mobileHeader={MOBILE_HEADER} />);
 }
 
 

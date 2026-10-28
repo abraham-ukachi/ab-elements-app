@@ -47,8 +47,10 @@
 // Composition only: every piece of UI comes from the ab-nextjs-* packages, this file just wires
 // the `Welcome` messages, the slide data and the scenes together. A redesign swaps this folder + the messages 🔁.
 // 🧱 0.2.21 (the layout rule): core's AbAppLayout `panes` owns the 100dvh frame (the document never scrolls).
-//   top bar → the app `header` row · counter → `mainHeader` · slide → the main content (THE scroller) · dots + arrows
-//   → `mainBar` (see WelcomeSlides). No sidebar, aside or bottom nav on the Welcome: those slots are empty = 0px.
+//   top bar → the app `header` row (768px+) · below 768px core's `mobileHeader="main"` hides that row and the main pane's
+//   header is the packaged AbMobileHeader (logo · globe · 3-state theme) with the counter row under it (0.2.3 `row`) 📱
+//   · slide → the main content (THE scroller, focusable) · dots + arrows → `mainBar` (see WelcomeSlides).
+//   No sidebar, aside or bottom nav on the Welcome: those slots are empty = 0px.
 
 // REACT types
 import type { ReactNode } from 'react';
@@ -205,11 +207,10 @@ export default async function Welcome({ locale }: WelcomeProps) {
         <div
           id={`welcome-${slide.id}`}
           className={clsx(styles.slideBody, slide.id === 's09' && styles.slideEnd)}
-          // ♿ a named, focusable region per slide: the MAIN pane scrolls now (0.2.21), and core's main scroller isn't
-          // focusable itself, so this tab stop is how a keyboard reaches & arrow-scrolls a long slide (axe `scrollable-region-focusable`) ⌨️
+          // ♿ a named region per slide (no tab stop of its own: core ≥ 0.2.3 makes the MAIN scroller focusable,
+          // with a translated `scrollerLabel`, so a keyboard reaches & arrow-scrolls a long slide there ⌨️)
           role="region"
           aria-labelledby={`welcome-${slide.id}-title`}
-          tabIndex={0}
         >
           {/* Text Pane */}
           <div className={styles.textPane}>
@@ -324,6 +325,7 @@ export default async function Welcome({ locale }: WelcomeProps) {
           variant="panes"
           pageName="welcome"
           className={styles.app}
+          mobileHeader="main" // 📱 0.2.3: below 768px the main pane's header (AbMobileHeader + the counter row) IS the bar
           // 🔝 Top Bar - logo + utilities (core renders the row; its height is the v6 48 / 56 / 60px via a token)
           header={
             <div className={styles.topBar}>
@@ -343,10 +345,24 @@ export default async function Welcome({ locale }: WelcomeProps) {
               </div>
             </div>
           }
-          // 🎞️ the carousel around the main pane
+          // 🎞️ the main pane (the headless carousel no longer wraps it: 0.2.3 AbCarouselProvider)
           content={
             <WelcomeSlides
               slides={slides}
+              // 📱 the mobile header's pieces (rendered inside the carousel, so its `row` can hold the counter)
+              mobileHeader={{
+                logo: <AbLogo wordmark size={22} alt="abElements" />,
+                current: locale,
+                locales: WELCOME_LOCALES,
+                labels: {
+                  language: t('mobileHeader.language'),
+                  languageTitle: t('language'),
+                  toLight: t('mobileHeader.toLight'),
+                  toDark: t('mobileHeader.toDark'),
+                  toSystem: t('mobileHeader.toSystem'),
+                  header: t('mobileHeader.header'),
+                },
+              }}
               labels={{
                 carousel: t('carouselLabel'),
                 skip: t('skip'),
@@ -357,6 +373,7 @@ export default async function Welcome({ locale }: WelcomeProps) {
                 goTo: t.raw('goTo') as string,
                 announce: t.raw('announce') as string,
                 counter: t.raw('counter') as string,
+                mainContent: t('mainContent'), // ⌨️ the focusable main scroller's name (core 0.2.3 `scrollerLabel`)
               }}
             />
           }
