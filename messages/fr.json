@@ -47,6 +47,14 @@
       "system": "Système"
     },
     "language": "Langue",
+    "mobileHeader": {
+      "header": "En-tête principal",
+      "language": "Changer de langue",
+      "toLight": "Passer au thème clair",
+      "toDark": "Passer au thème sombre",
+      "toSystem": "Utiliser le thème du système"
+    },
+    "mainContent": "Diapositives de présentation",
     "install": {
       "label": "Installer {pkg}",
       "copy": "Copier la commande",

@@ -47,6 +47,14 @@
       "system": "System"
     },
     "language": "Language",
+    "mobileHeader": {
+      "header": "Main header",
+      "language": "Change language",
+      "toLight": "Switch to light theme",
+      "toDark": "Switch to dark theme",
+      "toSystem": "Use the system theme"
+    },
+    "mainContent": "Introduction slides",
     "install": {
       "label": "Install {pkg}",
       "copy": "Copy command",
