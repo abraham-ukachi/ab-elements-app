@@ -81,8 +81,8 @@ for (const [frame, viewport] of [['laptop', LAPTOP], ['mobile', MOBILE]] as cons
       expect(await longAnimations()).toEqual([]);
     });
 
-    test('Get Started is visible (opacity 1, in the viewport) on s09 🚀', async ({ page }) => {
-      // open s09
+    test('Get Started is visible (opacity 1, in the viewport) on s10 🚀', async ({ page }) => {
+      // open s10
       await openWelcome(page, 'en', SLIDE_COUNT);
       // the button
       const cta = page.getByRole('button', { name: 'Get Started' });

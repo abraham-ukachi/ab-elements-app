@@ -186,7 +186,7 @@ test.describe('Welcome gate (JavaScript disabled) 🚫📜', () => {
     await page.goto('/');
     await expect(page).toHaveURL(/\/welcome$/);
 
-    // open s09 & catch the POST the button sends 📮
+    // open s10 & catch the POST the button sends 📮
     await page.goto(`/welcome?s=${SLIDE_COUNT}`);
     const post = page.waitForRequest((request) => request.method() === 'POST');
     await page.getByRole('button', { name: 'Get Started' }).click();

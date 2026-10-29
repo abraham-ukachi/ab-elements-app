@@ -71,11 +71,11 @@ export const MOBILE = { width: 390, height: 844 } as const;
 
 // ===== SLIDES 🎞️ ===== //
 
-// the number of Welcome slides (s01 → s09)
-export const SLIDE_COUNT = 9;
+// the number of Welcome slides (s01 → s10; i18n = s09 since 02:40)
+export const SLIDE_COUNT = 10;
 // the slide ids, in order 🆔
-export const SLIDE_IDS = ['s01', 's02', 's03', 's04', 's05', 's06', 's07', 's08', 's09'] as const;
-// the two-digit counter text of slide `n` (1-based), e.g. `03 / 09` 🔢
+export const SLIDE_IDS = ['s01', 's02', 's03', 's04', 's05', 's06', 's07', 's08', 's09', 's10'] as const;
+// the two-digit counter text of slide `n` (1-based), e.g. `03 / 10` 🔢
 export const counterText = (n: number): string => `${String(n).padStart(2, '0')} / ${String(SLIDE_COUNT).padStart(2, '0')}`;
 
 
@@ -86,7 +86,7 @@ export const counterText = (n: number): string => `${String(n).padStart(2, '0')}
  *
  * @param { string } locale - `en` (no prefix), `fr`, `es` or `ru`
  * @param { number } [slide] - the 1-based slide to open (omit for s01)
- * @returns { string } - e.g. `/fr/welcome?s=9`
+ * @returns { string } - e.g. `/fr/welcome?s=10`
  */
 export function welcomePath(locale = 'en', slide?: number): string {
   // the default locale has no prefix 🌍
@@ -118,7 +118,7 @@ export async function openWelcome(page: Page, locale = 'en', slide = 1): Promise
 }
 
 
-// the counter (`02 / 09`) 🔢
+// the counter (`02 / 10`) 🔢
 // 📌 v5: ONE counter, at the top of the main column (v6 `ctr`), inside the main scroller
 export const counter = (page: Page) => page.locator('[data-ab-part="counter"]');
 // the carousel region 🎠

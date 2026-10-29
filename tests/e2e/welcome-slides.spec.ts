@@ -43,7 +43,7 @@
 */
 
 
-// 🎞️ Welcome slides e2e: next / back / dots / ←→ keys / `?s=` sync, Skip → s09 (+ focus),
+// 🎞️ Welcome slides e2e: next / back / dots / ←→ keys / `?s=` sync, Skip → s10 (+ focus),
 // and the globe (locale switch) keeping the current slide.
 
 // import the test helpers from `@playwright/test` 🎭
@@ -124,21 +124,21 @@ test.describe('Welcome slides 🎞️', () => {
     await expectSlide(page, 4);
   });
 
-  test('Skip jumps to s09 and focuses its title ⏩', async ({ page }) => {
+  test('Skip jumps to s10 and focuses its title ⏩', async ({ page }) => {
     // start on s02
     await openWelcome(page, 'en', 2);
     // press Skip
     await page.getByRole('button', { name: 'Skip', exact: true }).click();
 
-    // expect s09, its title focused, and no Skip / arrows left 🎯
+    // expect s10, its title focused, and no Skip / arrows left 🎯
     await expectSlide(page, SLIDE_COUNT);
-    await expect(slideTitle(page, 's09')).toBeFocused();
+    await expect(slideTitle(page, 's10')).toBeFocused();
     await expect(page.getByRole('button', { name: 'Skip', exact: true })).toHaveCount(0);
     await expect(nextButton(page)).toHaveCount(0);
   });
 
-  test('s09 shows Get Started & the disabled "Continue with GitHub · coming soon" 🚀', async ({ page }) => {
-    // open s09
+  test('s10 shows Get Started & the disabled "Continue with GitHub · coming soon" 🚀', async ({ page }) => {
+    // open s10
     await openWelcome(page, 'en', SLIDE_COUNT);
     // Get Started is there
     await expect(page.getByRole('button', { name: 'Get Started' })).toBeVisible();

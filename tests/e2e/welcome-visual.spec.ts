@@ -44,7 +44,7 @@
 
 
 // 📸 Welcome visual e2e: snapshot baselines of the 4 Welcome states (laptop / mobile × light / dark)
-// on s01 & s09 (≤ 1 % pixel diff), plus a few localized review captures.
+// on s01 & s10 (≤ 1 % pixel diff), plus a few localized review captures.
 
 // import the test helpers from `@playwright/test` 🎭
 import { expect, test } from '@playwright/test';
@@ -67,12 +67,12 @@ for (const [frame, viewport, scheme] of STATES) {
     // the frame & the OS scheme (System mode paints it) 🌗
     test.use({ viewport, colorScheme: scheme });
 
-    for (const slide of [1, 9]) {
-      test(`s0${slide} matches its baseline`, async ({ page }) => {
+    for (const slide of [1, 10]) {
+      test(`s${String(slide).padStart(2, "0")} matches its baseline`, async ({ page }) => {
         // open the slide
         await openWelcome(page, 'en', slide);
         // compare with the committed baseline (≤ 1 % of the pixels may differ) 🔍
-        await expect(page).toHaveScreenshot(`welcome-${frame}-${scheme}-s0${slide}.png`, {
+        await expect(page).toHaveScreenshot(`welcome-${frame}-${scheme}-s${String(slide).padStart(2, "0")}.png`, {
           animations: 'disabled', caret: 'hide', maxDiffPixelRatio: 0.01,
         });
       });
@@ -83,7 +83,7 @@ for (const [frame, viewport, scheme] of STATES) {
 
 // localized review captures (attached to the run, not compared) 🌍
 const REVIEW = [
-  ['fr', 9, MOBILE, 'dark', 'fr-s09-mobile-dark.png'],
+  ['fr', 10, MOBILE, 'dark', 'fr-s10-mobile-dark.png'],
   ['es', 5, LAPTOP, 'dark', 'es-s05-laptop-dark.png'],
 ] as const;
 
@@ -92,7 +92,7 @@ for (const [locale, slide, viewport, scheme, file] of REVIEW) {
     // the frame & the OS scheme
     test.use({ viewport, colorScheme: scheme });
 
-    test(`captures ${locale} s0${slide}`, async ({ page }, testInfo) => {
+    test(`captures ${locale} s${String(slide).padStart(2, "0")}`, async ({ page }, testInfo) => {
       // open the localized slide
       await openWelcome(page, locale, slide);
       // capture it next to the test's output 💾
