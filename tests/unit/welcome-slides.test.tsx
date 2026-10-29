@@ -55,12 +55,14 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import en from '../../messages/en.json';
 // import the client half of the Welcome + its pure helpers 🎞️
 import WelcomeSlides, { fillWelcomePattern, readWelcomeSlideParam, type WelcomeSlidesLabels } from '../../app/[locale]/welcome/_components/welcome-slides';
-// import the 9 scenes (data) 🗺️
-import { WELCOME_SCENES } from '../../app/[locale]/welcome/welcome-scenes';
+// import the slide list (each package slide names its packaged v6 scene) 🎞️
+import { WELCOME_SLIDES } from '../../app/[locale]/welcome/welcome';
+// import the packaged scene names 🗺️
+import { AB_PLAYGROUND_SCENE_PACKAGES } from 'ab-nextjs-components/ab-playground-scene';
 
 
-// the slide ids of the Welcome, s01 → s09 🎞️
-const IDS = ['s01', 's02', 's03', 's04', 's05', 's06', 's07', 's08', 's09'] as const;
+// the slide ids of the Welcome, s01 → s10 🎞️ (i18n = s09, the final slide = s10)
+const IDS = ['s01', 's02', 's03', 's04', 's05', 's06', 's07', 's08', 's09', 's10'] as const;
 // the `Welcome` messages (typed loosely for the checks) 🌐
 const W = en.Welcome as unknown as Record<string, unknown> & { slides: Record<string, Record<string, unknown>> };
 
@@ -74,14 +76,32 @@ const LABELS: WelcomeSlidesLabels = {
   goTo: en.Welcome.goTo, // ⚫
   announce: en.Welcome.announce, // 📣
   counter: en.Welcome.counter, // 🔢
+  mainContent: en.Welcome.mainContent, // ⌨️ 0.2.3 the main scroller's name
+  slideControls: en.Welcome.slideControls, // 🎛️ 0.2.3 the pinned main bar's name
+  playground: en.Welcome.playground.title, // 🗺️ v5: the aside pane's name
+  live: en.Welcome.playground.live, // 🟢 v6: the scene header's dot
+  provider: en.Welcome.playground.provider, // 🌍 i18n scene
+  prefix: en.Welcome.playground.prefix,
+  intlFormat: en.Welcome.playground.intlFormat,
+  greetings: en.Welcome.playground.greetings, // 👋
+  locale: 'en', // 🗣️
+  show: en.Welcome.playground.show, // 📱 the drawer opener
 };
 
-// render the client carousel with 9 simple slides (each with its focusable title) 🖨️
+// the phone header's pieces (0.2.3 AbMobileHeader + the language sheet) 📱
+const MOBILE_HEADER = {
+  logo: <span>abElements</span>, // 🅰️
+  current: 'en', // ✅
+  locales: [{ code: 'en', label: 'English' }, { code: 'fr', label: 'Français' }], // 🗣️
+  labels: { ...en.Welcome.mobileHeader, languageTitle: en.Welcome.language }, // 🌐
+};
+
+// render the client carousel with 10 simple slides (each with its focusable title) 🖨️
 function renderSlides(): string {
-  // the 9 slides: an id, a plain title and a tiny markup
-  const slides = IDS.map((id) => ({ id, title: `Title ${id}`, content: <h2 id={`welcome-${id}-title`} tabIndex={-1}>{`Title ${id}`}</h2> }));
+  // the 10 slides: an id, a plain title and a tiny markup
+  const slides = IDS.map((id) => ({ id, title: `Title ${id}`, content: <h2 id={`welcome-${id}-title`} tabIndex={-1}>{`Title ${id}`}</h2>, playground: { scene: 'core' as const, alt: `Playground ${id}` } }));
   // render them to static HTML (the SSR / no-JS output)
-  return renderToStaticMarkup(<WelcomeSlides slides={slides} labels={LABELS} />);
+  return renderToStaticMarkup(<WelcomeSlides slides={slides} labels={LABELS} mobileHeader={MOBILE_HEADER} />);
 }
 
 
@@ -96,21 +116,23 @@ describe('Welcome slides helpers 🧩', () => {
 
   it('reads `?s=` as a clamped 0-based index 🔗', () => {
     // missing → s01
-    expect(readWelcomeSlideParam('', 9)).toBe(0);
+    expect(readWelcomeSlideParam('', 10)).toBe(0);
     // `?s=3` → index 2
-    expect(readWelcomeSlideParam('?s=3', 9)).toBe(2);
+    expect(readWelcomeSlideParam('?s=3', 10)).toBe(2);
+    // 🔗 an old `?s=9` link (the final slide before 02:40) now opens the i18n slide (index 8), still a valid slide
+    expect(readWelcomeSlideParam('?s=9', 10)).toBe(8);
     // too big → the last slide
-    expect(readWelcomeSlideParam('?s=42', 9)).toBe(8);
+    expect(readWelcomeSlideParam('?s=42', 10)).toBe(9);
     // garbage → s01
-    expect(readWelcomeSlideParam('?s=abc', 9)).toBe(0);
-    expect(readWelcomeSlideParam('?s=-1', 9)).toBe(0);
+    expect(readWelcomeSlideParam('?s=abc', 10)).toBe(0);
+    expect(readWelcomeSlideParam('?s=-1', 10)).toBe(0);
   });
 });
 
 
 // ===== DATA & MESSAGES ===== //
 describe('Welcome data & messages 🌐', () => {
-  it('has a title, a body and an illustration alt for each of the 9 slides 🎞️', () => {
+  it('has a title, a body and an illustration alt for each of the 10 slides 🎞️', () => {
     // every slide has its three texts
     for (const id of IDS) {
       expect(W.slides[id], id).toHaveProperty('title');
@@ -131,19 +153,14 @@ describe('Welcome data & messages 🌐', () => {
     expect(en.Welcome.theme.system).toBeTruthy();
   });
 
-  it('has a scene with wired nodes for every slide 🗺️', () => {
-    // every slide has a scene
-    for (const id of IDS) {
-      // the scene
-      const scene = WELCOME_SCENES[id];
-      // one hub + spokes
-      expect(scene.nodes.length, id).toBeGreaterThan(2);
-      // every wire connects two existing nodes
-      const ids = new Set(scene.nodes.map((node) => node.id));
-      for (const edge of scene.edges) expect(ids.has(edge.from) && ids.has(edge.to), `${id} ${edge.from}→${edge.to}`).toBe(true);
-    }
-    // s01 wires the 8 packages to the logo
-    expect(WELCOME_SCENES.s01.edges).toHaveLength(8);
+  it('gives every slide its packaged v6 scene: welcome · the 8 packages · all 🗺️', () => {
+    // 🗺️ each package slide names the AbPlaygroundScene of ITS package (i18n on s09)
+    for (const slide of WELCOME_SLIDES.filter((x) => x.pkg)) expect(AB_PLAYGROUND_SCENE_PACKAGES[slide.scene], slide.id).toBe(slide.pkg);
+    // 👋 s01 = the welcome scene, 🚀 s10 = every package
+    expect(WELCOME_SLIDES[0].scene).toBe('welcome');
+    expect(WELCOME_SLIDES[WELCOME_SLIDES.length - 1].scene).toBe('all');
+    // 🔢 10 slides
+    expect(WELCOME_SLIDES).toHaveLength(10);
   });
 });
 
@@ -153,12 +170,12 @@ describe('WelcomeSlides (SSR / no-JS markup) 🎠', () => {
   // render once for every check
   const html = renderSlides();
 
-  it('renders the 9 slides, labelled "n of 9" ♿', () => {
-    // 9 slide groups
-    expect(html.match(/aria-roledescription="slide"/g)).toHaveLength(9);
+  it('renders the 10 slides, labelled "n of 10" ♿', () => {
+    // 10 slide groups
+    expect(html.match(/aria-roledescription="slide"/g)).toHaveLength(10);
     // the first and last labels
-    expect(html).toContain('aria-label="1 of 9"');
-    expect(html).toContain('aria-label="9 of 9"');
+    expect(html).toContain('aria-label="1 of 10"');
+    expect(html).toContain('aria-label="10 of 10"');
   });
 
   it('names the carousel region 🏷️', () => {
@@ -177,14 +194,38 @@ describe('WelcomeSlides (SSR / no-JS markup) 🎠', () => {
     expect(html).toContain(`aria-label="${en.Welcome.next}"`);
   });
 
-  it('renders the 9 dots with their "Go to slide" names ⚫', () => {
+  it('renders the 10 dots with their "Go to slide" names ⚫', () => {
     // the first and last dot names
     expect(html).toContain('Go to slide 1: Title s01');
-    expect(html).toContain('Go to slide 9: Title s09');
+    expect(html).toContain('Go to slide 10: Title s10');
   });
 
-  it('keeps the s09 title focusable for the Skip shortcut ♿', () => {
+  it('keeps the s10 title focusable for the Skip shortcut ♿', () => {
     // the Skip focus target
-    expect(html).toContain('id="welcome-s09-title" tabindex="-1"');
+    expect(html).toContain('id="welcome-s10-title" tabindex="-1"');
+  });
+});
+
+
+// ===== LAYOUT RULE (v5): header · main · aside, no footer ===== //
+describe('Welcome layout rule 🧱', () => {
+  it('puts the counter, the slides and the dots + arrows in main, and NO main footer bar ⚫', () => {
+    // the SSR output
+    const html = renderSlides();
+    // 🚫 no core footer bar (the v6 nav lives inside the main content now)
+    expect(html).not.toContain('data-ab-part="mainBar"');
+    // ⚫ the dots are still rendered (inside main)
+    expect(html).toContain('Go to slide 2');
+  });
+
+  it("shows ONLY the active slide's playground in the ONE aside pane, named 🗺️", () => {
+    // the SSR output (s01 is active)
+    const html = renderSlides();
+    // 🗺️ the aside pane exists and holds s01's playground, named "Live Playground"
+    expect(html.match(/data-ab-part="aside"/g)).toHaveLength(1);
+    expect(html).toContain(`aria-label="${en.Welcome.playground.title}"`);
+    expect(html).toContain('Playground s01');
+    // 🙈 not the others
+    expect(html).not.toContain('Playground s02');
   });
 });

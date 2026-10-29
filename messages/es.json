@@ -47,6 +47,15 @@
       "system": "Sistema"
     },
     "language": "Idioma",
+    "mobileHeader": {
+      "header": "Encabezado principal",
+      "language": "Cambiar idioma",
+      "toLight": "Cambiar al tema claro",
+      "toDark": "Cambiar al tema oscuro",
+      "toSystem": "Usar el tema del sistema"
+    },
+    "slideControls": "Controles de las diapositivas",
+    "mainContent": "Diapositivas de introducción",
     "install": {
       "label": "Instalar {pkg}",
       "copy": "Copiar comando",
@@ -54,6 +63,11 @@
     },
     "playground": {
       "title": "Zona de pruebas en vivo",
+      "show": "Mostrar la zona de pruebas",
+      "provider": "proveedor",
+      "prefix": "prefijo",
+      "intlFormat": "formato Intl",
+      "greetings": {"en": "Hello", "fr": "Bonjour", "es": "Hola", "ru": "Привет"},
       "live": "en vivo"
     },
     "cta": "Empezar",
@@ -79,17 +93,17 @@
       "s02": {
         "title": "Elementos básicos",
         "body": "La configuración, los diseños y las primitivas accesibles en los que se basan todos los demás paquetes de AbElements.",
-        "illustrationAlt": "Diagrama: los diseños de pantalla, principal y lateral conectados al paquete core."
+        "illustrationAlt": "Diagrama: el hub AbProvider conectado a los nodos config, Slot, cliente/servidor, anillo de foco, Portal e idioma."
       },
       "s03": {
         "title": "Componentes listos para usar",
         "body": "Una UI de React accesible, construida sobre Core y Theme: desde botones y pestañas hasta menús y una pantalla de inicio.",
-        "illustrationAlt": "Diagrama: un botón, pestañas, un menú y una pantalla de inicio conectados al paquete components."
+        "illustrationAlt": "Diagrama: ab-nextjs-components conectado a las vistas previas Button, Switch, Tabs, Sheet, Avatar y BottomNav."
       },
       "s04": {
         "title": "Temas cálidos basados en tokens",
         "body": "Tokens de diseño bronce como variables CSS, con un modo oscuro real y sin parpadeo al cargar.",
-        "illustrationAlt": "Diagrama: muestras de color y un interruptor claro/oscuro conectados a los tokens del tema.",
+        "illustrationAlt": "Diagrama: la paleta ThemeProvider conectada a los nodos tokens, esquema de color, claro y oscuro, radio, contraste y Tailwind.",
         "chips": {
           "tokens": "Tokens",
           "lightDark": "Claro y oscuro",
@@ -99,7 +113,7 @@
       "s05": {
         "title": "Iconos a la carta",
         "body": "Iconos SVG con nombres tipados. Importa solo los iconos que uses.",
-        "illustrationAlt": "Diagrama: una cuadrícula de iconos conectada al componente de icono, con opciones de tamaño y grosor.",
+        "illustrationAlt": "Diagrama: un conjunto de iconos conectado a los nodos tamaño, variante, Icon, bundle, eje de relleno e importación tipada.",
         "chips": {
           "grid": "Cuadrícula de 24 px",
           "typed": "Nombres tipados"
@@ -108,12 +122,12 @@
       "s06": {
         "title": "Fuentes sin saltos de maquetación",
         "body": "Inter, Zilla Slab, Mulish, Quicksand y Roboto, autoalojadas para Next.js con sencillas utilidades font-*.",
-        "illustrationAlt": "Diagrama: cinco muestras tipográficas alrededor de una gran «Aa»."
+        "illustrationAlt": "Diagrama: ab-nextjs-fonts conectado a las muestras Zilla Slab, pesos de Inter, Inter, Mulish, Quicksand y Roboto."
       },
       "s07": {
         "title": "Animaciones naturales",
         "body": "Curvas, fundidos y transiciones que respetan de serie el ajuste de movimiento reducido.",
-        "illustrationAlt": "Diagrama: una curva de aceleración y un interruptor para reducir animaciones conectados al paquete animations.",
+        "illustrationAlt": "Diagrama: una curva ease-out con un punto en movimiento, conectada a los nodos spring, duración, preset, movimiento reducido, Animate y escalonado.",
         "chips": {
           "easings": "Curvas",
           "fades": "Fundidos",
@@ -123,9 +137,14 @@
       "s08": {
         "title": "Hooks de React tipados",
         "body": "Hooks pequeños y tipados para el tema, las media queries, el almacenamiento y el portapapeles.",
-        "illustrationAlt": "Diagrama: cuatro hooks conectados al paquete hooks."
+        "illustrationAlt": "Diagrama: ab-nextjs-hooks conectado a useTheme, useMedia, useHotkey, useLocalStorage, useMounted y useClipboard."
       },
       "s09": {
+        "title": "Cada idioma, integrado",
+        "body": "Mensajes traducidos, rutas por idioma y alternativas hreflang para Next.js, listos para cada app de AbElements.",
+        "illustrationAlt": "Diagrama: el hub AbI18nProvider, con un globo y un saludo que alterna entre inglés, francés, español y ruso, conectado a los nodos messages/en.json, AbLocaleSwitcher, useAbTranslations, AbLocalePrefix, formato de números Intl y hreflang de getAbAlternates."
+      },
+      "s10": {
         "pill": "Gratis para siempre · MIT",
         "title": "Crea tus aplicaciones web<br></br>gratis con <em>AbElements</em>",
         "body": "Ocho paquetes de código abierto, documentación en vivo y una PWA. MIT, gratis para siempre.",

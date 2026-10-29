@@ -30,7 +30,7 @@
 * @authors: Abraham Ukachi <abrahamukachi@gmail.com>
 *
 * Example usage:
-*   1+|> <WelcomeSlides slides={slides} labels={labels} />
+*   1+|> <WelcomeSlides slides={slides} labels={labels} mobileHeader={mobileHeader} /> // 🧱 core's AbMainLayout inside a HEADLESS carousel (0.2.3)
 *    -|> 
 *
 */
@@ -47,15 +47,18 @@
 
 // 🎞️ Welcome slides: the client half of the Welcome (composition only, no app-local UI).
 // Every piece comes from `ab-nextjs-components/ab-carousel`; this file only wires the
-// `?s=` URL state, the Skip shortcut (→ s09 + focus its title ♿) and the frame rows 🧩.
+// `?s=` URL state, the Skip shortcut (→ the last slide, s10 + focus its title ♿) and the frame rows 🧩.
 
 // import the React hooks we need (state, effects, stable callbacks) ⚛️
 import { useCallback, useEffect, useState, type ReactNode } from 'react';
 
 // import the packaged carousel + its parts + its hook from `ab-nextjs-components` 🎠
 import {
-  AbCarousel, // 🎠 the region (state, keyboard, swipe, live region)
-  AbCarouselCounter, // 🔢 `02 / 09`
+  AbCarouselProvider, // 🧠 0.2.3: the carousel state WITHOUT an element (so it no longer wraps <main>)
+  AbCarouselStatus, // 📣 0.2.3: the polite live region ("Slide 3 of 9: …"), once, inside our region
+  useAbCarouselRegion, // 🧷 0.2.3: the region attributes, spread on OUR element
+  useAbCarouselKeys, // ⌨️ 0.2.3: ←/→ anywhere inside <main> (dots, slide area), never page-wide
+  AbCarouselCounter, // 🔢 `02 / 10`
   AbCarouselDots, // ⚫ the 9 dots
   AbCarouselNext, // ⏭️ next arrow
   AbCarouselPrev, // ⏮️ back arrow
@@ -66,6 +69,21 @@ import {
 } from 'ab-nextjs-components/ab-carousel';
 // import the packaged (client) button from `ab-nextjs-components` (the Skip button) 🔘
 import AbButton from 'ab-nextjs-components/ab-button';
+// import the packaged main pane (core 0.2.x layout rule: header · ONE scroller · bar, empty slots = 0px) 🧱
+import AbMainLayout from 'ab-nextjs-core/ab-main-layout';
+// import the packaged aside pane (core: an in-flow column from 1180px, closed below; the playground lives there) 🗺️
+import AbAsideLayout from 'ab-nextjs-core/ab-aside-layout';
+// import the packaged v6 "Live Playground" scenes (John's 7 + the i18n placeholder: dots, rich nodes, card, pulses) 🎨
+import AbPlaygroundScene, { type AbPlaygroundSceneName } from 'ab-nextjs-components/ab-playground-scene';
+// import the packaged media-query hook (phones get the compact 350×276 scene) 📱
+
+// import the page state: the main pane's own scroller (reset to the top on every slide change) 📜
+import { useAbAsideDrawer, useAbInlineScroller } from 'ab-nextjs-core/ab-page-provider'; // 📱 0.2.3: + the aside's mobile right drawer
+// import the class names helper 🏷️
+import clsx from 'clsx';
+
+// import the mobile header (AbMobileHeader + the language sheet), below 768px 📱
+import WelcomeMobileHeader, { type WelcomeMobileHeaderData } from './welcome-mobile-header';
 
 // import every Welcome-only style 🎨
 import styles from '../welcome.module.css';
@@ -75,9 +93,16 @@ import styles from '../welcome.module.css';
 
 // one slide handed over by the server `Welcome` 🖼️
 export interface WelcomeSlideData {
-  id: string; // 🆔 `s01` → `s09`
+  id: string; // 🆔 `s01` → `s10`
   title: string; // 🏷️ plain-text title (dots + live announcement)
-  content: ReactNode; // 🧩 the slide's server-rendered markup
+  content: ReactNode; // 🧩 the slide's server-rendered markup (the text)
+  playground: WelcomePlaygroundData; // 🗺️ the slide's playground (the aside pane)
+}
+
+// one slide's playground: the packaged v6 scene of that slide 🗺️
+export interface WelcomePlaygroundData {
+  scene: AbPlaygroundSceneName; // 🗂️ AbPlaygroundScene `name` (welcome · core … i18n · all)
+  alt: string; // ♿ the translated alt
 }
 
 // every (already translated) label of the client half 🌐
@@ -90,12 +115,24 @@ export interface WelcomeSlidesLabels {
   goTo: string; // ⚫ "Go to slide {n}: {title}" pattern
   announce: string; // 📣 "Slide {n} of {total}: {title}" pattern
   counter: string; // 🔢 "{current} / {total}" pattern
+  mainContent: string; // ⌨️ the focusable main scroller's name (core 0.2.3 `scrollerLabel`)
+  slideControls: string; // 🎛️ the pinned main bar's name (core 0.2.3 `mainBarLabel`)
+  playground: string; // 🗺️ "Live Playground": the aside pane's name + the scene header title
+  live: string; // 🟢 "live": the scene header's dot label
+  show: string; // 📱 "Show playground" (below 768px)
+  provider: string; // 🌍 i18n scene: "provider"
+  prefix: string; // 🌍 i18n scene: "prefix"
+  intlFormat: string; // 🌍 i18n scene: "Intl format"
+  greetings: { en: string; fr: string; es: string; ru: string }; // 👋 i18n scene greetings
+  locale: string; // 🗣️ the app locale (i18n scene)
 }
 
 // the props of `WelcomeSlides` 🧾
 interface WelcomeSlidesProps {
   slides: readonly WelcomeSlideData[]; // 🎞️ the 9 slides
   labels: WelcomeSlidesLabels; // 🌐 the labels
+  mobileHeader: WelcomeMobileHeaderData; // 📱 logo, locales + labels of the phone header
+  playgroundLogo?: ReactNode; // 🅰️ our mark for the scene headers + hubs
 }
 
 
@@ -107,7 +144,7 @@ export function fillWelcomePattern(pattern: string, values: Record<string, strin
   return pattern.replace(/\{(\w+)\}/g, (match, key: string) => (key in values ? String(values[key]) : match));
 }
 
-// two-digit numbers (`02`, `09`) for the counter 🔢
+// two-digit numbers (`02`, `10`) for the counter 🔢
 const pad = (n: number): string => String(n).padStart(2, '0');
 
 // read the 0-based slide index from `?s=` (1-based in the URL), clamped to the slides 🔗
@@ -123,21 +160,21 @@ export function readWelcomeSlideParam(search: string, count: number): number {
 
 // ===== WELCOME SLIDES - PARTS (composition of the packaged hook + button) ===== //
 
-/** ⏩ Skip: jumps to the last slide with the `'skip'` reason (hidden on s09). */
+/** ⏩ Skip: jumps to the last slide with the `'skip'` reason (hidden on the last slide, s10). */
 function WelcomeSkip({ label }: { label: string }) {
   // read the carousel state 🪝
   const { index, count, goTo } = useAbCarousel();
-  // s09: no Skip at all 🙈
+  // s10: no Skip at all 🙈
   if (index >= count - 1) return null;
   // the packaged text button 🔘
   return <AbButton type="text" label={label} className={styles.skip} onClick={() => goTo(count - 1, 'skip')} />;
 }
 
-/** ⏮️⏭️ the arrows: none on s09 (the brief's "no arrows on s09"). */
+/** ⏮️⏭️ the arrows: none on the last slide, s10 (the brief's "no arrows on the final slide"). */
 function WelcomeArrows({ back, next }: { back: string; next: string }) {
   // read the carousel state 🪝
   const { index, count } = useAbCarousel();
-  // s09: no arrows 🙈
+  // s10: no arrows 🙈
   if (index >= count - 1) return null;
   // back (aria-disabled on s01) + next (primary filled) 🔘
   return (
@@ -150,15 +187,139 @@ function WelcomeArrows({ back, next }: { back: string; next: string }) {
 
 
 /**
+ * `WelcomeScrollReset` - puts the main scroller back at the top whenever the slide changes 📜
+ * (the main pane is ONE scroller for every slide now, so a long slide must not leave the next one scrolled)
+ *
+ * @returns { null }
+ */
+function WelcomeScrollReset() {
+  // 🎠 the active slide
+  const { index } = useAbCarousel();
+  // 📜 core 0.2.3: whichever element ACTUALLY scrolls (the panes wrapper below 1180px, else main's scroller)
+  const scroller = useAbInlineScroller();
+  // ⬆️ back to the top on every change (instant: the slide motion is the transition)
+  useEffect(() => {
+    scroller?.scrollTo({ top: 0 });
+  }, [index, scroller]);
+  return null;
+}
+
+
+/**
+ * `WelcomeRegion` - OUR carousel region (headless mode, 0.2.3) 🧷
+ * The packaged region attributes (roledescription, label, keyboard, motion switches) spread on a plain div INSIDE
+ * the main scroller, plus the live region. It fills the visible area (a size container: the slides read `100cqh`).
+ *
+ * @param { { className?: string; children: ReactNode } } props - extra classes + the track (and the 768px+ counter)
+ * @returns { ReactElement }
+ */
+function WelcomeRegion({ className, children }: { className?: string; children: ReactNode }) {
+  // 🧷 the attributes the region needs (merge our class with the packaged one)
+  const region = useAbCarouselRegion();
+  // 🎠 our element is the region
+  return (
+    <div {...region} className={clsx(region.className, className)}>
+      {children}
+      {/* 📣 "Slide 3 of 9: …" (polite), rendered once */}
+      <AbCarouselStatus />
+    </div>
+  );
+}
+
+
+/**
+ * `WelcomeKeys` - the carousel's ←/→ for the whole main pane ⌨️
+ * Our region (counter, slides, dots) sits inside the main scroller, so the packaged hook scopes the keys to
+ * <main> (core's `data-ab-part="main"`): arrows on a dot or in the slide area move the slides; focus outside main
+ * (the app header, the body) is left alone (no global hijack).
+ *
+ * @returns { null }
+ */
+function WelcomeKeys() {
+  // ⌨️ main only (NOT 'document')
+  useAbCarouselKeys('main');
+  return null;
+}
+
+
+/**
+ * `WelcomePlayground` - the ACTIVE slide's playground, in the aside pane 🗺️
+ * The packaged v6 `AbPlaygroundScene` (compact 350×276 on phones, the full 760×600 card elsewhere), centred like the
+ * v6 laptop aside. One scene at a time; core places the ONE aside above main below 1180px (`asideBelow`).
+ *
+ * @param { { playgrounds: readonly WelcomePlaygroundData[]; labels: WelcomePlaygroundLabels } } props
+ * @returns { ReactElement }
+ */
+// the words every scene reads (title, live dot) + the i18n scene's own (provider, prefix, Intl format, greetings) 🌍
+type WelcomePlaygroundLabels = Pick<WelcomeSlidesLabels, 'live' | 'provider' | 'prefix' | 'intlFormat' | 'greetings' | 'locale'> & { title: string };
+// (+ our logo, handed to every scene) 🅰️
+
+function WelcomePlayground({ playgrounds, labels, logo }: { playgrounds: readonly WelcomePlaygroundData[]; labels: WelcomePlaygroundLabels; logo?: ReactNode }) {
+  // 🎠 the active slide
+  const { index } = useAbCarousel();
+  // 🗺️ the active slide's data (SSR / no-JS: s01's)
+  const data = playgrounds[index];
+  return (
+    <div className={styles.asidePlayground}>
+      {data && (
+        <AbPlaygroundScene
+          key={data.scene} // 🔁 a fresh scene (and pulse) per slide
+          name={data.scene}
+          variant="auto" // 📐 CSS-only: compact 350×276 in the < 768px drawer · full 760×600 v6 card from 768px (no JS, no flash)
+          active // ▶️ only the active slide's scene is mounted, so it always animates
+          locale={labels.locale} // 🗣️ the i18n scene follows the app locale
+          labels={{
+            title: labels.title,
+            live: labels.live,
+            alt: { [data.scene]: data.alt }, // ♿ only the active scene's alt (e.g. `alt.i18n`)
+            provider: labels.provider,
+            prefix: labels.prefix,
+            intlFormat: labels.intlFormat,
+            greetings: labels.greetings,
+          }}
+          logo={logo} // 🅰️ our mark
+          className={styles.diagram}
+        />
+      )}
+    </div>
+  );
+}
+
+
+/**
+ * `WelcomeShowPlayground` - phones (< 768px): "Show playground" at the bottom of every slide. Core 0.2.3's
+ * `useAbAsideDrawer()` opens THE aside (the active slide's playground) as the right drawer: role=dialog + aria-modal,
+ * named by AbAsideLayout's `aria-label`; Esc, a backdrop tap and a swipe close it; focus returns here. Hidden from 768px 🚪
+ *
+ * @param { { label: string } } props - the translated button label
+ * @returns { ReactElement }
+ */
+function WelcomeShowPlayground({ label }: { label: string }) {
+  // 📱 the packaged mobile aside drawer (ARIA + opener focus handled by core)
+  const drawer = useAbAsideDrawer();
+  return (
+    <div className={styles.showPlayground}>
+      <AbButton type="outlined" label={label} {...drawer.props} />
+    </div>
+  );
+}
+
+
+/**
  * `WelcomeSlides` - Client Component 🎞️
  *
- * The packaged `AbCarousel` around the server-rendered slides, with the counter + Skip row,
- * the dots + arrows footer and the `?s=` URL state.
+ * Core's `AbMainLayout` inside the HEADLESS packaged carousel (0.2.3 `AbCarouselProvider`: no element, so <main> is
+ * the content row's own pane again):
+ *   📱 AbMobileHeader → `mainHeader` (below 768px)
+ *   🛤️ 🔢 counter · the slides · ⚫⏮️⏭️ dots + arrows → OUR region in the main content (THE scroller, focusable, named)
+ *   🗺️ the active AbPlaygroundScene → AbAsideLayout (a column ≥ 1180px, above main below) · ⌨️ ←/→ scoped to <main>
+ *   `autoHeight`: the track follows the active slide (no blank scroll on short ones).
+ * Plus the `?s=` URL state.
  *
  * @param { WelcomeSlidesProps } props - the slides and their labels
  * @returns { ReactElement }
  */
-export default function WelcomeSlides({ slides, labels }: WelcomeSlidesProps) {
+export default function WelcomeSlides({ slides, labels, mobileHeader, playgroundLogo }: WelcomeSlidesProps) {
   // the number of slides (9) 🔢
   const count = slides.length;
   // the active slide (SSR always renders s01 for SEO / no-JS 🌱)
@@ -197,41 +358,84 @@ export default function WelcomeSlides({ slides, labels }: WelcomeSlidesProps) {
     [slides],
   );
 
-  // return the carousel 🎠
+  // 🔢 the counter row: `02 / 09` left, Skip right; at the TOP of the main column (v6 `ctr`, every width)
+  const counterRow = (
+    <div className={styles.counterRow}>
+      <AbCarouselCounter
+        className={styles.counter}
+        format={(current, total) => fillWelcomePattern(labels.counter, { current: pad(current), total: pad(total) })}
+      />
+      <WelcomeSkip label={labels.skip} />
+    </div>
+  );
+
+  // return the headless carousel around the main pane 🎠
   return (
-    <AbCarousel
+    <AbCarouselProvider
       label={labels.carousel} // 🏷️ region name
       index={index} // 🎛️ controlled (for `?s=`)
       onIndexChange={onIndexChange} // 📣 changes
+      count={count} // 🔢 explicit: the track sits inside AbMainLayout's `content`, so it can't be counted from children
       titles={slides.map((slide) => slide.title)} // 🏷️ dots + announcements
       slideLabel={(n, total) => fillWelcomePattern(labels.slide, { n, total })} // ♿ "3 of 9"
       announce={(n, total, title) => fillWelcomePattern(labels.announce, { n, total, title: title ?? '' })} // 📣
-      className={styles.carousel} // 🎨
+      autoHeight // 📏 0.2.3: the track takes the ACTIVE slide's height (short slides don't scroll into blank space)
     >
-      {/* Counter row - `02 / 09` left, Skip right 🔢⏩ */}
-      <div className={styles.counterRow}>
-        <AbCarouselCounter
-          className={styles.counter}
-          format={(current, total) => fillWelcomePattern(labels.counter, { current: pad(current), total: pad(total) })}
-        />
-        <WelcomeSkip label={labels.skip} />
-      </div>
-
-      {/* Track - the 9 slides 🛤️ */}
-      <AbCarouselTrack className={styles.track}>
-        {slides.map((slide, i) => (
-          // one slide (the label is "n of total" ♿)
-          <AbCarouselSlide key={slide.id} className={styles.slide} label={fillWelcomePattern(labels.slide, { n: i + 1, total: count })}>
-            {slide.content}
-          </AbCarouselSlide>
-        ))}
-      </AbCarouselTrack>
-
-      {/* Footer - dots left, arrows right ⚫⏮️⏭️ */}
-      <footer className={styles.footer}>
-        <AbCarouselDots label={labels.carousel} dotLabel={(n, _total, title) => fillWelcomePattern(labels.goTo, { n, title: title ?? '' })} />
-        <WelcomeArrows back={labels.back} next={labels.next} />
-      </footer>
-    </AbCarousel>
+      {/* ⬆️ a new slide starts at the top of the main scroller */}
+      <WelcomeScrollReset />
+      {/* ⌨️ ←/→ inside <main> */}
+      <WelcomeKeys />
+      {/* 🧱 the main pane: `id="main"` (the skip target ♿). God's layout rule + John's v6: the counter + slide scroll in
+          main's content; the dots + arrows sit in MAIN's own pinned footer bar (God 04:14, core 0.2.3 `mainBarPin`),
+          never an app footer */}
+      <AbMainLayout
+        id="main"
+        orientation="vertical"
+        pageName="welcome"
+        className={styles.main}
+        chrome={false} // 🧰 no legacy backdrop / menus / progress layers (0.1.5)
+        scrollerLabel={labels.mainContent} // ⌨️ 0.2.3: the main scroller is a named tab stop (axe scrollable-region-focusable)
+        // ⚓ 0.2.3: the counter row comes BEFORE the inline aside below 1180px (v6 phone: bar · counter · scene · text);
+        //    from 1180px it simply renders first in the main scroller (same reading order everywhere)
+        asideAnchor={counterRow}
+        // 📱 below 768px only (core hides this slot at 768px+): logo · globe · 3-state theme
+        mainHeader={<WelcomeMobileHeader {...mobileHeader} />}
+        // ⚫⏮️⏭️ 0.2.3 (God 04:14): the v6 nav (dots left, arrows right) in main's OWN footer, pinned to the bottom of
+        //    main at every width (sticky inside the one scroller below 1180px, under the drawer) and named for AT
+        mainBar={
+          <div className={styles.nav}>
+            <AbCarouselDots label={labels.carousel} dotLabel={(n, _total, title) => fillWelcomePattern(labels.goTo, { n, title: title ?? '' })} />
+            <WelcomeArrows back={labels.back} next={labels.next} />
+          </div>
+        }
+        mainBarPin="always" // 📌 flush at the bottom while main scrolls
+        mainBarLabel={labels.slideControls} // 🏷️ "Slide controls" (i18n)
+        // 🛤️ our region, inside the main scroller (after the counter anchor): the 10 slides · dots + arrows (bottom), as in v6
+        content={
+          <WelcomeRegion className={styles.region}>
+            <AbCarouselTrack className={styles.track}>
+              {slides.map((slide, i) => (
+                <AbCarouselSlide key={slide.id} className={styles.slide} label={fillWelcomePattern(labels.slide, { n: i + 1, total: count })}>
+                  {slide.content}
+                </AbCarouselSlide>
+              ))}
+            </AbCarouselTrack>
+            {/* 📱 < 768px: "Show playground" → core's right drawer (hidden from 768px) */}
+            <WelcomeShowPlayground label={labels.show} />
+          </WelcomeRegion>
+        }
+      />
+      {/* 🗺️ the aside pane: the active slide's playground (core: a column from 1180px, inline ABOVE main below via
+          `asideBelow`, rendered once). `dividerHidden` + the app's `--ab-pane-divider: none`: no line between the panes */}
+      <AbAsideLayout
+        orientation="vertical"
+        pageName="welcome"
+        className={styles.asidePane}
+        aria-label={labels.playground} // 🏷️ core 0.2.3: the complementary landmark's name
+        chrome={false} // 🧰 no legacy layers
+        dividerHidden // ➖ no divider
+        content={<WelcomePlayground playgrounds={slides.map((slide) => slide.playground)} labels={{ ...labels, title: labels.playground }} logo={playgroundLogo} />}
+      />
+    </AbCarouselProvider>
   );
 }

@@ -47,6 +47,15 @@
       "system": "System"
     },
     "language": "Language",
+    "mobileHeader": {
+      "header": "Main header",
+      "language": "Change language",
+      "toLight": "Switch to light theme",
+      "toDark": "Switch to dark theme",
+      "toSystem": "Use the system theme"
+    },
+    "slideControls": "Slide controls",
+    "mainContent": "Introduction slides",
     "install": {
       "label": "Install {pkg}",
       "copy": "Copy command",
@@ -54,6 +63,11 @@
     },
     "playground": {
       "title": "Live Playground",
+      "show": "Show playground",
+      "provider": "provider",
+      "prefix": "prefix",
+      "intlFormat": "Intl format",
+      "greetings": {"en": "Hello", "fr": "Bonjour", "es": "Hola", "ru": "Привет"},
       "live": "live"
     },
     "cta": "Get Started",
@@ -79,17 +93,17 @@
       "s02": {
         "title": "Core elements",
         "body": "The config, layouts and accessible primitives every other AbElements package builds on.",
-        "illustrationAlt": "Diagram: the screen, main and aside layouts all connect to the core package."
+        "illustrationAlt": "Diagram: the AbProvider hub wired to config, Slot, client/server, focus ring, Portal and locale nodes."
       },
       "s03": {
         "title": "Ready-made components",
         "body": "Accessible React UI built on Core and Theme, from buttons and tabs to menus and a splash screen.",
-        "illustrationAlt": "Diagram: a button, a tab bar, a menu and a splash screen connect to the components package."
+        "illustrationAlt": "Diagram: ab-nextjs-components wired to Button, Switch, Tabs, Sheet, Avatar and BottomNav previews."
       },
       "s04": {
         "title": "Warm, tokenised theming",
         "body": "Bronze design tokens as CSS variables, with a real dark mode and no flash on load.",
-        "illustrationAlt": "Diagram: colour swatches and a light and dark switch connect to the theme tokens.",
+        "illustrationAlt": "Diagram: the ThemeProvider palette wired to tokens, colour scheme, light and dark, radius, contrast and Tailwind nodes.",
         "chips": {
           "tokens": "Tokens",
           "lightDark": "Light & dark",
@@ -99,7 +113,7 @@
       "s05": {
         "title": "Tree-shakable icons",
         "body": "SVG icons with typed names. Import only the icons you ship.",
-        "illustrationAlt": "Diagram: a grid of icons connects to the icon component, with size and weight options.",
+        "illustrationAlt": "Diagram: an icon set wired to size, variant, Icon, bundle, fill axis and typed import nodes.",
         "chips": {
           "grid": "24px grid",
           "typed": "Typed names"
@@ -108,12 +122,12 @@
       "s06": {
         "title": "Fonts without layout shift",
         "body": "Inter, Zilla Slab, Mulish, Quicksand and Roboto, self-hosted for Next.js with simple font-* utilities.",
-        "illustrationAlt": "Diagram: five font specimens surround a large “Aa”."
+        "illustrationAlt": "Diagram: ab-nextjs-fonts wired to Zilla Slab, Inter weights, Inter, Mulish, Quicksand and Roboto samples."
       },
       "s07": {
         "title": "Animations that feel right",
         "body": "Easings, fades and transitions that respect the reduced-motion setting out of the box.",
-        "illustrationAlt": "Diagram: an easing curve and a reduce-animations switch connect to the animations package.",
+        "illustrationAlt": "Diagram: an ease-out curve with a moving dot, wired to spring, duration, preset, reduced motion, Animate and stagger nodes.",
         "chips": {
           "easings": "Easings",
           "fades": "Fades",
@@ -123,9 +137,14 @@
       "s08": {
         "title": "Typed React hooks",
         "body": "Small, typed hooks for the theme, media queries, storage and the clipboard.",
-        "illustrationAlt": "Diagram: four hooks connect to the hooks package."
+        "illustrationAlt": "Diagram: ab-nextjs-hooks wired to useTheme, useMedia, useHotkey, useLocalStorage, useMounted and useClipboard."
       },
       "s09": {
+        "title": "Every language, built in",
+        "body": "Translated messages, locale routes and hreflang alternates for Next.js, ready for every AbElements app.",
+        "illustrationAlt": "Diagram: the AbI18nProvider hub, with a globe and a greeting cycling through English, French, Spanish and Russian, wired to messages/en.json, AbLocaleSwitcher, useAbTranslations, AbLocalePrefix, Intl number formatting and getAbAlternates hreflang nodes."
+      },
+      "s10": {
         "pill": "Free forever · MIT",
         "title": "Build your web apps<br></br>for free with <em>AbElements</em>",
         "body": "Eight open-source packages, live docs and one PWA. MIT, free forever.",

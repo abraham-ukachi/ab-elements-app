@@ -46,6 +46,9 @@
 'use client';
 
 // 🌍 Welcome globe: the packaged `AbLocaleSwitcher` with real links (works as plain `<a hreflang>`).
+// 🗄️ 0.2.21 (D40): `presentation="auto"` = the packaged bottom app drawer (AbDrawerList) below 768px, the popover menu above.
+// 📱 0.2.3: below 768px the app header row (and so this globe) is hidden by core's `mobileHeader="main"`; the phone globe
+//   lives in AbMobileHeader instead (see WelcomeMobileHeader), which reuses `useWelcomeLocaleHref` from here.
 // Composition only: this file just builds each locale's `/welcome` URL and keeps the slide (`?s=`) 🔗.
 
 // import the React hooks (state + effect) ⚛️
@@ -69,12 +72,12 @@ interface WelcomeLocaleSwitcherProps {
 
 
 /**
- * `WelcomeLocaleSwitcher` - Client Component 🌍
+ * `useWelcomeLocaleHref` - the `/welcome` URL of a locale, keeping the slide (`?s=`) 🔗
+ * (shared by the 768px+ globe menu and the mobile header's language drawer)
  *
- * @param { WelcomeLocaleSwitcherProps } props - the current locale, the trigger label and the choices
- * @returns { ReactElement }
+ * @returns { (code: string) => string } the href builder
  */
-export default function WelcomeLocaleSwitcher({ current, label, locales }: WelcomeLocaleSwitcherProps) {
+export function useWelcomeLocaleHref(): (code: string) => string {
   // the current `?s=…` query (empty on the server and on s01) 🔗
   const [search, setSearch] = useState('');
 
@@ -84,7 +87,7 @@ export default function WelcomeLocaleSwitcher({ current, label, locales }: Welco
     const sync = () => setSearch(window.location.search);
     // first read 🌱
     sync();
-    // re-read whenever the pointer / keyboard reaches the header (cheap, no polling) 🖱️⌨️
+    // re-read whenever the pointer / keyboard is used (cheap, no polling) 🖱️⌨️
     document.addEventListener('pointerdown', sync, true);
     document.addEventListener('keydown', sync, true);
     // clean up 🧹
@@ -94,15 +97,31 @@ export default function WelcomeLocaleSwitcher({ current, label, locales }: Welco
     };
   }, []);
 
+  // 🔗 same slide, other locale
+  return (code: string) => `${localizeAbPathname('/welcome', code, abI18nConfig)}${search}`;
+}
+
+
+/**
+ * `WelcomeLocaleSwitcher` - Client Component 🌍
+ *
+ * @param { WelcomeLocaleSwitcherProps } props - the current locale, the trigger label and the choices
+ * @returns { ReactElement }
+ */
+export default function WelcomeLocaleSwitcher({ current, label, locales }: WelcomeLocaleSwitcherProps) {
+  // 🔗 the locale hrefs (keeping `?s=`)
+  const getHref = useWelcomeLocaleHref();
+
   // return the packaged globe (variant icon, menu aligned to the end) 🌐
   return (
     <AbLocaleSwitcher
       variant="icon" // 🌐 globe only
       align="end" // ↔️ under the right edge
+      presentation="auto" // 🗄️ drawer on phones, menu on tablet / desktop (resolved at open time: no hydration flip)
       label={label} // 🏷️ "Language"
       current={current} // ✅
       locales={locales} // 🗣️
-      getHref={(code) => `${localizeAbPathname('/welcome', code, abI18nConfig)}${search}`} // 🔗 same slide, other locale
+      getHref={getHref} // 🔗 same slide, other locale
     />
   );
 }

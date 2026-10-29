@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.21](https://github.com/abraham-ukachi/ab-elements-app/compare/v0.2.20...v0.2.21) (2026-10-30)
+
+* :building_construction: :iphone: Rebuild the Welcome on the packaged core panes: header · main · aside, with the counter in main, one scroller below 1180px (header, counter, playground and text scroll together) and the playground pane from 1180px
+* :sparkles: Show the packaged v6 Live Playground scenes (`AbPlaygroundScene`, compact below 768px and full from 768px, no JS) with the abElements logo, code-name captions and the v6 page, pane and card surfaces
+* :globe_with_meridians: Add the i18n slide "Every language, built in" (10 slides now; the last slide moves to s10) in en, fr, es & ru
+* :iphone: Open the playground in a right drawer below 768px from a "Show playground" button (Esc, backdrop tap & swipe close it, focus returns)
+* :pushpin: Pin the slide dots & arrows to the bottom of main at every width (a named "Slide controls" main bar, never an app footer); Skip stays in the top bar
+* :art: Match the v6 call to action: a bronze rounded Get Started and a card-style Continue with GitHub (52px, 56px from 1180px)
+* :wheelchair: Put the top bar in a banner landmark and make each slide title the page's single `h1` (no axe issues at any width)
+* :arrow_up: Pin the published ab-nextjs-components 0.2.3, ab-nextjs-core 0.2.3, ab-nextjs-theme 0.3.7 & ab-nextjs-animations 0.2.5, with exact release-age pins that expire 24h after each publish, and drop the expired pins
+* :white_check_mark: Test the 10 slides, the playground drawer (dialog, Esc, backdrop tap, real-touch swipe, hit-testing, focus return) and the packaged scenes, and refresh the Welcome visual baselines
+
 ### [0.2.20](https://github.com/abraham-ukachi/ab-elements-app/compare/v0.2.19...v0.2.20) (2026-10-21)
 
 * :sparkles: :iphone: Build the docs shell from packaged pieces only: the compact app bar, the sidebar (rail, version switcher, profile button), the bottom nav (Home · Packages · Search · Profile) and the 768 / 1180 / 1920 panes, where only the main pane scrolls

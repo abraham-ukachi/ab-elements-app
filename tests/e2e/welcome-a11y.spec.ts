@@ -55,7 +55,7 @@ import type { Page } from '@playwright/test';
 // import the axe builder from `@axe-core/playwright` 🪓
 import AxeBuilder from '@axe-core/playwright';
 // import the shared Welcome helpers 🧰
-import { LAPTOP, SLIDE_IDS, openWelcome } from './welcome-helpers';
+import { LAPTOP, SLIDE_COUNT, SLIDE_IDS, openWelcome } from './welcome-helpers';
 
 
 // where each run drops its axe summary (one JSON per slide × theme; `test-results/` is git-ignored) 📊
@@ -140,7 +140,7 @@ const focusKey = (page: Page): Promise<string> => page.evaluate(() => {
  * @returns { Promise<string[]> }
  */
 async function tabOrder(page: Page, presses: number): Promise<string[]> {
-  // the sequence, with consecutive duplicates collapsed (9 dots → one `dot`)
+  // the sequence, with consecutive duplicates collapsed (10 dots → one `dot`)
   const order: string[] = [];
   for (let i = 0; i < presses; i++) {
     await page.keyboard.press('Tab');
@@ -161,9 +161,9 @@ test.describe('Welcome tab order ⌨️', () => {
     expect(order.filter((key) => key !== 'slide').slice(0, 7)).toEqual(['theme', 'language', 'skip', 'install', 'dot', 'prev', 'next']);
   });
 
-  test('s09: theme → language → slide content (Get Started → GitHub) → dots', async ({ page }) => {
-    // open s09 (no Skip, no arrows)
-    await openWelcome(page, 'en', 9);
+  test('s10: theme → language → slide content (Get Started → GitHub) → dots', async ({ page }) => {
+    // open s10 (no Skip, no arrows)
+    await openWelcome(page, 'en', SLIDE_COUNT);
     // tab through it
     const order = await tabOrder(page, 20);
     // expect the end-of-walkthrough order ✅

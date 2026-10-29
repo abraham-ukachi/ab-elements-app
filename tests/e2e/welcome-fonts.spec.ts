@@ -113,15 +113,15 @@ test.describe('Welcome ru titles in Mulish (Cyrillic) 🇷🇺', () => {
     await page.screenshot({ path: testInfo.outputPath('ru-s01-laptop-light.png'), animations: 'disabled' });
   });
 
-  test('ru titles wrap without clipping on mobile (s03, s06, s09) 📱', async ({ page }) => {
+  test('ru titles wrap without clipping on mobile (s03, s06, s10) 📱', async ({ page }) => {
     // the mobile frame
     await page.setViewportSize(MOBILE);
-    for (const n of [3, 6, 9]) {
+    for (const n of [3, 6, 10]) {
       // open the slide
       await openWelcome(page, 'ru', n);
       // the title's box never scrolls sideways (no clipping) ✂️
       const overflow = await slideTitle(page, SLIDE_IDS[n - 1]).evaluate((el) => el.scrollWidth - el.clientWidth);
-      expect(overflow, `s0${n}`).toBeLessThanOrEqual(0);
+      expect(overflow, `s${String(n).padStart(2, "0")}`).toBeLessThanOrEqual(0);
     }
   });
 });

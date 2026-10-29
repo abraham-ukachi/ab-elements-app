@@ -81,20 +81,21 @@ for (const [frame, viewport] of [['laptop', LAPTOP], ['mobile', MOBILE]] as cons
       expect(await longAnimations()).toEqual([]);
     });
 
-    test('Get Started is visible (opacity 1, in the viewport) on s09 🚀', async ({ page }) => {
-      // open s09
+    test('Get Started is visible (opacity 1, in the viewport) on s10 🚀', async ({ page }) => {
+      // open s10
       await openWelcome(page, 'en', SLIDE_COUNT);
       // the button
       const cta = page.getByRole('button', { name: 'Get Started' });
       // visible, in view & not faded out 👀
       await expect(cta).toBeVisible();
       await expect(cta).toBeInViewport();
-      expect(await cta.evaluate((el) => {
+      // ⏱️ polled: the short reduced-motion fade (≤ MAX_REDUCED_MS, allowed above) may still be finishing on arrival
+      await expect.poll(() => cta.evaluate((el) => {
         // walk up: every ancestor must be fully opaque
         let opacity = 1;
         for (let node: Element | null = el; node; node = node.parentElement) opacity *= Number(getComputedStyle(node).opacity);
         return opacity;
-      })).toBe(1);
+      }), { timeout: MAX_REDUCED_MS + 1000 }).toBe(1);
     });
   });
 }

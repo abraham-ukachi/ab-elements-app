@@ -47,6 +47,15 @@
       "system": "Système"
     },
     "language": "Langue",
+    "mobileHeader": {
+      "header": "En-tête principal",
+      "language": "Changer de langue",
+      "toLight": "Passer au thème clair",
+      "toDark": "Passer au thème sombre",
+      "toSystem": "Utiliser le thème du système"
+    },
+    "slideControls": "Commandes des diapositives",
+    "mainContent": "Diapositives de présentation",
     "install": {
       "label": "Installer {pkg}",
       "copy": "Copier la commande",
@@ -54,6 +63,11 @@
     },
     "playground": {
       "title": "Bac à sable en direct",
+      "show": "Afficher le bac à sable",
+      "provider": "fournisseur",
+      "prefix": "préfixe",
+      "intlFormat": "format Intl",
+      "greetings": {"en": "Hello", "fr": "Bonjour", "es": "Hola", "ru": "Привет"},
       "live": "en direct"
     },
     "cta": "Commencer",
@@ -79,17 +93,17 @@
       "s02": {
         "title": "Éléments de base",
         "body": "La configuration, les mises en page et les primitives accessibles sur lesquelles reposent tous les autres packages AbElements.",
-        "illustrationAlt": "Schéma : les mises en page écran, principale et latérale reliées au package core."
+        "illustrationAlt": "Schéma : le hub AbProvider relié aux nœuds config, Slot, client/serveur, anneau de focus, Portal et langue."
       },
       "s03": {
         "title": "Composants prêts à l’emploi",
         "body": "Une UI React accessible, construite sur Core et Theme : des boutons et onglets jusqu’aux menus et à l’écran de démarrage.",
-        "illustrationAlt": "Schéma : un bouton, des onglets, un menu et un écran de démarrage reliés au package components."
+        "illustrationAlt": "Schéma : ab-nextjs-components relié aux aperçus Button, Switch, Tabs, Sheet, Avatar et BottomNav."
       },
       "s04": {
         "title": "Un thème chaleureux, fondé sur des jetons",
         "body": "Des jetons de design bronze en variables CSS, avec un vrai mode sombre et aucun flash au chargement.",
-        "illustrationAlt": "Schéma : des nuanciers et un interrupteur clair/sombre reliés aux jetons du thème.",
+        "illustrationAlt": "Schéma : la palette ThemeProvider reliée aux nœuds tokens, schéma de couleurs, clair et sombre, rayon, contraste et Tailwind.",
         "chips": {
           "tokens": "Jetons",
           "lightDark": "Clair et sombre",
@@ -99,7 +113,7 @@
       "s05": {
         "title": "Des icônes à la carte",
         "body": "Des icônes SVG aux noms typés. N’importez que celles dont vous avez besoin.",
-        "illustrationAlt": "Schéma : une grille d’icônes reliée au composant d’icône, avec des options de taille et de graisse.",
+        "illustrationAlt": "Schéma : un jeu d’icônes relié aux nœuds taille, variante, Icon, bundle, axe de remplissage et import typé.",
         "chips": {
           "grid": "Grille de 24 px",
           "typed": "Noms typés"
@@ -108,12 +122,12 @@
       "s06": {
         "title": "Des polices sans décalage visuel",
         "body": "Inter, Zilla Slab, Mulish, Quicksand et Roboto, auto-hébergées pour Next.js avec de simples utilitaires font-*.",
-        "illustrationAlt": "Schéma : cinq spécimens de polices autour d’un grand « Aa »."
+        "illustrationAlt": "Schéma : ab-nextjs-fonts relié aux échantillons Zilla Slab, graisses Inter, Inter, Mulish, Quicksand et Roboto."
       },
       "s07": {
         "title": "Des animations tout en finesse",
         "body": "Des courbes, fondus et transitions qui respectent d’emblée le réglage « Réduire les animations ».",
-        "illustrationAlt": "Schéma : une courbe d’accélération et un interrupteur « Réduire les animations » reliés au package animations.",
+        "illustrationAlt": "Schéma : une courbe ease-out avec un point en mouvement, reliée aux nœuds spring, durée, preset, mouvement réduit, Animate et décalage.",
         "chips": {
           "easings": "Courbes",
           "fades": "Fondus",
@@ -123,9 +137,14 @@
       "s08": {
         "title": "Des hooks React typés",
         "body": "De petits hooks typés pour le thème, les media queries, le stockage et le presse-papiers.",
-        "illustrationAlt": "Schéma : quatre hooks reliés au package hooks."
+        "illustrationAlt": "Schéma : ab-nextjs-hooks relié à useTheme, useMedia, useHotkey, useLocalStorage, useMounted et useClipboard."
       },
       "s09": {
+        "title": "Chaque langue, intégrée",
+        "body": "Messages traduits, routes par langue et alternatives hreflang pour Next.js, prêts pour chaque app AbElements.",
+        "illustrationAlt": "Schéma : le hub AbI18nProvider, avec un globe et une salutation qui passe de l’anglais au français, à l’espagnol et au russe, relié aux nœuds messages/en.json, AbLocaleSwitcher, useAbTranslations, AbLocalePrefix, format de nombres Intl et hreflang getAbAlternates."
+      },
+      "s10": {
         "pill": "Gratuit pour toujours · MIT",
         "title": "Créez vos applis web<br></br>gratuitement avec <em>AbElements</em>",
         "body": "Huit packages open source, une documentation en direct et une PWA. MIT, gratuit pour toujours.",
