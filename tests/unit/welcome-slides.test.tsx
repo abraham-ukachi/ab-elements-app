@@ -75,6 +75,7 @@ const LABELS: WelcomeSlidesLabels = {
   announce: en.Welcome.announce, // 📣
   counter: en.Welcome.counter, // 🔢
   mainContent: en.Welcome.mainContent, // ⌨️ 0.2.3 the main scroller's name
+  playground: en.Welcome.playground.title, // 🗺️ v5: the aside pane's name
 };
 
 // the phone header's pieces (0.2.3 AbMobileHeader + the language sheet) 📱
@@ -88,7 +89,7 @@ const MOBILE_HEADER = {
 // render the client carousel with 9 simple slides (each with its focusable title) 🖨️
 function renderSlides(): string {
   // the 9 slides: an id, a plain title and a tiny markup
-  const slides = IDS.map((id) => ({ id, title: `Title ${id}`, content: <h2 id={`welcome-${id}-title`} tabIndex={-1}>{`Title ${id}`}</h2> }));
+  const slides = IDS.map((id) => ({ id, title: `Title ${id}`, content: <h2 id={`welcome-${id}-title`} tabIndex={-1}>{`Title ${id}`}</h2>, playground: <p>{`Playground ${id}`}</p> }));
   // render them to static HTML (the SSR / no-JS output)
   return renderToStaticMarkup(<WelcomeSlides slides={slides} labels={LABELS} mobileHeader={MOBILE_HEADER} />);
 }
@@ -195,5 +196,29 @@ describe('WelcomeSlides (SSR / no-JS markup) 🎠', () => {
   it('keeps the s09 title focusable for the Skip shortcut ♿', () => {
     // the Skip focus target
     expect(html).toContain('id="welcome-s09-title" tabindex="-1"');
+  });
+});
+
+
+// ===== LAYOUT RULE (v5): header · main · aside, no footer ===== //
+describe('Welcome layout rule 🧱', () => {
+  it('puts the counter, the slides and the dots + arrows in main, and NO main footer bar ⚫', () => {
+    // the SSR output
+    const html = renderSlides();
+    // 🚫 no core footer bar (the v6 nav lives inside the main content now)
+    expect(html).not.toContain('data-ab-part="mainBar"');
+    // ⚫ the dots are still rendered (inside main)
+    expect(html).toContain('Go to slide 2');
+  });
+
+  it("shows ONLY the active slide's playground in the aside pane, named 🗺️", () => {
+    // the SSR output (s01 is active)
+    const html = renderSlides();
+    // 🗺️ the aside pane exists and holds s01's playground, named "Live Playground"
+    expect(html).toContain('data-ab-part="aside"');
+    expect(html).toContain(`aria-label="${en.Welcome.playground.title}"`);
+    expect(html).toContain('Playground s01');
+    // 🙈 not the others
+    expect(html).not.toContain('Playground s02');
   });
 });

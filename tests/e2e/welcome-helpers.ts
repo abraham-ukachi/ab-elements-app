@@ -119,7 +119,7 @@ export async function openWelcome(page: Page, locale = 'en', slide = 1): Promise
 
 
 // the counter (`02 / 09`) 🔢
-// 📌 0.2.3: ONE counter, in AbMobileHeader's `row` (core's `mainHeaderAt="all"` keeps that header at every width)
+// 📌 v5: ONE counter, at the top of the main column (v6 `ctr`), inside the main scroller
 export const counter = (page: Page) => page.locator('[data-ab-part="counter"]');
 // the carousel region 🎠
 export const carousel = (page: Page) => page.locator('[data-ab-part="carousel"]');
