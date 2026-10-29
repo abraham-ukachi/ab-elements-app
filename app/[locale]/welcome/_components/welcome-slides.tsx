@@ -57,6 +57,7 @@ import {
   AbCarouselProvider, // 🧠 0.2.3: the carousel state WITHOUT an element (so it no longer wraps <main>)
   AbCarouselStatus, // 📣 0.2.3: the polite live region ("Slide 3 of 9: …"), once, inside our region
   useAbCarouselRegion, // 🧷 0.2.3: the region attributes, spread on OUR element
+  useAbCarouselKeys, // ⌨️ 0.2.3: ←/→ anywhere inside <main> (dots, slide area), never page-wide
   AbCarouselCounter, // 🔢 `02 / 09`
   AbCarouselDots, // ⚫ the 9 dots
   AbCarouselNext, // ⏭️ next arrow
@@ -202,19 +203,17 @@ function WelcomeRegion({ className, children }: { className?: string; children: 
 
 
 /**
- * `WelcomeBar` - the dots + arrows row (core's `mainBar`) with the carousel's OWN ←/→ Home/End handler ⌨️
- * In headless mode our region sits inside the main scroller, so the bar is outside it: we hand the bar the packaged
- * `onKeyDown` from `useAbCarouselRegion()` (no keys of our own), so arrow keys on a dot still move the slides.
+ * `WelcomeKeys` - the carousel's ←/→ for the whole main pane ⌨️
+ * Our region sits inside the scroller and the dots in core's `mainBar`, so the packaged hook scopes the keys to
+ * <main> (core's `data-ab-part="main"`): arrows on a dot or in the slide area move the slides; focus outside main
+ * (the app header, the body) is left alone (no global hijack).
  *
- * @param { { children: ReactNode } } props - the dots + arrows
- * @returns { ReactElement }
+ * @returns { null }
  */
-function WelcomeBar({ children }: { children: ReactNode }) {
-  // ⌨️ the packaged key handler (only while focus is inside this row: no global hijack) + the region's class
-  const { onKeyDown, className } = useAbCarouselRegion();
-  // 🎨 the packaged region class carries the carousel tokens (`--_accent`: the active dot + the filled Next); outside
-  //    the region the parts would lose them (gap: the parts should fall back to --ab-carousel-accent themselves)
-  return <div className={clsx(className, styles.footer)} onKeyDown={onKeyDown}>{children}</div>;
+function WelcomeKeys() {
+  // ⌨️ main only (NOT 'document')
+  useAbCarouselKeys('main');
+  return null;
 }
 
 
@@ -223,8 +222,8 @@ function WelcomeBar({ children }: { children: ReactNode }) {
  *
  * Core's `AbMainLayout` inside the HEADLESS packaged carousel (0.2.3 `AbCarouselProvider`: no element, so <main> is
  * the content row's own pane again):
- *   📱 below 768px: AbMobileHeader with the 🔢 counter + Skip in its `row` → `mainHeader`
- *   🛤️ the slides (+ the 🔢 counter row at 768px+) → OUR region in the main content (THE scroller, focusable, named)
+ *   📌 AbMobileHeader with the 🔢 counter + Skip in its `row` → `mainHeader` (shown at every width: `mainHeaderAt="all"`)
+ *   🛤️ the slides → OUR region in the main content (THE scroller, focusable, named) · ⌨️ ←/→ scoped to <main>
  *   ⚫⏮️⏭️ dots + arrows → `mainBar`. `autoHeight`: the track follows the active slide (no blank scroll on short ones).
  * Plus the `?s=` URL state.
  *
@@ -270,9 +269,10 @@ export default function WelcomeSlides({ slides, labels, mobileHeader }: WelcomeS
     [slides],
   );
 
-  // 🔢 the counter row: `02 / 09` left, Skip right (in the mobile header's `row` below 768px, atop the region above)
-  const counterRow = (className: string) => (
-    <div className={className}>
+  // 🔢 the counter row: `02 / 09` left, Skip right; ONLY in the mobile header's `row` (core keeps that header at every
+  //    width with `mainHeaderAt="all"`, so it stays put while the slide scrolls)
+  const counterRow = (
+    <div className={clsx(styles.counterRow, styles.counterRowInHeader)}>
       <AbCarouselCounter
         className={styles.counter}
         format={(current, total) => fillWelcomePattern(labels.counter, { current: pad(current), total: pad(total) })}
@@ -295,6 +295,8 @@ export default function WelcomeSlides({ slides, labels, mobileHeader }: WelcomeS
     >
       {/* ⬆️ a new slide starts at the top of the main scroller */}
       <WelcomeScrollReset />
+      {/* ⌨️ ←/→ inside <main> */}
+      <WelcomeKeys />
       {/* 🧱 the main pane: `id="main"` (the skip target ♿), header · content · bar from core */}
       <AbMainLayout
         id="main"
@@ -304,19 +306,18 @@ export default function WelcomeSlides({ slides, labels, mobileHeader }: WelcomeS
         chrome={false} // 🧰 no legacy backdrop / menus / progress layers (0.1.5)
         scrollerLabel={labels.mainContent} // ⌨️ 0.2.3: the main scroller is a named tab stop (axe scrollable-region-focusable)
         // 📱 below 768px only (core hides this slot at 768px+): logo · globe · 3-state theme + the counter row
-        mainHeader={<WelcomeMobileHeader {...mobileHeader} row={counterRow(clsx(styles.counterRow, styles.counterRowInHeader))} />}
+        mainHeader={<WelcomeMobileHeader {...mobileHeader} row={counterRow} />}
         // ⚫⏮️⏭️ Bar - dots left, arrows right (core renders the <footer>)
         mainBar={
-          <WelcomeBar>
+          <div className={styles.footer}>
+            {/* 🟤 the parts resolve the accent themselves (0.2.3), so the bar needs no carousel class */}
             <AbCarouselDots label={labels.carousel} dotLabel={(n, _total, title) => fillWelcomePattern(labels.goTo, { n, title: title ?? '' })} />
             <WelcomeArrows back={labels.back} next={labels.next} />
-          </WelcomeBar>
+          </div>
         }
         // 🛤️ our region (the 768px+ counter row + the 9 slides), inside the main scroller
         content={
           <WelcomeRegion className={styles.region}>
-            {/* 🔢 768px+: the counter row atop the slides (below 768px it's in the mobile header's `row`) */}
-            <div className={styles.counterWide}>{counterRow(styles.counterRow)}</div>
             <AbCarouselTrack className={styles.track}>
               {slides.map((slide, i) => (
                 <AbCarouselSlide key={slide.id} className={styles.slide} label={fillWelcomePattern(labels.slide, { n: i + 1, total: count })}>

@@ -75,6 +75,9 @@ import AbPill from 'ab-nextjs-components/ab-pill';
 import AbInstallSnippet from 'ab-nextjs-components/ab-install-snippet';
 // import the 3-state theme switch (light / dark / system) from `ab-nextjs-components` 🌗
 import AbThemeToggle from 'ab-nextjs-components/ab-theme-toggle';
+// import the ONE shared theme mode (0.2.3): the laptop toggle + the mobile header's 3-state button read & write it 🧠
+// (from the package root: the pack has no `./ab-theme-mode` subpath export yet)
+import { AbThemeModeProvider } from 'ab-nextjs-components';
 // import the "Live Playground" diagram from `ab-nextjs-components` 🗺️
 import AbFlowDiagram from 'ab-nextjs-components/ab-flow-diagram';
 // import the no-JS carousel CSS (all slides stacked, controls hidden) from the server-safe helpers 🧯
@@ -318,6 +321,8 @@ export default async function Welcome({ locale }: WelcomeProps) {
       </noscript>
 
       {/* 📑 the page state (publishes the main scroller); the Welcome has no aside */}
+      {/* 🌗 one theme mode for the whole Welcome (no drift between the laptop toggle and the phone header at 768px) */}
+      <AbThemeModeProvider defaultMode="system">
       <AbPageProvider defaultAsideOpen={false}>
         {/* 🧱 the frame: header row · main pane (no sidebar / aside / bottom nav = 0px) */}
         <AbAppLayout
@@ -326,6 +331,7 @@ export default async function Welcome({ locale }: WelcomeProps) {
           pageName="welcome"
           className={styles.app}
           mobileHeader="main" // 📱 0.2.3: below 768px the main pane's header (AbMobileHeader + the counter row) IS the bar
+          mainHeaderAt="all" // 📌 0.2.3: that header stays at every width, so the counter row (its `row`) never scrolls away
           // 🔝 Top Bar - logo + utilities (core renders the row; its height is the v6 48 / 56 / 60px via a token)
           header={
             <div className={styles.topBar}>
@@ -379,6 +385,7 @@ export default async function Welcome({ locale }: WelcomeProps) {
           }
         />
       </AbPageProvider>
+      </AbThemeModeProvider>
     </>
   );
 }

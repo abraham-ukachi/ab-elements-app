@@ -45,15 +45,16 @@
 
 'use client';
 
-// 📱 Welcome mobile header: the packaged AbMobileHeader (logo · globe · 3-state theme) + the counter row in its
-// `row` slot (components 0.2.3), and the language list as the packaged bottom drawer (D40) that closes on a swipe
-// down and gives focus back to the globe (`trigger`). Composition only: no app-local UI 🧩.
+// 📱 Welcome mobile header: the packaged AbMobileHeader (compact: logo · globe · 3-state theme on the SHARED mode) +
+// the counter row in its `row` slot (components 0.2.3), and the language list as the packaged bottom drawer (D40)
+// that closes on a swipe down and gives focus back to the globe (`trigger`). Without JS the globe is a <details>
+// list of the 4 locale links (`languages`). Composition only: no app-local UI 🧩.
 
 // import the React hooks we need (state, a ref, a stable drawer component) ⚛️
-import { useCallback, useMemo, useRef, useState, type MouseEvent, type ReactNode } from 'react';
+import { useCallback, useId, useMemo, useRef, useState, type ReactNode } from 'react';
 
-// import the packaged mobile header (+ its theme-mode type) from `ab-nextjs-components` 📱
-import AbMobileHeader, { type AbMobileHeaderThemeMode } from 'ab-nextjs-components/ab-mobile-header';
+// import the packaged mobile header from `ab-nextjs-components` (its theme button reads the shared AbThemeModeProvider) 📱
+import AbMobileHeader from 'ab-nextjs-components/ab-mobile-header';
 // import the packaged bottom sheet (0.2.3: swipe down to close + `trigger` focus return) 🗄️
 import AbBottomDrawer from 'ab-nextjs-components/ab-bottom-drawer';
 // import the packaged drawer list (the locale rows with hreflang links + the ✓) 📋
@@ -62,8 +63,6 @@ import AbDrawerList from 'ab-nextjs-components/ab-drawer-list';
 import type { AbDrawerProps } from 'ab-nextjs-components/ab-drawer';
 // import the locale option type from the packaged switcher 🗣️
 import type { AbLocaleOption } from 'ab-nextjs-components/ab-locale-switcher';
-// import the theme engine (the same one AbThemeToggle uses: persists + applies to <html>) 🌗
-import { useAbThemeMode } from 'ab-nextjs-hooks/useAbTheme';
 
 // import the shared locale href builder (keeps `?s=`) 🔗
 import { useWelcomeLocaleHref } from './welcome-locale-switcher';
@@ -102,22 +101,17 @@ interface WelcomeMobileHeaderProps extends WelcomeMobileHeaderData {
  * @returns { ReactElement }
  */
 export default function WelcomeMobileHeader({ logo, current, locales, labels, row }: WelcomeMobileHeaderProps) {
-  // 🌗 the 3-state theme (light → dark → system), the v6 default is "system"
-  const { mode, setMode } = useAbThemeMode('system');
   // 🗄️ is the language drawer open?
   const [open, setOpen] = useState(false);
-  // 🌍 the globe button: the drawer's `trigger` (focus goes back to it on close, even after a swipe / on Safari)
-  const globeRef = useRef<HTMLElement | null>(null);
+  // 🆔 the sheet's id: the globe's aria-controls
+  const sheetId = `${useId()}-language`;
+  // 🌍 the globe element (AbMobileHeader fills it via `languageRef`): the drawer's `trigger` (focus returns to it)
+  const globeRef = useRef<HTMLButtonElement & HTMLAnchorElement>(null);
   // 🔗 the locale hrefs (same slide, other locale)
   const getHref = useWelcomeLocaleHref();
 
-  // 🌍 the globe was tapped: remember it as the trigger, then open the sheet
-  const onLanguage = useCallback((event?: MouseEvent<HTMLElement>) => {
-    // 📌 AbMobileHeader passes its click event; fall back to its globe part (gap: no `languageRef` prop yet)
-    globeRef.current = event?.currentTarget ?? document.querySelector<HTMLElement>('[data-ab-part="mobile-header-language"]');
-    // 🚪 open
-    setOpen(true);
-  }, []);
+  // 🌍 the globe was used (after hydration): open the sheet
+  const onLanguage = useCallback(() => setOpen(true), []);
 
   // 🧱 the drawer AbDrawerList renders in: the packaged bottom sheet with our `trigger` (stable, so it never remounts)
   const Sheet = useMemo(() => {
@@ -133,16 +127,21 @@ export default function WelcomeMobileHeader({ logo, current, locales, labels, ro
     <>
       <AbMobileHeader
         logo={logo} // 🅰️
-        onLanguage={onLanguage} // 🌍 opens the sheet
+        size="compact" // 📏 the v6 48px bar (+ the counter row = 96px)
+        onLanguage={onLanguage} // 🌍 opens the sheet (once hydrated)
+        languageControls={sheetId} // 🔗 aria-controls → the sheet
         languageExpanded={open} // ♿ aria-expanded on the globe
-        themeMode={mode as AbMobileHeaderThemeMode} // 🌗 the current mode
-        onThemeModeChange={setMode} // 🔁 light → dark → system (persists + applies to <html>)
-        row={row} // ➕ the counter row under the 56px bar
+        languageRef={globeRef} // 📌 the globe element (the sheet's `trigger`)
+        // 🧩 no JS: a <details> list of real hreflang links (the 4 locales, this slide kept once hydrated)
+        languages={locales.map((l) => ({ locale: l.code, label: l.label, href: getHref(l.code), current: l.code === current }))}
+        // 🌗 no theme props: the 3-state button reads & writes the shared AbThemeModeProvider
+        row={row} // ➕ the counter row under the bar
         labels={{ language: labels.language, toLight: labels.toLight, toDark: labels.toDark, toSystem: labels.toSystem, header: labels.header }} // 🌐
       />
       {/* 🗄️ the language list: a bottom sheet (swipe down / Esc / scrim close it) with real hreflang links */}
       <AbDrawerList
         as={Sheet} // 📱 the bottom sheet + `trigger`
+        id={sheetId} // 🆔 the globe's aria-controls target
         open={open} // 🚪
         onClose={() => setOpen(false)} // ⎋
         title={labels.languageTitle} // 🏷️ "Language"
