@@ -56,7 +56,11 @@ import en from '../../messages/en.json';
 // import the client half of the Welcome + its pure helpers 🎞️
 import WelcomeSlides, { fillWelcomePattern, readWelcomeSlideParam, type WelcomeSlidesLabels } from '../../app/[locale]/welcome/_components/welcome-slides';
 // import the 9 scenes (data) 🗺️
-import { WELCOME_SCENES } from '../../app/[locale]/welcome/welcome-scenes';
+import { WELCOME_HUB_SCENES } from '../../app/[locale]/welcome/welcome-scenes';
+// import the slide list (each package slide names its packaged v6 scene) 🎞️
+import { WELCOME_SLIDES } from '../../app/[locale]/welcome/welcome';
+// import the packaged scene names 🗺️
+import { AB_PLAYGROUND_SCENE_PACKAGES } from 'ab-nextjs-components/ab-playground-scene';
 
 
 // the slide ids of the Welcome, s01 → s09 🎞️
@@ -76,6 +80,12 @@ const LABELS: WelcomeSlidesLabels = {
   counter: en.Welcome.counter, // 🔢
   mainContent: en.Welcome.mainContent, // ⌨️ 0.2.3 the main scroller's name
   playground: en.Welcome.playground.title, // 🗺️ v5: the aside pane's name
+  live: en.Welcome.playground.live, // 🟢 v6: the scene header's dot
+  provider: en.Welcome.playground.provider, // 🌍 i18n scene
+  prefix: en.Welcome.playground.prefix,
+  intlFormat: en.Welcome.playground.intlFormat,
+  greetings: en.Welcome.playground.greetings, // 👋
+  locale: 'en', // 🗣️
 };
 
 // the phone header's pieces (0.2.3 AbMobileHeader + the language sheet) 📱
@@ -89,7 +99,7 @@ const MOBILE_HEADER = {
 // render the client carousel with 9 simple slides (each with its focusable title) 🖨️
 function renderSlides(): string {
   // the 9 slides: an id, a plain title and a tiny markup
-  const slides = IDS.map((id) => ({ id, title: `Title ${id}`, content: <h2 id={`welcome-${id}-title`} tabIndex={-1}>{`Title ${id}`}</h2>, playground: <p>{`Playground ${id}`}</p> }));
+  const slides = IDS.map((id) => ({ id, title: `Title ${id}`, content: <h2 id={`welcome-${id}-title`} tabIndex={-1}>{`Title ${id}`}</h2>, playground: { alt: `Playground ${id}`, hub: { full: <p>{`Playground ${id}`}</p>, compact: <p>{`Playground ${id}`}</p> } } }));
   // render them to static HTML (the SSR / no-JS output)
   return renderToStaticMarkup(<WelcomeSlides slides={slides} labels={LABELS} mobileHeader={MOBILE_HEADER} />);
 }
@@ -141,19 +151,16 @@ describe('Welcome data & messages 🌐', () => {
     expect(en.Welcome.theme.system).toBeTruthy();
   });
 
-  it('has a scene with wired nodes for every slide 🗺️', () => {
-    // every slide has a scene
-    for (const id of IDS) {
-      // the scene
-      const scene = WELCOME_SCENES[id];
-      // one hub + spokes
-      expect(scene.nodes.length, id).toBeGreaterThan(2);
-      // every wire connects two existing nodes
+  it('gives s02–s08 their packaged v6 scene (name = the slide package) and s01 / s09 a wired hub 🗺️', () => {
+    // 🗺️ every package slide names the AbPlaygroundScene of ITS package
+    for (const slide of WELCOME_SLIDES.filter((x) => x.pkg)) expect(slide.scene && AB_PLAYGROUND_SCENE_PACKAGES[slide.scene], slide.id).toBe(slide.pkg);
+    // 🚧 the two stopgap hubs: every wire connects two existing nodes
+    for (const scene of Object.values(WELCOME_HUB_SCENES)) {
       const ids = new Set(scene.nodes.map((node) => node.id));
-      for (const edge of scene.edges) expect(ids.has(edge.from) && ids.has(edge.to), `${id} ${edge.from}→${edge.to}`).toBe(true);
+      for (const edge of scene.edges) expect(ids.has(edge.from) && ids.has(edge.to)).toBe(true);
     }
     // s01 wires the 8 packages to the logo
-    expect(WELCOME_SCENES.s01.edges).toHaveLength(8);
+    expect(WELCOME_HUB_SCENES.s01.edges).toHaveLength(8);
   });
 });
 
@@ -211,11 +218,11 @@ describe('Welcome layout rule 🧱', () => {
     expect(html).toContain('Go to slide 2');
   });
 
-  it("shows ONLY the active slide's playground in the aside pane, named 🗺️", () => {
+  it("shows ONLY the active slide's playground in the ONE aside pane, named 🗺️", () => {
     // the SSR output (s01 is active)
     const html = renderSlides();
     // 🗺️ the aside pane exists and holds s01's playground, named "Live Playground"
-    expect(html).toContain('data-ab-part="aside"');
+    expect(html.match(/data-ab-part="aside"/g)).toHaveLength(1);
     expect(html).toContain(`aria-label="${en.Welcome.playground.title}"`);
     expect(html).toContain('Playground s01');
     // 🙈 not the others
