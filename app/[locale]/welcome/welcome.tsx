@@ -76,8 +76,7 @@ import AbInstallSnippet from 'ab-nextjs-components/ab-install-snippet';
 // import the 3-state theme switch (light / dark / system) from `ab-nextjs-components` 🌗
 import AbThemeToggle from 'ab-nextjs-components/ab-theme-toggle';
 // import the ONE shared theme mode (0.2.3): the laptop toggle + the mobile header's 3-state button read & write it 🧠
-// (from the package root: the pack has no `./ab-theme-mode` subpath export yet)
-import { AbThemeModeProvider } from 'ab-nextjs-components';
+import { AbThemeModeProvider } from 'ab-nextjs-components/ab-theme-mode';
 // import the "Live Playground" diagram from `ab-nextjs-components` 🗺️
 import AbFlowDiagram from 'ab-nextjs-components/ab-flow-diagram';
 // import the no-JS carousel CSS (all slides stacked, controls hidden) from the server-safe helpers 🧯

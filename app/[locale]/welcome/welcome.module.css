@@ -438,24 +438,3 @@
   /* the Skip target height (the v6 row read 48px with its 8px top pad) */
   min-height: 40px;
 }
-
-/* 🩹 STOPGAP (gap for the packages): with core's `mainHeaderAt="all"` the WHOLE AbMobileHeader stays from 768px up,
-   so its 48px bar (logo · globe · theme) doubled the app header row. Only its `row` (the counter) belongs there.
-   We hide the documented `mobile-header-bar` part at 768px+ until AbMobileHeader / core can show "the row only"
-   at those widths (e.g. a `barAt="mobile"` prop). Remove this block when that lands. */
-@media (min-width: 768px) {
-  .app [data-ab-part="mobile-header-bar"] {
-    /* 🙈 the app header row already carries the logo, the theme toggle and the globe here */
-    display: none;
-  }
-}
-
-/* 🩹 STOPGAP (gap for core): the main header (z-index 10) and the main scroller (z-index 10) are siblings in <main>,
-   so the later scroller paints OVER anything that drops out of the header: AbMobileHeader's no-JS `<details>`
-   language list was hidden under the slides and unclickable. One step up for the header until core orders them
-   (header above its own scroller). Doubled class (0,5,0): beats core's (0,4,0) mobile-header rule, whatever the
-   CSS order. Remove this block when that lands. */
-.app.app[data-variant="panes"][data-mobile-header="main"] [data-ab-part="main-header"] {
-  /* ⬆️ above the main scroller (10), still below the scrim (20) and the sheets */
-  z-index: 11;
-}
