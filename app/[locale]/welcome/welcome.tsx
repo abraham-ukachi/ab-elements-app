@@ -70,7 +70,7 @@ import AbLogo from 'ab-nextjs-components/server/ab-logo';
 import AbButton from 'ab-nextjs-components/server/ab-button';
 // import the (server) SVG icon from `ab-nextjs-components` (no Material font) 🔣
 import AbIcon from 'ab-nextjs-components/server/ab-icon';
-// import the chip (s02–s08) & the pill (eyebrows) from `ab-nextjs-components` 🏷️
+// import the chip (s02–s09) & the pill (eyebrows) from `ab-nextjs-components` 🏷️
 import AbChip from 'ab-nextjs-components/ab-chip';
 import AbPill from 'ab-nextjs-components/ab-pill';
 // import the install box (pm tabs + copy) from `ab-nextjs-components` 💻
@@ -80,7 +80,6 @@ import AbThemeToggle from 'ab-nextjs-components/ab-theme-toggle';
 // import the ONE shared theme mode (0.2.3): the laptop toggle + the mobile header's 3-state button read & write it 🧠
 import { AbThemeModeProvider } from 'ab-nextjs-components/ab-theme-mode';
 // import the "Live Playground" diagram from `ab-nextjs-components` 🗺️
-import AbFlowDiagram from 'ab-nextjs-components/ab-flow-diagram';
 // import the packaged type of the v6 playground scene names (John's 7 + the i18n placeholder) 🗺️
 import type { AbPlaygroundSceneName } from 'ab-nextjs-components/ab-playground-scene';
 // import the no-JS carousel CSS (all slides stacked, controls hidden) from the server-safe helpers 🧯
@@ -104,8 +103,6 @@ import { completeWelcome } from './actions';
 // import the client halves: the carousel wiring + the globe 🎞️🌍
 import WelcomeSlides, { type WelcomeSlideData } from './_components/welcome-slides';
 import WelcomeLocaleSwitcher from './_components/welcome-locale-switcher';
-// import the 9 "Live Playground" scenes (data) 🗺️
-import { WELCOME_HUB_SCENES } from './welcome-scenes';
 // import every Welcome-only style 🎨
 import styles from './welcome.module.css';
 // import the shared package-manager key (`ab-pm`, D27: one choice for the whole app 📦)
@@ -146,14 +143,14 @@ type WelcomeChip =
         | 'slides.s07.chips.easings' | 'slides.s07.chips.fades' | 'slides.s07.chips.reducedMotion';
     };
 
-// the slide ids, s01 → s09 🎞️
-export type WelcomeSlideId = 's01' | 's02' | 's03' | 's04' | 's05' | 's06' | 's07' | 's08' | 's09';
+// the slide ids, s01 → s10 🎞️ (02:40: i18n became s09, the final slide moved to s10)
+export type WelcomeSlideId = 's01' | 's02' | 's03' | 's04' | 's05' | 's06' | 's07' | 's08' | 's09' | 's10';
 
-// the 9 slides (s02–s08 each show one package: pill + chips + install box)
-// 🗺️ `scene` = the packaged v6 playground (AbPlaygroundScene `name`); s01 / s09 have no packaged scene yet (gap)
-export const WELCOME_SLIDES: ReadonlyArray<{ id: WelcomeSlideId; pkg?: string; scene?: AbPlaygroundSceneName; chips?: ReadonlyArray<WelcomeChip> }> = [
+// the 10 slides (s02–s09 each show one package: pill + chips + install box)
+// 🗺️ `scene` = the packaged v6 playground (AbPlaygroundScene `name`): `welcome` on s01, one per package, `all` on s10
+export const WELCOME_SLIDES: ReadonlyArray<{ id: WelcomeSlideId; pkg?: string; scene: AbPlaygroundSceneName; chips?: ReadonlyArray<WelcomeChip> }> = [
   // s01: Welcome + the 8 package cards 👋
-  { id: 's01' },
+  { id: 's01', scene: 'welcome' },
   // s02: core (real 0.1.5 exports: the layouts)
   { id: 's02', pkg: 'ab-nextjs-core', scene: 'core', chips: [{ code: 'AbScreenLayout' }, { code: 'AbMainLayout' }, { code: 'AbAsideLayout' }] },
   // s03: components (real exports)
@@ -168,8 +165,10 @@ export const WELCOME_SLIDES: ReadonlyArray<{ id: WelcomeSlideId; pkg?: string; s
   { id: 's07', pkg: 'ab-nextjs-animations', scene: 'animations', chips: [{ key: 'slides.s07.chips.easings' }, { key: 'slides.s07.chips.fades' }, { key: 'slides.s07.chips.reducedMotion' }] },
   // s08: hooks (real `useAb*` names)
   { id: 's08', pkg: 'ab-nextjs-hooks', scene: 'hooks', chips: [{ code: 'useAbTheme' }, { code: 'useAbMedia' }, { code: 'useAbLocalStorage' }, { code: 'useAbClipboard' }] },
-  // s09: the end, Get Started + Continue with GitHub 🚀
-  { id: 's09' },
+  // s09: i18n (John's 8th illustration, the packaged `AbPlaygroundScene name="i18n"`; real export names) 🌍
+  { id: 's09', pkg: 'ab-nextjs-i18n', scene: 'i18n', chips: [{ code: 'AbI18nProvider' }, { code: 'useAbTranslations' }, { code: 'useAbLocaleSwitch' }, { code: 'getAbAlternates' }] },
+  // s10: the end, Get Started + Continue with GitHub 🚀
+  { id: 's10', scene: 'all' },
 ];
 
 
@@ -180,7 +179,7 @@ type WelcomeProps = Readonly<{ locale: string }>;
 /**
  * `Welcome` - Entry Component 🎬
  *
- * Renders the frame (top bar with the theme switch + globe) and hands the 9 server-rendered
+ * Renders the frame (top bar with the theme switch + globe) and hands the 10 server-rendered
  * slides to the packaged carousel. Without JS, all slides stay stacked and Get Started still works ♿.
  *
  * @param { WelcomeProps } props - the current `locale` (for the Get Started form + the globe)
@@ -194,39 +193,20 @@ export default async function Welcome({ locale }: WelcomeProps) {
   // the plain-text tags of the titles (for the dots & the live announcement 📣)
   const plain = { em: (chunks: string) => chunks, br: () => ' ' };
 
-  // 🎞️ build the 9 slides (server markup handed to the client carousel)
+  // 🎞️ build the 10 slides (server markup handed to the client carousel)
   const slides: WelcomeSlideData[] = WELCOME_SLIDES.map((slide, index) => {
     // the message keys of this slide
     const key = `slides.${slide.id}` as const;
     // the title element: one `h1` (s01), the others are `h2` ♿
     const Title = index === 0 ? 'h1' : 'h2';
-    // 🗺️ this slide's playground: the packaged v6 scene (s02–s08), or — 🚧 stopgap until a packaged `welcome` /
-    //    `all` scene exists — the s01 / s09 hub drawn by AbFlowDiagram, one per variant (the client picks one)
-    const hub = slide.scene ? undefined : WELCOME_HUB_SCENES[slide.id as 's01' | 's09'];
-    const hubDiagram = (variant: 'full' | 'compact') =>
-      hub && (
-        <AbFlowDiagram
-          nodes={hub.nodes}
-          edges={hub.edges}
-          caption={hub.caption}
-          title={t('playground.title')}
-          live={t('playground.live')}
-          alt={t(`${key}.illustrationAlt`)}
-          variant={variant}
-        />
-      );
-
     // return one slide's data
     return {
       // 🆔 the slide id
       id: slide.id,
-      // 🗺️ the playground, for the aside pane (core shows it inline above main below 1180px: rendered ONCE)
+      // 🗺️ the playground, for the ONE aside pane (core: a column ≥ 1180px, inside the main scroller below)
       playground: {
-        scene: slide.scene, // 🗂️ AbPlaygroundScene `name`
-        // ♿ its translated alt. 🌍 The i18n 8th scene (John's illustration, approved; Julie ships it in AbPlaygroundScene
-        //    name="i18n") needs ONLY `labels.alt.i18n` from the app: its alt has its own key, ready for whichever slide hosts it
-        alt: slide.scene === 'i18n' ? t('playground.i18nAlt') : t(`${key}.illustrationAlt`),
-        hub: hub && { full: hubDiagram('full'), compact: hubDiagram('compact') }, // 🚧 s01 / s09 stopgap
+        scene: slide.scene, // 🗂️ AbPlaygroundScene `name` (welcome · core … i18n · all)
+        alt: t(`${key}.illustrationAlt`), // ♿ its translated alt (→ AbPlaygroundScene `labels.alt[name]`)
       },
       // 🏷️ the plain title
       title: t.markup(`${key}.title`, plain),
@@ -234,7 +214,7 @@ export default async function Welcome({ locale }: WelcomeProps) {
       content: (
         <div
           id={`welcome-${slide.id}`}
-          className={clsx(styles.slideBody, slide.id === 's09' && styles.slideEnd)}
+          className={clsx(styles.slideBody, slide.id === 's10' && styles.slideEnd)}
           // ♿ a named region per slide (no tab stop of its own: core ≥ 0.2.3 makes the MAIN scroller focusable,
           // with a translated `scrollerLabel`, so a keyboard reaches & arrow-scrolls a long slide there ⌨️)
           role="region"
@@ -242,12 +222,12 @@ export default async function Welcome({ locale }: WelcomeProps) {
         >
           {/* Text Pane */}
           <div className={styles.textPane}>
-            {/* Eyebrow (s01) / package pill (s02–s08) / MIT pill with a sage dot (s09) 🏷️ */}
+            {/* Eyebrow (s01) / package pill (s02–s09) / MIT pill with a sage dot (s10) 🏷️ */}
             {slide.id === 's01' && <AbPill>{t('slides.s01.eyebrow')}</AbPill>}
             {slide.pkg && <AbPill mono>{slide.pkg}</AbPill>}
-            {slide.id === 's09' && <AbPill dot="sage">{t('slides.s09.pill')}</AbPill>}
+            {slide.id === 's10' && <AbPill dot="sage">{t('slides.s10.pill')}</AbPill>}
 
-            {/* Title (Mulish via `--ab-font-title`) - s09's is the Skip focus target ♿ */}
+            {/* Title (Mulish via `--ab-font-title`) - s10's is the Skip focus target ♿ */}
             <Title id={`welcome-${slide.id}-title`} tabIndex={-1} className={styles.title}>
               {t.rich(`${key}.title`, rich)}
             </Title>
@@ -271,7 +251,7 @@ export default async function Welcome({ locale }: WelcomeProps) {
               </ul>
             )}
 
-            {/* s02–s08: chips 🏷️ */}
+            {/* s02–s09: chips 🏷️ */}
             {slide.chips && (
               <ul className={styles.chips}>
                 {slide.chips.map((chip) => (
@@ -282,7 +262,7 @@ export default async function Welcome({ locale }: WelcomeProps) {
               </ul>
             )}
 
-            {/* s02–s08: the install box (pnpm / npm / yarn / bun + copy; the choice persists across slides & the whole app via `ab-pm`) 💻 */}
+            {/* s02–s09: the install box (pnpm / npm / yarn / bun + copy; the choice persists across slides & the whole app via `ab-pm`) 💻 */}
             {slide.pkg && (
               <AbInstallSnippet
                 pkg={slide.pkg}
@@ -292,8 +272,8 @@ export default async function Welcome({ locale }: WelcomeProps) {
               />
             )}
 
-            {/* s09: Get Started (works without JS) + Continue with GitHub (coming soon) 🚀 */}
-            {slide.id === 's09' && (
+            {/* s10: Get Started (works without JS) + Continue with GitHub (coming soon) 🚀 */}
+            {slide.id === 's10' && (
               <div className={styles.actions}>
                 {/* Get Started - a plain form POST to the server action 🍪 */}
                 <form action={completeWelcome}>
@@ -343,7 +323,9 @@ export default async function Welcome({ locale }: WelcomeProps) {
           variant="panes"
           pageName="welcome"
           className={styles.app}
-          asideBelow="inline-before-main" // 📑 0.2.3: below 1180px core puts the ONE aside (the playground) in the flow above main
+          asideBelow="inline-in-main" // 📜 0.2.3: 768–1179px the ONE aside joins the main scroller after the counter (nothing pinned)
+          asideDrawerAt="mobile" // 📱 0.2.3: below 768px that same aside is the RIGHT drawer (God's rule), opened by "Show playground"
+          surface="page" // 🎨 0.2.3: v6's original page surface on the panes at every width (theme ≥ 0.3.7), no app override
           mobileHeader="main" // 📱 0.2.3: below 768px the main pane's header (AbMobileHeader) IS the bar (the counter lives in main now)
           // 🔝 Top Bar - logo + utilities (core renders the row; its height is the v6 48 / 56 / 60px via a token)
           header={
@@ -368,9 +350,12 @@ export default async function Welcome({ locale }: WelcomeProps) {
           content={
             <WelcomeSlides
               slides={slides}
+              // 🅰️ our mark for the scene headers + hubs (decorative: the scene is ONE image with its own alt)
+              playgroundLogo={<AbLogo size={20} alt="" />}
               // 📱 the mobile header's pieces (below 768px)
               mobileHeader={{
                 logo: <AbLogo wordmark size={22} alt="abElements" />,
+
                 current: locale,
                 locales: WELCOME_LOCALES,
                 labels: {
@@ -394,6 +379,7 @@ export default async function Welcome({ locale }: WelcomeProps) {
                 counter: t.raw('counter') as string,
                 playground: t('playground.title'), // 🗺️ the aside pane's name (+ the scene header title)
                 live: t('playground.live'), // 🟢 the scene header's live dot
+                show: t('playground.show'), // 📱 below 768px: the "Show playground" button (opens the right drawer)
                 // 🌍 the i18n scene's words (Julie's AbPlaygroundScene name="i18n"); greetings stay in their own language
                 provider: t('playground.provider'),
                 prefix: t('playground.prefix'),
