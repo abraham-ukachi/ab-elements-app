@@ -62,7 +62,7 @@
     },
     "playground": {
       "title": "Bac à sable en direct",
-      "i18nAlt": "Schéma : le hub AbI18nProvider, avec un globe et une salutation qui passe de l’anglais au français, à l’espagnol et au russe, relié aux nœuds messages/en.json, AbLocaleSwitcher, useAbTranslations, AbLocalePrefix, format de nombres Intl et hreflang getAbAlternates.",
+      "show": "Afficher le bac à sable",
       "provider": "fournisseur",
       "prefix": "préfixe",
       "intlFormat": "format Intl",
@@ -139,6 +139,11 @@
         "illustrationAlt": "Schéma : ab-nextjs-hooks relié à useTheme, useMedia, useHotkey, useLocalStorage, useMounted et useClipboard."
       },
       "s09": {
+        "title": "Chaque langue, intégrée",
+        "body": "Messages traduits, routes par langue et alternatives hreflang pour Next.js, prêts pour chaque app AbElements.",
+        "illustrationAlt": "Schéma : le hub AbI18nProvider, avec un globe et une salutation qui passe de l’anglais au français, à l’espagnol et au russe, relié aux nœuds messages/en.json, AbLocaleSwitcher, useAbTranslations, AbLocalePrefix, format de nombres Intl et hreflang getAbAlternates."
+      },
+      "s10": {
         "pill": "Gratuit pour toujours · MIT",
         "title": "Créez vos applis web<br></br>gratuitement avec <em>AbElements</em>",
         "body": "Huit packages open source, une documentation en direct et une PWA. MIT, gratuit pour toujours.",

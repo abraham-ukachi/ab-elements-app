@@ -62,7 +62,7 @@
     },
     "playground": {
       "title": "Zona de pruebas en vivo",
-      "i18nAlt": "Diagrama: el hub AbI18nProvider, con un globo y un saludo que alterna entre inglés, francés, español y ruso, conectado a los nodos messages/en.json, AbLocaleSwitcher, useAbTranslations, AbLocalePrefix, formato de números Intl y hreflang de getAbAlternates.",
+      "show": "Mostrar la zona de pruebas",
       "provider": "proveedor",
       "prefix": "prefijo",
       "intlFormat": "formato Intl",
@@ -139,6 +139,11 @@
         "illustrationAlt": "Diagrama: ab-nextjs-hooks conectado a useTheme, useMedia, useHotkey, useLocalStorage, useMounted y useClipboard."
       },
       "s09": {
+        "title": "Cada idioma, integrado",
+        "body": "Mensajes traducidos, rutas por idioma y alternativas hreflang para Next.js, listos para cada app de AbElements.",
+        "illustrationAlt": "Diagrama: el hub AbI18nProvider, con un globo y un saludo que alterna entre inglés, francés, español y ruso, conectado a los nodos messages/en.json, AbLocaleSwitcher, useAbTranslations, AbLocalePrefix, formato de números Intl y hreflang de getAbAlternates."
+      },
+      "s10": {
         "pill": "Gratis para siempre · MIT",
         "title": "Crea tus aplicaciones web<br></br>gratis con <em>AbElements</em>",
         "body": "Ocho paquetes de código abierto, documentación en vivo y una PWA. MIT, gratis para siempre.",

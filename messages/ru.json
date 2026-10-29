@@ -62,7 +62,7 @@
     },
     "playground": {
       "title": "Живая песочница",
-      "i18nAlt": "Схема: узел AbI18nProvider с глобусом и приветствием на английском, французском, испанском и русском по очереди связан с узлами messages/en.json, AbLocaleSwitcher, useAbTranslations, AbLocalePrefix, форматирование чисел Intl и hreflang getAbAlternates.",
+      "show": "Показать песочницу",
       "provider": "провайдер",
       "prefix": "префикс",
       "intlFormat": "формат Intl",
@@ -139,6 +139,11 @@
         "illustrationAlt": "Схема: ab-nextjs-hooks связан с useTheme, useMedia, useHotkey, useLocalStorage, useMounted и useClipboard."
       },
       "s09": {
+        "title": "Любой язык — из коробки",
+        "body": "Переведённые сообщения, маршруты по языкам и альтернативы hreflang для Next.js — для любого приложения AbElements.",
+        "illustrationAlt": "Схема: узел AbI18nProvider с глобусом и приветствием на английском, французском, испанском и русском по очереди связан с узлами messages/en.json, AbLocaleSwitcher, useAbTranslations, AbLocalePrefix, форматирование чисел Intl и hreflang getAbAlternates."
+      },
+      "s10": {
         "pill": "Бесплатно навсегда · MIT",
         "title": "Создавайте веб-приложения<br></br>бесплатно с <em>AbElements</em>",
         "body": "Восемь пакетов с открытым исходным кодом, живая документация и PWA. MIT, бесплатно навсегда.",

@@ -62,7 +62,7 @@
     },
     "playground": {
       "title": "Live Playground",
-      "i18nAlt": "Diagram: the AbI18nProvider hub, with a globe and a greeting cycling through English, French, Spanish and Russian, wired to messages/en.json, AbLocaleSwitcher, useAbTranslations, AbLocalePrefix, Intl number formatting and getAbAlternates hreflang nodes.",
+      "show": "Show playground",
       "provider": "provider",
       "prefix": "prefix",
       "intlFormat": "Intl format",
@@ -139,6 +139,11 @@
         "illustrationAlt": "Diagram: ab-nextjs-hooks wired to useTheme, useMedia, useHotkey, useLocalStorage, useMounted and useClipboard."
       },
       "s09": {
+        "title": "Every language, built in",
+        "body": "Translated messages, locale routes and hreflang alternates for Next.js, ready for every AbElements app.",
+        "illustrationAlt": "Diagram: the AbI18nProvider hub, with a globe and a greeting cycling through English, French, Spanish and Russian, wired to messages/en.json, AbLocaleSwitcher, useAbTranslations, AbLocalePrefix, Intl number formatting and getAbAlternates hreflang nodes."
+      },
+      "s10": {
         "pill": "Free forever · MIT",
         "title": "Build your web apps<br></br>for free with <em>AbElements</em>",
         "body": "Eight open-source packages, live docs and one PWA. MIT, free forever.",
