@@ -296,6 +296,7 @@ export default async function Welcome({ locale }: WelcomeProps) {
                 {/* Continue with GitHub - disabled until auth exists, with a "Coming soon" badge (sets NO cookie) 🚫 */}
                 <AbButton
                   type="outlined"
+                  color="card" // 🃏 components 0.2.3: the v6 GitHub secondary (card bg, 1px hairline, text colour)
                   shape="rounded" // 🔲 v6 secondary: same 12px radius
                   size="lg" // 📏 same 52 / 56px as Get Started
                   label={t('github')}
