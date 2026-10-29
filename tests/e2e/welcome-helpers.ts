@@ -129,7 +129,7 @@ export const dots = (page: Page) => page.locator('[data-ab-part="dot"]');
 export const prevButton = (page: Page) => page.locator('[data-ab-part="prev"]');
 // the next arrow ⏭️
 export const nextButton = (page: Page) => page.locator('[data-ab-part="next"]');
-// the title of slide `id` (`h1` on s01, `h2` elsewhere) 🏷️
+// the title of slide `id` (an `h1` on every slide; only the active one is in the a11y tree) 🏷️
 export const slideTitle = (page: Page, id: string) => page.locator(`#welcome-${id}-title`);
 
 

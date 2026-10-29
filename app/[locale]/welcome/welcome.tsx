@@ -194,11 +194,13 @@ export default async function Welcome({ locale }: WelcomeProps) {
   const plain = { em: (chunks: string) => chunks, br: () => ' ' };
 
   // 🎞️ build the 10 slides (server markup handed to the client carousel)
-  const slides: WelcomeSlideData[] = WELCOME_SLIDES.map((slide, index) => {
+  const slides: WelcomeSlideData[] = WELCOME_SLIDES.map((slide) => {
     // the message keys of this slide
     const key = `slides.${slide.id}` as const;
-    // the title element: one `h1` (s01), the others are `h2` ♿
-    const Title = index === 0 ? 'h1' : 'h2';
+    // the title element: every slide's title is an `h1` ♿ (0.2.21, axe page-has-heading-one)
+    // 🎯 only the ACTIVE slide's counts: the packaged carousel makes the others `inert` + `aria-hidden` + hidden,
+    //    so the a11y tree always has ONE h1 (s01's on load, the active slide's after every move)
+    const Title = 'h1';
     // return one slide's data
     return {
       // 🆔 the slide id
@@ -328,8 +330,10 @@ export default async function Welcome({ locale }: WelcomeProps) {
           surface="page" // 🎨 0.2.3: v6's original page surface on the panes at every width (theme ≥ 0.3.7), no app override
           mobileHeader="main" // 📱 0.2.3: below 768px the main pane's header (AbMobileHeader) IS the bar (the counter lives in main now)
           // 🔝 Top Bar - logo + utilities (core renders the row; its height is the v6 48 / 56 / 60px via a token)
+          // 🪧 0.2.21 (axe `region`): the slot child IS a <header> (banner), so core renders its panes row as a plain
+          //    div around it (no nested header) and the logo + utilities live inside the banner landmark
           header={
-            <div className={styles.topBar}>
+            <header className={styles.topBar}>
               {/* abElements wordmark 🅰️ */}
               <AbLogo wordmark size={24} alt="abElements" />
               {/* Utilities - theme + globe */}
@@ -344,7 +348,7 @@ export default async function Welcome({ locale }: WelcomeProps) {
                 {/* the globe: a bottom app drawer below 768px, the popover menu above (D40) 🌍 */}
                 <WelcomeLocaleSwitcher current={locale} label={t('language')} locales={WELCOME_LOCALES} />
               </div>
-            </div>
+            </header>
           }
           // 🎞️ the main + aside panes (one headless carousel drives both: 0.2.3 AbCarouselProvider renders no element)
           content={
