@@ -54,6 +54,7 @@
       "toDark": "Switch to dark theme",
       "toSystem": "Use the system theme"
     },
+    "slideControls": "Slide controls",
     "mainContent": "Introduction slides",
     "install": {
       "label": "Install {pkg}",

@@ -116,6 +116,7 @@ export interface WelcomeSlidesLabels {
   announce: string; // 📣 "Slide {n} of {total}: {title}" pattern
   counter: string; // 🔢 "{current} / {total}" pattern
   mainContent: string; // ⌨️ the focusable main scroller's name (core 0.2.3 `scrollerLabel`)
+  slideControls: string; // 🎛️ the pinned main bar's name (core 0.2.3 `mainBarLabel`)
   playground: string; // 🗺️ "Live Playground": the aside pane's name + the scene header title
   live: string; // 🟢 "live": the scene header's dot label
   show: string; // 📱 "Show playground" (below 768px)
@@ -384,8 +385,9 @@ export default function WelcomeSlides({ slides, labels, mobileHeader, playground
       <WelcomeScrollReset />
       {/* ⌨️ ←/→ inside <main> */}
       <WelcomeKeys />
-      {/* 🧱 the main pane: `id="main"` (the skip target ♿). God's layout rule + John's v6: EVERYTHING on the left is in
-          the scrollable main content (counter · slide · dots + arrows), no main footer bar */}
+      {/* 🧱 the main pane: `id="main"` (the skip target ♿). God's layout rule + John's v6: the counter + slide scroll in
+          main's content; the dots + arrows sit in MAIN's own pinned footer bar (God 04:14, core 0.2.3 `mainBarPin`),
+          never an app footer */}
       <AbMainLayout
         id="main"
         orientation="vertical"
@@ -398,6 +400,16 @@ export default function WelcomeSlides({ slides, labels, mobileHeader, playground
         asideAnchor={counterRow}
         // 📱 below 768px only (core hides this slot at 768px+): logo · globe · 3-state theme
         mainHeader={<WelcomeMobileHeader {...mobileHeader} />}
+        // ⚫⏮️⏭️ 0.2.3 (God 04:14): the v6 nav (dots left, arrows right) in main's OWN footer, pinned to the bottom of
+        //    main at every width (sticky inside the one scroller below 1180px, under the drawer) and named for AT
+        mainBar={
+          <div className={styles.nav}>
+            <AbCarouselDots label={labels.carousel} dotLabel={(n, _total, title) => fillWelcomePattern(labels.goTo, { n, title: title ?? '' })} />
+            <WelcomeArrows back={labels.back} next={labels.next} />
+          </div>
+        }
+        mainBarPin="always" // 📌 flush at the bottom while main scrolls
+        mainBarLabel={labels.slideControls} // 🏷️ "Slide controls" (i18n)
         // 🛤️ our region, inside the main scroller (after the counter anchor): the 10 slides · dots + arrows (bottom), as in v6
         content={
           <WelcomeRegion className={styles.region}>
@@ -408,11 +420,6 @@ export default function WelcomeSlides({ slides, labels, mobileHeader, playground
                 </AbCarouselSlide>
               ))}
             </AbCarouselTrack>
-            {/* ⚫⏮️⏭️ the v6 `nav`: dots left, arrows right (the parts resolve the accent themselves, 0.2.3) */}
-            <div className={styles.nav}>
-              <AbCarouselDots label={labels.carousel} dotLabel={(n, _total, title) => fillWelcomePattern(labels.goTo, { n, title: title ?? '' })} />
-              <WelcomeArrows back={labels.back} next={labels.next} />
-            </div>
             {/* 📱 < 768px: "Show playground" → core's right drawer (hidden from 768px) */}
             <WelcomeShowPlayground label={labels.show} />
           </WelcomeRegion>

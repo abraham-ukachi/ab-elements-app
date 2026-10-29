@@ -397,6 +397,7 @@ export default async function Welcome({ locale }: WelcomeProps) {
                 greetings: { en: t('playground.greetings.en'), fr: t('playground.greetings.fr'), es: t('playground.greetings.es'), ru: t('playground.greetings.ru') },
                 locale, // 🗣️ the app locale (the i18n scene starts its EN→FR→ES→RU cycle there)
                 mainContent: t('mainContent'), // ⌨️ the focusable main scroller's name (core 0.2.3 `scrollerLabel`)
+                slideControls: t('slideControls'), // 🎛️ the pinned main bar's name (core 0.2.3 `mainBarLabel`)
               }}
             />
           }

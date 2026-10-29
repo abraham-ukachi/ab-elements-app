@@ -77,6 +77,7 @@ const LABELS: WelcomeSlidesLabels = {
   announce: en.Welcome.announce, // 📣
   counter: en.Welcome.counter, // 🔢
   mainContent: en.Welcome.mainContent, // ⌨️ 0.2.3 the main scroller's name
+  slideControls: en.Welcome.slideControls, // 🎛️ 0.2.3 the pinned main bar's name
   playground: en.Welcome.playground.title, // 🗺️ v5: the aside pane's name
   live: en.Welcome.playground.live, // 🟢 v6: the scene header's dot
   provider: en.Welcome.playground.provider, // 🌍 i18n scene

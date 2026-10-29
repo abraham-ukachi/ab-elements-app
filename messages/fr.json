@@ -54,6 +54,7 @@
       "toDark": "Passer au thème sombre",
       "toSystem": "Utiliser le thème du système"
     },
+    "slideControls": "Commandes des diapositives",
     "mainContent": "Diapositives de présentation",
     "install": {
       "label": "Installer {pkg}",

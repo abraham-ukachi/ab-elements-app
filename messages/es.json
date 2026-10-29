@@ -54,6 +54,7 @@
       "toDark": "Cambiar al tema oscuro",
       "toSystem": "Usar el tema del sistema"
     },
+    "slideControls": "Controles de las diapositivas",
     "mainContent": "Diapositivas de introducción",
     "install": {
       "label": "Instalar {pkg}",
