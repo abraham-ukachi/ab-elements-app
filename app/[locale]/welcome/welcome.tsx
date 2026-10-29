@@ -282,9 +282,12 @@ export default async function Welcome({ locale }: WelcomeProps) {
                   {/* the visitor's locale (validated by the action) */}
                   <input type="hidden" name="locale" value={locale} />
                   {/* the submit button */}
-                  {/* solid bronze `filled` type (components 0.1.12 + theme 0.3.3: on-primary label & icon, AA in light & dark) 🥉 */}
+                  {/* 🥉 v6 primary CTA (components 0.2.3): rounded lg = 52px (56px ≥ 1180px), 12px radius, bronze #A67C52 + #FFF8F5 label, v6 shadow */}
                   <AbButton
                     type="filled"
+                    shape="rounded" // 🔲 v6 12px radius (not a pill)
+                    size="lg" // 📏 v6 52 / 56px
+                    color="bronze" // 🎨 v6 bronze + cream label
                     htmlType="submit"
                     label={t('cta')}
                     endIcon={<AbIcon name="arrow_forward" svg={iconArrowForward} size={20} />}
@@ -293,6 +296,8 @@ export default async function Welcome({ locale }: WelcomeProps) {
                 {/* Continue with GitHub - disabled until auth exists, with a "Coming soon" badge (sets NO cookie) 🚫 */}
                 <AbButton
                   type="outlined"
+                  shape="rounded" // 🔲 v6 secondary: same 12px radius
+                  size="lg" // 📏 same 52 / 56px as Get Started
                   label={t('github')}
                   startIcon={<AbIcon name="github" svg={iconGithub} size={20} />}
                   disabled
