@@ -81,6 +81,8 @@ import AbThemeToggle from 'ab-nextjs-components/ab-theme-toggle';
 import { AbThemeModeProvider } from 'ab-nextjs-components/ab-theme-mode';
 // import the "Live Playground" diagram from `ab-nextjs-components` 🗺️
 import AbFlowDiagram from 'ab-nextjs-components/ab-flow-diagram';
+// import the packaged type of the v6 playground scene names (John's 7 + the i18n placeholder) 🗺️
+import type { AbPlaygroundSceneName } from 'ab-nextjs-components/ab-playground-scene';
 // import the no-JS carousel CSS (all slides stacked, controls hidden) from the server-safe helpers 🧯
 import { AB_CAROUSEL_NOSCRIPT_CSS } from 'ab-nextjs-components/ab-carousel/helpers';
 // import the per-icon SVG modules of the 8 package cards + the GitHub mark from `ab-nextjs-icons` (tree-shaken 🌳)
@@ -103,7 +105,7 @@ import { completeWelcome } from './actions';
 import WelcomeSlides, { type WelcomeSlideData } from './_components/welcome-slides';
 import WelcomeLocaleSwitcher from './_components/welcome-locale-switcher';
 // import the 9 "Live Playground" scenes (data) 🗺️
-import { WELCOME_SCENES } from './welcome-scenes';
+import { WELCOME_HUB_SCENES } from './welcome-scenes';
 // import every Welcome-only style 🎨
 import styles from './welcome.module.css';
 // import the shared package-manager key (`ab-pm`, D27: one choice for the whole app 📦)
@@ -148,23 +150,24 @@ type WelcomeChip =
 export type WelcomeSlideId = 's01' | 's02' | 's03' | 's04' | 's05' | 's06' | 's07' | 's08' | 's09';
 
 // the 9 slides (s02–s08 each show one package: pill + chips + install box)
-export const WELCOME_SLIDES: ReadonlyArray<{ id: WelcomeSlideId; pkg?: string; chips?: ReadonlyArray<WelcomeChip> }> = [
+// 🗺️ `scene` = the packaged v6 playground (AbPlaygroundScene `name`); s01 / s09 have no packaged scene yet (gap)
+export const WELCOME_SLIDES: ReadonlyArray<{ id: WelcomeSlideId; pkg?: string; scene?: AbPlaygroundSceneName; chips?: ReadonlyArray<WelcomeChip> }> = [
   // s01: Welcome + the 8 package cards 👋
   { id: 's01' },
   // s02: core (real 0.1.5 exports: the layouts)
-  { id: 's02', pkg: 'ab-nextjs-core', chips: [{ code: 'AbScreenLayout' }, { code: 'AbMainLayout' }, { code: 'AbAsideLayout' }] },
+  { id: 's02', pkg: 'ab-nextjs-core', scene: 'core', chips: [{ code: 'AbScreenLayout' }, { code: 'AbMainLayout' }, { code: 'AbAsideLayout' }] },
   // s03: components (real exports)
-  { id: 's03', pkg: 'ab-nextjs-components', chips: [{ code: 'AbButton' }, { code: 'AbIconButton' }, { code: 'AbTabs' }, { code: 'AbMenu' }, { code: 'AbSplash' }] },
+  { id: 's03', pkg: 'ab-nextjs-components', scene: 'components', chips: [{ code: 'AbButton' }, { code: 'AbIconButton' }, { code: 'AbTabs' }, { code: 'AbMenu' }, { code: 'AbSplash' }] },
   // s04: theme 🌗
-  { id: 's04', pkg: 'ab-nextjs-theme', chips: [{ key: 'slides.s04.chips.tokens' }, { key: 'slides.s04.chips.lightDark' }, { key: 'slides.s04.chips.cssVariables' }] },
+  { id: 's04', pkg: 'ab-nextjs-theme', scene: 'theme', chips: [{ key: 'slides.s04.chips.tokens' }, { key: 'slides.s04.chips.lightDark' }, { key: 'slides.s04.chips.cssVariables' }] },
   // s05: icons
-  { id: 's05', pkg: 'ab-nextjs-icons', chips: [{ code: 'ab-icons' }, { key: 'slides.s05.chips.grid' }, { key: 'slides.s05.chips.typed' }] },
+  { id: 's05', pkg: 'ab-nextjs-icons', scene: 'icons', chips: [{ code: 'ab-icons' }, { key: 'slides.s05.chips.grid' }, { key: 'slides.s05.chips.typed' }] },
   // s06: fonts (the five specimens are font names 🔤)
-  { id: 's06', pkg: 'ab-nextjs-fonts', chips: [{ code: 'Zilla Slab' }, { code: 'Inter' }, { code: 'Mulish' }, { code: 'Quicksand' }, { code: 'Roboto' }] },
+  { id: 's06', pkg: 'ab-nextjs-fonts', scene: 'fonts', chips: [{ code: 'Zilla Slab' }, { code: 'Inter' }, { code: 'Mulish' }, { code: 'Quicksand' }, { code: 'Roboto' }] },
   // s07: animations
-  { id: 's07', pkg: 'ab-nextjs-animations', chips: [{ key: 'slides.s07.chips.easings' }, { key: 'slides.s07.chips.fades' }, { key: 'slides.s07.chips.reducedMotion' }] },
+  { id: 's07', pkg: 'ab-nextjs-animations', scene: 'animations', chips: [{ key: 'slides.s07.chips.easings' }, { key: 'slides.s07.chips.fades' }, { key: 'slides.s07.chips.reducedMotion' }] },
   // s08: hooks (real `useAb*` names)
-  { id: 's08', pkg: 'ab-nextjs-hooks', chips: [{ code: 'useAbTheme' }, { code: 'useAbMedia' }, { code: 'useAbLocalStorage' }, { code: 'useAbClipboard' }] },
+  { id: 's08', pkg: 'ab-nextjs-hooks', scene: 'hooks', chips: [{ code: 'useAbTheme' }, { code: 'useAbMedia' }, { code: 'useAbLocalStorage' }, { code: 'useAbClipboard' }] },
   // s09: the end, Get Started + Continue with GitHub 🚀
   { id: 's09' },
 ];
@@ -197,29 +200,34 @@ export default async function Welcome({ locale }: WelcomeProps) {
     const key = `slides.${slide.id}` as const;
     // the title element: one `h1` (s01), the others are `h2` ♿
     const Title = index === 0 ? 'h1' : 'h2';
-    // the scene of this slide 🗺️
-    const scene = WELCOME_SCENES[slide.id];
-
-    // 🗺️ this slide's "Live Playground" (role=img + alt ♿): the v6 card (title · PKG · live dot), drawn by the package
-    const playground = (variant: 'full' | 'compact') => (
-      <AbFlowDiagram
-        nodes={scene.nodes}
-        edges={scene.edges}
-        caption={scene.caption}
-        title={t('playground.title')}
-        live={t('playground.live')}
-        alt={t(`${key}.illustrationAlt`)}
-        variant={variant} // 📐 compact = the v6 mobile 276px scene, full = the 760×600 laptop card
-        className={styles.diagram}
-      />
-    );
+    // 🗺️ this slide's playground: the packaged v6 scene (s02–s08), or — 🚧 stopgap until a packaged `welcome` /
+    //    `all` scene exists — the s01 / s09 hub drawn by AbFlowDiagram, one per variant (the client picks one)
+    const hub = slide.scene ? undefined : WELCOME_HUB_SCENES[slide.id as 's01' | 's09'];
+    const hubDiagram = (variant: 'full' | 'compact') =>
+      hub && (
+        <AbFlowDiagram
+          nodes={hub.nodes}
+          edges={hub.edges}
+          caption={hub.caption}
+          title={t('playground.title')}
+          live={t('playground.live')}
+          alt={t(`${key}.illustrationAlt`)}
+          variant={variant}
+        />
+      );
 
     // return one slide's data
     return {
       // 🆔 the slide id
       id: slide.id,
-      // 🗺️ the full playground, for the aside pane (≥ 1180px)
-      playground: playground('full'),
+      // 🗺️ the playground, for the aside pane (core shows it inline above main below 1180px: rendered ONCE)
+      playground: {
+        scene: slide.scene, // 🗂️ AbPlaygroundScene `name`
+        // ♿ its translated alt. 🌍 The i18n 8th scene (John's illustration, approved; Julie ships it in AbPlaygroundScene
+        //    name="i18n") needs ONLY `labels.alt.i18n` from the app: its alt has its own key, ready for whichever slide hosts it
+        alt: slide.scene === 'i18n' ? t('playground.i18nAlt') : t(`${key}.illustrationAlt`),
+        hub: hub && { full: hubDiagram('full'), compact: hubDiagram('compact') }, // 🚧 s01 / s09 stopgap
+      },
       // 🏷️ the plain title
       title: t.markup(`${key}.title`, plain),
       // 🧩 the slide markup
@@ -312,9 +320,6 @@ export default async function Welcome({ locale }: WelcomeProps) {
             )}
           </div>
 
-          {/* 📱 below 1180px: the playground INLINE in main, between the counter and the text (v6 mobile `mm`: counter ·
-              scene · body · nav), since core keeps the aside pane closed there. Hidden from 1180px, where the aside shows it 🗺️ */}
-          <div className={styles.inlinePlayground}>{playground('compact')}</div>
         </div>
       ),
     };
@@ -338,6 +343,7 @@ export default async function Welcome({ locale }: WelcomeProps) {
           variant="panes"
           pageName="welcome"
           className={styles.app}
+          asideBelow="inline-before-main" // 📑 0.2.3: below 1180px core puts the ONE aside (the playground) in the flow above main
           mobileHeader="main" // 📱 0.2.3: below 768px the main pane's header (AbMobileHeader) IS the bar (the counter lives in main now)
           // 🔝 Top Bar - logo + utilities (core renders the row; its height is the v6 48 / 56 / 60px via a token)
           header={
@@ -386,7 +392,14 @@ export default async function Welcome({ locale }: WelcomeProps) {
                 goTo: t.raw('goTo') as string,
                 announce: t.raw('announce') as string,
                 counter: t.raw('counter') as string,
-                playground: t('playground.title'), // 🗺️ the aside pane's name
+                playground: t('playground.title'), // 🗺️ the aside pane's name (+ the scene header title)
+                live: t('playground.live'), // 🟢 the scene header's live dot
+                // 🌍 the i18n scene's words (Julie's AbPlaygroundScene name="i18n"); greetings stay in their own language
+                provider: t('playground.provider'),
+                prefix: t('playground.prefix'),
+                intlFormat: t('playground.intlFormat'),
+                greetings: { en: t('playground.greetings.en'), fr: t('playground.greetings.fr'), es: t('playground.greetings.es'), ru: t('playground.greetings.ru') },
+                locale, // 🗣️ the app locale (the i18n scene starts its EN→FR→ES→RU cycle there)
                 mainContent: t('mainContent'), // ⌨️ the focusable main scroller's name (core 0.2.3 `scrollerLabel`)
               }}
             />

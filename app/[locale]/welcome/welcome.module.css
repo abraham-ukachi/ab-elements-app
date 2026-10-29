@@ -346,28 +346,9 @@
 }
 
 /* 🗺️ the illustration pane */
-.inlinePlayground {
-  /* centered content (`safe`: an oversized scene overflows downwards, never above the top 🛟) */
-  display: flex;
-  justify-content: safe center;
-  align-items: safe center;
-  /* the v6 mobile 276px scene 📱 */
-  height: 276px;
-  /* never shrinks */
-  flex: none;
-  /* side padding */
-  padding: 0 16px;
-  /* above the text (v6 mobile: counter · scene · body · nav) */
-  order: 1;
-}
-
-/* 🗺️ the inline diagram card fills its box */
+/* 🗺️ the scene card: fluid, never wider than its v6 frame (AbPlaygroundScene scales its 760×600 / 350×276 frame) */
 .diagram {
-  /* full width, capped */
   width: 100%;
-  max-width: 560px;
-  /* full height */
-  height: 100%;
 }
 
 /* 🗺️ the aside pane (≥ 1180px; core closes it below). Its surface = core's `--ab-color-pane` (v6 --pane) */
@@ -389,12 +370,16 @@
   padding: 24px;
 }
 
-/* 🗺️ the aside card: the v6 760×600 card, scaled down in narrower asides */
-.asidePlayground .diagram {
-  max-width: 760px;
-  height: auto;
-  aspect-ratio: 760 / 600;
+/* 📱📟 below 1180px core puts the aside INLINE above main, capped at its 60dvh (`--ab-aside-below-max-height`, kept):
+   the v6 mobile inset (14 · 20px), and the card sized so its whole v6 frame fits the cap (no inner scroll) */
+@media (width < 1180px) {
+  .asidePlayground { padding: 14px 20px 0; }
+  .asidePlayground .diagram { max-width: calc((60dvh - 14px) * 760 / 600); } /* 📐 the full 760:600 frame inside the cap */
 }
+@media (width < 768px) {
+  .asidePlayground .diagram { max-width: 350px; } /* 📱 the compact v6 350×276 scene at its natural size */
+}
+
 
 /* ⚫⏮️⏭️ the v6 nav (bottom of the main column): dots left, arrows right */
 .nav {
@@ -432,8 +417,6 @@
   .textPane { padding: 16px 32px 32px; }
   /* the one-liners come back */
   .cardDesc { display: block; grid-column: 2; }
-  /* a taller inline illustration 🖼️ */
-  .inlinePlayground { height: 360px; }
 }
 
 /* 💻 laptop (≥1024): the laptop top bar + title scale (the playground is still inline, above the text) */
@@ -452,8 +435,6 @@
   .app { --ab-aside-width: 47%; --welcome-counter-h: 80px; --welcome-nav-h: 104px; }
   .counterRow { padding: 40px 96px 0; }
   .nav { padding: 8px 96px 48px; }
-  /* the inline copy steps aside 🙈 */
-  .inlinePlayground { display: none; }
   /* the text sits centred between the counter and the nav (v6 `.bd{justify-content:center}`) */
   .slideBody { justify-content: safe center; }
   /* the text: centred, capped like v6 (.bd max 700 + the 96px gutters) */
@@ -465,6 +446,12 @@
 /* 🖥️ ≥ 1920px: keep the v6 joined look (core gaps + rounds the panes there; a gap would read as a divider) */
 @media (min-width: 1920px) {
   .app { --ab-pane-gap: 0px; --ab-pane-radius: 0px; --ab-pane-shadow: none; }
+}
+/* 🎨 v6's ORIGINAL surfaces (welcome-v6/_src/scenes.py: light main = pane = #FFF8F5 · dark main #1D150F, pane #19120C).
+   The theme's ≥1920px light override (#fff panes, docs mock 05) is not the Welcome's: same selector as the theme, so the
+   panes go back to the theme's own v6 token `--ab-color-bg` (#FFF8F5). Dark already matches (pane-main #1D150F, bg #19120C) */
+@media (min-width: 1920px) {
+  :global([data-theme='light']) .app { --ab-color-pane-main: var(--ab-color-bg); --ab-color-pane: var(--ab-color-bg); }
 }
 
 /* 🧘 reduced motion: nothing here animates on its own (the packages & the theme calm their own motion) */

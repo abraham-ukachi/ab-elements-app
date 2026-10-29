@@ -73,6 +73,10 @@ import AbButton from 'ab-nextjs-components/ab-button';
 import AbMainLayout from 'ab-nextjs-core/ab-main-layout';
 // import the packaged aside pane (core: an in-flow column from 1180px, closed below; the playground lives there) 🗺️
 import AbAsideLayout from 'ab-nextjs-core/ab-aside-layout';
+// import the packaged v6 "Live Playground" scenes (John's 7 + the i18n placeholder: dots, rich nodes, card, pulses) 🎨
+import AbPlaygroundScene, { type AbPlaygroundSceneName } from 'ab-nextjs-components/ab-playground-scene';
+// import the packaged media-query hook (phones get the compact 350×276 scene) 📱
+import { useAbMedia } from 'ab-nextjs-hooks/useAbMedia';
 // import the page state: the main pane's own scroller (reset to the top on every slide change) 📜
 import { useAbPage } from 'ab-nextjs-core/ab-page-provider';
 // import the class names helper 🏷️
@@ -91,8 +95,15 @@ import styles from '../welcome.module.css';
 export interface WelcomeSlideData {
   id: string; // 🆔 `s01` → `s09`
   title: string; // 🏷️ plain-text title (dots + live announcement)
-  content: ReactNode; // 🧩 the slide's server-rendered markup (text + the inline < 1180px playground)
-  playground: ReactNode; // 🗺️ the slide's full playground, shown in the aside pane (≥ 1180px)
+  content: ReactNode; // 🧩 the slide's server-rendered markup (the text)
+  playground: WelcomePlaygroundData; // 🗺️ the slide's playground (the aside pane)
+}
+
+// one slide's playground: a packaged scene, or (🚧 s01 / s09 stopgap) a server-drawn hub per variant 🗺️
+export interface WelcomePlaygroundData {
+  scene?: AbPlaygroundSceneName; // 🗂️ AbPlaygroundScene `name` (s02–s08)
+  alt: string; // ♿ the translated alt
+  hub?: { full: ReactNode; compact: ReactNode }; // 🚧 s01 / s09 until a packaged `welcome` / `all` scene exists
 }
 
 // every (already translated) label of the client half 🌐
@@ -106,7 +117,13 @@ export interface WelcomeSlidesLabels {
   announce: string; // 📣 "Slide {n} of {total}: {title}" pattern
   counter: string; // 🔢 "{current} / {total}" pattern
   mainContent: string; // ⌨️ the focusable main scroller's name (core 0.2.3 `scrollerLabel`)
-  playground: string; // 🗺️ "Live Playground": the aside pane's name
+  playground: string; // 🗺️ "Live Playground": the aside pane's name + the scene header title
+  live: string; // 🟢 "live": the scene header's dot label
+  provider: string; // 🌍 i18n scene: "provider"
+  prefix: string; // 🌍 i18n scene: "prefix"
+  intlFormat: string; // 🌍 i18n scene: "Intl format"
+  greetings: { en: string; fr: string; es: string; ru: string }; // 👋 i18n scene greetings
+  locale: string; // 🗣️ the app locale (i18n scene)
 }
 
 // the props of `WelcomeSlides` 🧾
@@ -223,18 +240,47 @@ function WelcomeKeys() {
 
 /**
  * `WelcomePlayground` - the ACTIVE slide's playground, in the aside pane 🗺️
- * (a named group inside core's aside scroller, centred like the v6 laptop aside; one diagram at a time)
+ * The packaged v6 `AbPlaygroundScene` (compact 350×276 on phones, the full 760×600 card elsewhere), centred like the
+ * v6 laptop aside. One scene at a time; core places the ONE aside above main below 1180px (`asideBelow`).
  *
- * @param { { playgrounds: readonly ReactNode[]; label: string } } props - the 9 full playgrounds + the pane name
+ * @param { { playgrounds: readonly WelcomePlaygroundData[]; labels: WelcomePlaygroundLabels } } props
  * @returns { ReactElement }
  */
-function WelcomePlayground({ playgrounds, label }: { playgrounds: readonly ReactNode[]; label: string }) {
+// the words every scene reads (title, live dot) + the i18n scene's own (provider, prefix, Intl format, greetings) 🌍
+type WelcomePlaygroundLabels = Pick<WelcomeSlidesLabels, 'live' | 'provider' | 'prefix' | 'intlFormat' | 'greetings' | 'locale'> & { title: string };
+
+function WelcomePlayground({ playgrounds, labels }: { playgrounds: readonly WelcomePlaygroundData[]; labels: WelcomePlaygroundLabels }) {
   // 🎠 the active slide
   const { index } = useAbCarousel();
-  // 🗺️ its playground (SSR / no-JS: s01's)
+  // 📱 phones (< 768px) get the compact v6 mobile scene (SSR: full, then the client corrects it once)
+  const isPhone = useAbMedia('(max-width: 767px)');
+  // 🗺️ the active slide's data (SSR / no-JS: s01's)
+  const data = playgrounds[index];
+  const variant = isPhone ? 'compact' : 'full';
   return (
-    <div className={styles.asidePlayground} role="group" aria-label={label}>
-      {playgrounds[index]}
+    <div className={styles.asidePlayground}>
+      {data?.scene ? (
+        <AbPlaygroundScene
+          key={data.scene} // 🔁 a fresh scene (and pulse) per slide
+          name={data.scene}
+          variant={variant}
+          active // ▶️ only the active slide's scene is mounted, so it always animates
+          locale={labels.locale} // 🗣️ the i18n scene follows the app locale
+          labels={{
+            title: labels.title,
+            live: labels.live,
+            alt: { [data.scene]: data.alt }, // ♿ only the active scene's alt (e.g. `alt.i18n`)
+            provider: labels.provider,
+            prefix: labels.prefix,
+            intlFormat: labels.intlFormat,
+            greetings: labels.greetings,
+          }}
+          className={styles.diagram}
+        />
+      ) : (
+        // 🚧 s01 / s09: the server-drawn hub (stopgap)
+        data?.hub?.[variant]
+      )}
     </div>
   );
 }
@@ -247,7 +293,7 @@ function WelcomePlayground({ playgrounds, label }: { playgrounds: readonly React
  * the content row's own pane again):
  *   📱 AbMobileHeader → `mainHeader` (below 768px)
  *   🛤️ 🔢 counter · the slides · ⚫⏮️⏭️ dots + arrows → OUR region in the main content (THE scroller, focusable, named)
- *   🗺️ the active playground → AbAsideLayout (≥ 1180px) · ⌨️ ←/→ scoped to <main>
+ *   🗺️ the active AbPlaygroundScene → AbAsideLayout (a column ≥ 1180px, above main below) · ⌨️ ←/→ scoped to <main>
  *   `autoHeight`: the track follows the active slide (no blank scroll on short ones).
  * Plus the `?s=` URL state.
  *
@@ -350,15 +396,16 @@ export default function WelcomeSlides({ slides, labels, mobileHeader }: WelcomeS
           </WelcomeRegion>
         }
       />
-      {/* 🗺️ the aside pane: the active slide's playground (core: in the flow from 1180px, closed below → the slide's
-          inline copy shows there). `dividerHidden` + the app's `--ab-pane-divider: none`: no line between the panes */}
+      {/* 🗺️ the aside pane: the active slide's playground (core: a column from 1180px, inline ABOVE main below via
+          `asideBelow`, rendered once). `dividerHidden` + the app's `--ab-pane-divider: none`: no line between the panes */}
       <AbAsideLayout
         orientation="vertical"
         pageName="welcome"
         className={styles.asidePane}
+        aria-label={labels.playground} // 🏷️ core 0.2.3: the complementary landmark's name
         chrome={false} // 🧰 no legacy layers
         dividerHidden // ➖ no divider
-        content={<WelcomePlayground playgrounds={slides.map((slide) => slide.playground)} label={labels.playground} />}
+        content={<WelcomePlayground playgrounds={slides.map((slide) => slide.playground)} labels={{ ...labels, title: labels.playground }} />}
       />
     </AbCarouselProvider>
   );
