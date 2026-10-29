@@ -51,8 +51,13 @@
 .app {
   /* 🔝 the v6 top bar heights (core's header row reads this token): 48px on phones */
   --ab-header-height: 48px;
-  /* the warm page background */
-  background: var(--md-sys-color-background);
+  /* ➖ God's layout rule (v5): NO visible line between main and aside (core's public pane-divider token) */
+  --ab-pane-divider: none;
+  /* 🔢⚫ the heights of the main column's counter row + nav (the slide fills the rest of the visible area) */
+  --welcome-counter-h: 48px;
+  --welcome-nav-h: 72px;
+  /* 🧱 the warm app background (theme: v6 --bg, light #FFF8F5 · dark #19120C); main / aside use core's pane tokens */
+  background: var(--ab-color-bg, var(--md-sys-color-background));
   /* the body text color */
   color: var(--md-sys-color-on-background);
 }
@@ -87,8 +92,8 @@
 
 /* 🎞️ main: core's AbMainLayout (counter row · THE scroller · dots + arrows); just the surface here */
 .main {
-  /* the page background (core's pane surface would be a card colour) */
-  background: var(--md-sys-color-background);
+  /* 🎨 core paints it with the theme's `--ab-color-pane-main` (v6 --main: #FFF8F5 · dark #1D150F); nothing to add */
+  min-width: 0;
 }
 
 /* 🎠 OUR carousel region (headless, 0.2.3): it fills the main scroller's visible area and is a size container,
@@ -116,9 +121,13 @@
   /* centered */
   align-items: center;
   /* fixed height (keeps the layout still when Skip hides on s09) */
-  min-height: 48px;
+  min-height: var(--welcome-counter-h);
   /* side padding */
   padding: 8px 16px 0;
+  /* the padding counts in the height token */
+  box-sizing: border-box;
+  /* never squeezed */
+  flex: none;
 }
 
 /* 🔢 the counter (mono, small bronze text) */
@@ -155,7 +164,7 @@
   min-width: 0;
 }
 
-/* 🧩 a slide's body: illustration above the text (mobile), side by side (laptop) */
+/* 🧩 a slide's body: the inline playground above the text (< 1180px), the text alone from 1180px (aside has the playground) */
 .slideBody {
   /* a column on mobile */
   display: flex;
@@ -163,9 +172,9 @@
   flex-direction: column;
   /* 16px apart */
   gap: 16px;
-  /* 📐 at least the visible area (the region's 100cqh; the counter row is in the main header now) so the laptop aside's divider
-     still runs full height; a long slide grows and the MAIN pane scrolls. Short slides: no blank scroll (0.2.3) */
-  min-height: 100cqh;
+  /* 📐 the visible area minus the counter row + nav (v6: counter top, nav bottom, the body centred between them);
+     a long slide grows and the MAIN pane scrolls. Short slides: no blank scroll (0.2.3 autoHeight) */
+  min-height: calc(100cqh - var(--welcome-counter-h) - var(--welcome-nav-h));
   /* the borders sit inside it */
   box-sizing: border-box;
 }
@@ -337,22 +346,22 @@
 }
 
 /* 🗺️ the illustration pane */
-.aside {
+.inlinePlayground {
   /* centered content (`safe`: an oversized scene overflows downwards, never above the top 🛟) */
   display: flex;
   justify-content: safe center;
   align-items: safe center;
-  /* a 276px scene on mobile 📱 (components 0.1.11's AbFlowDiagram keeps its nodes below the header & inside the card) */
+  /* the v6 mobile 276px scene 📱 */
   height: 276px;
   /* never shrinks */
   flex: none;
   /* side padding */
   padding: 0 16px;
-  /* above the text on mobile */
+  /* above the text (v6 mobile: counter · scene · body · nav) */
   order: 1;
 }
 
-/* 🗺️ the diagram card fills its pane */
+/* 🗺️ the inline diagram card fills its box */
 .diagram {
   /* full width, capped */
   width: 100%;
@@ -361,8 +370,34 @@
   height: 100%;
 }
 
-/* ⚫⏮️⏭️ footer: dots left, arrows right */
-.footer {
+/* 🗺️ the aside pane (≥ 1180px; core closes it below). Its surface = core's `--ab-color-pane` (v6 --pane) */
+.asidePane {
+  /* nothing to add: core sizes it from `--ab-aside-width` and makes its content the scroller */
+  min-width: 0;
+}
+
+/* 🗺️ the aside's playground: centred in the pane like the v6 laptop aside (`safe`: a short window scrolls the aside) */
+.asidePlayground {
+  /* fill the aside scroller */
+  min-height: 100%;
+  box-sizing: border-box;
+  /* centred */
+  display: flex;
+  justify-content: safe center;
+  align-items: safe center;
+  /* breathing room */
+  padding: 24px;
+}
+
+/* 🗺️ the aside card: the v6 760×600 card, scaled down in narrower asides */
+.asidePlayground .diagram {
+  max-width: 760px;
+  height: auto;
+  aspect-ratio: 760 / 600;
+}
+
+/* ⚫⏮️⏭️ the v6 nav (bottom of the main column): dots left, arrows right */
+.nav {
   /* a row */
   display: flex;
   /* ends */
@@ -370,13 +405,12 @@
   /* centered */
   align-items: center;
   /* fixed height (no jump when the arrows hide on s09) */
-  min-height: 72px;
-  /* padding */
+  min-height: var(--welcome-nav-h);
+  /* padding (counted in the height token) */
   padding: 12px 16px;
+  box-sizing: border-box;
   /* never shrinks */
   flex: none;
-  /* the divider above it */
-  border-top: 1px solid var(--md-sys-color-outline-variant);
 }
 
 /* ⏮️⏭️ the arrows */
@@ -392,49 +426,45 @@
   /* a taller top bar */
   .app { --ab-header-height: 56px; }
   .topBar { padding: 0 32px; }
-  /* roomier counter row & footer */
-  .counterRow, .footer { padding-left: 32px; padding-right: 32px; }
+  /* roomier counter row & nav */
+  .counterRow, .nav { padding-left: 32px; padding-right: 32px; }
   /* roomier text */
   .textPane { padding: 16px 32px 32px; }
   /* the one-liners come back */
   .cardDesc { display: block; grid-column: 2; }
-  /* a taller illustration 🖼️ */
-  .aside { height: 360px; }
+  /* a taller inline illustration 🖼️ */
+  .inlinePlayground { height: 360px; }
 }
 
-/* 💻 laptop (≥1024): text left, illustration right (45%) */
+/* 💻 laptop (≥1024): the laptop top bar + title scale (the playground is still inline, above the text) */
 @media (min-width: 1024px) {
   /* the laptop top bar */
   .app { --ab-header-height: 60px; }
-  /* side by side */
-  .slideBody { flex-direction: row; gap: 0; }
-  /* text left, illustration right */
-  .textPane { order: 1; flex: 1; }
-  .aside { order: 2; }
-  /* the text pane: centered, capped */
-  .textPane { flex: 1; padding: 40px 96px 48px; max-width: 796px; }
-  /* s09: a wider text pane */
-  .slideEnd .textPane { max-width: 976px; }
   /* the laptop title scale */
   .title { font-size: clamp(48px, 4.5vw, 68px); }
   /* the laptop s09 title scale */
   .slideEnd .title { font-size: clamp(52px, 5.3vw, 80px); }
-  /* the illustration: 45%, full height, divider on its left */
-  .aside { width: 45%; height: auto; margin-left: auto; padding: 32px; border-left: 1px solid var(--md-sys-color-outline-variant); }
-  /* the diagram card: capped like the mock (760×600) */
-  .diagram { max-width: 760px; max-height: 600px; }
+}
+
+/* 💻 ≥ 1180px: core opens the aside pane in the flow → the playground moves there (v6 laptop: main | aside 900/1920) */
+@media (min-width: 1180px) {
+  /* 📑 the v6 aside share (900 of 1920px) + the v6 main padding (40 · 96 · 48) on the counter / nav rows */
+  .app { --ab-aside-width: 47%; --welcome-counter-h: 80px; --welcome-nav-h: 104px; }
+  .counterRow { padding: 40px 96px 0; }
+  .nav { padding: 8px 96px 48px; }
+  /* the inline copy steps aside 🙈 */
+  .inlinePlayground { display: none; }
+  /* the text sits centred between the counter and the nav (v6 `.bd{justify-content:center}`) */
+  .slideBody { justify-content: safe center; }
+  /* the text: centred, capped like v6 (.bd max 700 + the 96px gutters) */
+  .textPane { padding: 24px 96px; max-width: 796px; }
+  /* s09: a wider text pane */
+  .slideEnd .textPane { max-width: 976px; }
+}
+
+/* 🖥️ ≥ 1920px: keep the v6 joined look (core gaps + rounds the panes there; a gap would read as a divider) */
+@media (min-width: 1920px) {
+  .app { --ab-pane-gap: 0px; --ab-pane-radius: 0px; --ab-pane-shadow: none; }
 }
 
 /* 🧘 reduced motion: nothing here animates on its own (the packages & the theme calm their own motion) */
-
-/* 📱 the counter row inside AbMobileHeader's `row` (below 768px): it fills the row (Skip at the right end, as in v6);
-   the row already pads 16px at the sides and 8px below, so ours drops its own padding. Last in the file, so it
-   wins over `.counterRow` and its 640px+ side padding */
-.counterRowInHeader {
-  /* the whole row */
-  flex: 1 1 auto;
-  /* AbMobileHeader's row pads it */
-  padding: 0;
-  /* the Skip target height (the v6 row read 48px with its 8px top pad) */
-  min-height: 40px;
-}

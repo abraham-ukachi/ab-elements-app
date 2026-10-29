@@ -71,6 +71,8 @@ import {
 import AbButton from 'ab-nextjs-components/ab-button';
 // import the packaged main pane (core 0.2.x layout rule: header · ONE scroller · bar, empty slots = 0px) 🧱
 import AbMainLayout from 'ab-nextjs-core/ab-main-layout';
+// import the packaged aside pane (core: an in-flow column from 1180px, closed below; the playground lives there) 🗺️
+import AbAsideLayout from 'ab-nextjs-core/ab-aside-layout';
 // import the page state: the main pane's own scroller (reset to the top on every slide change) 📜
 import { useAbPage } from 'ab-nextjs-core/ab-page-provider';
 // import the class names helper 🏷️
@@ -89,7 +91,8 @@ import styles from '../welcome.module.css';
 export interface WelcomeSlideData {
   id: string; // 🆔 `s01` → `s09`
   title: string; // 🏷️ plain-text title (dots + live announcement)
-  content: ReactNode; // 🧩 the slide's server-rendered markup
+  content: ReactNode; // 🧩 the slide's server-rendered markup (text + the inline < 1180px playground)
+  playground: ReactNode; // 🗺️ the slide's full playground, shown in the aside pane (≥ 1180px)
 }
 
 // every (already translated) label of the client half 🌐
@@ -103,6 +106,7 @@ export interface WelcomeSlidesLabels {
   announce: string; // 📣 "Slide {n} of {total}: {title}" pattern
   counter: string; // 🔢 "{current} / {total}" pattern
   mainContent: string; // ⌨️ the focusable main scroller's name (core 0.2.3 `scrollerLabel`)
+  playground: string; // 🗺️ "Live Playground": the aside pane's name
 }
 
 // the props of `WelcomeSlides` 🧾
@@ -204,7 +208,7 @@ function WelcomeRegion({ className, children }: { className?: string; children: 
 
 /**
  * `WelcomeKeys` - the carousel's ←/→ for the whole main pane ⌨️
- * Our region sits inside the scroller and the dots in core's `mainBar`, so the packaged hook scopes the keys to
+ * Our region (counter, slides, dots) sits inside the main scroller, so the packaged hook scopes the keys to
  * <main> (core's `data-ab-part="main"`): arrows on a dot or in the slide area move the slides; focus outside main
  * (the app header, the body) is left alone (no global hijack).
  *
@@ -218,13 +222,33 @@ function WelcomeKeys() {
 
 
 /**
+ * `WelcomePlayground` - the ACTIVE slide's playground, in the aside pane 🗺️
+ * (a named group inside core's aside scroller, centred like the v6 laptop aside; one diagram at a time)
+ *
+ * @param { { playgrounds: readonly ReactNode[]; label: string } } props - the 9 full playgrounds + the pane name
+ * @returns { ReactElement }
+ */
+function WelcomePlayground({ playgrounds, label }: { playgrounds: readonly ReactNode[]; label: string }) {
+  // 🎠 the active slide
+  const { index } = useAbCarousel();
+  // 🗺️ its playground (SSR / no-JS: s01's)
+  return (
+    <div className={styles.asidePlayground} role="group" aria-label={label}>
+      {playgrounds[index]}
+    </div>
+  );
+}
+
+
+/**
  * `WelcomeSlides` - Client Component 🎞️
  *
  * Core's `AbMainLayout` inside the HEADLESS packaged carousel (0.2.3 `AbCarouselProvider`: no element, so <main> is
  * the content row's own pane again):
- *   📌 AbMobileHeader with the 🔢 counter + Skip in its `row` → `mainHeader` (shown at every width: `mainHeaderAt="all"`)
- *   🛤️ the slides → OUR region in the main content (THE scroller, focusable, named) · ⌨️ ←/→ scoped to <main>
- *   ⚫⏮️⏭️ dots + arrows → `mainBar`. `autoHeight`: the track follows the active slide (no blank scroll on short ones).
+ *   📱 AbMobileHeader → `mainHeader` (below 768px)
+ *   🛤️ 🔢 counter · the slides · ⚫⏮️⏭️ dots + arrows → OUR region in the main content (THE scroller, focusable, named)
+ *   🗺️ the active playground → AbAsideLayout (≥ 1180px) · ⌨️ ←/→ scoped to <main>
+ *   `autoHeight`: the track follows the active slide (no blank scroll on short ones).
  * Plus the `?s=` URL state.
  *
  * @param { WelcomeSlidesProps } props - the slides and their labels
@@ -269,10 +293,9 @@ export default function WelcomeSlides({ slides, labels, mobileHeader }: WelcomeS
     [slides],
   );
 
-  // 🔢 the counter row: `02 / 09` left, Skip right; ONLY in the mobile header's `row` (core keeps that header at every
-  //    width with `mainHeaderAt="all"`, so it stays put while the slide scrolls)
+  // 🔢 the counter row: `02 / 09` left, Skip right; at the TOP of the main column (v6 `ctr`, every width)
   const counterRow = (
-    <div className={clsx(styles.counterRow, styles.counterRowInHeader)}>
+    <div className={styles.counterRow}>
       <AbCarouselCounter
         className={styles.counter}
         format={(current, total) => fillWelcomePattern(labels.counter, { current: pad(current), total: pad(total) })}
@@ -297,7 +320,8 @@ export default function WelcomeSlides({ slides, labels, mobileHeader }: WelcomeS
       <WelcomeScrollReset />
       {/* ⌨️ ←/→ inside <main> */}
       <WelcomeKeys />
-      {/* 🧱 the main pane: `id="main"` (the skip target ♿), header · content · bar from core */}
+      {/* 🧱 the main pane: `id="main"` (the skip target ♿). God's layout rule + John's v6: EVERYTHING on the left is in
+          the scrollable main content (counter · slide · dots + arrows), no main footer bar */}
       <AbMainLayout
         id="main"
         orientation="vertical"
@@ -305,19 +329,12 @@ export default function WelcomeSlides({ slides, labels, mobileHeader }: WelcomeS
         className={styles.main}
         chrome={false} // 🧰 no legacy backdrop / menus / progress layers (0.1.5)
         scrollerLabel={labels.mainContent} // ⌨️ 0.2.3: the main scroller is a named tab stop (axe scrollable-region-focusable)
-        // 📱 below 768px only (core hides this slot at 768px+): logo · globe · 3-state theme + the counter row
-        mainHeader={<WelcomeMobileHeader {...mobileHeader} row={counterRow} />}
-        // ⚫⏮️⏭️ Bar - dots left, arrows right (core renders the <footer>)
-        mainBar={
-          <div className={styles.footer}>
-            {/* 🟤 the parts resolve the accent themselves (0.2.3), so the bar needs no carousel class */}
-            <AbCarouselDots label={labels.carousel} dotLabel={(n, _total, title) => fillWelcomePattern(labels.goTo, { n, title: title ?? '' })} />
-            <WelcomeArrows back={labels.back} next={labels.next} />
-          </div>
-        }
-        // 🛤️ our region (the 768px+ counter row + the 9 slides), inside the main scroller
+        // 📱 below 768px only (core hides this slot at 768px+): logo · globe · 3-state theme
+        mainHeader={<WelcomeMobileHeader {...mobileHeader} />}
+        // 🛤️ our region, inside the main scroller: counter (top) · the 9 slides · dots + arrows (bottom), as in v6
         content={
           <WelcomeRegion className={styles.region}>
+            {counterRow}
             <AbCarouselTrack className={styles.track}>
               {slides.map((slide, i) => (
                 <AbCarouselSlide key={slide.id} className={styles.slide} label={fillWelcomePattern(labels.slide, { n: i + 1, total: count })}>
@@ -325,8 +342,23 @@ export default function WelcomeSlides({ slides, labels, mobileHeader }: WelcomeS
                 </AbCarouselSlide>
               ))}
             </AbCarouselTrack>
+            {/* ⚫⏮️⏭️ the v6 `nav`: dots left, arrows right (the parts resolve the accent themselves, 0.2.3) */}
+            <div className={styles.nav}>
+              <AbCarouselDots label={labels.carousel} dotLabel={(n, _total, title) => fillWelcomePattern(labels.goTo, { n, title: title ?? '' })} />
+              <WelcomeArrows back={labels.back} next={labels.next} />
+            </div>
           </WelcomeRegion>
         }
+      />
+      {/* 🗺️ the aside pane: the active slide's playground (core: in the flow from 1180px, closed below → the slide's
+          inline copy shows there). `dividerHidden` + the app's `--ab-pane-divider: none`: no line between the panes */}
+      <AbAsideLayout
+        orientation="vertical"
+        pageName="welcome"
+        className={styles.asidePane}
+        chrome={false} // 🧰 no legacy layers
+        dividerHidden // ➖ no divider
+        content={<WelcomePlayground playgrounds={slides.map((slide) => slide.playground)} label={labels.playground} />}
       />
     </AbCarouselProvider>
   );

@@ -30,7 +30,7 @@
 * @authors: Abraham Ukachi <abrahamukachi@gmail.com>
 *
 * Example usage:
-*   1+|> <WelcomeMobileHeader logo={logo} current="en" locales={locales} labels={labels} row={counterRow} />
+*   1+|> <WelcomeMobileHeader logo={logo} current="en" locales={locales} labels={labels} />
 *    -|> // 📱 below 768px only (core's `mobileHeader="main"` hides the main header slot at 768px+)
 *
 */
@@ -46,7 +46,7 @@
 'use client';
 
 // 📱 Welcome mobile header: the packaged AbMobileHeader (compact: logo · globe · 3-state theme on the SHARED mode) +
-// the counter row in its `row` slot (components 0.2.3), and the language list as the packaged bottom drawer (D40)
+// (the counter now sits at the top of the main column, v6), and the language list as the packaged bottom drawer (D40)
 // that closes on a swipe down and gives focus back to the globe (`trigger`). Without JS the globe is a <details>
 // list of the 4 locale links (`languages`). Composition only: no app-local UI 🧩.
 
@@ -80,7 +80,7 @@ export interface WelcomeMobileHeaderLabels {
   header: string; // 🏷️ the group's name ("Main header")
 }
 
-// what the server `Welcome` hands over (the counter row is added by WelcomeSlides) 🧾
+// what the server `Welcome` hands over 🧾
 export interface WelcomeMobileHeaderData {
   logo: ReactNode; // 🅰️ the wordmark (server-rendered)
   current: string; // ✅ the active locale
@@ -88,19 +88,17 @@ export interface WelcomeMobileHeaderData {
   labels: WelcomeMobileHeaderLabels; // 🌐
 }
 
-// the props of `WelcomeMobileHeader` 🧾
-interface WelcomeMobileHeaderProps extends WelcomeMobileHeaderData {
-  row?: ReactNode; // ➕ the second row (the `02 / 09` counter + Skip)
-}
+// the props of `WelcomeMobileHeader` (just the server data) 🧾
+type WelcomeMobileHeaderProps = WelcomeMobileHeaderData;
 
 
 /**
  * `WelcomeMobileHeader` - Client Component 📱
  *
- * @param { WelcomeMobileHeaderProps } props - logo, locales, labels and the counter row
+ * @param { WelcomeMobileHeaderProps } props - logo, locales and labels
  * @returns { ReactElement }
  */
-export default function WelcomeMobileHeader({ logo, current, locales, labels, row }: WelcomeMobileHeaderProps) {
+export default function WelcomeMobileHeader({ logo, current, locales, labels }: WelcomeMobileHeaderProps) {
   // 🗄️ is the language drawer open?
   const [open, setOpen] = useState(false);
   // 🆔 the sheet's id: the globe's aria-controls
@@ -127,7 +125,7 @@ export default function WelcomeMobileHeader({ logo, current, locales, labels, ro
     <>
       <AbMobileHeader
         logo={logo} // 🅰️
-        size="compact" // 📏 the v6 48px bar (+ the counter row = 96px)
+        size="compact" // 📏 the v6 48px bar
         onLanguage={onLanguage} // 🌍 opens the sheet (once hydrated)
         languageControls={sheetId} // 🔗 aria-controls → the sheet
         languageExpanded={open} // ♿ aria-expanded on the globe
@@ -135,7 +133,6 @@ export default function WelcomeMobileHeader({ logo, current, locales, labels, ro
         // 🧩 no JS: a <details> list of real hreflang links (the 4 locales, this slide kept once hydrated)
         languages={locales.map((l) => ({ locale: l.code, label: l.label, href: getHref(l.code), current: l.code === current }))}
         // 🌗 no theme props: the 3-state button reads & writes the shared AbThemeModeProvider
-        row={row} // ➕ the counter row under the bar
         labels={{ language: labels.language, toLight: labels.toLight, toDark: labels.toDark, toSystem: labels.toSystem, header: labels.header }} // 🌐
       />
       {/* 🗄️ the language list: a bottom sheet (swipe down / Esc / scrim close it) with real hreflang links */}

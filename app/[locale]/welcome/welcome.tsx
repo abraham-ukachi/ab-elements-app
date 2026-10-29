@@ -48,9 +48,11 @@
 // the `Welcome` messages, the slide data and the scenes together. A redesign swaps this folder + the messages 🔁.
 // 🧱 0.2.21 (the layout rule): core's AbAppLayout `panes` owns the 100dvh frame (the document never scrolls).
 //   top bar → the app `header` row (768px+) · below 768px core's `mobileHeader="main"` hides that row and the main pane's
-//   header is the packaged AbMobileHeader (logo · globe · 3-state theme) with the counter row under it (0.2.3 `row`) 📱
-//   · slide → the main content (THE scroller, focusable) · dots + arrows → `mainBar` (see WelcomeSlides).
-//   No sidebar, aside or bottom nav on the Welcome: those slots are empty = 0px.
+//   header is the packaged AbMobileHeader (logo · globe · 3-state theme) 📱
+//   · counter + slide + dots / arrows → the main content (THE scroller, focusable, v6 left column) · the playground →
+//   core's AbAsideLayout from 1180px, inline in the slide below (see WelcomeSlides).
+//   God's layout rule: header · main (text + counter, dots, arrows) · aside (the playground, ≥ 1180px). No sidebar,
+//   no footer / bottom nav: those slots are empty = 0px.
 
 // REACT types
 import type { ReactNode } from 'react';
@@ -198,10 +200,26 @@ export default async function Welcome({ locale }: WelcomeProps) {
     // the scene of this slide 🗺️
     const scene = WELCOME_SCENES[slide.id];
 
+    // 🗺️ this slide's "Live Playground" (role=img + alt ♿): the v6 card (title · PKG · live dot), drawn by the package
+    const playground = (variant: 'full' | 'compact') => (
+      <AbFlowDiagram
+        nodes={scene.nodes}
+        edges={scene.edges}
+        caption={scene.caption}
+        title={t('playground.title')}
+        live={t('playground.live')}
+        alt={t(`${key}.illustrationAlt`)}
+        variant={variant} // 📐 compact = the v6 mobile 276px scene, full = the 760×600 laptop card
+        className={styles.diagram}
+      />
+    );
+
     // return one slide's data
     return {
       // 🆔 the slide id
       id: slide.id,
+      // 🗺️ the full playground, for the aside pane (≥ 1180px)
+      playground: playground('full'),
       // 🏷️ the plain title
       title: t.markup(`${key}.title`, plain),
       // 🧩 the slide markup
@@ -294,18 +312,9 @@ export default async function Welcome({ locale }: WelcomeProps) {
             )}
           </div>
 
-          {/* Aside - the "Live Playground" diagram (role=img + alt ♿) 🗺️ */}
-          <aside className={styles.aside} aria-label={t('playground.title')}>
-            <AbFlowDiagram
-              nodes={scene.nodes}
-              edges={scene.edges}
-              caption={scene.caption}
-              title={t('playground.title')}
-              live={t('playground.live')}
-              alt={t(`${key}.illustrationAlt`)}
-              className={styles.diagram}
-            />
-          </aside>
+          {/* 📱 below 1180px: the playground INLINE in main, between the counter and the text (v6 mobile `mm`: counter ·
+              scene · body · nav), since core keeps the aside pane closed there. Hidden from 1180px, where the aside shows it 🗺️ */}
+          <div className={styles.inlinePlayground}>{playground('compact')}</div>
         </div>
       ),
     };
@@ -319,18 +328,17 @@ export default async function Welcome({ locale }: WelcomeProps) {
         <style>{AB_CAROUSEL_NOSCRIPT_CSS}</style>
       </noscript>
 
-      {/* 📑 the page state (publishes the main scroller); the Welcome has no aside */}
+      {/* 📑 the page state (publishes the scrollers); the aside pane (the playground) is OPEN: core shows it from 1180px */}
       {/* 🌗 one theme mode for the whole Welcome (no drift between the laptop toggle and the phone header at 768px) */}
       <AbThemeModeProvider defaultMode="system">
-      <AbPageProvider defaultAsideOpen={false}>
-        {/* 🧱 the frame: header row · main pane (no sidebar / aside / bottom nav = 0px) */}
+      <AbPageProvider defaultAsideOpen>
+        {/* 🧱 the frame (God's layout rule): header · main (text + slider controls) · aside (the playground). No sidebar, no footer */}
         <AbAppLayout
           orientation="vertical"
           variant="panes"
           pageName="welcome"
           className={styles.app}
-          mobileHeader="main" // 📱 0.2.3: below 768px the main pane's header (AbMobileHeader + the counter row) IS the bar
-          mainHeaderAt="all" // 📌 0.2.3: that header stays at every width, so the counter row (its `row`) never scrolls away
+          mobileHeader="main" // 📱 0.2.3: below 768px the main pane's header (AbMobileHeader) IS the bar (the counter lives in main now)
           // 🔝 Top Bar - logo + utilities (core renders the row; its height is the v6 48 / 56 / 60px via a token)
           header={
             <div className={styles.topBar}>
@@ -350,11 +358,11 @@ export default async function Welcome({ locale }: WelcomeProps) {
               </div>
             </div>
           }
-          // 🎞️ the main pane (the headless carousel no longer wraps it: 0.2.3 AbCarouselProvider)
+          // 🎞️ the main + aside panes (one headless carousel drives both: 0.2.3 AbCarouselProvider renders no element)
           content={
             <WelcomeSlides
               slides={slides}
-              // 📱 the mobile header's pieces (rendered inside the carousel, so its `row` can hold the counter)
+              // 📱 the mobile header's pieces (below 768px)
               mobileHeader={{
                 logo: <AbLogo wordmark size={22} alt="abElements" />,
                 current: locale,
@@ -378,6 +386,7 @@ export default async function Welcome({ locale }: WelcomeProps) {
                 goTo: t.raw('goTo') as string,
                 announce: t.raw('announce') as string,
                 counter: t.raw('counter') as string,
+                playground: t('playground.title'), // 🗺️ the aside pane's name
                 mainContent: t('mainContent'), // ⌨️ the focusable main scroller's name (core 0.2.3 `scrollerLabel`)
               }}
             />
