@@ -242,10 +242,11 @@ function ThemePill() {
  *   📱 < 768: AbMobileHeader (logoname · globe → Settings with the language list · theme), no search (the tab has it)
  *   📟 768–1179: crumb · grow · search · globe · theme pill · GitHub · divider · `<<` (spec §3)
  *
- * @param { { crumbs: AbBreadcrumbItem[] } } props - the breadcrumb trail (last = current page)
+ * @param { { crumbs: AbBreadcrumbItem[]; asideToggle?: boolean } } props - the breadcrumb trail (last = current page)
+ *   & whether the page has an outline for the `<<` toggle (default true; the 404 has none, 0.2.22 🤷🏽‍♂️)
  * @returns { ReactElement }
  */
-export function DocsMainBar({ crumbs }: Readonly<{ crumbs: AbBreadcrumbItem[] }>) {
+export function DocsMainBar({ crumbs, asideToggle = true }: Readonly<{ crumbs: AbBreadcrumbItem[]; asideToggle?: boolean }>) {
   // 🧠 the shell
   const { labels, locale, locales, theme, open, setOpen } = useShell();
   // 🌐 the drawer strings
@@ -275,9 +276,9 @@ export function DocsMainBar({ crumbs }: Readonly<{ crumbs: AbBreadcrumbItem[] }>
         <AbLocaleSwitcher variant="icon" align="end" label={labels.language} current={locale} locales={locales} getHref={(code) => localizeAbPathname(pathname, code, abI18nConfig)} />
         <ThemePill />
         <AbIconButton icon="github" iconSize={20} label={labels.github} href={GITHUB_URL} />
-        {/* ➖ 1×20 divider before the outline toggle (decorative) */}
-        <span aria-hidden="true" className="mx-1 h-5 w-px bg-(--ab-color-div)" />
-        <AsideToggle />
+        {/* ➖ 1×20 divider + the outline toggle, only when the page has an outline drawer (no dead `<<` on the 404 🚫) */}
+        {asideToggle && <span aria-hidden="true" className="mx-1 h-5 w-px bg-(--ab-color-div)" />}
+        {asideToggle && <AsideToggle />}
       </div>
     </>
   );

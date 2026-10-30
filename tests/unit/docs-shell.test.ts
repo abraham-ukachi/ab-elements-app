@@ -82,7 +82,9 @@ describe('docs shell 🧭', () => {
     const shell = read('components/app/docs-shell/index.tsx');
     expect(shell).toContain('<AbLinkProvider component={Link} locales={abI18nConfig.locales}>');
     expect(shell).not.toContain('as unknown as');
-    expect(read('app/[locale]/(docs)/layout.tsx')).toContain('<AbIconRegistrar icons={SHELL_ICONS} />');
+    // 🧭 0.2.22: the registrar lives in the shared shell frame (the `(docs)` layout and the 404s both use it)
+    expect(read('components/app/docs-shell/frame.tsx')).toContain('<AbIconRegistrar icons={SHELL_ICONS} />');
+    expect(read('app/[locale]/(docs)/layout.tsx')).toContain('<DocsShellFrame locale={locale}>');
     expect(shell).toContain('variant="panes"');
     expect(shell).toContain('onCollapsedChange={setRail}');
   });
