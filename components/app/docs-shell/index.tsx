@@ -82,6 +82,9 @@ import AbSettingsDrawer, { type AbSettingsTheme } from 'ab-nextjs-components/ab-
 import AbNavDrawer from 'ab-nextjs-components/ab-nav-drawer';
 import AbSearchDrawer, { type AbSearchDrawerGroup } from 'ab-nextjs-components/ab-search-drawer';
 import { useAbEdgeSwipe } from 'ab-nextjs-components/ab-drawer';
+// import the client icon registry + the Settings drawer's `settings` glyph (it isn't in AbIcon's built-in set) 🗂️⚙️
+import { registerAbIcons } from 'ab-nextjs-components/ab-icon';
+import settings from 'ab-nextjs-icons/ab-icons/icons/settings';
 // import the ONE theme engine every toggle shares (so the pill, the mobile icon & Settings never disagree) 🌗
 import { useAbThemeMode } from 'ab-nextjs-hooks/useAbTheme';
 // import the client translations & the localized pathname helper from `ab-nextjs-i18n` 🌐
@@ -292,6 +295,11 @@ export function DocsMainBar({ crumbs, asideToggle = true, mobileSearch = false }
     </>
   );
 }
+
+
+// 🗂️ register the shell's extra glyphs once, at module load (server render AND browser: same set, no hydration
+//    diff, no Material font fallback). `brightness_auto` (the drawer's System theme) has no AbIcons svg yet 🚧
+registerAbIcons({ settings });
 
 
 /**

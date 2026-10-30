@@ -64,6 +64,10 @@ import { AbList, AbListItem } from 'ab-nextjs-components/ab-list';
 import { AbLink } from 'ab-nextjs-components/ab-link';
 // import the server AbIcon (full icon map, no JS shipped) 🔣
 import AbIcon from 'ab-nextjs-components/server/ab-icon';
+// import the server-safe icon registrar (a client leaf that fills the CLIENT AbIcon registry during render) 🗂️
+import { AbIconRegistrar } from 'ab-nextjs-components/ab-icon/registrar';
+// import the link_off svg data (AbErrorHero's default badge glyph, ab-nextjs-icons 0.2.6) 🔗🚫
+import link_off from 'ab-nextjs-icons/ab-icons/icons/link_off';
 // import the server-side translations helper from `ab-nextjs-i18n` 🌐
 import { getAbTranslations } from 'ab-nextjs-i18n/server';
 // import `notFound` (an unknown locale never reaches next-intl) 🚫
@@ -122,11 +126,13 @@ export default async function NotFoundView({ locale }: NotFoundViewProps): Promi
         <div className="@container px-4 pt-[18px] pb-[110px] min-[768px]:px-9 min-[768px]:py-[30px] min-[1180px]:px-12 min-[1180px]:py-[34px] min-[1920px]:py-11">
           {/* 🎯 one centred column: the hero's copy & actions, the Suggested row may go wider (mock 46–47) */}
           <div className="mx-auto flex max-w-[760px] flex-col items-center">
+            {/* 🗂️ register link_off BEFORE the hero renders (same set on the server & at hydration: no Material font fallback, no dev warning) */}
+            <AbIconRegistrar icons={{ link_off }} />
             {/* 🦸 the packaged hero: gradient "404" + the link_off tile, the one h1 ♿, the lede, the hint & the actions */}
             <AbErrorHero
               className={FAINT_DOTS}
               code={t('code')}
-              badge={<AbIcon name="link_off" size={22} />}
+              // 🟫 no `badge` prop: AbErrorHero's default is the (client) link_off AbIcon, registered just above ⬆️
               title={t('title')}
               message={t('lede')}
               // 💡 "Did you mean …?" (client island, only when a route is close) — on every width now 📱💻
