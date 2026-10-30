@@ -244,9 +244,10 @@ function ThemePill() {
  *
  * @param { { crumbs: AbBreadcrumbItem[]; asideToggle?: boolean } } props - the breadcrumb trail (last = current page)
  *   & whether the page has an outline for the `<<` toggle (default true; the 404 has none, 0.2.22 🤷🏽‍♂️)
+ *   & `mobileSearch` (the 404 mock): the mobile header shows a "Search ⌘K" pill + the theme icon instead of globe · theme
  * @returns { ReactElement }
  */
-export function DocsMainBar({ crumbs, asideToggle = true }: Readonly<{ crumbs: AbBreadcrumbItem[]; asideToggle?: boolean }>) {
+export function DocsMainBar({ crumbs, asideToggle = true, mobileSearch = false }: Readonly<{ crumbs: AbBreadcrumbItem[]; asideToggle?: boolean; mobileSearch?: boolean }>) {
   // 🧠 the shell
   const { labels, locale, locales, theme, open, setOpen } = useShell();
   // 🌐 the drawer strings
@@ -260,8 +261,16 @@ export function DocsMainBar({ crumbs, asideToggle = true }: Readonly<{ crumbs: A
         <AbMobileHeader
           logo={<AbLink href="/" aria-label={labels.brand}><AbLogo wordmark alt="" size={22} /></AbLink>}
           theme={theme.resolvedTheme === 'dark' ? 'dark' : 'light'}
-          onThemeChange={theme.setMode}
-          onLanguage={() => setOpen('settings')}
+          // 🌗🌍 the default header: globe · theme (built in); the 404's (mobileSearch) puts both in `actions` instead
+          onThemeChange={mobileSearch ? undefined : theme.setMode}
+          onLanguage={mobileSearch ? undefined : () => setOpen('settings')}
+          // 🔎 404 mock: the 34px "Search ⌘K" pill (opens the search drawer) + the packaged theme icon, in that order
+          actions={mobileSearch ? (
+            <span className="flex items-center gap-1">
+              <AbSearchTrigger size="sm" variant="field" label={labels.searchShort} onOpen={() => setOpen('search')} hotkey={false} />
+              <AbThemeToggle variant="icon" modes={['light', 'dark']} value={theme.mode as 'light' | 'dark'} onChange={theme.setMode} labels={labels.theme} />
+            </span>
+          ) : undefined}
           languageExpanded={open === 'settings'}
           labels={{ language: t('drawers.changeLanguage'), toDark: t('drawers.toDark'), toLight: t('drawers.toLight'), header: t('drawers.mobileHeader') }}
         />
