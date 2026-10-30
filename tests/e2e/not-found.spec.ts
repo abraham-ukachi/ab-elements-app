@@ -103,7 +103,7 @@ test.describe('404 per locale, inside the shell 🌍', () => {
       // 🙈 never indexed
       await expect(page.locator('meta[name="robots"]').first()).toHaveAttribute('content', /noindex/);
       // ♿ exactly one visible h1, translated
-      await expect(page.getByRole('heading', { level: 1 })).toHaveText(h1);
+      await expect(page.getByRole('heading', { level: 1 })).toContainText(h1); // 🗣️ AbErrorHero reads "404: " first (visually hidden)
       // 🧭 the shell is there: the sidebar's "Documentation" nav (laptop default viewport is 1280)
       await expect(page.locator('[data-ab-part="main-content"]').first()).toBeVisible();
       // ⬅️ Back to home points at this locale's Home
@@ -128,7 +128,7 @@ test.describe('global 404 (outside the locale tree) 🌐', () => {
     // 🇬🇧 English, with the same page as the locale tree
     await expect(page.locator('html')).toHaveAttribute('lang', 'en');
     await expect(page).toHaveTitle('Page not found | abElements');
-    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Page not found');
+    await expect(page.getByRole('heading', { level: 1 })).toContainText('Page not found'); // 🗣️ + the hidden "404: "
     await expect(page.getByRole('link', { name: 'Back to home' })).toHaveAttribute('href', '/');
   });
 });

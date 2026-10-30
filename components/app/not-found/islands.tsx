@@ -86,11 +86,12 @@ export function NotFoundDidYouMean() {
   const t = useAbTranslations('NotFound');
   // 💡 the closest route (or none)
   const match = closestRoute(pathname);
-  // 🙈 nothing close enough: no pill at all (mobile mock 44–45 has none either)
+  // 🙈 nothing close enough: no pill at all
   if (!match) return null;
   // return the mono chip: requested path · "Did you mean <link>…</link>?"
   return (
-    <AbChip mono shape="rounded" className="max-w-full">
+    // ↩️ overflow="wrap": a long path breaks onto lines (the suggestion link must stay readable on a phone 📱)
+    <AbChip mono shape="rounded" overflow="wrap" className="max-w-full">
       {/* 🧾 what was requested (mono, muted) */}
       <code aria-label={`${t('requested')}: ${pathname}`}>{pathname}</code>
       {/* · a decorative separator */}
@@ -113,10 +114,6 @@ export function NotFoundDidYouMean() {
 export function NotFoundSearch({ label }: Readonly<{ label: string }>) {
   // 🗄️ the shell's drawer state
   const { setOpen } = useShellDrawer();
-  // return the packaged field (the hotkey shows its ⌘K cap, like the mock; the app bar's field has none, so no clash ⌨️; the token stretches it 📏)
-  return (
-    <div className="w-full [--ab-search-trigger-width:100%]">
-      <AbSearchTrigger variant="field" label={label} onOpen={() => setOpen('search')} hotkey />
-    </div>
-  );
+  // return the packaged big field (size="lg": 44px, 440px wide, full width on a phone 📏; its ⌘K cap like the mock ⌨️)
+  return <AbSearchTrigger size="lg" variant="field" label={label} onOpen={() => setOpen('search')} hotkey />;
 }
