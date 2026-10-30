@@ -25,8 +25,54 @@
   },
   "NotFound": {
     "code": "404",
-    "title": "Cette page est introuvable.",
-    "backHome": "Retour à abElements"
+    "title": "Page introuvable",
+    "lede": "Cette page a été déplacée ou n’a jamais existé. Cherchez dans la doc ou reprenez depuis l’une des pages ci-dessous.",
+    "crumb": "Page introuvable",
+    "didYouMean": "Vouliez-vous dire <link>{path}</link> ?",
+    "requested": "Chemin demandé",
+    "search": "Rechercher dans la doc …",
+    "backHome": "Retour à l’accueil",
+    "browseDocs": "Parcourir la doc",
+    "suggested": "Suggestions",
+    "suggestions": {
+      "gettingStarted": {
+        "title": "Bien démarrer",
+        "desc": "Installer AbElements dans une app Next.js"
+      },
+      "components": {
+        "title": "Composants",
+        "desc": "Boutons, cartes, panneaux et plus"
+      },
+      "themeTokens": {
+        "title": "Jetons du thème",
+        "desc": "Couleurs, rayons et variables du mode sombre"
+      }
+    },
+    "popular": "Pages populaires",
+    "popularPages": {
+      "installation": {
+        "title": "Installation",
+        "meta": "Bien démarrer"
+      },
+      "button": {
+        "title": "Bouton",
+        "meta": "Composants"
+      },
+      "themeTokens": {
+        "title": "Jetons du thème",
+        "meta": "ab-nextjs-theme"
+      },
+      "useMedia": {
+        "title": "useMedia",
+        "meta": "ab-nextjs-hooks"
+      },
+      "changelog": {
+        "title": "Journal des modifications",
+        "meta": "Nouveautés"
+      }
+    },
+    "reportLink": "Signaler un lien cassé",
+    "openIssue": "Ouvrir un ticket sur GitHub"
   },
   "Welcome": {
     "meta": {
@@ -67,7 +113,12 @@
       "provider": "fournisseur",
       "prefix": "préfixe",
       "intlFormat": "format Intl",
-      "greetings": {"en": "Hello", "fr": "Bonjour", "es": "Hola", "ru": "Привет"},
+      "greetings": {
+        "en": "Hello",
+        "fr": "Bonjour",
+        "es": "Hola",
+        "ru": "Привет"
+      },
       "live": "en direct"
     },
     "cta": "Commencer",

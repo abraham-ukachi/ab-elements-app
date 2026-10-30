@@ -25,8 +25,54 @@
   },
   "NotFound": {
     "code": "404",
-    "title": "No se pudo encontrar esta página.",
-    "backHome": "Volver a abElements"
+    "title": "Página no encontrada",
+    "lede": "Esta página se movió o nunca existió. Busca en la documentación o continúa desde una de las páginas de abajo.",
+    "crumb": "Página no encontrada",
+    "didYouMean": "¿Quisiste decir <link>{path}</link>?",
+    "requested": "Ruta solicitada",
+    "search": "Buscar en la documentación…",
+    "backHome": "Volver al inicio",
+    "browseDocs": "Ver la documentación",
+    "suggested": "Sugerencias",
+    "suggestions": {
+      "gettingStarted": {
+        "title": "Primeros pasos",
+        "desc": "Instala AbElements en una app de Next.js"
+      },
+      "components": {
+        "title": "Componentes",
+        "desc": "Botones, tarjetas, paneles y más"
+      },
+      "themeTokens": {
+        "title": "Tokens del tema",
+        "desc": "Colores, radios y variables del modo oscuro"
+      }
+    },
+    "popular": "Páginas populares",
+    "popularPages": {
+      "installation": {
+        "title": "Instalación",
+        "meta": "Primeros pasos"
+      },
+      "button": {
+        "title": "Botón",
+        "meta": "Componentes"
+      },
+      "themeTokens": {
+        "title": "Tokens del tema",
+        "meta": "ab-nextjs-theme"
+      },
+      "useMedia": {
+        "title": "useMedia",
+        "meta": "ab-nextjs-hooks"
+      },
+      "changelog": {
+        "title": "Registro de cambios",
+        "meta": "Novedades"
+      }
+    },
+    "reportLink": "Informar de un enlace roto",
+    "openIssue": "Abrir una incidencia en GitHub"
   },
   "Welcome": {
     "meta": {
@@ -67,7 +113,12 @@
       "provider": "proveedor",
       "prefix": "prefijo",
       "intlFormat": "formato Intl",
-      "greetings": {"en": "Hello", "fr": "Bonjour", "es": "Hola", "ru": "Привет"},
+      "greetings": {
+        "en": "Hello",
+        "fr": "Bonjour",
+        "es": "Hola",
+        "ru": "Привет"
+      },
       "live": "en vivo"
     },
     "cta": "Empezar",

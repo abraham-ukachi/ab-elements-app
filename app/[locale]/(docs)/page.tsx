@@ -141,9 +141,14 @@ export async function generateMetadata({ params }: HomeProps): Promise<Metadata>
 /**
  * `Home` - Page 🏠
  *
+ * @param { HomeProps } props - the page props (with the `locale` param)
  * @returns { Promise<ReactElement> }
  */
-export default async function Home() {
+export default async function Home({ params }: HomeProps) {
+  // 🛂 an unknown locale segment (e.g. `/foo.bar`, which the proxy never rewrites) → 404 BEFORE any next-intl call:
+  //    this page renders in parallel with the root layout's own check, and next-intl would read the request
+  //    headers for it, turning the 404 into a 500 💥 (0.2.22)
+  if (!isAbLocale(abI18nConfig, (await params).locale)) notFound();
   // get the translations of the `Home` messages of the current locale 🌐
   const t = await getAbTranslations('Home');
   // 🧩 the package previews, with the Components tile's words in this locale (components 0.2.2)

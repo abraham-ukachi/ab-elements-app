@@ -82,6 +82,9 @@ import AbSettingsDrawer, { type AbSettingsTheme } from 'ab-nextjs-components/ab-
 import AbNavDrawer from 'ab-nextjs-components/ab-nav-drawer';
 import AbSearchDrawer, { type AbSearchDrawerGroup } from 'ab-nextjs-components/ab-search-drawer';
 import { useAbEdgeSwipe } from 'ab-nextjs-components/ab-drawer';
+// import the client icon registry + the Settings drawer's `settings` glyph (it isn't in AbIcon's built-in set) 🗂️⚙️
+import { registerAbIcons } from 'ab-nextjs-components/ab-icon';
+import settings from 'ab-nextjs-icons/ab-icons/icons/settings';
 // import the ONE theme engine every toggle shares (so the pill, the mobile icon & Settings never disagree) 🌗
 import { useAbThemeMode } from 'ab-nextjs-hooks/useAbTheme';
 // import the client translations & the localized pathname helper from `ab-nextjs-i18n` 🌐
@@ -242,10 +245,12 @@ function ThemePill() {
  *   📱 < 768: AbMobileHeader (logoname · globe → Settings with the language list · theme), no search (the tab has it)
  *   📟 768–1179: crumb · grow · search · globe · theme pill · GitHub · divider · `<<` (spec §3)
  *
- * @param { { crumbs: AbBreadcrumbItem[] } } props - the breadcrumb trail (last = current page)
+ * @param { { crumbs: AbBreadcrumbItem[]; asideToggle?: boolean } } props - the breadcrumb trail (last = current page)
+ *   & whether the page has an outline for the `<<` toggle (default true; the 404 has none, 0.2.22 🤷🏽‍♂️)
+ *   & `mobileSearch` (the 404 mock): the mobile header shows a "Search ⌘K" pill + the theme icon instead of globe · theme
  * @returns { ReactElement }
  */
-export function DocsMainBar({ crumbs }: Readonly<{ crumbs: AbBreadcrumbItem[] }>) {
+export function DocsMainBar({ crumbs, asideToggle = true, mobileSearch = false }: Readonly<{ crumbs: AbBreadcrumbItem[]; asideToggle?: boolean; mobileSearch?: boolean }>) {
   // 🧠 the shell
   const { labels, locale, locales, theme, open, setOpen } = useShell();
   // 🌐 the drawer strings
@@ -259,8 +264,16 @@ export function DocsMainBar({ crumbs }: Readonly<{ crumbs: AbBreadcrumbItem[] }>
         <AbMobileHeader
           logo={<AbLink href="/" aria-label={labels.brand}><AbLogo wordmark alt="" size={22} /></AbLink>}
           theme={theme.resolvedTheme === 'dark' ? 'dark' : 'light'}
-          onThemeChange={theme.setMode}
-          onLanguage={() => setOpen('settings')}
+          // 🌗🌍 the default header: globe · theme (built in); the 404's (mobileSearch) puts both in `actions` instead
+          onThemeChange={mobileSearch ? undefined : theme.setMode}
+          onLanguage={mobileSearch ? undefined : () => setOpen('settings')}
+          // 🔎 404 mock: the 34px "Search ⌘K" pill (opens the search drawer) + the packaged theme icon, in that order
+          actions={mobileSearch ? (
+            <span className="flex items-center gap-1">
+              <AbSearchTrigger size="sm" variant="field" label={labels.searchShort} onOpen={() => setOpen('search')} hotkey={false} />
+              <AbThemeToggle variant="icon" modes={['light', 'dark']} value={theme.mode as 'light' | 'dark'} onChange={theme.setMode} labels={labels.theme} />
+            </span>
+          ) : undefined}
           languageExpanded={open === 'settings'}
           labels={{ language: t('drawers.changeLanguage'), toDark: t('drawers.toDark'), toLight: t('drawers.toLight'), header: t('drawers.mobileHeader') }}
         />
@@ -275,13 +288,18 @@ export function DocsMainBar({ crumbs }: Readonly<{ crumbs: AbBreadcrumbItem[] }>
         <AbLocaleSwitcher variant="icon" align="end" label={labels.language} current={locale} locales={locales} getHref={(code) => localizeAbPathname(pathname, code, abI18nConfig)} />
         <ThemePill />
         <AbIconButton icon="github" iconSize={20} label={labels.github} href={GITHUB_URL} />
-        {/* ➖ 1×20 divider before the outline toggle (decorative) */}
-        <span aria-hidden="true" className="mx-1 h-5 w-px bg-(--ab-color-div)" />
-        <AsideToggle />
+        {/* ➖ 1×20 divider + the outline toggle, only when the page has an outline drawer (no dead `<<` on the 404 🚫) */}
+        {asideToggle && <span aria-hidden="true" className="mx-1 h-5 w-px bg-(--ab-color-div)" />}
+        {asideToggle && <AsideToggle />}
       </div>
     </>
   );
 }
+
+
+// 🗂️ register the shell's extra glyphs once, at module load (server render AND browser: same set, no hydration
+//    diff, no Material font fallback). `brightness_auto` (the drawer's System theme) has no AbIcons svg yet 🚧
+registerAbIcons({ settings });
 
 
 /**

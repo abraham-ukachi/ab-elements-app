@@ -25,8 +25,54 @@
   },
   "NotFound": {
     "code": "404",
-    "title": "This page could not be found.",
-    "backHome": "Back to abElements"
+    "title": "Page not found",
+    "lede": "This page moved or never existed. Search the docs or pick up from one of the pages below.",
+    "crumb": "Page not found",
+    "didYouMean": "Did you mean <link>{path}</link>?",
+    "requested": "Requested path",
+    "search": "Search docs…",
+    "backHome": "Back to home",
+    "browseDocs": "Browse docs",
+    "suggested": "Suggested",
+    "suggestions": {
+      "gettingStarted": {
+        "title": "Getting started",
+        "desc": "Install AbElements in a Next.js app"
+      },
+      "components": {
+        "title": "Components",
+        "desc": "Buttons, cards, sheets and more"
+      },
+      "themeTokens": {
+        "title": "Theme tokens",
+        "desc": "Colors, radii and dark-mode variables"
+      }
+    },
+    "popular": "Popular pages",
+    "popularPages": {
+      "installation": {
+        "title": "Installation",
+        "meta": "Getting started"
+      },
+      "button": {
+        "title": "Button",
+        "meta": "Components"
+      },
+      "themeTokens": {
+        "title": "Theme tokens",
+        "meta": "ab-nextjs-theme"
+      },
+      "useMedia": {
+        "title": "useMedia",
+        "meta": "ab-nextjs-hooks"
+      },
+      "changelog": {
+        "title": "Changelog",
+        "meta": "What’s new"
+      }
+    },
+    "reportLink": "Report a broken link",
+    "openIssue": "Open an issue on GitHub"
   },
   "Welcome": {
     "meta": {
@@ -67,7 +113,12 @@
       "provider": "provider",
       "prefix": "prefix",
       "intlFormat": "Intl format",
-      "greetings": {"en": "Hello", "fr": "Bonjour", "es": "Hola", "ru": "Привет"},
+      "greetings": {
+        "en": "Hello",
+        "fr": "Bonjour",
+        "es": "Hola",
+        "ru": "Привет"
+      },
       "live": "live"
     },
     "cta": "Get Started",

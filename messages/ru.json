@@ -25,8 +25,54 @@
   },
   "NotFound": {
     "code": "404",
-    "title": "Эта страница не найдена.",
-    "backHome": "Назад к abElements"
+    "title": "Страница не найдена",
+    "lede": "Эта страница переехала или никогда не существовала. Найдите нужное в документации или начните с одной из страниц ниже.",
+    "crumb": "Страница не найдена",
+    "didYouMean": "Возможно, вы имели в виду <link>{path}</link>?",
+    "requested": "Запрошенный путь",
+    "search": "Поиск по документации…",
+    "backHome": "На главную",
+    "browseDocs": "Открыть документацию",
+    "suggested": "Рекомендуем",
+    "suggestions": {
+      "gettingStarted": {
+        "title": "Начало работы",
+        "desc": "Установите AbElements в приложение Next.js"
+      },
+      "components": {
+        "title": "Компоненты",
+        "desc": "Кнопки, карточки, панели и другое"
+      },
+      "themeTokens": {
+        "title": "Токены темы",
+        "desc": "Цвета, радиусы и переменные тёмной темы"
+      }
+    },
+    "popular": "Популярные страницы",
+    "popularPages": {
+      "installation": {
+        "title": "Установка",
+        "meta": "Начало работы"
+      },
+      "button": {
+        "title": "Кнопка",
+        "meta": "Компоненты"
+      },
+      "themeTokens": {
+        "title": "Токены темы",
+        "meta": "ab-nextjs-theme"
+      },
+      "useMedia": {
+        "title": "useMedia",
+        "meta": "ab-nextjs-hooks"
+      },
+      "changelog": {
+        "title": "Список изменений",
+        "meta": "Что нового"
+      }
+    },
+    "reportLink": "Сообщить о битой ссылке",
+    "openIssue": "Создать issue на GitHub"
   },
   "Welcome": {
     "meta": {
@@ -67,7 +113,12 @@
       "provider": "провайдер",
       "prefix": "префикс",
       "intlFormat": "формат Intl",
-      "greetings": {"en": "Hello", "fr": "Bonjour", "es": "Hola", "ru": "Привет"},
+      "greetings": {
+        "en": "Hello",
+        "fr": "Bonjour",
+        "es": "Hola",
+        "ru": "Привет"
+      },
       "live": "в реальном времени"
     },
     "cta": "Начать",

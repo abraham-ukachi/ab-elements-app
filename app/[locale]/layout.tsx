@@ -118,6 +118,10 @@ export const viewport: Viewport = StaticViewport;
 // next/root-params, so no setAbRequestLocale is needed).
 export const generateStaticParams = () => generateAbStaticParams(abI18nConfig);
 
+// 🚫 only our 4 locales match `[locale]` (0.2.22): any other first segment (e.g. `/foo.bar`, which the proxy never
+// rewrites) is an UNMATCHED URL, so Next.js serves `app/global-not-found.tsx` instead of a blank 404 🤷🏽‍♂️
+export const dynamicParams = false;
+
 
 /**
  * `themeScript` 🌗
