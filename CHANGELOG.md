@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.22](https://github.com/abraham-ukachi/ab-elements-app/compare/v0.2.21...v0.2.22) (2026-10-30)
+
+* :sparkles: Build the 404 page inside the docs shell in en, fr, es & ru: the packaged `AbErrorHero` (gradient 404, link_off badge, faint dot grid), the large search field, Back to home · Browse docs, "Did you mean …?" on every width, and Suggested rows (mobile) or cards with an icon tile, bold title & arrow (from 640px)
+* :bookmark_tabs: Show Popular pages in the aside from 1180px (`AbToc` links variant) with Report a broken link · Open an issue
+* :iphone: Give the 404 mobile header a Search pill and a theme icon, and stack the two actions full width below 768px so longer labels never wrap
+* :bug: Serve every unknown URL (including `/foo.bar`, no more 500) a real 404 status in the visitor's locale, with `noindex`
+* :globe_with_meridians: Localize AbButton links through AbLinkProvider (no more server-computed hrefs)
+* :card_file_box: Register the `link_off` and `settings` icons, so they never fall back to the Material Symbols font
+* :arrow_up: Pin the published ab-nextjs-components 0.3.1 & ab-nextjs-icons 0.2.6, with exact release-age pins that expire 24h after each publish
+* :white_check_mark: Test the 404 in every locale (status, h1, localized links, mobile rows, global 404) and run axe on it at every width in both themes
+
 ### [0.2.21](https://github.com/abraham-ukachi/ab-elements-app/compare/v0.2.20...v0.2.21) (2026-10-30)
 
 * :building_construction: :iphone: Rebuild the Welcome on the packaged core panes: header · main · aside, with the counter in main, one scroller below 1180px (header, counter, playground and text scroll together) and the playground pane from 1180px
