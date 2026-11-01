@@ -55,3 +55,6 @@ next-env.d.ts
 
 # backups folder
 **/backups
+
+# 🚦 Lighthouse reports (pnpm lighthouse)
+/lighthouse-report

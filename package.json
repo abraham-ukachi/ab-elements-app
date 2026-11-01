@@ -35,7 +35,9 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "lighthouse": "node scripts/lighthouse.mjs",
+    "lighthouse:strict": "node scripts/lighthouse.mjs --strict"
   },
   "engines": {
     "node": ">=24"
@@ -63,8 +65,10 @@
     "@types/node": "^26.6.4",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
+    "chrome-launcher": "1.2.2",
     "eslint": "^9.39.5",
     "eslint-config-next": "16.3.4",
+    "lighthouse": "13.6.0",
     "tailwindcss": "^4.3.3",
     "typescript": "^6.0.3",
     "vitest": "^5.0.3"
