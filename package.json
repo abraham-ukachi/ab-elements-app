@@ -1,6 +1,6 @@
 {
   "name": "ab-elements-app",
-  "version": "0.2.22",
+  "version": "0.2.23",
   "description": "abElements is the home of every Ab package: docs, live examples, and an installable PWA, built with the same packages it documents.",
   "private": true,
   "homepage": "https://ab-elements.vercel.app/",
@@ -35,7 +35,9 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "lighthouse": "node scripts/lighthouse.mjs",
+    "lighthouse:strict": "node scripts/lighthouse.mjs --strict"
   },
   "engines": {
     "node": ">=24"
@@ -43,12 +45,12 @@
   "packageManager": "pnpm@11.3.0",
   "dependencies": {
     "ab-nextjs-animations": "0.2.5",
-    "ab-nextjs-components": "0.3.1",
+    "ab-nextjs-components": "0.3.2",
     "ab-nextjs-core": "0.2.3",
-    "ab-nextjs-fonts": "0.2.6",
+    "ab-nextjs-fonts": "0.2.7",
     "ab-nextjs-hooks": "0.1.7",
     "ab-nextjs-i18n": "0.1.0",
-    "ab-nextjs-icons": "0.2.6",
+    "ab-nextjs-icons": "0.2.7",
     "ab-nextjs-theme": "0.3.7",
     "clsx": "^2.1.1",
     "next": "16.3.4",
@@ -63,8 +65,10 @@
     "@types/node": "^26.6.4",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
+    "chrome-launcher": "1.2.2",
     "eslint": "^9.39.5",
     "eslint-config-next": "16.3.4",
+    "lighthouse": "13.6.0",
     "tailwindcss": "^4.3.3",
     "typescript": "^6.0.3",
     "vitest": "^5.0.3"

@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.23](https://github.com/abraham-ukachi/ab-elements-app/compare/v0.2.22...v0.2.23) (2026-11-01)
+
+* :white_check_mark: Test the layout rules on Home, the 404 and the Welcome at 390, 768, 1180, 1280 and 1920px in light and dark: the document never scrolls, only the panes scroll and they scroll independently, empty slots are 0px, the aside is a pane from 1180px and the right drawer below it, the tablet `<<` toggle opens it (Escape closes it and focus returns), and the scroll spy follows main
+* :white_check_mark: Test touch on phones: 44px tap targets, edge swipes that open the nav and outline drawers, scrim taps and swipes that close them, and every drawer staying inside the app with focus back on its opener
+* :white_check_mark: Test accessibility: axe at every width in both themes and with each drawer open, one `h1`, named landmarks, the skip link first and no Tab stop in a hidden pane
+* :chart_with_upwards_trend: Add `pnpm lighthouse` (and `lighthouse:strict`): Performance, Accessibility, Best Practices and SEO for `/`, `/fr` and the 404 on the mobile and desktop presets, the median of 3 runs against the plan's targets
+* :iphone: Use the packaged mobile header search slot on the 404 (search · theme, the shared theme glyph)
+* :wheelchair: Name the Home aside landmark after its outline
+* :card_file_box: Register the `brightness_auto` icon, so the Settings drawer never falls back to the Material Symbols font
+* :arrow_up: Pin the published ab-nextjs-components 0.3.2, ab-nextjs-icons 0.2.7 & ab-nextjs-fonts 0.2.7 (Inter now swaps in, so the Home text paints at once), with exact release-age pins that expire 24h after each publish, and drop the expired pins
+
 ### [0.2.22](https://github.com/abraham-ukachi/ab-elements-app/compare/v0.2.21...v0.2.22) (2026-10-30)
 
 * :sparkles: Build the 404 page inside the docs shell in en, fr, es & ru: the packaged `AbErrorHero` (gradient 404, link_off badge, faint dot grid), the large search field, Back to home · Browse docs, "Did you mean …?" on every width, and Suggested rows (mobile) or cards with an icon tile, bold title & arrow (from 640px)

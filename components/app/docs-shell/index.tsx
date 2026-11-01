@@ -85,6 +85,8 @@ import { useAbEdgeSwipe } from 'ab-nextjs-components/ab-drawer';
 // import the client icon registry + the Settings drawer's `settings` glyph (it isn't in AbIcon's built-in set) 🗂️⚙️
 import { registerAbIcons } from 'ab-nextjs-components/ab-icon';
 import settings from 'ab-nextjs-icons/ab-icons/icons/settings';
+// import the Settings drawer's System-theme glyph (new in ab-nextjs-icons 0.2.7) 🌓
+import brightness_auto from 'ab-nextjs-icons/ab-icons/icons/brightness_auto';
 // import the ONE theme engine every toggle shares (so the pill, the mobile icon & Settings never disagree) 🌗
 import { useAbThemeMode } from 'ab-nextjs-hooks/useAbTheme';
 // import the client translations & the localized pathname helper from `ab-nextjs-i18n` 🌐
@@ -247,7 +249,7 @@ function ThemePill() {
  *
  * @param { { crumbs: AbBreadcrumbItem[]; asideToggle?: boolean } } props - the breadcrumb trail (last = current page)
  *   & whether the page has an outline for the `<<` toggle (default true; the 404 has none, 0.2.22 🤷🏽‍♂️)
- *   & `mobileSearch` (the 404 mock): the mobile header shows a "Search ⌘K" pill + the theme icon instead of globe · theme
+ *   & `mobileSearch` (the 404 mock): the mobile header shows the "Search" pill (AbMobileHeader `search` slot) · theme, no globe
  * @returns { ReactElement }
  */
 export function DocsMainBar({ crumbs, asideToggle = true, mobileSearch = false }: Readonly<{ crumbs: AbBreadcrumbItem[]; asideToggle?: boolean; mobileSearch?: boolean }>) {
@@ -264,16 +266,13 @@ export function DocsMainBar({ crumbs, asideToggle = true, mobileSearch = false }
         <AbMobileHeader
           logo={<AbLink href="/" aria-label={labels.brand}><AbLogo wordmark alt="" size={22} /></AbLink>}
           theme={theme.resolvedTheme === 'dark' ? 'dark' : 'light'}
-          // 🌗🌍 the default header: globe · theme (built in); the 404's (mobileSearch) puts both in `actions` instead
-          onThemeChange={mobileSearch ? undefined : theme.setMode}
+          // 🌗 the built-in theme button on every page (components 0.3.2: the same glyph map as AbThemeToggle)
+          onThemeChange={theme.setMode}
+          // 🌍 the globe, except on the 404 (its mock shows search · theme only)
           onLanguage={mobileSearch ? undefined : () => setOpen('settings')}
-          // 🔎 404 mock: the 34px "Search ⌘K" pill (opens the search drawer) + the packaged theme icon, in that order
-          actions={mobileSearch ? (
-            <span className="flex items-center gap-1">
-              <AbSearchTrigger size="sm" variant="field" label={labels.searchShort} onOpen={() => setOpen('search')} hotkey={false} />
-              <AbThemeToggle variant="icon" modes={['light', 'dark']} value={theme.mode as 'light' | 'dark'} onChange={theme.setMode} labels={labels.theme} />
-            </span>
-          ) : undefined}
+          // 🔎 404 mock: the 34px "Search" pill in the packaged search slot (components 0.3.2), right before the theme
+          //    button; the pill carries its own invisible 44px hit area 👆
+          search={mobileSearch ? <AbSearchTrigger size="sm" variant="field" label={labels.searchShort} onOpen={() => setOpen('search')} hotkey={false} /> : undefined}
           languageExpanded={open === 'settings'}
           labels={{ language: t('drawers.changeLanguage'), toDark: t('drawers.toDark'), toLight: t('drawers.toLight'), header: t('drawers.mobileHeader') }}
         />
@@ -298,8 +297,8 @@ export function DocsMainBar({ crumbs, asideToggle = true, mobileSearch = false }
 
 
 // 🗂️ register the shell's extra glyphs once, at module load (server render AND browser: same set, no hydration
-//    diff, no Material font fallback). `brightness_auto` (the drawer's System theme) has no AbIcons svg yet 🚧
-registerAbIcons({ settings });
+//    diff, no Material font fallback): `settings` + the Settings drawer's System theme `brightness_auto` (icons 0.2.7)
+registerAbIcons({ settings, brightness_auto });
 
 
 /**
