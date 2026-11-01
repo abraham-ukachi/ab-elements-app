@@ -119,7 +119,8 @@ export default function HomeAside({ items, title, links, promo }: HomeAsideProps
   // return the aside pane
   return (
     // 🫥 no asideHeader / asideBar = 0px (one banner per page ♿)
-    <AbAsideLayout orientation="vertical" pageName="home">
+    // ♿ 0.2.23: the aside landmark is named by the outline's own title ("On this page", AbToc's `${id}-title`)
+    <AbAsideLayout orientation="vertical" pageName="home" aria-labelledby="ab-toc-title">
       {/* 📑 On this page (plain #id links without JS) + the extras in AbToc's own footer slot (components 0.1.14, P14):
           the package draws the 1px rule & the 12.5px link style; we only pass packaged links + the promo card 🧩 */}
       <AbToc
