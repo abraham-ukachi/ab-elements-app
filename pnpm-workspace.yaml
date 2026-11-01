@@ -6,5 +6,8 @@ allowBuilds:
   unrs-resolver: true
 # our own Ab packages are trusted, so the EXACT releases we use skip pnpm's minimum release age
 # (one `name@version` pin per Ab package, matching package.json & the lockfile; bump the pin with
-# the package, and a pin can go once that release is a day old). None right now: every Ab release
-# in use is over a day old (0.2.23), so the `minimumReleaseAgeExclude:` list is gone until the next bump
+# the package, and a pin can go once that release is a day old).
+minimumReleaseAgeExclude:
+  - ab-nextjs-components@0.3.2 # ⏳ D33: expires 2026-11-02 05:15 Paris (24h after publish)
+  - ab-nextjs-fonts@0.2.7 # ⏳ D33: expires 2026-11-02 05:06 Paris (24h after publish)
+  - ab-nextjs-icons@0.2.7 # ⏳ D33: expires 2026-11-02 04:43 Paris (24h after publish)

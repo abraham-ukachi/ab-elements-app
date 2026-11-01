@@ -12,14 +12,14 @@ importers:
         specifier: 0.2.5
         version: 0.2.5(next@16.3.4(@babel/core@7.29.7)(@opentelemetry/api@1.10.0)(@playwright/test@1.63.0)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       ab-nextjs-components:
-        specifier: 0.3.1
-        version: 0.3.1(22e47055e2f2c1d5dce0ddd9a0b449dc)
+        specifier: 0.3.2
+        version: 0.3.2(92603feb985394d00775979955e56cec)
       ab-nextjs-core:
         specifier: 0.2.3
         version: 0.2.3(clsx@2.1.1)(next@16.3.4(@babel/core@7.29.7)(@opentelemetry/api@1.10.0)(@playwright/test@1.63.0)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       ab-nextjs-fonts:
-        specifier: 0.2.6
-        version: 0.2.6(next@16.3.4(@babel/core@7.29.7)(@opentelemetry/api@1.10.0)(@playwright/test@1.63.0)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+        specifier: 0.2.7
+        version: 0.2.7(next@16.3.4(@babel/core@7.29.7)(@opentelemetry/api@1.10.0)(@playwright/test@1.63.0)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       ab-nextjs-hooks:
         specifier: 0.1.7
         version: 0.1.7(next@16.3.4(@babel/core@7.29.7)(@opentelemetry/api@1.10.0)(@playwright/test@1.63.0)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
@@ -27,11 +27,11 @@ importers:
         specifier: 0.1.0
         version: 0.1.0(next-intl@4.14.9(@swc/helpers@0.5.23)(@types/react@19.3.0)(next@16.3.4(@babel/core@7.29.7)(@opentelemetry/api@1.10.0)(@playwright/test@1.63.0)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0))(next@16.3.4(@babel/core@7.29.7)(@opentelemetry/api@1.10.0)(@playwright/test@1.63.0)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       ab-nextjs-icons:
-        specifier: 0.2.6
-        version: 0.2.6(next@16.3.4(@babel/core@7.29.7)(@opentelemetry/api@1.10.0)(@playwright/test@1.63.0)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+        specifier: 0.2.7
+        version: 0.2.7(next@16.3.4(@babel/core@7.29.7)(@opentelemetry/api@1.10.0)(@playwright/test@1.63.0)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       ab-nextjs-theme:
         specifier: 0.3.7
-        version: 0.3.7(ab-nextjs-animations@0.2.5(next@16.3.4(@babel/core@7.29.7)(@opentelemetry/api@1.10.0)(@playwright/test@1.63.0)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(ab-nextjs-fonts@0.2.6(next@16.3.4(@babel/core@7.29.7)(@opentelemetry/api@1.10.0)(@playwright/test@1.63.0)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(ab-nextjs-icons@0.2.6(next@16.3.4(@babel/core@7.29.7)(@opentelemetry/api@1.10.0)(@playwright/test@1.63.0)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(next@16.3.4(@babel/core@7.29.7)(@opentelemetry/api@1.10.0)(@playwright/test@1.63.0)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+        version: 0.3.7(ab-nextjs-animations@0.2.5(next@16.3.4(@babel/core@7.29.7)(@opentelemetry/api@1.10.0)(@playwright/test@1.63.0)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(ab-nextjs-fonts@0.2.7(next@16.3.4(@babel/core@7.29.7)(@opentelemetry/api@1.10.0)(@playwright/test@1.63.0)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(ab-nextjs-icons@0.2.7(next@16.3.4(@babel/core@7.29.7)(@opentelemetry/api@1.10.0)(@playwright/test@1.63.0)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(next@16.3.4(@babel/core@7.29.7)(@opentelemetry/api@1.10.0)(@playwright/test@1.63.0)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -1207,12 +1207,12 @@ packages:
       react-dom:
         optional: true
 
-  ab-nextjs-components@0.3.1:
-    resolution: {integrity: sha512-pIxhcTRNHgUxQCMlkdb4HVuRsZm8tOv7LyYqgMNFUE6ni1I0+w5WasLxKEiZCKh+GdAVu9Kas9bXvKApQ29Saw==}
+  ab-nextjs-components@0.3.2:
+    resolution: {integrity: sha512-eqmJVmWw20PUimllS/lSqasPSOA+DDBaLhyRiNTZNNDTWKPaJQKnUNHdS2vNmkjJVf1zvHwke1BZ71IBha3AGA==}
     peerDependencies:
       ab-nextjs-animations: ^0.2.5
       ab-nextjs-hooks: ^0.1.7
-      ab-nextjs-icons: ^0.2.6
+      ab-nextjs-icons: ^0.2.7
       ab-nextjs-theme: ^0.3.7
       clsx: ^2
       next: ^16.3.4
@@ -1232,8 +1232,8 @@ packages:
       react: ^19
       react-dom: ^19
 
-  ab-nextjs-fonts@0.2.6:
-    resolution: {integrity: sha512-4pc04JdAH/0V2+6adgwbOLUVZNtavuS+OUnQJbe0dWyys4MIbWAfhMsXtSffUzivH20Zq62jGbhDwOAz72eliQ==}
+  ab-nextjs-fonts@0.2.7:
+    resolution: {integrity: sha512-zOK2z1ZrfaOoYfAasLNpyD8BoMuSdPWgoQVHqPrH71VOxsxcjr8mhtvCsd5c2DVHRRGOFhvLUCzyiOlWebRt3w==}
     peerDependencies:
       next: ^16.3.4
       react: ^19
@@ -1263,8 +1263,8 @@ packages:
       react: ^19
       react-dom: ^19
 
-  ab-nextjs-icons@0.2.6:
-    resolution: {integrity: sha512-nhDPrVYvW4a2vXjBSdDWtZ9RbpGT1g8oOS+RF23z8LQwuYHAPT2jHzacbQyMtOZzzE6/GMzchjLu1H1jsnrsTA==}
+  ab-nextjs-icons@0.2.7:
+    resolution: {integrity: sha512-vEqQ/XUD6ls8dGODdiI1xj1BswM3qKjY0V7LIuwpdql4GGb4dKY2WflJ/OjCHc37/KzAnVF/CqovpV7ysxCEig==}
     peerDependencies:
       next: ^16.3.4
       react: ^19.0.0
@@ -4080,17 +4080,17 @@ snapshots:
       react: 19.3.0
       react-dom: 19.3.0(react@19.3.0)
 
-  ab-nextjs-components@0.3.1(22e47055e2f2c1d5dce0ddd9a0b449dc):
+  ab-nextjs-components@0.3.2(92603feb985394d00775979955e56cec):
     dependencies:
       ab-nextjs-animations: 0.2.5(next@16.3.4(@babel/core@7.29.7)(@opentelemetry/api@1.10.0)(@playwright/test@1.63.0)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
-      ab-nextjs-icons: 0.2.6(next@16.3.4(@babel/core@7.29.7)(@opentelemetry/api@1.10.0)(@playwright/test@1.63.0)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+      ab-nextjs-icons: 0.2.7(next@16.3.4(@babel/core@7.29.7)(@opentelemetry/api@1.10.0)(@playwright/test@1.63.0)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       clsx: 2.1.1
       next: 16.3.4(@babel/core@7.29.7)(@opentelemetry/api@1.10.0)(@playwright/test@1.63.0)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       react: 19.3.0
       react-dom: 19.3.0(react@19.3.0)
     optionalDependencies:
       ab-nextjs-hooks: 0.1.7(next@16.3.4(@babel/core@7.29.7)(@opentelemetry/api@1.10.0)(@playwright/test@1.63.0)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
-      ab-nextjs-theme: 0.3.7(ab-nextjs-animations@0.2.5(next@16.3.4(@babel/core@7.29.7)(@opentelemetry/api@1.10.0)(@playwright/test@1.63.0)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(ab-nextjs-fonts@0.2.6(next@16.3.4(@babel/core@7.29.7)(@opentelemetry/api@1.10.0)(@playwright/test@1.63.0)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(ab-nextjs-icons@0.2.6(next@16.3.4(@babel/core@7.29.7)(@opentelemetry/api@1.10.0)(@playwright/test@1.63.0)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(next@16.3.4(@babel/core@7.29.7)(@opentelemetry/api@1.10.0)(@playwright/test@1.63.0)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+      ab-nextjs-theme: 0.3.7(ab-nextjs-animations@0.2.5(next@16.3.4(@babel/core@7.29.7)(@opentelemetry/api@1.10.0)(@playwright/test@1.63.0)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(ab-nextjs-fonts@0.2.7(next@16.3.4(@babel/core@7.29.7)(@opentelemetry/api@1.10.0)(@playwright/test@1.63.0)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(ab-nextjs-icons@0.2.7(next@16.3.4(@babel/core@7.29.7)(@opentelemetry/api@1.10.0)(@playwright/test@1.63.0)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(next@16.3.4(@babel/core@7.29.7)(@opentelemetry/api@1.10.0)(@playwright/test@1.63.0)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
 
   ab-nextjs-core@0.2.3(clsx@2.1.1)(next@16.3.4(@babel/core@7.29.7)(@opentelemetry/api@1.10.0)(@playwright/test@1.63.0)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0):
     dependencies:
@@ -4099,7 +4099,7 @@ snapshots:
       react: 19.3.0
       react-dom: 19.3.0(react@19.3.0)
 
-  ab-nextjs-fonts@0.2.6(next@16.3.4(@babel/core@7.29.7)(@opentelemetry/api@1.10.0)(@playwright/test@1.63.0)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0):
+  ab-nextjs-fonts@0.2.7(next@16.3.4(@babel/core@7.29.7)(@opentelemetry/api@1.10.0)(@playwright/test@1.63.0)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0):
     optionalDependencies:
       next: 16.3.4(@babel/core@7.29.7)(@opentelemetry/api@1.10.0)(@playwright/test@1.63.0)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       react: 19.3.0
@@ -4120,7 +4120,7 @@ snapshots:
       react-dom: 19.3.0(react@19.3.0)
       server-only: 0.0.1
 
-  ab-nextjs-icons@0.2.6(next@16.3.4(@babel/core@7.29.7)(@opentelemetry/api@1.10.0)(@playwright/test@1.63.0)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0):
+  ab-nextjs-icons@0.2.7(next@16.3.4(@babel/core@7.29.7)(@opentelemetry/api@1.10.0)(@playwright/test@1.63.0)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0):
     dependencies:
       material-symbols: 0.29.3
     optionalDependencies:
@@ -4128,12 +4128,12 @@ snapshots:
       react: 19.3.0
       react-dom: 19.3.0(react@19.3.0)
 
-  ab-nextjs-theme@0.3.7(ab-nextjs-animations@0.2.5(next@16.3.4(@babel/core@7.29.7)(@opentelemetry/api@1.10.0)(@playwright/test@1.63.0)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(ab-nextjs-fonts@0.2.6(next@16.3.4(@babel/core@7.29.7)(@opentelemetry/api@1.10.0)(@playwright/test@1.63.0)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(ab-nextjs-icons@0.2.6(next@16.3.4(@babel/core@7.29.7)(@opentelemetry/api@1.10.0)(@playwright/test@1.63.0)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(next@16.3.4(@babel/core@7.29.7)(@opentelemetry/api@1.10.0)(@playwright/test@1.63.0)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0):
+  ab-nextjs-theme@0.3.7(ab-nextjs-animations@0.2.5(next@16.3.4(@babel/core@7.29.7)(@opentelemetry/api@1.10.0)(@playwright/test@1.63.0)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(ab-nextjs-fonts@0.2.7(next@16.3.4(@babel/core@7.29.7)(@opentelemetry/api@1.10.0)(@playwright/test@1.63.0)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(ab-nextjs-icons@0.2.7(next@16.3.4(@babel/core@7.29.7)(@opentelemetry/api@1.10.0)(@playwright/test@1.63.0)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(next@16.3.4(@babel/core@7.29.7)(@opentelemetry/api@1.10.0)(@playwright/test@1.63.0)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0):
     dependencies:
-      ab-nextjs-icons: 0.2.6(next@16.3.4(@babel/core@7.29.7)(@opentelemetry/api@1.10.0)(@playwright/test@1.63.0)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+      ab-nextjs-icons: 0.2.7(next@16.3.4(@babel/core@7.29.7)(@opentelemetry/api@1.10.0)(@playwright/test@1.63.0)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
     optionalDependencies:
       ab-nextjs-animations: 0.2.5(next@16.3.4(@babel/core@7.29.7)(@opentelemetry/api@1.10.0)(@playwright/test@1.63.0)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
-      ab-nextjs-fonts: 0.2.6(next@16.3.4(@babel/core@7.29.7)(@opentelemetry/api@1.10.0)(@playwright/test@1.63.0)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+      ab-nextjs-fonts: 0.2.7(next@16.3.4(@babel/core@7.29.7)(@opentelemetry/api@1.10.0)(@playwright/test@1.63.0)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       next: 16.3.4(@babel/core@7.29.7)(@opentelemetry/api@1.10.0)(@playwright/test@1.63.0)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       react: 19.3.0
       react-dom: 19.3.0(react@19.3.0)
