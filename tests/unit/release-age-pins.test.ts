@@ -80,8 +80,10 @@ const pins = readPins();
 const lock = read('pnpm-lock.yaml');
 
 describe('🛡️ D33 minimumReleaseAgeExclude pins', () => {
-  it('📋 has pins to check', () => {
-    expect(pins.length).toBeGreaterThan(0);
+  // 🧹 0.2.23: every pin can expire (all Ab releases a day old), so "no list" is valid; an EMPTY list key is not
+  it('📋 the list is either gone or holds pins (no empty `minimumReleaseAgeExclude:` left behind)', () => {
+    const hasKey = /^minimumReleaseAgeExclude:/m.test(read('pnpm-workspace.yaml'));
+    expect(hasKey ? pins.length > 0 : pins.length === 0).toBe(true);
   });
 
   it.each(pins.map((p) => [p.raw, p] as const))('📌 %s is one exact version', (_raw, pin) => {
