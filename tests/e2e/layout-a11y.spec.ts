@@ -99,7 +99,6 @@ for (const spec of PAGES) {
         // 🏷️ every navigation & complementary landmark has a name
         const unnamed = await page.evaluate(() => Array.from(document.querySelectorAll<HTMLElement>('nav, aside, [role="navigation"], [role="complementary"]'))
           .filter((el) => el.getBoundingClientRect().width > 0)
-          .filter((el) => el.getAttribute('data-ab-part') !== 'toc-promo') // 🚧 the AbTocPromo gap, tested on its own below
           .filter((el) => !el.getAttribute('aria-label') && !el.getAttribute('aria-labelledby'))
           .map((el) => el.outerHTML.slice(0, 80)));
         expect(unnamed).toEqual([]);
@@ -129,9 +128,9 @@ for (const spec of PAGES) {
 }
 
 
-// 🚧 PACKAGE GAP (components): AbTocPromo renders an `<aside>` with no accessible name, nested inside the aside pane
-//    (a second, unnamed complementary landmark). It needs a `label` / `aria-labelledby` (or a non-landmark root).
-test.fixme('🏷️ AbTocPromo is not an unnamed landmark (Home aside)', async ({ page }) => {
+// ♿ components 0.3.2: AbTocPromo's root is a plain <div> unless it gets a `label` (then a NAMED <aside>), so the Home
+//    aside holds no unnamed nested landmark
+test('🏷️ AbTocPromo is not an unnamed landmark (Home aside)', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
   await openPage(page, '/');
   const promo = page.locator('aside[data-ab-part="toc-promo"]');
