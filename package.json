@@ -29,6 +29,7 @@
   },
   "license": "MIT",
   "scripts": {
+    "postinstall": "fumadocs-mdx",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -44,6 +45,7 @@
   },
   "packageManager": "pnpm@11.3.0",
   "dependencies": {
+    "@types/mdx": "2.0.14",
     "ab-nextjs-animations": "0.2.5",
     "ab-nextjs-components": "0.3.2",
     "ab-nextjs-core": "0.2.3",
@@ -53,10 +55,13 @@
     "ab-nextjs-icons": "0.2.7",
     "ab-nextjs-theme": "0.3.7",
     "clsx": "^2.1.1",
+    "fumadocs-core": "16.17.9",
+    "fumadocs-mdx": "15.4.10",
     "next": "16.3.4",
     "next-intl": "^4.14.9",
     "react": "19.3.0",
-    "react-dom": "19.3.0"
+    "react-dom": "19.3.0",
+    "zod": "4.6.7"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",

@@ -47,6 +47,8 @@
 import type { NextConfig } from 'next';
 // import the i18n plugin from `ab-nextjs-i18n`
 import { withAbI18n } from 'ab-nextjs-i18n/plugin';
+// import the MDX plugin of `fumadocs-mdx` (compiles `content/docs` into `.source/`, 0.2.24) 📚
+import { createMDX } from 'fumadocs-mdx/next';
 
 
 // `true` under `next dev` (React needs `eval` there to rebuild server error stacks in the browser 🐛)
@@ -139,5 +141,9 @@ const nextConfig: NextConfig = {
 };
 
 
-// export the config, wrapped with the i18n plugin, as default 🌐
-export default withAbI18n(nextConfig);
+// 📚 the MDX plugin (reads `source.config.ts`)
+const withMDX = createMDX();
+
+
+// export the config, wrapped with the i18n & MDX plugins, as default 🌐📚
+export default withMDX(withAbI18n(nextConfig));

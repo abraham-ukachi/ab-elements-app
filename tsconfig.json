@@ -24,6 +24,9 @@
     "paths": {
       "@/*": [
         "./*"
+      ],
+      "collections/*": [
+        "./.source/*"
       ]
     },
     "target": "ES2017"

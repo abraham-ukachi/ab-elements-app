@@ -61,7 +61,8 @@ const eslintConfig = defineConfig([
     },
   },
   // ignore the build outputs, Next.js' generated types & the trash 🗑️
-  globalIgnores([".next/**", "out/**", "build/**", "next-env.d.ts", "trash/**"]),
+  // 📚 `.source/**` = fumadocs-mdx output (generated, 0.2.24)
+  globalIgnores([".next/**", "out/**", "build/**", "next-env.d.ts", "trash/**", ".source/**"]),
 ]);
 
 // export the ESLint config as default
