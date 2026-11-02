@@ -401,5 +401,16 @@
       "guides": "Guides",
       "whatsNew": "Nouveautés"
     }
+  },
+  "Docs": {
+    "crumb": "Docs",
+    "pager": "Pages précédente et suivante",
+    "previous": "Précédent",
+    "next": "Suivant",
+    "fallback": {
+      "title": "Pas encore traduite",
+      "message": "Cette page n’est pas encore disponible en français : vous lisez la version anglaise."
+    },
+    "metaSuffix": "Docs AbElements"
   }
 }

@@ -116,7 +116,7 @@ export default async function DocsShellFrame({ locale, children }: DocsShellFram
       ...(section.id === 'packages' ? { itemSize: 'sm' as const } : {}),
       items: section.id === 'packages'
         // 🏷️ fidelity spec: display names (Fonts, Icons…) + the real version; the mono `ab-nextjs-*` name stays on the cards
-        ? packages.map((pkg) => ({ href: `/#package-${pkg.id}`, icon: PACKAGE_ICONS[pkg.id], label: pkg.title, badge: pkg.versionLabel }))
+        ? packages.map((pkg) => ({ href: `/docs/packages/${pkg.id}`, icon: PACKAGE_ICONS[pkg.id], label: pkg.title, badge: pkg.versionLabel })) // 📚 0.2.24: each package's docs page
         : section.items.map((item) => ({ href: item.href, icon: item.icon, label: tk(item.label) })),
     })),
   ];

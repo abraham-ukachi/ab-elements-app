@@ -53,19 +53,24 @@ import type { AbSitemapPath } from 'ab-nextjs-i18n/server';
 // import abElements' i18n config & public URL
 import abI18nConfig from '@/i18n/config';
 import { APP_URL } from './metadata';
+// import the docs source & path helper (every docs page is listed, 0.2.24) 📚
+import { source } from '@/lib/source';
+import { docsPath } from '@/lib/docs';
 
 
 // the public paths (without locale prefix) listed in the sitemap
 const SITEMAP_PATHS: readonly AbSitemapPath[] = [
   // the home page 🏠
   { path: '/', changeFrequency: 'weekly', priority: 1 },
+  // 📚 every docs page (the English tree is the full list: the other locales fall back to it)
+  ...source.getPages(abI18nConfig.defaultLocale).map((page): AbSitemapPath => ({ path: docsPath(page.slugs), changeFrequency: 'weekly', priority: page.slugs.length ? 0.7 : 0.9 })),
 ];
 
 
 /**
  * `sitemap` - served as `/sitemap.xml`
  *
- * One entry per path and locale (`/`, `/fr`, `/es`, `/ru`), each with hreflang alternates for every locale.
+ * One entry per path and locale (`/`, `/fr`, … and every docs page, e.g. `/docs`, `/fr/docs`), each with hreflang alternates for every locale.
  *
  * @returns { MetadataRoute.Sitemap }
  */

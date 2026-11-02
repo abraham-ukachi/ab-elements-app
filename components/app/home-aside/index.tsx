@@ -45,7 +45,7 @@
 
 'use client';
 
-// 📑 Home's "On this page" pane: the packaged aside layout (core 0.2.0) + AbToc with its footer (components 0.1.14)
+// 📑 Home's (and, from 0.2.24, every docs page's) "On this page" pane: the packaged aside layout (core 0.2.0) + AbToc with its footer (components 0.1.14)
 // driven by useAbScrollSpy & scrollToAbSection (hooks 0.1.7). Composition only 🧩.
 // ➡️ Below 1180 the aside pane is hidden, so the SAME outline lives in AbTocDrawer, opened by a right-to-left edge
 // swipe (≤ 1179px, God 02:44) or the tablet `<<` toggle; it shares the shell's one-drawer-at-a-time state 🗄️.
@@ -81,7 +81,8 @@ export type HomeAsideProps = Readonly<{
   items: AbTocItem[]; // 📑 the sections
   title: string; // 🏷️ "On this page"
   links: { edit: { href: string; label: string }; changelog: { href: string; label: string } }; // 🔗 the TOC extras (spec §4)
-  promo: { kind: string; title: string; body: string }; // 🆕 the "New" card
+  promo?: { kind: string; title: string; body: string }; // 🆕 the "New" card (Home only; the docs pages have none)
+  pageName?: string; // 🏷️ the aside's page name (core `pageName`, default `home`; the docs pages pass `docs`, 0.2.24)
 }>;
 
 
@@ -91,7 +92,7 @@ export type HomeAsideProps = Readonly<{
  * @param { HomeAsideProps } props - the TOC items (section ids + labels) & the title
  * @returns { ReactElement }
  */
-export default function HomeAside({ items, title, links, promo }: HomeAsideProps) {
+export default function HomeAside({ items, title, links, promo, pageName = 'home' }: HomeAsideProps) {
   // 📜 the main pane scrolls on its own (the page never does), so it's the spy root & the scroll container
   const { mainScrollElement } = useAbPage();
   // 🔎 fallback: look the scroller up in the DOM after mount (never during render / SSR)
@@ -120,7 +121,7 @@ export default function HomeAside({ items, title, links, promo }: HomeAsideProps
   return (
     // 🫥 no asideHeader / asideBar = 0px (one banner per page ♿)
     // ♿ 0.2.23: the aside landmark is named by the outline's own title ("On this page", AbToc's `${id}-title`)
-    <AbAsideLayout orientation="vertical" pageName="home" aria-labelledby="ab-toc-title">
+    <AbAsideLayout orientation="vertical" pageName={pageName} aria-labelledby="ab-toc-title">
       {/* 📑 On this page (plain #id links without JS) + the extras in AbToc's own footer slot (components 0.1.14, P14):
           the package draws the 1px rule & the 12.5px link style; we only pass packaged links + the promo card 🧩 */}
       <AbToc
@@ -133,7 +134,7 @@ export default function HomeAside({ items, title, links, promo }: HomeAsideProps
             <AbLink href={links.edit.href} target="_blank" rel="noopener"><AbIcon name="github" size={15} />{links.edit.label}</AbLink>
             <AbLink href={links.changelog.href} target="_blank" rel="noopener"><AbIcon name="north_east" size={15} />{links.changelog.label}</AbLink>
             {/* 🆕 the packaged "New" promo card */}
-            <AbTocPromo title={promo.title} badge={promo.kind}>{promo.body}</AbTocPromo>
+            {promo ? <AbTocPromo title={promo.title} badge={promo.kind}>{promo.body}</AbTocPromo> : null}
           </>
         }
       />

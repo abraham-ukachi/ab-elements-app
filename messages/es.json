@@ -401,5 +401,16 @@
       "guides": "Guías",
       "whatsNew": "Novedades"
     }
+  },
+  "Docs": {
+    "crumb": "Docs",
+    "pager": "Páginas anterior y siguiente",
+    "previous": "Anterior",
+    "next": "Siguiente",
+    "fallback": {
+      "title": "Aún sin traducir",
+      "message": "Esta página aún no está disponible en español: estás leyendo la versión en inglés."
+    },
+    "metaSuffix": "Docs de AbElements"
   }
 }
