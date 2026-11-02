@@ -82,9 +82,14 @@ describe('lib/nav 🧭', () => {
     expect(ready.flatMap((section) => section.items).every((item) => item.ready)).toBe(true);
   });
 
-  it('anchors the not-yet-built pages on Home (no 404s, D26) ⚓', () => {
+  it('links a real docs page or anchors on Home (no 404s, D26; docs pages from 0.2.24) ⚓📚', () => {
     const hrefs = [...TOP_LINKS, ...SIDEBAR_SECTIONS.flatMap((section) => section.items)].filter((item) => item.ready).map((item) => item.href);
-    for (const href of hrefs) expect(href === '/' || href.startsWith('/#'), href).toBe(true);
+    // 📚 a docs href must have its English content file (`/docs/x` → `x.mdx` or `x/index.mdx`)
+    const isDocsPage = (href: string): boolean => {
+      const slug = href.replace(/^\/docs\/?/, '');
+      return [`${slug || 'index'}.mdx`, `${slug}/index.mdx`].some((file) => existsSync(join(process.cwd(), 'content/docs/en', file)));
+    };
+    for (const href of hrefs) expect(href === '/' || href.startsWith('/#') || (href.startsWith('/docs') && isDocsPage(href)), href).toBe(true);
   });
 });
 
