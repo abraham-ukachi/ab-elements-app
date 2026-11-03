@@ -7,4 +7,9 @@ allowBuilds:
   unrs-resolver: true
 # our own Ab packages are trusted, so an EXACT release we need before it's a day old may skip pnpm's minimum
 # release age with a `name@version` pin here (matching package.json & the lockfile, D33); a pin goes once that
-# release is a day old. None needed right now (the 0.2.23 pins all expired on 2026-11-02) ✅
+# release is a day old ⏳
+minimumReleaseAgeExclude:
+  # 🎨 theme 0.3.8 (.ab-prose, warning/danger, color-scheme): published 2026-11-03T01:45:37Z → drop after 2026-11-04T01:45:37Z
+  - ab-nextjs-theme@0.3.8
+  # 🧩 components 0.4.0 (AbCodeBlock, AbCallout, AbContentTabs, AbDocPager): published 2026-11-03T01:55:09Z → drop after 2026-11-04T01:55:09Z
+  - ab-nextjs-components@0.4.0
