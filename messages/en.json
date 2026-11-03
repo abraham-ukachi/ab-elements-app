@@ -401,5 +401,18 @@
       "guides": "Guides",
       "whatsNew": "What's new"
     }
+  },
+  "Docs": {
+    "crumb": "Docs",
+    "pager": "Previous and next pages",
+    "previous": "Previous",
+    "next": "Next",
+    "fallback": {
+      "title": "Not translated yet",
+      "message": "This page is not translated yet, so you are reading the English version."
+    },
+    "metaSuffix": "AbElements docs",
+    "copyCode": "Copy code",
+    "copied": "Copied"
   }
 }

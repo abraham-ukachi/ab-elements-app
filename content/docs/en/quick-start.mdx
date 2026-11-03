@@ -1,0 +1,35 @@
+---
+title: Quick start
+description: "Build your first AbElements page: a screen layout, a main pane and an outline."
+icon: bolt
+---
+
+## Create the layout
+
+Wrap your page in the screen layout from **ab-nextjs-core**:
+
+```tsx title="app/layout.tsx"
+import AbAppLayout from 'ab-nextjs-core/ab-app-layout';
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return <AbAppLayout>{children}</AbAppLayout>;
+}
+```
+
+## Add a main pane
+
+```tsx title="app/page.tsx"
+import AbMainLayout from 'ab-nextjs-core/server/ab-main-layout';
+
+export default function Page() {
+  return <AbMainLayout id="main">Hello AbElements</AbMainLayout>;
+}
+```
+
+## Add an outline
+
+Use `AbToc` with `useAbScrollSpy` to highlight the section in view.
+
+### Keep it accessible
+
+Every outline link points at a real heading id, so it works without JavaScript too.

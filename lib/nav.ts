@@ -81,18 +81,18 @@ export const SIDEBAR_HOME: ShellNavLink = { id: 'home', href: '/', label: 'sideb
 export const SIDEBAR_SECTIONS: readonly ShellNavSection[] = [
   {
     id: 'gettingStarted', label: 'sidebar.sections.gettingStarted', items: [
-      // ⚓ fidelity spec: shown now, anchored on Home's sections until the docs pages exist (D26: no 404s)
-      { id: 'introduction', href: '/#overview', label: 'sidebar.items.introduction', icon: 'description', ready: true },
-      { id: 'installation', href: '/#install', label: 'sidebar.items.installation', icon: 'download', ready: true },
-      { id: 'quickStart', href: '/#guide-install', label: 'sidebar.items.quickStart', icon: 'bolt', ready: true },
+      // 📚 0.2.24: the real docs pages (content/docs); the PWA shell guide is still anchored on Home (D26: no 404s)
+      { id: 'introduction', href: '/docs', label: 'sidebar.items.introduction', icon: 'description', ready: true },
+      { id: 'installation', href: '/docs/installation', label: 'sidebar.items.installation', icon: 'download', ready: true },
+      { id: 'quickStart', href: '/docs/quick-start', label: 'sidebar.items.quickStart', icon: 'bolt', ready: true },
     ],
   },
   // 📦 the 8 package rows are built from `lib/packages.ts` (name + version badge), so they're not listed here
   { id: 'packages', label: 'sidebar.sections.packages', items: [] },
   {
     id: 'guides', label: 'sidebar.sections.guides', items: [
-      { id: 'themingDarkMode', href: '/#guide-theming', label: 'sidebar.items.themingDarkMode', icon: 'palette', ready: true },
-      { id: 'iconsFonts', href: '/#guide-iconsFonts', label: 'sidebar.items.iconsFonts', icon: 'match_case', ready: true },
+      { id: 'themingDarkMode', href: '/docs/guides/theming-dark-mode', label: 'sidebar.items.themingDarkMode', icon: 'palette', ready: true },
+      { id: 'iconsFonts', href: '/docs/guides/icons-fonts', label: 'sidebar.items.iconsFonts', icon: 'match_case', ready: true },
       { id: 'pwaShell', href: '/#guide-pwaShell', label: 'sidebar.items.pwaShell', icon: 'dashboard_customize', ready: true },
     ],
   },

@@ -74,10 +74,11 @@ export const LAPTOP_MIN = 1180;
 
 // ===== PAGES 🗺️ ===== //
 
-// the screens of 0.2.23: Home, the 404 (in the shell) and the Welcome (its own panes); the Splash is tested apart
+// the screens of 0.2.23 (+ a docs page, 0.2.24): Home, the 404 (in the shell), a docs page and the Welcome (its own panes); the Splash is tested apart
 export const PAGES = [
   { id: 'home', path: '/', shell: true },
   { id: 'not-found', path: '/nope', shell: true },
+  { id: 'docs', path: '/docs/installation', shell: true }, // 📚 0.2.24: an MDX docs page (TOC aside, code, prev / next)
   { id: 'welcome', path: '/welcome', shell: false },
 ] as const;
 // one entry of `PAGES` 🗺️

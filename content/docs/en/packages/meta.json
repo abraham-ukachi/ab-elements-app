@@ -1,0 +1,13 @@
+{
+  "title": "Packages",
+  "pages": [
+    "core",
+    "components",
+    "theme",
+    "icons",
+    "fonts",
+    "animations",
+    "hooks",
+    "i18n"
+  ]
+}

@@ -1,0 +1,57 @@
+---
+title: Installation
+description: "Install the AbElements packages with your package manager and wire the theme."
+icon: download
+---
+
+## Requirements
+
+- Node.js 24 or newer
+- Next.js 16 with the App Router
+- React 19
+
+## Install the packages
+
+<Tabs label="Package manager">
+  <Tab label="pnpm">
+
+```bash
+pnpm add ab-nextjs-core ab-nextjs-components ab-nextjs-theme
+```
+
+  </Tab>
+  <Tab label="npm">
+
+```bash
+npm install ab-nextjs-core ab-nextjs-components ab-nextjs-theme
+```
+
+  </Tab>
+</Tabs>
+
+<Callout type="tip" title="Exact versions">
+  The packages move fast, so pin exact versions and upgrade them together.
+</Callout>
+
+### Transpile them
+
+The packages ship TypeScript sources, so list them in `transpilePackages`:
+
+```ts title="next.config.ts"
+const nextConfig = {
+  transpilePackages: ['ab-nextjs-core', 'ab-nextjs-components', 'ab-nextjs-theme'],
+};
+
+export default nextConfig;
+```
+
+## Import the styles
+
+<Callout type="warning" title="Import order">
+  Import the theme before the components, so the components can read its tokens.
+</Callout>
+
+```css title="app/globals.css"
+@import 'ab-nextjs-theme/styles.css';
+@import 'ab-nextjs-components/styles.css';
+```

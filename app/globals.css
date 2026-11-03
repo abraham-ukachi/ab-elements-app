@@ -15,8 +15,10 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 
-/* Ab theme defaults while the theme script hasn't run (e.g. no JS) */
-:root {
+/* Ab theme defaults while the theme script hasn't run (e.g. no JS): follow the OS 🌗. Once `.dark` / `.light`
+   is on <html>, theme ≥ 0.3.8 sets `color-scheme` itself, so this unlayered rule must step aside (it would
+   otherwise beat the theme's layered one and pin Shiki's light-dark() to the OS) */
+:root:not(.dark, .light) {
   color-scheme: light dark;
 }
 
