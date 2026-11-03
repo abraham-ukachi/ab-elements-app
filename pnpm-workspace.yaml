@@ -8,8 +8,8 @@ allowBuilds:
 # our own Ab packages are trusted, so an EXACT release we need before it's a day old may skip pnpm's minimum
 # release age with a `name@version` pin here (matching package.json & the lockfile, D33); a pin goes once that
 # release is a day old ⏳
-# 🎨 theme 0.3.8 (.ab-prose, warning/danger, color-scheme) & 🧩 components 0.4.0 (AbCodeBlock, AbCallout,
-# AbContentTabs, AbDocPager), both published 2026-11-03 for the 0.2.24 docs
+# 🎨 theme 0.3.9 & 🧩 components 0.4.1 (the 0.2.24 docs fixes: prose size, mono code, list markers, inline-code
+# contrast, the dark code surface & the 768px crumbs), published 2026-11-03
 minimumReleaseAgeExclude:
-  - ab-nextjs-theme@0.3.8 # D33: expires 2026-11-04 02:46 Paris
-  - ab-nextjs-components@0.4.0 # D33: expires 2026-11-04 02:56 Paris
+  - ab-nextjs-theme@0.3.9 # D33: expires 2026-11-04 04:15 Paris
+  - ab-nextjs-components@0.4.1 # D33: expires 2026-11-04 04:26 Paris
