@@ -47,15 +47,25 @@
 import { fileURLToPath } from 'node:url';
 // import `defineConfig` from `vitest`
 import { defineConfig } from 'vitest/config';
+// import the Fumadocs MDX Vite plugin (compiles the `content/docs/*.mdx?collection=docs` imports) 📚
+import mdx from 'fumadocs-mdx/vite';
 
 
 // create abElements' Vitest config as the default export (unit tests only)
 export default defineConfig({
+  /* Plugins */
+  // 📚 lib/source.ts (→ the sitemap, the docs pages) imports `collections/server`, i.e. the `.source/` index that
+  //    `fumadocs-mdx` generates (postinstall / next build). That index imports every page as
+  //    `*.mdx?collection=docs`, which plain Vite can't parse, so the plugin compiles them here too.
+  //    `index: false`: reuse the generated `.source/` (never rewrite the one Next.js builds from) 🧱
+  plugins: [mdx(import('./source.config'), { index: false })],
   /* Resolve */
   resolve: {
     // mirror the `@/*` path alias of tsconfig.json
     alias: [
       { find: /^@\//, replacement: fileURLToPath(new URL('./', import.meta.url)) },
+      // mirror the `collections/*` path alias of tsconfig.json too: fumadocs-mdx's generated `.source/` 📚
+      { find: /^collections\/(.*)$/, replacement: fileURLToPath(new URL('./.source/$1', import.meta.url)) },
       // `server-only` throws outside React Server Components (see tests/unit/stubs/server-only.ts)
       { find: /^server-only$/, replacement: fileURLToPath(new URL('./tests/unit/stubs/server-only.ts', import.meta.url)) },
     ],
