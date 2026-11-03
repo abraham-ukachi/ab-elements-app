@@ -171,8 +171,10 @@ export default async function DocsPage({ params }: DocsPageProps): Promise<React
         id="main"
         orientation="vertical"
         pageName="docs"
-        // 🍞 "Docs › <title>": the "Docs" crumb links the docs index (AbBreadcrumbs ≥ 0.4.0 crumbs are ≥ 24×24 ♿)
-        mainHeader={<DocsMainBar crumbs={[{ label: t('crumb'), href: '/docs' }, { label: page.data.title }]} />}
+        // 🍞 "Docs › <title>": the "Docs" crumb is still NOT a link (G-gap, components 0.4.0): the crumb is 24px now,
+        //    but at 768px the search field of the main bar overlaps the trail, leaving the link only 16px of clear
+        //    space (axe `target-size`). The bar's crumb slot must clip / shrink the trail first. Packages first 🧩
+        mainHeader={<DocsMainBar crumbs={[{ label: t('crumb') }, { label: page.data.title }]} />}
       >
         {/* 📏 the same pane padding as Home (spec §3) */}
         <div className="@container px-4 pt-[18px] pb-[110px] min-[768px]:px-9 min-[768px]:py-[30px] min-[1180px]:px-12 min-[1180px]:py-[34px] min-[1920px]:px-0 min-[1920px]:py-11">

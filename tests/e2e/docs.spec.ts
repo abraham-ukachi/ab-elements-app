@@ -46,8 +46,8 @@
 // 🧪 The MDX docs pages (0.2.24), in all 4 locales: status, one h1 (= the frontmatter title), the English fallback
 // banner, the "On this page" links (one per h2 / h3, each pointing at a real heading) & the scroll spy, prev / next,
 // a real 404 for a missing slug, the edit link, the sitemap & the search index, + axe on a fallback page ♿.
-// ✅ The former package gaps (AbCodeBlock copy button, AbCallout, AbContentTabs, theme `color-scheme`, the crumb
-// link) are real tests since components 0.4.0 / theme 0.3.8.
+// ✅ The former package gaps (AbCodeBlock copy button, AbCallout, AbContentTabs, theme `color-scheme`) are real
+// tests since components 0.4.0 / theme 0.3.8; the crumb link stays `test.fixme` (the 768px overlap, see below).
 // (The layout rules / touch / a11y suites also run on `/docs/installation`: it is in `PAGES` of layout-helpers.)
 
 // import the test helpers from Playwright 🎭
@@ -106,8 +106,8 @@ for (const { locale, prefix } of LOCALES) {
         // 1️⃣ one h1, the frontmatter title
         await expect(page.getByRole('heading', { level: 1 })).toHaveCount(1);
         await expect(page.getByRole('heading', { level: 1 })).toHaveText(title);
-        // 🏳️ the banner only on an English fallback
-        await expect(page.locator('article [role="status"]')).toHaveCount(fallback ? 1 : 0);
+        // 🏳️ the banner only (each AbCodeBlock's copy button has its own polite status, skip those)
+        await expect(page.locator('article [role="status"]:not([data-ab-part="code-block-copy"] *)')).toHaveCount(fallback ? 1 : 0);
         // 🔎 the document title carries the page title
         await expect(page).toHaveTitle(new RegExp(`^${title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')} · `));
       });
@@ -212,17 +212,24 @@ test.describe('docs · code 🖍️', () => {
     }
   });
 
-  // 🌗 theme 0.3.8 sets `color-scheme` on `.dark` / `.light`, so light-dark() follows the picked theme
+  // 🌗 theme 0.3.8 sets `color-scheme` on `.dark` / `.light`, so Shiki's light-dark() follows the PICKED theme
   test('🌗 the code follows the picked theme, not the OS', async ({ page }) => {
     await page.emulateMedia({ colorScheme: 'light' });
+    await page.setViewportSize({ width: 1280, height: 800 });
     await openPage(page, '/docs/installation');
-    await page.evaluate(() => { document.documentElement.classList.remove('light'); document.documentElement.classList.add('dark'); });
-    const scheme = await page.locator('[data-docs-body] pre').first().evaluate((node) => getComputedStyle(node).colorScheme);
-    expect(scheme).toContain('dark');
+    // 🖱️ pick dark with the app bar's theme toggle (the OS stays light)
+    await page.getByRole('radiogroup', { name: 'Theme' }).getByRole('radio', { name: 'Dark', exact: true }).click();
+    await expect(page.locator('html')).toHaveClass(/\bdark\b/);
+    const pre = page.locator('[data-docs-body] pre').first();
+    await expect.poll(() => pre.evaluate((node) => getComputedStyle(node).colorScheme)).toContain('dark');
+    // 🎨 github-dark's text colour (AbCodeBlock paints its own surface, so the <pre> background is transparent)
+    expect(await pre.evaluate((node) => getComputedStyle(node).color)).toBe('rgb(225, 228, 232)');
   });
 
-  // 🍞 AbBreadcrumbs (components 0.4.0) crumbs are ≥ 24×24, so the tablet "Docs" crumb is a link again
-  test('🍞 the tablet "Docs" crumb links the docs index', async ({ page }) => {
+  // 🕳️ G-gap (components 0.4.0): crumbs are ≥ 24×24 now, but at 768px the main bar's search field overlaps the
+  //    trail (16px clear space, axe `target-size`), so the "Docs" crumb stays a plain label until the bar's crumb
+  //    slot clips / shrinks the trail
+  test.fixme('🍞 the tablet "Docs" crumb links the docs index', async ({ page }) => {
     await page.setViewportSize({ width: 900, height: 800 });
     await openPage(page, '/docs/installation');
     const crumb = page.locator('[data-ab-part="main-header"] a[href="/docs"]');
@@ -247,12 +254,12 @@ test.describe('docs · code 🖍️', () => {
     await openPage(page, '/docs/installation');
     const tabs = page.locator('[data-docs-body] [data-ab-part="content-tabs"]').first();
     await expect(tabs.getByRole('tab')).toHaveCount(2);
-    await expect(tabs.getByRole('tab', { name: 'pnpm' })).toHaveAttribute('aria-selected', 'true');
+    await expect(tabs.getByRole('tab', { name: 'pnpm', exact: true })).toHaveAttribute('aria-selected', 'true');
     await expect(tabs.getByRole('tabpanel')).toContainText('pnpm add');
     // ⌨️ → moves to npm
-    await tabs.getByRole('tab', { name: 'pnpm' }).focus();
+    await tabs.getByRole('tab', { name: 'pnpm', exact: true }).focus();
     await page.keyboard.press('ArrowRight');
-    await expect(tabs.getByRole('tab', { name: 'npm' })).toHaveAttribute('aria-selected', 'true');
+    await expect(tabs.getByRole('tab', { name: 'npm', exact: true })).toHaveAttribute('aria-selected', 'true');
     await expect(tabs.getByRole('tabpanel')).toContainText('npm install');
   });
 
