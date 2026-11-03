@@ -30,7 +30,7 @@
 * @authors: Abraham Ukachi <abrahamukachi@gmail.com>
 *
 * Example usage:
-*   1+|> <MDX components={getDocsMdxComponents()} />
+*   1+|> <MDX components={getDocsMdxComponents({ copyLabel: 'Copy code', copiedLabel: 'Copied' })} />
 *    -|>
 *
 */
@@ -43,18 +43,36 @@
 */
 
 
-// 🧩 The docs MDX component map (0.2.24): what each MDX element renders. Packages only (PLAN.md "packages first"):
-// internal links → the packaged AbLink (locale-aware, client-side navigation). Everything else stays the plain HTML
-// the MDX compiler emits (headings with ids, lists, tables, Shiki's `<pre>`), styled by the theme's base layer.
-// 🕳️ Package gaps (listed for the packages, NOT built here): AbCodeBlock (Shiki HTML + copy button), AbCallout,
-//    content tabs (AbTabs is a nav bar without tab panels) & a prose wrapper (theme typography for MDX).
+// 🧩 The docs MDX component map (0.2.24): what each MDX element renders. Packages only (PLAN.md "packages first"),
+// so this file only WIRES package pieces to MDX names, it draws nothing itself 🚫🎨:
+//   🔗 `a`        → the packaged AbLink (locale-aware, client-side navigation) for in-app paths
+//   💻 `pre`      → AbCodeBlock (Shiki's pre-highlighted `<pre>` + the `title="…"` filename header + a copy button)
+//   💡 `Callout`  → AbCallout (`<Callout type="note|tip|warning|danger" title="…">`, the theme's warning / danger colours)
+//   🗂️ `Tabs/Tab` → AbContentTabs / AbContentTab (the WAI-ARIA tabs pattern, every panel in the server HTML)
+// 📄 Long-form typography (headings, lists, tables, inline code) is the theme's `.ab-prose` class on the body wrapper.
 
 // MDX types
 import type { MDXComponents } from 'mdx/types';
 // REACT types
-import type { AnchorHTMLAttributes, ReactElement } from 'react';
+import type { AnchorHTMLAttributes, HTMLAttributes, ReactElement, ReactNode } from 'react';
 // import the packaged, locale-aware link from `ab-nextjs-components` 🔗
 import { AbLink } from 'ab-nextjs-components/ab-link';
+// import the packaged code block (server, with its own client copy island) 💻
+import AbCodeBlock from 'ab-nextjs-components/ab-code-block';
+// import the packaged admonition (server-safe) 💡
+import AbCallout, { type AbCalloutVariant } from 'ab-nextjs-components/ab-callout';
+// import the packaged content tabs (client) 🗂️
+import { AbContentTabs, AbContentTab } from 'ab-nextjs-components/ab-content-tabs';
+
+
+// 🌍 the translated labels the map hands to the package pieces
+export type DocsMdxLabels = Readonly<{ copyLabel: string; copiedLabel: string }>;
+
+// 🧾 the props fumadocs' rehype-code leaves on a Shiki `<pre>` (`title="…"` from the fence meta)
+type DocsPreProps = HTMLAttributes<HTMLPreElement> & { title?: string; 'data-language'?: string };
+
+// 💡 the MDX `<Callout>` props (fumadocs-style `type`, mapped onto AbCallout's `variant`)
+type DocsCalloutProps = Readonly<{ type?: AbCalloutVariant | 'info' | 'warn' | 'error'; title?: ReactNode; children?: ReactNode }>;
 
 
 /**
@@ -75,12 +93,46 @@ function DocsAnchor({ href = '', children, ...rest }: AnchorHTMLAttributes<HTMLA
 
 
 /**
+ * `toCalloutVariant` - fumadocs' callout names → AbCallout's four kinds 🎨
+ *
+ * @param { DocsCalloutProps['type'] } type
+ * @returns { AbCalloutVariant }
+ */
+export function toCalloutVariant(type: DocsCalloutProps['type']): AbCalloutVariant {
+  // 🔁 the aliases (`info` = note, `warn` = warning, `error` = danger); unknown → note
+  switch (type) {
+    case 'tip': return 'tip';
+    case 'warning': case 'warn': return 'warning';
+    case 'danger': case 'error': return 'danger';
+    default: return 'note';
+  }
+}
+
+
+/**
  * `getDocsMdxComponents` - the component map handed to every compiled MDX page 🗺️
  *
+ * @param { DocsMdxLabels } labels - the copy button's translated names
  * @param { MDXComponents } [overrides] - per-page overrides
  * @returns { MDXComponents }
  */
-export function getDocsMdxComponents(overrides: MDXComponents = {}): MDXComponents {
-  // return the map (links only for now, see the gaps above) 🧩
-  return { a: DocsAnchor, ...overrides };
+export function getDocsMdxComponents(labels: DocsMdxLabels, overrides: MDXComponents = {}): MDXComponents {
+  return {
+    // 🔗 links
+    a: DocsAnchor,
+    // 💻 every fenced block: Shiki's `<pre>` goes INSIDE AbCodeBlock untouched (its tabindex + light-dark() spans
+    //    kept); the fence's `title="…"` becomes the filename header; the copy button copies the rendered text 📋
+    pre: ({ title, 'data-language': language, ...pre }: DocsPreProps) => (
+      <AbCodeBlock filename={title} language={language} copyLabel={labels.copyLabel} copiedLabel={labels.copiedLabel}>
+        <pre {...pre} />
+      </AbCodeBlock>
+    ),
+    // 💡 `<Callout type="warning" title="…">…</Callout>`
+    Callout: ({ type, title, children }: DocsCalloutProps) => <AbCallout variant={toCalloutVariant(type)} title={title}>{children}</AbCallout>,
+    // 🗂️ `<Tabs label="…"><Tab label="pnpm">…</Tab></Tabs>`
+    Tabs: AbContentTabs,
+    Tab: AbContentTab,
+    // 🧩 per-page overrides last
+    ...overrides,
+  };
 }

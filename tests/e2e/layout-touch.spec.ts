@@ -99,11 +99,9 @@ for (const path of ['/', '/nope']) {
   // 👆 components 0.3.2 closed the gap: AbNavbar items are 44px tall, AbMobileHeader's logo link is 44px tall, the
   //    icon AbThemeToggle is 44×44, and the 34px `size="sm"` AbSearchTrigger pill has an invisible 44px hit area.
   //    So a control passes when its box is ≥ 44×44 OR a tap 22px from its centre (all 4 sides) still lands on it.
-  // 🚧 PACKAGE GAP (components 0.3.2): on the 404 the `size="sm"` AbSearchTrigger's invisible hit area is
-  //    `::after { inset: -5px 0 }`, measured from the PADDING box, so with the pill's 1px border it only reaches
-  //    32 + 2 × 5 = 42px (y 7 → 49 on a 34px pill at y 11 → 45), not 44. It needs `inset: -6px 0` (or -5px from the
-  //    border box). Home's header has no pill, so it passes. Packages first: no app patch 🧩
-  const tapTest = path === '/nope' ? test.fixme : test;
+  // ✅ components 0.4.0 widened the `size="sm"` AbSearchTrigger's hit area to `inset: -6px 0` (46px), so the 404's
+  //    pill passes too: no fixme left here 🎉
+  const tapTest = test;
   tapTest(`🎯 ${path}: mobile header & bottom bar controls are ≥ ${TAP}×${TAP} tap targets`, async ({ page }) => {
     await openPage(page, path);
     // 🔍 every visible control of the two phone bars

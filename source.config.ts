@@ -67,11 +67,11 @@ export const docs = defineDocs({
 export default defineConfig({
   mdxOptions: {
     // 🖍️ Shiki at build time (no highlighter shipped): one `light-dark()` colour per token, so the code follows the
-    //    `color-scheme` without any app CSS 🌗 (G-gap: the theme should set `color-scheme` on `.dark` / `.light`)
+    //    `color-scheme` without any app CSS 🌗 (theme ≥ 0.3.8 sets it on `.dark` / `.light`, so it follows the pick)
     rehypeCodeOptions: {
       themes: { light: 'github-light', dark: 'github-dark' },
       defaultColor: 'light-dark()',
-      // 🚫 no language icon on `<pre>` (fumadocs-ui's CodeBlock reads it; the packaged AbCodeBlock is a gap)
+      // 🚫 no language icon on `<pre>` (fumadocs-ui's CodeBlock reads it; the packaged AbCodeBlock draws the header)
       icon: false,
     },
   },

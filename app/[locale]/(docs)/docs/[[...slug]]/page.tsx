@@ -58,9 +58,9 @@ import { notFound } from 'next/navigation';
 
 // import the server main pane from `ab-nextjs-core` 🧱
 import AbMainLayout from 'ab-nextjs-core/server/ab-main-layout';
-// import the packaged banner (the "not translated yet" notice) & card (prev / next) from `ab-nextjs-components` 🧩
+// import the packaged banner (the "not translated yet" notice) & the prev / next pager from `ab-nextjs-components` 🧩
 import AbInfo from 'ab-nextjs-components/ab-info';
-import AbCard from 'ab-nextjs-components/ab-card';
+import AbDocPager from 'ab-nextjs-components/ab-doc-pager';
 // import the locale guard & the server i18n helpers from `ab-nextjs-i18n` 🌐
 import { isAbLocale } from 'ab-nextjs-i18n/config';
 import { getAbAlternates, getAbTranslations } from 'ab-nextjs-i18n/server';
@@ -171,9 +171,8 @@ export default async function DocsPage({ params }: DocsPageProps): Promise<React
         id="main"
         orientation="vertical"
         pageName="docs"
-        // 🍞 "Docs › <title>": the "Docs" crumb is NOT a link yet (G-gap: AbBreadcrumbs' crumb links are under the
-        //    24×24 WCAG 2.2 target size, axe `target-size` at 768px)
-        mainHeader={<DocsMainBar crumbs={[{ label: t('crumb') }, { label: page.data.title }]} />}
+        // 🍞 "Docs › <title>": the "Docs" crumb links the docs index (AbBreadcrumbs ≥ 0.4.0 crumbs are ≥ 24×24 ♿)
+        mainHeader={<DocsMainBar crumbs={[{ label: t('crumb'), href: '/docs' }, { label: page.data.title }]} />}
       >
         {/* 📏 the same pane padding as Home (spec §3) */}
         <div className="@container px-4 pt-[18px] pb-[110px] min-[768px]:px-9 min-[768px]:py-[30px] min-[1180px]:px-12 min-[1180px]:py-[34px] min-[1920px]:px-0 min-[1920px]:py-11">
@@ -186,17 +185,19 @@ export default async function DocsPage({ params }: DocsPageProps): Promise<React
               {/* 📝 the lede = its frontmatter description */}
               {page.data.description ? <p className="m-0 text-[15.5px] leading-[1.55] text-(--ab-color-muted)">{page.data.description}</p> : null}
             </header>
-            {/* 📄 the MDX body (headings carry their ids, Shiki's code is pre-highlighted) */}
-            <div data-docs-body="">
-              <MDX components={getDocsMdxComponents()} />
+            {/* 📄 the MDX body in the theme's `.ab-prose` typography (headings carry their ids, Shiki's code is
+                pre-highlighted & wrapped in AbCodeBlock, which opts itself out with `.ab-prose-none`) */}
+            <div data-docs-body="" className="ab-prose">
+              <MDX components={getDocsMdxComponents({ copyLabel: t('copyCode'), copiedLabel: t('copied') })} />
             </div>
-            {/* ⬅️➡️ prev / next: two packaged cards (G-gap: a dedicated AbDocPager) */}
-            {previous || next ? (
-              <nav aria-label={t('pager')} data-docs-pager="" className="grid grid-cols-1 gap-3 min-[768px]:grid-cols-2">
-                {previous ? <AbCard as="div" headingLevel={2} href={docsUnprefixed(previous.url, abI18nConfig.locales)} eyebrow={t('previous')} title={previous.title} /> : <span aria-hidden="true" />}
-                {next ? <AbCard as="div" headingLevel={2} href={docsUnprefixed(next.url, abI18nConfig.locales)} eyebrow={t('next')} title={next.title} arrow /> : null}
-              </nav>
-            ) : null}
+            {/* ⬅️➡️ prev / next: the packaged AbDocPager (its URLs lose the locale prefix, AbLink adds it back 🌍) */}
+            <div data-docs-pager="">
+              <AbDocPager
+                prev={previous ? { href: docsUnprefixed(previous.url, abI18nConfig.locales), title: previous.title } : null}
+                next={next ? { href: docsUnprefixed(next.url, abI18nConfig.locales), title: next.title } : null}
+                labels={{ nav: t('pager'), prev: t('previous'), next: t('next') }}
+              />
+            </div>
           </article>
         </div>
       </AbMainLayout>

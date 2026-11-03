@@ -411,6 +411,8 @@
       "title": "Not translated yet",
       "message": "This page is not translated yet, so you are reading the English version."
     },
-    "metaSuffix": "AbElements docs"
+    "metaSuffix": "AbElements docs",
+    "copyCode": "Copy code",
+    "copied": "Copied"
   }
 }

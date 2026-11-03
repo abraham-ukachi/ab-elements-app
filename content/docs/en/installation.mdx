@@ -12,9 +12,26 @@ icon: download
 
 ## Install the packages
 
+<Tabs label="Package manager">
+  <Tab label="pnpm">
+
 ```bash
 pnpm add ab-nextjs-core ab-nextjs-components ab-nextjs-theme
 ```
+
+  </Tab>
+  <Tab label="npm">
+
+```bash
+npm install ab-nextjs-core ab-nextjs-components ab-nextjs-theme
+```
+
+  </Tab>
+</Tabs>
+
+<Callout type="tip" title="Exact versions">
+  The packages move fast, so pin exact versions and upgrade them together.
+</Callout>
 
 ### Transpile them
 
@@ -29,6 +46,10 @@ export default nextConfig;
 ```
 
 ## Import the styles
+
+<Callout type="warning" title="Import order">
+  Import the theme before the components, so the components can read its tokens.
+</Callout>
 
 ```css title="app/globals.css"
 @import 'ab-nextjs-theme/styles.css';

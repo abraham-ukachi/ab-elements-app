@@ -411,6 +411,8 @@
       "title": "Aún sin traducir",
       "message": "Esta página aún no está disponible en español: estás leyendo la versión en inglés."
     },
-    "metaSuffix": "Docs de AbElements"
+    "metaSuffix": "Docs de AbElements",
+    "copyCode": "Copiar el código",
+    "copied": "Copiado"
   }
 }

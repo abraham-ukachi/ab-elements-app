@@ -46,7 +46,8 @@
 // 🧪 The MDX docs pages (0.2.24), in all 4 locales: status, one h1 (= the frontmatter title), the English fallback
 // banner, the "On this page" links (one per h2 / h3, each pointing at a real heading) & the scroll spy, prev / next,
 // a real 404 for a missing slug, the edit link, the sitemap & the search index, + axe on a fallback page ♿.
-// 🕳️ The package gaps (AbCodeBlock copy button, AbCallout, theme `color-scheme`) are `test.fixme` below.
+// ✅ The former package gaps (AbCodeBlock copy button, AbCallout, AbContentTabs, theme `color-scheme`, the crumb
+// link) are real tests since components 0.4.0 / theme 0.3.8.
 // (The layout rules / touch / a11y suites also run on `/docs/installation`: it is in `PAGES` of layout-helpers.)
 
 // import the test helpers from Playwright 🎭
@@ -192,30 +193,74 @@ test.describe('docs · code 🖍️', () => {
     await expect(pre).not.toHaveAttribute('icon', /.*/);
   });
 
-  // 🕳️ G-gap: AbCodeBlock (ab-nextjs-components) — filename header + copy button island
-  test.fixme('📋 each code block has a copy button (AbCodeBlock)', async ({ page }) => {
+  // 📋 AbCodeBlock (components 0.4.0): every fenced block has a copy button that copies its code
+  test('📋 each code block has a copy button (AbCodeBlock)', async ({ page, context, browserName }) => {
     await openPage(page, '/docs/installation');
-    await expect(page.locator('[data-docs-body] pre').first().locator('..').getByRole('button', { name: /copy/i })).toHaveCount(1);
+    const blocks = page.locator('[data-docs-body] [data-ab-part="code-block"]');
+    // 🧱 one AbCodeBlock per <pre> (the hidden tab panels included)
+    expect(await blocks.count()).toBe(await page.locator('[data-docs-body] pre').count());
+    const first = blocks.first();
+    await expect(first.getByRole('button', { name: /copy code/i })).toHaveCount(1);
+    // 📄 the `title="…"` fence meta is the filename header
+    await expect(page.locator('[data-docs-body] [data-ab-part="code-block-head"]', { hasText: 'next.config.ts' })).toHaveCount(1);
+    // 📋 the clipboard gets the code (Chromium only: the permission API)
+    if (browserName === 'chromium') {
+      await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+      await first.getByRole('button', { name: /copy code/i }).click();
+      await expect(first.getByRole('status')).toHaveText('Copied');
+      expect(await page.evaluate(() => navigator.clipboard.readText())).toBe('pnpm add ab-nextjs-core ab-nextjs-components ab-nextjs-theme');
+    }
   });
 
-  // 🕳️ G-gap: the theme sets `color-scheme` on `.dark` / `.light` so light-dark() follows the picked theme
-  test.fixme('🌗 the code follows the picked theme, not the OS', async ({ page }) => {
+  // 🌗 theme 0.3.8 sets `color-scheme` on `.dark` / `.light`, so light-dark() follows the picked theme
+  test('🌗 the code follows the picked theme, not the OS', async ({ page }) => {
     await page.emulateMedia({ colorScheme: 'light' });
     await openPage(page, '/docs/installation');
     await page.evaluate(() => { document.documentElement.classList.remove('light'); document.documentElement.classList.add('dark'); });
-    const bg = await page.locator('[data-docs-body] pre').first().evaluate((node) => getComputedStyle(node).backgroundColor);
-    expect(bg).toBe('rgb(36, 41, 46)');
+    const scheme = await page.locator('[data-docs-body] pre').first().evaluate((node) => getComputedStyle(node).colorScheme);
+    expect(scheme).toContain('dark');
   });
 
-  // 🕳️ G-gap: AbBreadcrumbs crumb links ≥ 24×24 (WCAG 2.2 target-size) → then the tablet "Docs" crumb links /docs
-  test.fixme('🍞 the tablet "Docs" crumb links the docs index', async ({ page }) => {
+  // 🍞 AbBreadcrumbs (components 0.4.0) crumbs are ≥ 24×24, so the tablet "Docs" crumb is a link again
+  test('🍞 the tablet "Docs" crumb links the docs index', async ({ page }) => {
     await page.setViewportSize({ width: 900, height: 800 });
     await openPage(page, '/docs/installation');
-    await expect(page.locator('[data-ab-part="main-header"] a[href="/docs"]')).toHaveCount(1);
+    const crumb = page.locator('[data-ab-part="main-header"] a[href="/docs"]');
+    await expect(crumb).toHaveCount(1);
+    const box = await crumb.boundingBox();
+    expect(box?.width ?? 0).toBeGreaterThanOrEqual(24);
+    expect(box?.height ?? 0).toBeGreaterThanOrEqual(24);
   });
 
-  // 🕳️ G-gap: AbCallout (ab-nextjs-components) for MDX `<Callout type="note|tip|warning|danger">`
-  test.fixme('💬 callouts render as AbCallout', async () => {});
+  // 💬 AbCallout (components 0.4.0) for MDX `<Callout type="note|tip|warning|danger">`
+  test('💬 callouts render as AbCallout', async ({ page }) => {
+    await openPage(page, '/docs/installation');
+    const callouts = page.locator('[data-docs-body] [data-ab-part="callout"]');
+    await expect(callouts).toHaveCount(2);
+    await expect(callouts.first()).toHaveAttribute('role', 'note');
+    await expect(callouts.first()).toHaveAttribute('data-variant', 'tip');
+    await expect(callouts.last()).toHaveAttribute('data-variant', 'warning');
+  });
+
+  // 🗂️ AbContentTabs (components 0.4.0) for MDX `<Tabs>` / `<Tab>`: ARIA tabs, arrow keys switch the panel
+  test('🗂️ content tabs switch panels (AbContentTabs)', async ({ page }) => {
+    await openPage(page, '/docs/installation');
+    const tabs = page.locator('[data-docs-body] [data-ab-part="content-tabs"]').first();
+    await expect(tabs.getByRole('tab')).toHaveCount(2);
+    await expect(tabs.getByRole('tab', { name: 'pnpm' })).toHaveAttribute('aria-selected', 'true');
+    await expect(tabs.getByRole('tabpanel')).toContainText('pnpm add');
+    // ⌨️ → moves to npm
+    await tabs.getByRole('tab', { name: 'pnpm' }).focus();
+    await page.keyboard.press('ArrowRight');
+    await expect(tabs.getByRole('tab', { name: 'npm' })).toHaveAttribute('aria-selected', 'true');
+    await expect(tabs.getByRole('tabpanel')).toContainText('npm install');
+  });
+
+  // 📄 the theme's `.ab-prose` typography wraps the MDX body
+  test('📄 the body uses the theme prose typography', async ({ page }) => {
+    await openPage(page, '/docs/installation');
+    await expect(page.locator('[data-docs-body]')).toHaveClass(/\bab-prose\b/);
+  });
 });
 
 
