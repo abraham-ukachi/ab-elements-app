@@ -212,19 +212,22 @@ test.describe('docs · code 🖍️', () => {
     }
   });
 
-  // 🌗 theme 0.3.8 sets `color-scheme` on `.dark` / `.light`, so Shiki's light-dark() follows the PICKED theme
-  test('🌗 the code follows the picked theme, not the OS', async ({ page }) => {
-    await page.emulateMedia({ colorScheme: 'light' });
-    await page.setViewportSize({ width: 1280, height: 800 });
-    await openPage(page, '/docs/installation');
-    // 🖱️ pick dark with the app bar's theme toggle (the OS stays light)
-    await page.getByRole('radiogroup', { name: 'Theme' }).getByRole('radio', { name: 'Dark', exact: true }).click();
-    await expect(page.locator('html')).toHaveClass(/\bdark\b/);
-    const pre = page.locator('[data-docs-body] pre').first();
-    await expect.poll(() => pre.evaluate((node) => getComputedStyle(node).colorScheme)).toContain('dark');
-    // 🎨 github-dark's text colour (AbCodeBlock paints its own surface, so the <pre> background is transparent)
-    expect(await pre.evaluate((node) => getComputedStyle(node).color)).toBe('rgb(225, 228, 232)');
-  });
+  // 🌗 theme 0.3.8 sets `color-scheme` from the PICKED theme; AbCodeBlock's surface is dark in both, so the
+  //    github-dark tokens stay readable whichever theme is picked (the OS stays light)
+  for (const pick of ['Light', 'Dark'] as const) {
+    test(`🌗 the code stays readable on the code surface (${pick} picked)`, async ({ page }) => {
+      await page.emulateMedia({ colorScheme: 'light' });
+      await page.setViewportSize({ width: 1280, height: 800 });
+      await openPage(page, '/docs/installation');
+      // 🖱️ pick the theme with the app bar's toggle
+      await page.getByRole('radiogroup', { name: 'Theme' }).getByRole('radio', { name: pick, exact: true }).click();
+      await expect(page.locator('html')).toHaveClass(new RegExp(`\\b${pick.toLowerCase()}\\b`));
+      const pre = page.locator('[data-docs-body] pre').first();
+      await expect.poll(() => pre.evaluate(() => getComputedStyle(document.documentElement).colorScheme)).toContain(pick.toLowerCase());
+      // 🎨 github-dark's text colour (AbCodeBlock paints its own dark surface; the <pre> background is transparent)
+      expect(await pre.evaluate((node) => getComputedStyle(node).color)).toBe('rgb(225, 228, 232)');
+    });
+  }
 
   // 🕳️ G-gap (components 0.4.0): crumbs are ≥ 24×24 now, but at 768px the main bar's search field overlaps the
   //    trail (16px clear space, axe `target-size`), so the "Docs" crumb stays a plain label until the bar's crumb
