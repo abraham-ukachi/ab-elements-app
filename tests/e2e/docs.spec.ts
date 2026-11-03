@@ -46,8 +46,8 @@
 // 🧪 The MDX docs pages (0.2.24), in all 4 locales: status, one h1 (= the frontmatter title), the English fallback
 // banner, the "On this page" links (one per h2 / h3, each pointing at a real heading) & the scroll spy, prev / next,
 // a real 404 for a missing slug, the edit link, the sitemap & the search index, + axe on a fallback page ♿.
-// ✅ The former package gaps (AbCodeBlock copy button, AbCallout, AbContentTabs, theme `color-scheme`) are real
-// tests since components 0.4.0 / theme 0.3.8; the crumb link stays `test.fixme` (the 768px overlap, see below).
+// ✅ The former package gaps (AbCodeBlock copy button, AbCallout, AbContentTabs, theme `color-scheme`, the tablet
+// crumb link) are real tests since components 0.4.1 / theme 0.3.9: no `test.fixme` left here 🎉
 // (The layout rules / touch / a11y suites also run on `/docs/installation`: it is in `PAGES` of layout-helpers.)
 
 // import the test helpers from Playwright 🎭
@@ -229,10 +229,9 @@ test.describe('docs · code 🖍️', () => {
     });
   }
 
-  // 🕳️ G-gap (components 0.4.0): crumbs are ≥ 24×24 now, but at 768px the main bar's search field overlaps the
-  //    trail (16px clear space, axe `target-size`), so the "Docs" crumb stays a plain label until the bar's crumb
-  //    slot clips / shrinks the trail
-  test.fixme('🍞 the tablet "Docs" crumb links the docs index', async ({ page }) => {
+  // 🍞 components 0.4.1: the 768px trail keeps its width (the search field shrinks first), so the "Docs" crumb
+  //    is a ≥ 24×24 link with clear space around it (axe `target-size` passes) ♿
+  test('🍞 the tablet "Docs" crumb links the docs index', async ({ page }) => {
     await page.setViewportSize({ width: 900, height: 800 });
     await openPage(page, '/docs/installation');
     const crumb = page.locator('[data-ab-part="main-header"] a[href="/docs"]');

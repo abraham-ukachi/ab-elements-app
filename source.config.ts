@@ -66,12 +66,11 @@ export const docs = defineDocs({
 // ⚙️ the MDX pipeline
 export default defineConfig({
   mdxOptions: {
-    // 🖍️ Shiki at build time (no highlighter shipped). AbCodeBlock (components 0.4.0) paints the theme's code
-    //    surface, which is DARK in both themes, so both slots use github-dark: the tokens stay readable on it 🌑
-    //    (G-gap: AbCodeBlock should set `color-scheme: dark` on that surface; then `light` can go back to
-    //    github-light and light-dark() resolves to the dark colours there by itself)
+    // 🖍️ Shiki at build time (no highlighter shipped): one `light-dark()` colour per token 🌗. AbCodeBlock
+    //    (components ≥ 0.4.1) sets `color-scheme: dark` on its dark code surface, so the tokens resolve to
+    //    github-dark there in BOTH page themes; a raw `<pre>` elsewhere follows the picked theme (theme ≥ 0.3.8)
     rehypeCodeOptions: {
-      themes: { light: 'github-dark', dark: 'github-dark' },
+      themes: { light: 'github-light', dark: 'github-dark' },
       defaultColor: 'light-dark()',
       // 🚫 no language icon on `<pre>` (fumadocs-ui's CodeBlock reads it; the packaged AbCodeBlock draws the header)
       icon: false,
