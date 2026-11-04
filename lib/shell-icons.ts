@@ -71,7 +71,7 @@ import translate from 'ab-nextjs-icons/ab-icons/icons/translate';
 import description from 'ab-nextjs-icons/ab-icons/icons/description';
 import download from 'ab-nextjs-icons/ab-icons/icons/download';
 import bolt from 'ab-nextjs-icons/ab-icons/icons/bolt';
-import package2 from 'ab-nextjs-icons/ab-icons/icons/package_2'; // 📦 the Packages tab (drawers v2, God 01:27)
+import package2 from 'ab-nextjs-icons/ab-icons/icons/package_2'; // 📦 the Packages tab (drawers v2)
 import github from 'ab-nextjs-icons/ab-icons/icons/github';
 import keyboardDoubleArrowLeft from 'ab-nextjs-icons/ab-icons/icons/keyboard_double_arrow_left';
 import keyboardDoubleArrowRight from 'ab-nextjs-icons/ab-icons/icons/keyboard_double_arrow_right';

@@ -51,7 +51,7 @@
 .app {
   /* 🔝 the v6 top bar heights (core's header row reads this token): 48px on phones */
   --ab-header-height: 48px;
-  /* ➖ God's layout rule (v5): NO visible line between main and aside (core's public pane-divider token) */
+  /* ➖ the layout rule (v5): NO visible line between main and aside (core's public pane-divider token) */
   --ab-pane-divider: none;
   /* 🔢⚫ the heights of the main column's counter row + nav (the slide fills the rest of the visible area) */
   --welcome-counter-h: 48px;

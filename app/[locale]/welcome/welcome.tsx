@@ -51,7 +51,7 @@
 //   header is the packaged AbMobileHeader (logo · globe · 3-state theme) 📱
 //   · counter + slide + dots / arrows → the main content (THE scroller, focusable, v6 left column) · the playground →
 //   core's AbAsideLayout from 1180px, inline in the slide below (see WelcomeSlides).
-//   God's layout rule: header · main (text + counter, dots, arrows) · aside (the playground, ≥ 1180px). No sidebar,
+//   The layout rule: header · main (text + counter, dots, arrows) · aside (the playground, ≥ 1180px). No sidebar,
 //   no footer / bottom nav: those slots are empty = 0px.
 
 // REACT types
@@ -80,7 +80,7 @@ import AbThemeToggle from 'ab-nextjs-components/ab-theme-toggle';
 // import the ONE shared theme mode (0.2.3): the laptop toggle + the mobile header's 3-state button read & write it 🧠
 import { AbThemeModeProvider } from 'ab-nextjs-components/ab-theme-mode';
 // import the "Live Playground" diagram from `ab-nextjs-components` 🗺️
-// import the packaged type of the v6 playground scene names (John's 7 + the i18n placeholder) 🗺️
+// import the packaged type of the v6 playground scene names (the 7 design scenes + the i18n placeholder) 🗺️
 import type { AbPlaygroundSceneName } from 'ab-nextjs-components/ab-playground-scene';
 // import the no-JS carousel CSS (all slides stacked, controls hidden) from the server-safe helpers 🧯
 import { AB_CAROUSEL_NOSCRIPT_CSS } from 'ab-nextjs-components/ab-carousel/helpers';
@@ -165,7 +165,7 @@ export const WELCOME_SLIDES: ReadonlyArray<{ id: WelcomeSlideId; pkg?: string; s
   { id: 's07', pkg: 'ab-nextjs-animations', scene: 'animations', chips: [{ key: 'slides.s07.chips.easings' }, { key: 'slides.s07.chips.fades' }, { key: 'slides.s07.chips.reducedMotion' }] },
   // s08: hooks (real `useAb*` names)
   { id: 's08', pkg: 'ab-nextjs-hooks', scene: 'hooks', chips: [{ code: 'useAbTheme' }, { code: 'useAbMedia' }, { code: 'useAbLocalStorage' }, { code: 'useAbClipboard' }] },
-  // s09: i18n (John's 8th illustration, the packaged `AbPlaygroundScene name="i18n"`; real export names) 🌍
+  // s09: i18n (the 8th illustration, the packaged `AbPlaygroundScene name="i18n"`; real export names) 🌍
   { id: 's09', pkg: 'ab-nextjs-i18n', scene: 'i18n', chips: [{ code: 'AbI18nProvider' }, { code: 'useAbTranslations' }, { code: 'useAbLocaleSwitch' }, { code: 'getAbAlternates' }] },
   // s10: the end, Get Started + Continue with GitHub 🚀
   { id: 's10', scene: 'all' },
@@ -325,14 +325,14 @@ export default async function Welcome({ locale }: WelcomeProps) {
       {/* 🌗 one theme mode for the whole Welcome (no drift between the laptop toggle and the phone header at 768px) */}
       <AbThemeModeProvider defaultMode="system">
       <AbPageProvider defaultAsideOpen>
-        {/* 🧱 the frame (God's layout rule): header · main (text + slider controls) · aside (the playground). No sidebar, no footer */}
+        {/* 🧱 the frame (the layout rule): header · main (text + slider controls) · aside (the playground). No sidebar, no footer */}
         <AbAppLayout
           orientation="vertical"
           variant="panes"
           pageName="welcome"
           className={styles.app}
           asideBelow="inline-in-main" // 📜 0.2.3: 768–1179px the ONE aside joins the main scroller after the counter (nothing pinned)
-          asideDrawerAt="mobile" // 📱 0.2.3: below 768px that same aside is the RIGHT drawer (God's rule), opened by "Show playground"
+          asideDrawerAt="mobile" // 📱 0.2.3: below 768px that same aside is the RIGHT drawer (the layout rule), opened by "Show playground"
           surface="page" // 🎨 0.2.3: v6's original page surface on the panes at every width (theme ≥ 0.3.7), no app override
           mobileHeader="main" // 📱 0.2.3: below 768px the main pane's header (AbMobileHeader) IS the bar (the counter lives in main now)
           // 🔝 Top Bar - logo + utilities (core renders the row; its height is the v6 48 / 56 / 60px via a token)
@@ -390,7 +390,7 @@ export default async function Welcome({ locale }: WelcomeProps) {
                 playground: t('playground.title'), // 🗺️ the aside pane's name (+ the scene header title)
                 live: t('playground.live'), // 🟢 the scene header's live dot
                 show: t('playground.show'), // 📱 below 768px: the "Show playground" button (opens the right drawer)
-                // 🌍 the i18n scene's words (Julie's AbPlaygroundScene name="i18n"); greetings stay in their own language
+                // 🌍 the i18n scene's words (the packaged AbPlaygroundScene name="i18n"); greetings stay in their own language
                 provider: t('playground.provider'),
                 prefix: t('playground.prefix'),
                 intlFormat: t('playground.intlFormat'),

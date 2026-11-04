@@ -48,7 +48,7 @@
 // 📑 Home's (and, from 0.2.24, every docs page's) "On this page" pane: the packaged aside layout (core 0.2.0) + AbToc with its footer (components 0.1.14)
 // driven by useAbScrollSpy & scrollToAbSection (hooks 0.1.7). Composition only 🧩.
 // ➡️ Below 1180 the aside pane is hidden, so the SAME outline lives in AbTocDrawer, opened by a right-to-left edge
-// swipe (≤ 1179px, God 02:44) or the tablet `<<` toggle; it shares the shell's one-drawer-at-a-time state 🗄️.
+// swipe (≤ 1179px) or the tablet `<<` toggle; it shares the shell's one-drawer-at-a-time state 🗄️.
 
 // import the packaged aside pane from `ab-nextjs-core` 🧱
 import AbAsideLayout from 'ab-nextjs-core/ab-aside-layout';

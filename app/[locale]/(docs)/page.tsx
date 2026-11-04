@@ -44,7 +44,7 @@
 
 
 // 🏠 Home (0.2.23 + fidelity pass 2): hero (copy · install terminal), the 8 package cards, then Guides + What's new
-// as row lists, inside the packaged shell panes. Sizes / spacing follow `home-fidelity-spec.md` §2–§4 (approved by God).
+// as row lists, inside the packaged shell panes. Sizes / spacing follow `home-fidelity-spec.md` §2–§4 (approved).
 // Composition only: AbMainLayout + AbAsideLayout (core 0.2.0), AbChip / AbButton / AbInstallSnippet / AbPackageCard /
 // AbList (components 0.1.14). The theme 0.3.5 `@layer base` lets plain Tailwind utilities style h1 / h2 / p again 🧅.
 

@@ -48,10 +48,10 @@
 // 🧭 The docs shell (0.2.21–0.2.22, Home fidelity + drawers v2): composition ONLY of packaged pieces (no app-local UI).
 // AbLinkProvider (locale-aware links 🌍) → AbPageProvider (aside state 📑) → AbAppLayout panes (core 🧱: 768 / 1180 / 1920,
 // `tabletHeader="main"` + `mobileHeader="main"`) with the compact AbAppBar (laptop+), AbSidebar, the blurred AbNavbar
-// (mobile 📱) and John's approved drawers (God 01:22 / 01:27):
+// (mobile 📱) and the approved drawer designs:
 //   ⚙️ AbSettingsDrawer (theme + language) · ⬅️ AbNavDrawer (the mobile sidebar, left edge swipe) · 🔎 AbSearchDrawer.
 //   ➡️ AbTocDrawer belongs to the page that has an aside (Home's HomeAside renders it + the right edge swipe ≤ 1179px,
-//      God 02:44); the shell only keeps the one-drawer-at-a-time state (`useShellDrawer`) and the tablet `<<` toggle.
+//      design); the shell only keeps the one-drawer-at-a-time state (`useShellDrawer`) and the tablet `<<` toggle.
 //   👤 AbSidebar's `profile` = AbSidebarProfileButton at the bottom left (≥ 1180px), which opens its own Settings drawer.
 //   ↩️ Every drawer returns focus to the header logo by itself (components 0.2.1 AB_DRAWER_RETURN_FOCUS): no overrides.
 // Each page puts `<DocsMainBar>` in its AbMainLayout `mainHeader`: the mobile header below 768, the tablet bar 768–1179 📟.
@@ -279,7 +279,7 @@ export function DocsMainBar({ crumbs, asideToggle = true, mobileSearch = false }
       </div>
       {/* 📟 the tablet bar */}
       <div className="hidden h-full items-center gap-2 pr-3 pl-7 min-[768px]:flex">
-        {/* 🍞 Home (no "Docs" crumb, God 01:27) */}
+        {/* 🍞 Home (no "Docs" crumb) */}
         <AbBreadcrumbs items={crumbs} label={labels.breadcrumbs} />
         <span className="grow" aria-hidden="true" />
         {/* 🔎 the field opens the search drawer (no ⌘K, no hotkey) */}
@@ -420,7 +420,7 @@ export default function DocsShell({ locale, labels, locales, sections, topLinks,
             pageName="docs"
             header={<ShellBar topLinks={topLinks} />}
             sideBar={
-              // 🗂️ the compact sidebar + the version switcher (no "Docs" label, God 01:27) + the tablet logo row
+              // 🗂️ the compact sidebar + the version switcher (no "Docs" label) + the tablet logo row
               <AbSidebar
                 sections={sections}
                 collapsed={rail}

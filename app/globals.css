@@ -4,7 +4,7 @@
 @import "ab-nextjs-theme/styles.css";
 /* chrome (toast, dialog, spinner, logo, doodle) from `ab-nextjs-components` — requires >= 0.1.8 */
 @import "ab-nextjs-components/styles.css";
-/* the fonts from `ab-nextjs-fonts` 🔤 (fidelity spec, God 20:10): Inter (body), Mulish (titles, `--ab-font-title`)
+/* the fonts from `ab-nextjs-fonts` 🔤 (fidelity spec): Inter (body), Mulish (titles, `--ab-font-title`)
    & Roboto Mono (code, `--ab-font-code`); the theme tokens already point at these three families */
 @import "ab-nextjs-fonts/inter/styles.css";
 @import "ab-nextjs-fonts/mulish/styles.css";
