@@ -129,6 +129,15 @@ for (const scheme of THEMES) {
         // ⇥ Tab leaves the tablist for the open panel
         await page.keyboard.press('Tab');
         await expect(panels.nth(0)).toBeFocused();
+        // 💻 on the Code tab: ONE stop for the panel, then the copy button (the Shiki <pre> is not a 2nd stop)
+        await tabs.nth(1).click();
+        await expect(panels.nth(1).locator('pre.shiki')).toHaveAttribute('tabindex', '-1');
+        await page.keyboard.press('Tab');
+        await expect(panels.nth(1)).toBeFocused();
+        await page.keyboard.press('Tab');
+        const focused = await page.evaluate(() => ({ tag: document.activeElement?.tagName, inPanel: !!document.activeElement?.closest('[role="tabpanel"]'), pre: !!document.activeElement?.closest('pre') }));
+        expect(focused.pre).toBe(false);
+        if (focused.inPanel) expect(focused.tag).toBe('BUTTON'); // 📋 the copy button
       });
     });
   }

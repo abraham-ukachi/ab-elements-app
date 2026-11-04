@@ -169,7 +169,7 @@ function DocsExample({ title, code = '', children, labels }: DocsExampleProps & 
   const preview = parts.find((p) => p.type === DocsExamplePreview);
   const fence = parts.find((p) => p.type !== DocsExamplePreview);
   // 🖍️ the fence's Shiki `<pre>` as a plain element (AbDemoCode draws the code frame, not the map's AbCodeBlock)
-  const { title: _t, 'data-language': _l, ...pre } = (fence?.props ?? {}) as DocsPreProps; // eslint-disable-line @typescript-eslint/no-unused-vars
+  const { title: _t, 'data-language': _l, tabIndex: _ti, ...pre } = (fence?.props ?? {}) as DocsPreProps; // eslint-disable-line @typescript-eslint/no-unused-vars
   return (
     // 🏷️ `ab-prose-none`: the page's long-form typography stays out of the components under test
     <div data-docs-example="" className="ab-prose-none">
@@ -177,7 +177,9 @@ function DocsExample({ title, code = '', children, labels }: DocsExampleProps & 
         label={title ?? labels.exampleLabel ?? 'Example'} // ♿ names the tablist
         labels={{ preview: labels.previewLabel, code: labels.codeLabel, copy: labels.copyLabel, copied: labels.copiedLabel }} // 🌍
         code={code} // 📋 the exact source (shown & copied only)
-        highlighted={fence ? <pre {...pre} /> : undefined} // 🖍️ build-time Shiki
+        // 🖍️ build-time Shiki via `highlighted` (never `trustedHtml`). ⌨️ Shiki's `tabindex="0"` is dropped (-1):
+        //    the Code tabpanel is already the one tab stop, so the code is not a second, empty stop
+        highlighted={fence ? <pre {...pre} tabIndex={-1} /> : undefined}
         language="tsx"
       >
         {preview /* 👀 the real components, rendered by React like the rest of the page */}

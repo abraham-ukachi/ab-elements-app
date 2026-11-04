@@ -195,6 +195,9 @@ describe('the Components page (compiled MDX) 📚', () => {
       expect(panels[1]).toContain('AbCodeBlock');
       // 🖍️ highlighted at build time (Shiki's light-dark() tokens), never a run-time highlighter
       expect(panels[1]).toContain('class="shiki');
+      // ⌨️ the panel is the one tab stop: Shiki's <pre> is not a second one; 🧾 no raw-HTML code path
+      expect(panels[1]).toMatch(/<pre class="shiki[^>]*tabindex="-1"/);
+      expect(panels[1]).not.toMatch(/<pre[^>]*tabindex="0"/);
     }
   });
 
