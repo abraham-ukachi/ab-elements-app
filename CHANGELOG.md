@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.25](https://github.com/abraham-ukachi/ab-elements-app/compare/v0.2.24...v0.2.25) (2026-11-04)
+
+* :sparkles: Add the docs page template: chips under each title (section, package, Client or Server Component, status) and Edit this page, Report an issue and View source links in the aside and the outline drawer, in all four locales
+* :construction_worker: Run Lighthouse CI in warn mode on `/`, `/docs/installation` and `/fr/docs/quick-start` (mobile and desktop, every assertion a warning)
+* :bug: Rename the Lighthouse CI preset and port variables to `AB_LH_*`, so lhci stops reading them as flags
+* :arrow_up: Upgrade ab-nextjs-components to 0.4.2, then to 0.5.0 for one active sidebar item (Introduction no longer lights up next to the current page), with an exact release-age pin that expires 24h after its publish
+* :fire: Remove personal names from comments and docs
+* :white_check_mark: Test the docs page template in every locale and theme (breadcrumbs, chips, TOC and scroll spy, the outline drawer below 1180px, the links)
+* :white_check_mark: Test that exactly one sidebar and nav drawer item is active on `/docs` and `/docs/installation` in every locale
+
+### [0.2.24](https://github.com/abraham-ukachi/ab-elements-app/compare/v0.2.23...v0.2.24) (2026-11-03)
+
+* :heavy_plus_sign: Add Fumadocs MDX, fumadocs-core and zod for the docs pipeline
+* :memo: Add the first docs content in four locales
+* :sparkles: Render the MDX docs pages in the shell
+* :recycle: Render the docs with the packaged code blocks, callouts, tabs and pager
+* :bug: Let the picked theme set the color-scheme and keep the crumb a label at 768px
+* :lipstick: Highlight the code with github-dark on the dark code surface
+* :sparkles: Link the Docs crumb and highlight with both Shiki themes
+* :arrow_up: Upgrade to theme 0.3.8 and components 0.4.0, then to theme 0.3.9 and components 0.4.1
+* :white_check_mark: Test the docs pages in all four locales
+* :white_check_mark: Load the docs source in unit tests and cover the docs sitemap
+
 ### [0.2.23](https://github.com/abraham-ukachi/ab-elements-app/compare/v0.2.22...v0.2.23) (2026-11-01)
 
 * :white_check_mark: Test the layout rules on Home, the 404 and the Welcome at 390, 768, 1180, 1280 and 1920px in light and dark: the document never scrolls, only the panes scroll and they scroll independently, empty slots are 0px, the aside is a pane from 1180px and the right drawer below it, the tablet `<<` toggle opens it (Escape closes it and focus returns), and the scroll spy follows main
