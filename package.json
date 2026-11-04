@@ -37,6 +37,7 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:e2e": "playwright test",
+    "check:no-eval": "node scripts/check-no-eval.mjs",
     "lighthouse": "node scripts/lighthouse.mjs",
     "lighthouse:strict": "node scripts/lighthouse.mjs --strict"
   },
