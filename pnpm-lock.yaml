@@ -15,8 +15,8 @@ importers:
         specifier: 0.2.5
         version: 0.2.5(next@16.3.4(@babel/core@7.29.7)(@opentelemetry/api@1.10.0)(@playwright/test@1.63.0)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       ab-nextjs-components:
-        specifier: 0.4.1
-        version: 0.4.1(51a7f82b31f26e3d433b06df08a06ba6)
+        specifier: 0.4.2
+        version: 0.4.2(51a7f82b31f26e3d433b06df08a06ba6)
       ab-nextjs-core:
         specifier: 0.2.3
         version: 0.2.3(clsx@2.1.1)(next@16.3.4(@babel/core@7.29.7)(@opentelemetry/api@1.10.0)(@playwright/test@1.63.0)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
@@ -1511,8 +1511,8 @@ packages:
       react-dom:
         optional: true
 
-  ab-nextjs-components@0.4.1:
-    resolution: {integrity: sha512-4tXAg+ZcepHOg3LAVLgP+jfONnqPpfZ2VZ425pDWNNEWCRSfy74y0Nf7LjFkb9E746o54cxlFITPSDF8kH3aNw==}
+  ab-nextjs-components@0.4.2:
+    resolution: {integrity: sha512-xr+GwJFNntUF4CG2W0B6BN+MChoRFf2vPUc3A/OL3GGTelnpvXFkbkYBc77kbIuNkNFUbJRJgYbP2gSS63EQDg==}
     peerDependencies:
       ab-nextjs-animations: ^0.2.5
       ab-nextjs-hooks: ^0.1.7
@@ -5157,7 +5157,7 @@ snapshots:
       react: 19.3.0
       react-dom: 19.3.0(react@19.3.0)
 
-  ab-nextjs-components@0.4.1(51a7f82b31f26e3d433b06df08a06ba6):
+  ab-nextjs-components@0.4.2(51a7f82b31f26e3d433b06df08a06ba6):
     dependencies:
       ab-nextjs-animations: 0.2.5(next@16.3.4(@babel/core@7.29.7)(@opentelemetry/api@1.10.0)(@playwright/test@1.63.0)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       ab-nextjs-icons: 0.2.7(next@16.3.4(@babel/core@7.29.7)(@opentelemetry/api@1.10.0)(@playwright/test@1.63.0)(@types/node@26.6.4)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)

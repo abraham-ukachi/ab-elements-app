@@ -9,3 +9,6 @@ allowBuilds:
 # release age with a `name@version` pin here (matching package.json & the lockfile, D33); a pin goes once that
 # release is a day old ⏳
 # 🧹 Nov 4 2026: theme 0.3.9 & components 0.4.1 are > 1 day old, so their pins are gone (list empty again)
+# 🧩 components 0.4.2 (G59: stacked drawers, Escape closes the topmost · CHANGELOG backfill), published 2026-11-04
+minimumReleaseAgeExclude:
+  - ab-nextjs-components@0.4.2 # D33: expires 2026-11-05 17:57 Paris
