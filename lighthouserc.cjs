@@ -30,7 +30,7 @@
 * @authors: Abraham Ukachi <abrahamukachi@gmail.com>
 *
 * Example usage:
-*   1+|> pnpm build && pnpm dlx @lhci/cli@0.16.0 autorun  # LHCI_PRESET=desktop for the desktop preset
+*   1+|> pnpm build && pnpm dlx @lhci/cli@0.16.0 autorun  # AB_LH_PRESET=desktop for the desktop preset
 *    -|>
 *
 */
@@ -46,16 +46,18 @@
 // 🚦 Lighthouse CI (0.2.25, D44): the same pages & targets as `scripts/lighthouse.mjs`, run on every pull request by
 //    `.github/workflows/lighthouse.yml`, in WARN MODE: every assertion is `warn`, so a miss is printed (⚠️) but never
 //    fails the job. Strict (`error`) comes later, by 1.0 (plan §6.3 / P9) 🔒.
-//    📱 mobile by default; `LHCI_PRESET=desktop` switches to the desktop preset (the workflow runs both).
+//    📱 mobile by default; `AB_LH_PRESET=desktop` switches to the desktop preset (the workflow runs both).
 //    🍪 every run sends `AB_APP_HELLO=true` (a returning visitor), so `/` is Home and not the Welcome redirect.
 //    🙈 the 404 (`/nope`) is NOT here: Lighthouse refuses an HTTP 404 document (ERRORED_DOCUMENT_REQUEST); the local
 //    `pnpm lighthouse` audits it through its relay instead.
 
 // 🖥️ which preset this run uses
-const desktop = process.env.LHCI_PRESET === 'desktop';
+// ⚠️ NOT named `LHCI_*`: lhci turns every `LHCI_*` env var into a CLI flag (`LHCI_PRESET=mobile` became an invalid
+//    `assert --preset mobile` and failed the job), so our own knobs use the `AB_LH_` prefix 🔑
+const desktop = process.env.AB_LH_PRESET === 'desktop';
 
 // 🔢 the port of the local `next start` (same default as Playwright & scripts/lighthouse.mjs)
-const PORT = Number(process.env.LHCI_PORT) || 3020;
+const PORT = Number(process.env.AB_LH_PORT) || 3020;
 
 // 📄 the audited pages: Home, an English docs page & a localized one
 const PAGES = ['/', '/docs/installation', '/fr/docs/quick-start'];

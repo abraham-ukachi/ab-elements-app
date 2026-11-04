@@ -140,11 +140,11 @@ describe('Lighthouse CI in warn mode 🚦', () => {
   const load = (preset?: string) => {
     const require = createRequire(import.meta.url);
     const path = join(process.cwd(), 'lighthouserc.cjs');
-    const before = process.env.LHCI_PRESET;
-    if (preset) process.env.LHCI_PRESET = preset; else delete process.env.LHCI_PRESET;
+    const before = process.env.AB_LH_PRESET;
+    if (preset) process.env.AB_LH_PRESET = preset; else delete process.env.AB_LH_PRESET;
     delete require.cache[require.resolve(path)];
     const config = require(path);
-    if (before === undefined) delete process.env.LHCI_PRESET; else process.env.LHCI_PRESET = before;
+    if (before === undefined) delete process.env.AB_LH_PRESET; else process.env.AB_LH_PRESET = before;
     return config.ci;
   };
 
@@ -164,7 +164,7 @@ describe('Lighthouse CI in warn mode 🚦', () => {
     expect(JSON.parse(collect.settings.extraHeaders).Cookie).toContain('AB_APP_HELLO=true');
   });
 
-  it('mobile by default, the desktop preset with LHCI_PRESET=desktop; reports stay local', () => {
+  it('mobile by default, the desktop preset with AB_LH_PRESET=desktop; reports stay local', () => {
     expect(load().collect.settings.preset).toBeUndefined();
     expect(load('desktop').collect.settings.preset).toBe('desktop');
     expect(load().upload.target).toBe('filesystem');

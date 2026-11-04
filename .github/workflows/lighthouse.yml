@@ -73,7 +73,7 @@ jobs:
         preset: [mobile, desktop] # 📱🖥️
     env:
       NEXT_TELEMETRY_DISABLED: 1
-      LHCI_PRESET: ${{ matrix.preset }}
+      AB_LH_PRESET: ${{ matrix.preset }}
 
     steps:
       - name: Check out the repo
