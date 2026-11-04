@@ -419,7 +419,10 @@
     "example": {
       "label": "Ejemplo",
       "preview": "Vista previa",
-      "code": "Código"
+      "code": "Código",
+      "toolbar": "Herramientas de la vista previa",
+      "dark": "Vista previa oscura",
+      "reload": "Recargar la vista previa"
     },
     "chips": {
       "label": "Detalles de la página",

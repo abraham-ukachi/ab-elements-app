@@ -195,9 +195,14 @@ describe('the Components page (compiled MDX) 📚', () => {
       expect(panels[1]).toContain('AbCodeBlock');
       // 🖍️ highlighted at build time (Shiki's light-dark() tokens), never a run-time highlighter
       expect(panels[1]).toContain('class="shiki');
-      // ⌨️ the panel is the one tab stop: Shiki's <pre> is not a second one; 🧾 no raw-HTML code path
-      expect(panels[1]).toMatch(/<pre class="shiki[^>]*tabindex="-1"/);
-      expect(panels[1]).not.toMatch(/<pre[^>]*tabindex="0"/);
+      // ⌨️ the code WRAPPER is the one stop of the code block (arrow keys scroll it); Shiki's <pre> has no tabindex
+      expect(panels[1]).toMatch(/data-ab-part="code-block-code"[^>]*tabindex="0"|tabindex="0"[^>]*data-ab-part="code-block-code"/);
+      expect(panels[1]).not.toMatch(/<pre[^>]*tabindex=/);
+      // 🧰 the packaged toolbar is in the Preview panel, with no open link (no standalone page yet)
+      expect(ex).toContain('data-ab-part="preview-toolbar"');
+      expect(ex).toContain('data-ab-tool="scheme"');
+      expect(ex).toContain('data-ab-tool="reload"');
+      expect(ex).not.toContain('data-ab-tool="open"');
       // 🧱 ONE code frame & ONE <pre> per Code panel (the map's own AbCodeBlock is unwrapped, never nested)
       expect(panels[1].match(/data-ab-part="code-block"/g)).toHaveLength(1);
       expect(panels[1].match(/<pre/g)).toHaveLength(1);
@@ -232,7 +237,7 @@ describe('tab labels in all 4 locales 🌍', () => {
     const all = { en, fr, es, ru } as const;
     for (const [locale, m] of Object.entries(all)) {
       const ex = (m as typeof en).Docs.example;
-      for (const key of ['label', 'preview', 'code'] as const) expect(ex[key], `${locale}.${key}`).toMatch(/\S/);
+      for (const key of ['label', 'preview', 'code', 'toolbar', 'dark', 'reload'] as const) expect(ex[key], `${locale}.${key}`).toMatch(/\S/);
     }
     expect(fr.Docs.example.preview).toBe('Aperçu');
     expect(es.Docs.example.preview).toBe('Vista previa');

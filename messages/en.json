@@ -419,7 +419,10 @@
     "example": {
       "label": "Example",
       "preview": "Preview",
-      "code": "Code"
+      "code": "Code",
+      "toolbar": "Preview tools",
+      "dark": "Dark preview",
+      "reload": "Reload preview"
     },
     "chips": {
       "label": "Page details",

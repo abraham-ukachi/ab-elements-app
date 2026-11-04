@@ -129,18 +129,68 @@ for (const scheme of THEMES) {
         // ⇥ Tab leaves the tablist for the open panel
         await page.keyboard.press('Tab');
         await expect(panels.nth(0)).toBeFocused();
-        // 💻 on the Code tab: ONE stop for the panel, then the copy button (the Shiki <pre> is not a 2nd stop)
+        // 💻 on the Code tab: the panel, then the code WRAPPER (the code block's one stop), then the copy button;
+        //    the Shiki <pre> is never a stop of its own
         await tabs.nth(1).click();
-        await expect(panels.nth(1).locator('pre.shiki')).toHaveAttribute('tabindex', '-1');
+        const wrapper = panels.nth(1).locator('[data-ab-part="code-block-code"]');
+        await expect(wrapper).toHaveAttribute('tabindex', '0');
+        await expect(panels.nth(1).locator('pre.shiki')).not.toHaveAttribute('tabindex', /.*/);
         await page.keyboard.press('Tab');
         await expect(panels.nth(1)).toBeFocused();
         await page.keyboard.press('Tab');
-        const focused = await page.evaluate(() => ({ tag: document.activeElement?.tagName, inPanel: !!document.activeElement?.closest('[role="tabpanel"]'), pre: !!document.activeElement?.closest('pre') }));
-        expect(focused.pre).toBe(false);
-        if (focused.inPanel) expect(focused.tag).toBe('BUTTON'); // 📋 the copy button
+        await expect(wrapper).toBeFocused();
+        await page.keyboard.press('Tab');
+        const focused = await page.evaluate(() => ({ tag: document.activeElement?.tagName, pre: !!document.activeElement?.closest('pre') }));
+        expect(focused).toEqual({ tag: 'BUTTON', pre: false }); // 📋 the copy button
       });
     });
   }
+
+  test(`🧰 toolbar · ${scheme}: the light/dark toggle & reload change ONLY this preview`, async ({ page }) => {
+    await page.emulateMedia({ colorScheme: scheme });
+    await page.addInitScript((mode) => localStorage.setItem('theme', mode), scheme);
+    await openPage(page, PAGE);
+    const ex = page.locator(EXAMPLE).first();
+    const toolbar = ex.getByRole('toolbar');
+    const toggle = toolbar.locator('[data-ab-tool="scheme"]');
+    const box = ex.locator('[data-ab-part="demo-box"]');
+    // 🌗 the toggle flips this preview's scheme (aria-pressed = dark) & never the page's
+    const start = await toggle.getAttribute('aria-pressed');
+    await toggle.click();
+    const flipped = start === 'true' ? 'false' : 'true';
+    await expect(toggle).toHaveAttribute('aria-pressed', flipped);
+    await expect(box).toHaveAttribute('data-theme', flipped === 'true' ? 'dark' : 'light');
+    await expect(page.locator('html')).toHaveAttribute('data-theme', scheme);
+    await toggle.click();
+    await expect(toggle).toHaveAttribute('aria-pressed', start ?? 'false');
+    // 🔄 reload remounts the preview: a marked node is replaced by a fresh one, same content
+    await box.locator('button').first().evaluate((el) => el.setAttribute('data-e2e-old', '1'));
+    await toolbar.locator('[data-ab-tool="reload"]').click();
+    await expect(box.locator('[data-e2e-old]')).toHaveCount(0);
+    await expect(box.getByRole('button', { name: 'Save' })).toBeVisible();
+    // ↗️ no open link (no standalone page yet)
+    await expect(toolbar.locator('[data-ab-tool="open"]')).toHaveCount(0);
+  });
+
+  test(`⌨️↔️ 390px · ${scheme}: arrow keys scroll a long code line & the copy button never covers code`, async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.emulateMedia({ colorScheme: scheme });
+    await page.addInitScript((mode) => localStorage.setItem('theme', mode), scheme);
+    await openPage(page, PAGE);
+    const ex = page.locator(EXAMPLE).first();
+    await ex.getByRole('tab').nth(1).click();
+    const wrapper = ex.locator('[data-ab-part="code-block-code"]');
+    // ↔️ the long line overflows, and the focused wrapper scrolls with →
+    expect(await wrapper.evaluate((el) => el.scrollWidth > el.clientWidth)).toBe(true);
+    await wrapper.focus();
+    for (let i = 0; i < 6; i++) await page.keyboard.press('ArrowRight');
+    await expect.poll(() => wrapper.evaluate((el) => el.scrollLeft)).toBeGreaterThan(0);
+    // 📋 the copy button sits in its gutter: it never intersects the code scroller's visible box
+    const copy = ex.locator('[role="tabpanel"]').nth(1).getByRole('button');
+    const [c, w] = [await copy.boundingBox(), await wrapper.boundingBox()];
+    const overlap = Math.max(0, Math.min(c!.x + c!.width, w!.x + w!.width) - Math.max(c!.x, w!.x)) * Math.max(0, Math.min(c!.y + c!.height, w!.y + w!.height) - Math.max(c!.y, w!.y));
+    expect(overlap).toBe(0);
+  });
 
   test(`📱 390px · ${scheme}: tabs work & nothing overflows the page`, async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });

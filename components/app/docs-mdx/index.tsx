@@ -87,6 +87,10 @@ export type DocsMdxLabels = Readonly<{
   exampleLabel?: string;
   previewLabel?: string;
   codeLabel?: string;
+  // 🧰 the preview toolbar (components ≥ 0.6.0): its name, the light/dark toggle & reload
+  toolbarLabel?: string;
+  darkLabel?: string;
+  reloadLabel?: string;
 }>;
 
 // 🧪 the MDX `<Example title="…">` props (its children were split by the remark step: [ExamplePreview, pre])
@@ -205,17 +209,22 @@ function DocsExample({ title, code = '', children, labels, preType }: DocsExampl
   const fence = parts.find((p) => p.type !== DocsExamplePreview);
   // 🖍️ the fence's Shiki `<pre>` as a plain element (AbDemoCode draws the code frame, not the map's AbCodeBlock)
   const found = fence ? findShikiPre(fence, preType) : null;
+  // ✂️ drop the header bits (AbDemoCode draws its own) & Shiki's tab stop (the wrapper is the stop)
   const { title: _t, 'data-language': _l, tabIndex: _ti, ...pre } = found ?? {}; // eslint-disable-line @typescript-eslint/no-unused-vars
   return (
     // 🏷️ `ab-prose-none`: the page's long-form typography stays out of the components under test
     <div data-docs-example="" className="ab-prose-none">
       <AbPreviewCode
         label={title ?? labels.exampleLabel ?? 'Example'} // ♿ names the tablist
-        labels={{ preview: labels.previewLabel, code: labels.codeLabel, copy: labels.copyLabel, copied: labels.copiedLabel }} // 🌍
+        labels={{ preview: labels.previewLabel, code: labels.codeLabel, copy: labels.copyLabel, copied: labels.copiedLabel, toolbar: labels.toolbarLabel, dark: labels.darkLabel, reload: labels.reloadLabel }} // 🌍
         code={code} // 📋 the exact source (shown & copied only)
-        // 🖍️ build-time Shiki via `highlighted` (never `trustedHtml`). ⌨️ Shiki's `tabindex="0"` is dropped (-1):
-        //    the Code tabpanel is already the one tab stop, so the code is not a second, empty stop
-        highlighted={found ? <pre {...pre} tabIndex={-1} /> : undefined}
+        // 🖍️ build-time Shiki via `highlighted` (never `trustedHtml`). ⌨️ components ≥ 0.6.0 make the code WRAPPER
+        //    the one tab stop (arrow keys scroll long lines) & drop Shiki's own `tabindex`, so we pass none
+        highlighted={found ? <pre {...pre} /> : undefined}
+        // 🧰 the packaged toolbar (0.6.0): a per-preview light/dark toggle & reload. ↗️ No `href`: there is no
+        //    standalone example page yet, and an open link is only given for a same-origin path that passes the
+        //    URL allowlist (lib/remark-live-example `isSafeLiveUrl`), so it stays off for now
+        toolbar
         language="tsx"
       >
         {preview /* 👀 the real components, rendered by React like the rest of the page */}
