@@ -126,17 +126,18 @@ for (const scheme of THEMES) {
         await page.keyboard.press('Home');
         await expect(tabs.nth(0)).toBeFocused();
         await expect(panels.nth(0)).toBeVisible();
-        // ⇥ Tab leaves the tablist for the open panel
+        // ⇥ Tab leaves the tablist straight for the panel's first control (the preview toolbar): a panel with
+        //    focusable content is no tab stop of its own (components 0.6.0)
+        await expect(panels.nth(0)).not.toHaveAttribute('tabindex', '0');
         await page.keyboard.press('Tab');
-        await expect(panels.nth(0)).toBeFocused();
-        // 💻 on the Code tab: the panel, then the code WRAPPER (the code block's one stop), then the copy button;
-        //    the Shiki <pre> is never a stop of its own
+        await expect(panels.nth(0).locator('[data-ab-tool="scheme"]')).toBeFocused();
+        // 💻 on the Code tab: the code WRAPPER (the code block's one stop), then the copy button; no separate
+        //    panel stop, and the Shiki <pre> is never a stop of its own
         await tabs.nth(1).click();
         const wrapper = panels.nth(1).locator('[data-ab-part="code-block-code"]');
         await expect(wrapper).toHaveAttribute('tabindex', '0');
         await expect(panels.nth(1).locator('pre.shiki')).not.toHaveAttribute('tabindex', /.*/);
-        await page.keyboard.press('Tab');
-        await expect(panels.nth(1)).toBeFocused();
+        await expect(panels.nth(1)).not.toHaveAttribute('tabindex', '0');
         await page.keyboard.press('Tab');
         await expect(wrapper).toBeFocused();
         await page.keyboard.press('Tab');
