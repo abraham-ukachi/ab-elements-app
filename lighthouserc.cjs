@@ -60,7 +60,7 @@ const desktop = process.env.AB_LH_PRESET === 'desktop';
 const PORT = Number(process.env.AB_LH_PORT) || 3020;
 
 // 📄 the audited pages: Home, an English docs page & a localized one
-const PAGES = ['/', '/docs/installation', '/fr/docs/quick-start'];
+const PAGES = ['/', '/docs/installation', '/docs/packages/components', '/fr/docs/quick-start']; // 🧪 0.2.26: + a live-preview page
 
 // 🎯 the targets (plan §6.3, mobile): Perf ≥ 90 · A11y 100 · BP ≥ 95 · SEO ≥ 90, all as WARN (D44) ⚠️
 const ASSERTIONS = {

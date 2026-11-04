@@ -157,9 +157,9 @@ describe('Lighthouse CI in warn mode 🚦', () => {
     expect(assert.assertions['categories:performance'][1].minScore).toBe(0.9);
   });
 
-  it('audits Home, an English & a French docs page as a returning visitor, 3 runs each', () => {
+  it('audits Home, an English, a live-preview & a French docs page as a returning visitor, 3 runs each', () => {
     const { collect } = load();
-    expect(collect.url.map((u: string) => new URL(u).pathname)).toEqual(['/', '/docs/installation', '/fr/docs/quick-start']);
+    expect(collect.url.map((u: string) => new URL(u).pathname)).toEqual(['/', '/docs/installation', '/docs/packages/components', '/fr/docs/quick-start']);
     expect(collect.numberOfRuns).toBe(3);
     expect(JSON.parse(collect.settings.extraHeaders).Cookie).toContain('AB_APP_HELLO=true');
   });

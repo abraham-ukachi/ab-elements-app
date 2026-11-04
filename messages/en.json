@@ -416,6 +416,14 @@
     "metaSuffix": "AbElements docs",
     "copyCode": "Copy code",
     "copied": "Copied",
+    "example": {
+      "label": "Example",
+      "preview": "Preview",
+      "code": "Code",
+      "toolbar": "Preview tools",
+      "dark": "Dark preview",
+      "reload": "Reload preview"
+    },
     "chips": {
       "label": "Page details",
       "section": {

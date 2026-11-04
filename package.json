@@ -1,6 +1,6 @@
 {
   "name": "ab-elements-app",
-  "version": "0.2.25",
+  "version": "0.2.26",
   "description": "abElements is the home of every Ab package: docs, live examples, and an installable PWA, built with the same packages it documents.",
   "private": true,
   "homepage": "https://ab-elements.vercel.app/",
@@ -37,6 +37,7 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:e2e": "playwright test",
+    "check:no-eval": "node scripts/check-no-eval.mjs",
     "lighthouse": "node scripts/lighthouse.mjs",
     "lighthouse:strict": "node scripts/lighthouse.mjs --strict"
   },
@@ -47,7 +48,7 @@
   "dependencies": {
     "@types/mdx": "2.0.14",
     "ab-nextjs-animations": "0.2.5",
-    "ab-nextjs-components": "0.5.0",
+    "ab-nextjs-components": "0.6.0",
     "ab-nextjs-core": "0.2.3",
     "ab-nextjs-fonts": "0.2.7",
     "ab-nextjs-hooks": "0.1.7",

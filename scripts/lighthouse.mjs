@@ -77,6 +77,7 @@ const PAGES = [
   { id: 'home', path: '/', seo: true },
   { id: 'home-fr', path: '/fr', seo: true },
   { id: 'docs', path: '/docs/installation', seo: true }, // 📚 0.2.24: an MDX docs page (Shiki code, TOC aside)
+  { id: 'docs-previews', path: '/docs/packages/components', seo: true }, // 🧪 0.2.26: live previews (Preview / Code tabs)
   { id: 'docs-fr', path: '/fr/docs/quick-start', seo: true }, // 🏳️ 0.2.24: an English fallback page (banner)
   { id: 'not-found', path: '/nope', seo: false, relay: true },
 ];

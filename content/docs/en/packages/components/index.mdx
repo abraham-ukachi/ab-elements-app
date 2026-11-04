@@ -20,3 +20,29 @@ pnpm add ab-nextjs-components
 ## Usage
 
 Import what you need from its entry points; everything is typed.
+
+## Live examples
+
+Each example renders the real package components. Its **Code** tab shows the exact source of that preview, so the two never drift apart.
+
+<Example title="Buttons">
+  <AbButton label="Save" type="contained" />
+  <AbButton label="Cancel" type="outlined" />
+  <AbButton label="Learn more" type="text" />
+</Example>
+
+<Example title="Chips and pills">
+  <AbChip tone="accent">Beta</AbChip>
+  <AbChip tone="sage" dot="sage">Stable</AbChip>
+  <AbPill mono>v0.5.0</AbPill>
+</Example>
+
+<Example title="Keyboard hint">
+  <AbKbd keys={['Ctrl', 'K']} />
+</Example>
+
+<Example title="Callout">
+  <AbCallout variant="tip" title="Tip">
+    Previews are real components, not screenshots.
+  </AbCallout>
+</Example>

@@ -51,6 +51,8 @@
 import { defineConfig, defineDocs, frontmatterSchema, metaSchema } from 'fumadocs-mdx/config';
 // import our extra frontmatter fields (relative: this file is bundled on its own, without the `@/` alias) 🧾
 import { docsFrontmatterExtra } from './lib/docs-frontmatter';
+// import the live preview step (0.2.26): `<Example>` → its real components + their exact source, at build time 🧪
+import remarkLiveExample from './lib/remark-live-example';
 
 
 // 📚 the docs collection: every `.mdx` page & `meta.json` under `content/docs`
@@ -66,6 +68,9 @@ export const docs = defineDocs({
 // ⚙️ the MDX pipeline
 export default defineConfig({
   mdxOptions: {
+    // 🧪 0.2.26 live previews: after fumadocs' own remark plugins, `<Example>` is checked (package components +
+    //    literal props only) & split into a preview + a ```tsx fence of the SAME source; nothing runs at run time
+    remarkPlugins: (plugins) => [...plugins, remarkLiveExample],
     // 🖍️ Shiki at build time (no highlighter shipped): one `light-dark()` colour per token 🌗. AbCodeBlock
     //    (components ≥ 0.4.1) sets `color-scheme: dark` on its dark code surface, so the tokens resolve to
     //    github-dark there in BOTH page themes; a raw `<pre>` elsewhere follows the picked theme (theme ≥ 0.3.8)

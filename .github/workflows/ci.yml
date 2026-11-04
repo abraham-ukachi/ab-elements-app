@@ -53,3 +53,7 @@ jobs:
 
       - name: Build
         run: pnpm build
+
+      # 🛡️ 0.2.26: no eval / new Function in the client bundle (CSP-friendly, live previews included)
+      - name: No eval in the client bundle
+        run: pnpm check:no-eval
