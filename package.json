@@ -48,7 +48,7 @@
   "dependencies": {
     "@types/mdx": "2.0.14",
     "ab-nextjs-animations": "0.2.5",
-    "ab-nextjs-components": "0.5.0",
+    "ab-nextjs-components": "0.6.0",
     "ab-nextjs-core": "0.2.3",
     "ab-nextjs-fonts": "0.2.7",
     "ab-nextjs-hooks": "0.1.7",
