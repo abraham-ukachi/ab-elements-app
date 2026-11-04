@@ -49,12 +49,19 @@
 //   💻 `pre`      → AbCodeBlock (Shiki's pre-highlighted `<pre>` + the `title="…"` filename header + a copy button)
 //   💡 `Callout`  → AbCallout (`<Callout type="note|tip|warning|danger" title="…">`, the theme's warning / danger colours)
 //   🗂️ `Tabs/Tab` → AbContentTabs / AbContentTab (the WAI-ARIA tabs pattern, every panel in the server HTML)
+//   🧪 `Example`  → 0.2.26 live previews: the packaged AbPreviewCode (components ≥ 0.6.0, G16): a Preview tab
+//                   (its scoped AbDemoBox around the REAL package components) & a Code tab (AbDemoCode with the same
+//                   source, Shiki-highlighted at build time; lib/remark-live-example keeps both from ONE source).
+//                   No eval, no code strings turned into components, no iframe: a preview is compiled MDX 🛡️
+//   📦 `AbButton`, `AbCallout`, `AbChip`, `AbKbd`, `AbPill` → the preview scope (LIVE_EXAMPLE_SCOPE)
 // 📄 Long-form typography (headings, lists, tables, inline code) is the theme's `.ab-prose` class on the body wrapper.
 
 // MDX types
 import type { MDXComponents } from 'mdx/types';
 // REACT types
 import type { AnchorHTMLAttributes, HTMLAttributes, ReactElement, ReactNode } from 'react';
+// import the child helpers (to split an Example's preview from its code) 🧩
+import { Children, isValidElement, type ReactElement as El } from 'react';
 // import the packaged, locale-aware link from `ab-nextjs-components` 🔗
 import { AbLink } from 'ab-nextjs-components/ab-link';
 // import the packaged code block (server, with its own client copy island) 💻
@@ -63,10 +70,27 @@ import AbCodeBlock from 'ab-nextjs-components/ab-code-block';
 import AbCallout, { type AbCalloutVariant } from 'ab-nextjs-components/ab-callout';
 // import the packaged content tabs (client) 🗂️
 import { AbContentTabs, AbContentTab } from 'ab-nextjs-components/ab-content-tabs';
+// import the packaged Preview / Code pair (0.6.0, G16: AbContentTabs + a scoped AbDemoBox + AbDemoCode) 🧪💻
+import AbPreviewCode from 'ab-nextjs-components/ab-preview-code';
+// import the preview scope: published package components only (must match LIVE_EXAMPLE_SCOPE) 📦
+import AbButton from 'ab-nextjs-components/ab-button';
+import AbChip from 'ab-nextjs-components/ab-chip';
+import AbKbd from 'ab-nextjs-components/ab-kbd';
+import AbPill from 'ab-nextjs-components/ab-pill';
 
 
 // 🌍 the translated labels the map hands to the package pieces
-export type DocsMdxLabels = Readonly<{ copyLabel: string; copiedLabel: string }>;
+export type DocsMdxLabels = Readonly<{
+  copyLabel: string;
+  copiedLabel: string;
+  // 🧪 0.2.26 live previews: the tablist's name (when the Example has no title) & the two tab labels
+  exampleLabel?: string;
+  previewLabel?: string;
+  codeLabel?: string;
+}>;
+
+// 🧪 the MDX `<Example title="…">` props (its children were split by the remark step: [ExamplePreview, pre])
+type DocsExampleProps = Readonly<{ title?: string; code?: string; children?: ReactNode }>;
 
 // 🧾 the props fumadocs' rehype-code leaves on a Shiki `<pre>` (`title="…"` from the fence meta)
 type DocsPreProps = HTMLAttributes<HTMLPreElement> & { title?: string; 'data-language'?: string };
@@ -110,6 +134,60 @@ export function toCalloutVariant(type: DocsCalloutProps['type']): AbCalloutVaria
 
 
 /**
+ * `DocsExamplePreview` - the marker the remark step wraps around an Example's real components 🏷️ (it renders
+ * them as they are; DocsExample finds it by identity to tell the preview from the code)
+ *
+ * @param { { children?: ReactNode } } props
+ * @returns { ReactElement }
+ */
+export function DocsExamplePreview({ children }: { children?: ReactNode }): ReactElement {
+  return <>{children}</>;
+}
+
+
+/**
+ * `getLivePreviewScope` - the package components an `<Example>` may render (the MDX names = the export names) 📦
+ *
+ * @returns { MDXComponents }
+ */
+export function getLivePreviewScope(): MDXComponents {
+  return { AbButton, AbCallout, AbChip, AbKbd, AbPill } as MDXComponents;
+}
+
+
+/**
+ * `DocsExample` - a live example 🧪: the packaged AbContentTabs (WAI-ARIA tabs, ←/→/Home/End, both panels in the
+ * server HTML) with a Preview tab (the packaged AbDemoBox around the real components) & a Code tab (the Shiki
+ * `<pre>` in AbCodeBlock, via the map's `pre`). Only package pieces: this function only wires them 🔌
+ *
+ * @param { DocsExampleProps & { labels: DocsMdxLabels } } props
+ * @returns { ReactElement }
+ */
+function DocsExample({ title, code = '', children, labels }: DocsExampleProps & { labels: DocsMdxLabels }): ReactElement {
+  // ✂️ [ExamplePreview, the Shiki code block] (anything else, e.g. whitespace, is dropped)
+  const parts = Children.toArray(children).filter(isValidElement) as El<Record<string, unknown>>[];
+  const preview = parts.find((p) => p.type === DocsExamplePreview);
+  const fence = parts.find((p) => p.type !== DocsExamplePreview);
+  // 🖍️ the fence's Shiki `<pre>` as a plain element (AbDemoCode draws the code frame, not the map's AbCodeBlock)
+  const { title: _t, 'data-language': _l, ...pre } = (fence?.props ?? {}) as DocsPreProps; // eslint-disable-line @typescript-eslint/no-unused-vars
+  return (
+    // 🏷️ `ab-prose-none`: the page's long-form typography stays out of the components under test
+    <div data-docs-example="" className="ab-prose-none">
+      <AbPreviewCode
+        label={title ?? labels.exampleLabel ?? 'Example'} // ♿ names the tablist
+        labels={{ preview: labels.previewLabel, code: labels.codeLabel, copy: labels.copyLabel, copied: labels.copiedLabel }} // 🌍
+        code={code} // 📋 the exact source (shown & copied only)
+        highlighted={fence ? <pre {...pre} /> : undefined} // 🖍️ build-time Shiki
+        language="tsx"
+      >
+        {preview /* 👀 the real components, rendered by React like the rest of the page */}
+      </AbPreviewCode>
+    </div>
+  );
+}
+
+
+/**
  * `getDocsMdxComponents` - the component map handed to every compiled MDX page 🗺️
  *
  * @param { DocsMdxLabels } labels - the copy button's translated names
@@ -132,6 +210,11 @@ export function getDocsMdxComponents(labels: DocsMdxLabels, overrides: MDXCompon
     // 🗂️ `<Tabs label="…"><Tab label="pnpm">…</Tab></Tabs>`
     Tabs: AbContentTabs,
     Tab: AbContentTab,
+    // 🧪 `<Example title="…">…package components…</Example>` (0.2.26 live previews) + its preview marker
+    Example: (props: DocsExampleProps) => <DocsExample {...props} labels={labels} />,
+    ExamplePreview: DocsExamplePreview,
+    // 📦 the preview scope (published package components only)
+    ...getLivePreviewScope(),
     // 🧩 per-page overrides last
     ...overrides,
   };

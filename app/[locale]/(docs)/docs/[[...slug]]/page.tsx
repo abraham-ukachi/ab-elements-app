@@ -207,7 +207,7 @@ export default async function DocsPage({ params }: DocsPageProps): Promise<React
             {/* 📄 the MDX body in the theme's `.ab-prose` typography (headings carry their ids, Shiki's code is
                 pre-highlighted & wrapped in AbCodeBlock, which opts itself out with `.ab-prose-none`) */}
             <div data-docs-body="" className="ab-prose">
-              <MDX components={getDocsMdxComponents({ copyLabel: t('copyCode'), copiedLabel: t('copied') })} />
+              <MDX components={getDocsMdxComponents({ copyLabel: t('copyCode'), copiedLabel: t('copied'), exampleLabel: t('example.label'), previewLabel: t('example.preview'), codeLabel: t('example.code') })} />
             </div>
             {/* ⬅️➡️ prev / next: the packaged AbDocPager (its URLs lose the locale prefix, AbLink adds it back 🌍) */}
             <div data-docs-pager="">

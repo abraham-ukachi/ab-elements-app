@@ -416,6 +416,11 @@
     "metaSuffix": "Документация AbElements",
     "copyCode": "Копировать код",
     "copied": "Скопировано",
+    "example": {
+      "label": "Пример",
+      "preview": "Превью",
+      "code": "Код"
+    },
     "chips": {
       "label": "Сведения о странице",
       "section": {
