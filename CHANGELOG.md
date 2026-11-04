@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.26](https://github.com/abraham-ukachi/ab-elements-app/compare/v0.2.25...v0.2.26) (2026-11-04)
+
+* :sparkles: Add live Preview / Code tabs to docs examples: an MDX `<Example>` renders the real package components (packaged AbPreviewCode), and its Code tab shows the exact same source, highlighted by Shiki at build time (one source per example, no eval, no runtime code strings, no iframe)
+* :sparkles: Show the packaged preview toolbar on every example: a light/dark toggle for that preview only and a reload that remounts it, labelled in all four locales
+* :lock: Check every live example at build time: package components and literal props only, no handlers, spreads, expressions or raw HTML, and URL props limited to `/path` (not `//`), `#hash`, `https:` and `mailto:` (anything else fails the build)
+* :shield: Add `pnpm check:no-eval` (also in CI): the client bundle must contain no `eval` or `new Function`, so the site keeps working under a CSP without `'unsafe-eval'`
+* :wheelchair: Keep one tab stop per code block (the code wrapper; arrow keys scroll long lines) and no separate tab panel stop
+* :memo: Add live examples (buttons, chips and pills, a keyboard hint, a callout) to the Components page
+* :chart_with_upwards_trend: Audit `/docs/packages/components` in Lighthouse and Lighthouse CI too
+* :arrow_up: Upgrade ab-nextjs-components to 0.6.0, with an exact release-age pin that expires 24h after its publish, and drop the 0.5.0 pin
+* :white_check_mark: Test the live previews in every locale and theme: the tabs, the keyboard and tab order, both panels, the code matching the preview, the toolbar, arrow-key scrolling, the copy button at 390px and no CSP eval violation
+
 ### [0.2.25](https://github.com/abraham-ukachi/ab-elements-app/compare/v0.2.24...v0.2.25) (2026-11-04)
 
 * :sparkles: Add the docs page template: chips under each title (section, package, Client or Server Component, status) and Edit this page, Report an issue and View source links in the aside and the outline drawer, in all four locales
