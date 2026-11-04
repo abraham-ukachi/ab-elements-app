@@ -43,7 +43,7 @@
 */
 
 
-// 📚 The docs page (0.2.24): one MDX page of `content/docs/<locale>/…` (lib/source), rendered in the packaged shell:
+// 📚 The docs page template (0.2.24 → 0.2.25: + the header chips & the Edit / Report / Source links): one MDX page of `content/docs/<locale>/…` (lib/source), rendered in the packaged shell:
 // the main pane (DocsMainBar crumbs · title · lede · the MDX body · prev / next) + the "On this page" pane (HomeAside:
 // AbToc + scroll spy, AbTocDrawer below 1180). A page missing in fr / es / ru shows the English one + a banner 🏳️.
 // 🚫 Every (locale, slug) pair is prerendered and `dynamicParams = false`, so a missing slug is an UNMATCHED URL that
@@ -61,8 +61,10 @@ import AbMainLayout from 'ab-nextjs-core/server/ab-main-layout';
 // import the packaged banner (the "not translated yet" notice) & the prev / next pager from `ab-nextjs-components` 🧩
 import AbInfo from 'ab-nextjs-components/ab-info';
 import AbDocPager from 'ab-nextjs-components/ab-doc-pager';
+// import the packaged chip (the page header's section · package · Client/Server · status, 0.2.25) 🏷️
+import AbChip from 'ab-nextjs-components/ab-chip';
 // import the locale guard & the server i18n helpers from `ab-nextjs-i18n` 🌐
-import { isAbLocale } from 'ab-nextjs-i18n/config';
+import { isAbLocale, localizeAbPathname } from 'ab-nextjs-i18n/config';
 import { getAbAlternates, getAbTranslations } from 'ab-nextjs-i18n/server';
 
 // import abElements' i18n config & public URL 🌍
@@ -70,14 +72,12 @@ import abI18nConfig from '@/i18n/config';
 import { APP_URL } from '@/app/metadata';
 // import the docs source & helpers 📚
 import { source } from '@/lib/source';
-import { docsContentFile, docsEditUrl, docsNeighbours, docsUnprefixed, docsPath, docsTocItems, flattenDocsTree, type DocsTreeNode } from '@/lib/docs';
+import { docsChips, docsContentFile, docsEditUrl, docsReportUrl, docsSourceUrl, docsNeighbours, docsUnprefixed, docsPath, docsTocItems, flattenDocsTree, type DocsTreeNode } from '@/lib/docs';
 // import the MDX component map (packages only) 🗺️
 import { getDocsMdxComponents } from '@/components/app/docs-mdx';
 // import the "On this page" pane & the tablet main bar of the packaged shell 📑📟
 import HomeAside from '@/components/app/home-aside';
 import { DocsMainBar } from '@/components/app/docs-shell';
-// import the repo URL (the Changelog link) 🐙
-import { GITHUB_URL } from '@/lib/nav';
 
 
 // 🧾 the page props (Next.js 16 hands the params as a Promise; `slug` is undefined on `/docs`)
@@ -149,7 +149,7 @@ export async function generateMetadata({ params }: DocsPageProps): Promise<Metad
  */
 export default async function DocsPage({ params }: DocsPageProps): Promise<ReactElement> {
   // 📄 the page
-  const { locale, page } = getDocsPage(await params);
+  const { locale, slug, page } = getDocsPage(await params);
   // 🌐 the docs & shell messages
   const t = await getAbTranslations({ locale, namespace: 'Docs' });
   const ts = await getAbTranslations({ locale, namespace: 'Shell' });
@@ -157,6 +157,16 @@ export default async function DocsPage({ params }: DocsPageProps): Promise<React
   //    content locale is the file's own folder (`en/quick-start.mdx`, `parser: 'dir'`)
   const { contentLocale, file } = docsContentFile(page.path, locale);
   const isFallback = contentLocale !== locale;
+  // 🏷️ the header chips (0.2.25): section · package · Client/Server · status, from the slugs & the frontmatter
+  const chips = docsChips(page.slugs, page.data);
+  // 🔗 the TOC extras (0.2.25): Edit (GitHub editor) · Report (a prefilled issue) · Source (the raw MDX), all on the
+  //    file the reader actually sees (the English one for a fallback page 🏳️)
+  const pageUrl = `${APP_URL}${localizeAbPathname(docsPath(slug), locale, abI18nConfig)}`;
+  const asideLinks = [
+    { id: 'edit', href: docsEditUrl(contentLocale, file), label: ts('aside.editPage'), icon: 'github' },
+    { id: 'report', href: docsReportUrl({ title: page.data.title, url: pageUrl, file: `content/docs/${contentLocale}/${file}` }), label: ts('aside.reportIssue'), icon: 'bug_report' },
+    { id: 'source', href: docsSourceUrl(contentLocale, file), label: ts('aside.viewSource'), icon: 'code' },
+  ];
   // 🧩 the compiled MDX body & its TOC
   const MDX = page.data.body;
   const toc = docsTocItems(page.data.toc);
@@ -185,6 +195,14 @@ export default async function DocsPage({ params }: DocsPageProps): Promise<React
               <h1 className={`${TITLE} m-0 text-[29px] leading-[1.13] min-[768px]:text-[34px] min-[1180px]:text-[38px]`}>{page.data.title}</h1>
               {/* 📝 the lede = its frontmatter description */}
               {page.data.description ? <p className="m-0 text-[15.5px] leading-[1.55] text-(--ab-color-muted)">{page.data.description}</p> : null}
+              {/* 🏷️ the chips (a labelled list of packaged AbChips; a package name stays as is, the rest is translated) */}
+              <ul data-docs-chips="" aria-label={t('chips.label')} className="m-0 mt-1 flex list-none flex-wrap gap-2 p-0">
+                {chips.map((chip) => (
+                  <AbChip key={chip.id} as="li" size="sm" tone={chip.tone} mono={chip.mono} dot={chip.dot}>
+                    {chip.text ?? t(chip.key as Parameters<typeof t>[0])}
+                  </AbChip>
+                ))}
+              </ul>
             </header>
             {/* 📄 the MDX body in the theme's `.ab-prose` typography (headings carry their ids, Shiki's code is
                 pre-highlighted & wrapped in AbCodeBlock, which opts itself out with `.ab-prose-none`) */}
@@ -203,15 +221,12 @@ export default async function DocsPage({ params }: DocsPageProps): Promise<React
         </div>
       </AbMainLayout>
 
-      {/* 📑 On this page (+ Edit this page → this content file on GitHub) */}
+      {/* 📑 On this page (+ Edit · Report · Source → this content file on GitHub, 0.2.25) */}
       <HomeAside
         pageName="docs"
         title={ts('aside.onThisPage')}
         items={toc}
-        links={{
-          edit: { href: docsEditUrl(contentLocale, file), label: ts('aside.editPage') },
-          changelog: { href: `${GITHUB_URL}/releases`, label: ts('aside.changelog') },
-        }}
+        links={asideLinks}
       />
     </>
   );

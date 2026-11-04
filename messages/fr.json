@@ -250,7 +250,9 @@
       "toggleClose": "Masquer le plan de la page",
       "onThisPage": "Sur cette page",
       "editPage": "Modifier cette page",
-      "changelog": "Journal des modifications"
+      "changelog": "Journal des modifications",
+      "reportIssue": "Signaler un problème",
+      "viewSource": "Voir la source"
     },
     "github": "AbElements sur GitHub",
     "language": {
@@ -413,6 +415,24 @@
     },
     "metaSuffix": "Docs AbElements",
     "copyCode": "Copier le code",
-    "copied": "Copié"
+    "copied": "Copié",
+    "chips": {
+      "label": "Détails de la page",
+      "section": {
+        "gettingStarted": "Premiers pas",
+        "guides": "Guides",
+        "packages": "Paquets"
+      },
+      "kind": {
+        "client": "Composant client",
+        "server": "Composant serveur"
+      },
+      "status": {
+        "new": "Nouveau",
+        "beta": "Bêta",
+        "stable": "Stable",
+        "deprecated": "Obsolète"
+      }
+    }
   }
 }

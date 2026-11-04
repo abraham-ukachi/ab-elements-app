@@ -291,11 +291,11 @@ export default async function Home({ params }: HomeProps) {
           { id: 'guides', label: t('toc.guides') },
           { id: 'whats-new', label: t('toc.whatsNew') },
         ]}
-        links={{
+        links={[
           // ✏️ "Edit this page" → this file on GitHub; ↗ "Changelog" → the repo's releases
-          edit: { href: `${GITHUB_URL}/blob/main/app/%5Blocale%5D/(docs)/page.tsx`, label: ts('aside.editPage') },
-          changelog: { href: `${GITHUB_URL}/releases`, label: ts('aside.changelog') },
-        }}
+          { id: 'edit', href: `${GITHUB_URL}/blob/main/app/%5Blocale%5D/(docs)/page.tsx`, label: ts('aside.editPage'), icon: 'github' },
+          { id: 'changelog', href: `${GITHUB_URL}/releases`, label: ts('aside.changelog'), icon: 'north_east' },
+        ]}
         promo={{ kind: t('whatsNew.kind.new'), title: t('whatsNew.promo'), body: t('whatsNew.asideLabel', { pkg: 'ab-nextjs-components' }) }}
       />
     </>
