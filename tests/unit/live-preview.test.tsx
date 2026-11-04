@@ -198,6 +198,9 @@ describe('the Components page (compiled MDX) 📚', () => {
       // ⌨️ the panel is the one tab stop: Shiki's <pre> is not a second one; 🧾 no raw-HTML code path
       expect(panels[1]).toMatch(/<pre class="shiki[^>]*tabindex="-1"/);
       expect(panels[1]).not.toMatch(/<pre[^>]*tabindex="0"/);
+      // 🧱 ONE code frame & ONE <pre> per Code panel (the map's own AbCodeBlock is unwrapped, never nested)
+      expect(panels[1].match(/data-ab-part="code-block"/g)).toHaveLength(1);
+      expect(panels[1].match(/<pre/g)).toHaveLength(1);
     }
   });
 

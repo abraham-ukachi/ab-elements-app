@@ -134,6 +134,41 @@ export function toCalloutVariant(type: DocsCalloutProps['type']): AbCalloutVaria
 
 
 /**
+ * `DocsPreBlock` - every fenced block 💻: Shiki's `<pre>` goes INSIDE AbCodeBlock untouched (its light-dark() spans
+ * kept); the fence's `title="…"` becomes the filename header; the copy button copies the rendered text 📋
+ *
+ * @param { DocsPreProps & { labels?: DocsMdxLabels } } props
+ * @returns { ReactElement }
+ */
+function DocsPreBlock({ title, 'data-language': language, labels, ...pre }: DocsPreProps & { labels: DocsMdxLabels }): ReactElement {
+  return (
+    <AbCodeBlock filename={title} language={language} copyLabel={labels.copyLabel} copiedLabel={labels.copiedLabel}>
+      <pre {...pre} />
+    </AbCodeBlock>
+  );
+}
+
+
+/**
+ * `findShikiPre` - the Shiki `<pre>` props inside an Example's code child (whatever MDX wrapped around it) 🔍
+ *
+ * @param { ReactNode } node
+ * @param { unknown } preType - the map's `pre` component
+ * @returns { DocsPreProps | null }
+ */
+function findShikiPre(node: ReactNode, preType: unknown): DocsPreProps | null {
+  for (const c of Children.toArray(node)) {
+    if (!isValidElement(c)) continue; // 🙅 text
+    const props = c.props as DocsPreProps & { children?: ReactNode };
+    if (c.type === preType || c.type === 'pre') return props; // ✅ the fence's <pre>
+    const deeper = findShikiPre(props.children, preType); // 🔁
+    if (deeper) return deeper;
+  }
+  return null;
+}
+
+
+/**
  * `DocsExamplePreview` - the marker the remark step wraps around an Example's real components 🏷️ (it renders
  * them as they are; DocsExample finds it by identity to tell the preview from the code)
  *
@@ -163,13 +198,14 @@ export function getLivePreviewScope(): MDXComponents {
  * @param { DocsExampleProps & { labels: DocsMdxLabels } } props
  * @returns { ReactElement }
  */
-function DocsExample({ title, code = '', children, labels }: DocsExampleProps & { labels: DocsMdxLabels }): ReactElement {
+function DocsExample({ title, code = '', children, labels, preType }: DocsExampleProps & { labels: DocsMdxLabels; preType: unknown }): ReactElement {
   // ✂️ [ExamplePreview, the Shiki code block] (anything else, e.g. whitespace, is dropped)
   const parts = Children.toArray(children).filter(isValidElement) as El<Record<string, unknown>>[];
   const preview = parts.find((p) => p.type === DocsExamplePreview);
   const fence = parts.find((p) => p.type !== DocsExamplePreview);
   // 🖍️ the fence's Shiki `<pre>` as a plain element (AbDemoCode draws the code frame, not the map's AbCodeBlock)
-  const { title: _t, 'data-language': _l, tabIndex: _ti, ...pre } = (fence?.props ?? {}) as DocsPreProps; // eslint-disable-line @typescript-eslint/no-unused-vars
+  const found = fence ? findShikiPre(fence, preType) : null;
+  const { title: _t, 'data-language': _l, tabIndex: _ti, ...pre } = found ?? {}; // eslint-disable-line @typescript-eslint/no-unused-vars
   return (
     // 🏷️ `ab-prose-none`: the page's long-form typography stays out of the components under test
     <div data-docs-example="" className="ab-prose-none">
@@ -179,7 +215,7 @@ function DocsExample({ title, code = '', children, labels }: DocsExampleProps & 
         code={code} // 📋 the exact source (shown & copied only)
         // 🖍️ build-time Shiki via `highlighted` (never `trustedHtml`). ⌨️ Shiki's `tabindex="0"` is dropped (-1):
         //    the Code tabpanel is already the one tab stop, so the code is not a second, empty stop
-        highlighted={fence ? <pre {...pre} tabIndex={-1} /> : undefined}
+        highlighted={found ? <pre {...pre} tabIndex={-1} /> : undefined}
         language="tsx"
       >
         {preview /* 👀 the real components, rendered by React like the rest of the page */}
@@ -197,23 +233,21 @@ function DocsExample({ title, code = '', children, labels }: DocsExampleProps & 
  * @returns { MDXComponents }
  */
 export function getDocsMdxComponents(labels: DocsMdxLabels, overrides: MDXComponents = {}): MDXComponents {
+  // 💻 the code block of this map (DocsExample looks for it to unwrap the Shiki <pre>)
+  const DocsPre = (props: DocsPreProps) => <DocsPreBlock {...props} labels={labels} />;
   return {
     // 🔗 links
     a: DocsAnchor,
     // 💻 every fenced block: Shiki's `<pre>` goes INSIDE AbCodeBlock untouched (its tabindex + light-dark() spans
     //    kept); the fence's `title="…"` becomes the filename header; the copy button copies the rendered text 📋
-    pre: ({ title, 'data-language': language, ...pre }: DocsPreProps) => (
-      <AbCodeBlock filename={title} language={language} copyLabel={labels.copyLabel} copiedLabel={labels.copiedLabel}>
-        <pre {...pre} />
-      </AbCodeBlock>
-    ),
+    pre: DocsPre,
     // 💡 `<Callout type="warning" title="…">…</Callout>`
     Callout: ({ type, title, children }: DocsCalloutProps) => <AbCallout variant={toCalloutVariant(type)} title={title}>{children}</AbCallout>,
     // 🗂️ `<Tabs label="…"><Tab label="pnpm">…</Tab></Tabs>`
     Tabs: AbContentTabs,
     Tab: AbContentTab,
     // 🧪 `<Example title="…">…package components…</Example>` (0.2.26 live previews) + its preview marker
-    Example: (props: DocsExampleProps) => <DocsExample {...props} labels={labels} />,
+    Example: (props: DocsExampleProps) => <DocsExample {...props} labels={labels} preType={DocsPre} />,
     ExamplePreview: DocsExamplePreview,
     // 📦 the preview scope (published package components only)
     ...getLivePreviewScope(),
