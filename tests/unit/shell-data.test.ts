@@ -70,7 +70,7 @@ describe('lib/nav 🧭', () => {
     for (const label of labels) expect(typeof resolve(label), label).toBe('string');
   });
 
-  it('the bottom bar is Home · Packages · Search · Profile, with no Docs anywhere (God 01:27) 📱', () => {
+  it('the bottom bar is Home · Packages · Search · Profile, with no Docs anywhere 📱', () => {
     expect(BOTTOM_TABS.map((tab) => tab.id)).toEqual(['home', 'packages', 'search', 'profile']);
     expect([...TOP_LINKS, ...BOTTOM_TABS].some((item) => item.id === 'docs' || ('href' in item && item.href.startsWith('/docs')))).toBe(false);
   });

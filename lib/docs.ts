@@ -228,3 +228,66 @@ export function docsUnprefixed(url: string, locales: readonly string[]): string 
   // ✂️ drop it when it's a locale (`/fr` alone → `/`)
   return locales.includes(first) ? `/${rest.join('/')}` : url;
 }
+
+
+// ───────────────────────────── 0.2.25 · the docs page template ─────────────────────────────
+
+
+/**
+ * `docsSourceUrl` - the GitHub "View source" URL of a content file (read-only blob on main) 🧾
+ *
+ * @param { string } locale - the content locale (the folder the file lives in)
+ * @param { string } file - the file path inside that locale folder (e.g. `installation.mdx`)
+ * @returns { string }
+ */
+export function docsSourceUrl(locale: string, file: string): string {
+  // return the GitHub blob URL on main 🐙
+  return `${GITHUB_URL}/blob/main/${DOCS_CONTENT_DIR}/${locale}/${file.replace(/^\/+/, '')}`;
+}
+
+
+/**
+ * `docsReportUrl` - a prefilled GitHub "new issue" URL for a docs page 🐛
+ *
+ * The title names the page, the body carries its public URL & its content file, so a report is actionable without
+ * a back-and-forth. Everything goes through `URLSearchParams`, so any title (quotes, `&`, emoji…) stays safe 🔒.
+ *
+ * @param { { title: string; url: string; file: string } } page - the page title, its public URL & its repo file
+ * @returns { string }
+ */
+export function docsReportUrl({ title, url, file }: Readonly<{ title: string; url: string; file: string }>): string {
+  // 🧾 the prefilled issue (title + body + the `docs` label)
+  const query = new URLSearchParams({ title: `Docs: ${title}`, body: `Page: ${url}\nFile: ${file}\n\nWhat's wrong?\n`, labels: 'docs' });
+  // return the GitHub new-issue URL 🐙
+  return `${GITHUB_URL}/issues/new?${query.toString()}`;
+}
+
+
+// 🏷️ one chip of the page header: a message key (translated by the page) or a code name (kept as is)
+export type DocsChip = Readonly<{ id: string; key?: string; text?: string; tone: 'neutral' | 'accent' | 'sage'; mono?: boolean; dot?: 'sage' | 'bronze' }>;
+
+// 🗂️ the top folders of the docs tree → their section message key (anything else is "Getting started")
+const DOCS_SECTIONS: Readonly<Record<string, string>> = { guides: 'guides', packages: 'packages' };
+
+
+/**
+ * `docsChips` - the chips under a docs page's title: section · package · Client/Server · status 🏷️
+ *
+ * Pure data (no React), so the order & tones are unit-tested; the page translates `key` and renders AbChip 🧩.
+ *
+ * @param { readonly string[] } slugs - the page slugs (`['packages', 'core']`)
+ * @param { { package?: string; kind?: 'client' | 'server'; status?: string } } data - the frontmatter extras
+ * @returns { DocsChip[] }
+ */
+export function docsChips(slugs: readonly string[], data: Readonly<{ package?: string; kind?: 'client' | 'server'; status?: string }>): DocsChip[] {
+  // 🗂️ the section (always first)
+  const chips: DocsChip[] = [{ id: 'section', key: `chips.section.${DOCS_SECTIONS[slugs[0] ?? ''] ?? 'gettingStarted'}`, tone: 'neutral' }];
+  // 📦 the documented package (a code name, mono, never translated)
+  if (data.package) chips.push({ id: 'package', text: data.package, tone: 'accent', mono: true });
+  // 🖥️ where it runs
+  if (data.kind) chips.push({ id: 'kind', key: `chips.kind.${data.kind}`, tone: 'neutral' });
+  // 🚦 how mature it is (stable = sage dot, the rest bronze)
+  if (data.status) chips.push({ id: 'status', key: `chips.status.${data.status}`, tone: data.status === 'stable' ? 'sage' : 'neutral', dot: data.status === 'stable' ? 'sage' : 'bronze' });
+  // return them in reading order 🏷️
+  return chips;
+}

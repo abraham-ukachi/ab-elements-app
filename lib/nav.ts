@@ -56,7 +56,7 @@ export type ShellNavLink = Readonly<{
   ready: boolean; // ✅ the page is built (D26)
 }>;
 
-// 🔘 a button tab: the shell wires its action (Search → the search drawer, Profile → the Settings drawer; God 01:27)
+// 🔘 a button tab: the shell wires its action (Search → the search drawer, Profile → the Settings drawer)
 export type ShellNavButton = Omit<ShellNavLink, 'href'> & Readonly<{ kind: 'button' }>;
 
 // 🗂️ a sidebar section
@@ -67,7 +67,7 @@ export type ShellNavSection = Readonly<{ id: string; label: string; items: reado
 export const GITHUB_URL = 'https://github.com/abraham-ukachi/ab-elements-app';
 
 // 🔝 the app-bar top links (laptop+)
-// 🎯 no "Docs" link anywhere (God 01:27: the app IS the docs); until the pages exist they point at Home's sections (D26)
+// 🎯 no "Docs" link anywhere (the app IS the docs); until the pages exist they point at Home's sections (D26)
 export const TOP_LINKS: readonly ShellNavLink[] = [
   { id: 'packages', href: '/#packages', label: 'nav.packages', ready: true },
   { id: 'guides', href: '/#guides', label: 'nav.guides', ready: true },
@@ -98,7 +98,7 @@ export const SIDEBAR_SECTIONS: readonly ShellNavSection[] = [
   },
 ];
 
-// 📱 the bottom-bar tabs (mobile, drawers v2 spec): Home · Packages · Search · Profile (no Docs, God 01:27)
+// 📱 the bottom-bar tabs (mobile, drawers v2 spec): Home · Packages · Search · Profile (no Docs)
 export const BOTTOM_TABS: readonly (ShellNavLink | ShellNavButton)[] = [
   { id: 'home', href: '/', label: 'bottomBar.home', icon: 'home', ready: true },
   { id: 'packages', href: '/#packages', label: 'bottomBar.packages', icon: 'package_2', ready: true }, // 📦 Home's packages grid

@@ -250,7 +250,9 @@
       "toggleClose": "Hide page outline",
       "onThisPage": "On this page",
       "editPage": "Edit this page",
-      "changelog": "Changelog"
+      "changelog": "Changelog",
+      "reportIssue": "Report an issue",
+      "viewSource": "View source"
     },
     "github": "AbElements on GitHub",
     "language": {
@@ -413,6 +415,24 @@
     },
     "metaSuffix": "AbElements docs",
     "copyCode": "Copy code",
-    "copied": "Copied"
+    "copied": "Copied",
+    "chips": {
+      "label": "Page details",
+      "section": {
+        "gettingStarted": "Getting started",
+        "guides": "Guides",
+        "packages": "Packages"
+      },
+      "kind": {
+        "client": "Client Component",
+        "server": "Server Component"
+      },
+      "status": {
+        "new": "New",
+        "beta": "Beta",
+        "stable": "Stable",
+        "deprecated": "Deprecated"
+      }
+    }
   }
 }

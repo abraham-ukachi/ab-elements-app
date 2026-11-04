@@ -1,0 +1,111 @@
+# /* 
+# * @license MIT
+# * ~~~~~~~~~~~~
+# * ab-elements-app 
+# * ~~~~~~~~~~~~
+# * Copyright (c) 2026 Abraham Ukachi. The abElements Project.
+# *
+# * Permission is hereby granted, free of charge, to any person obtaining a copy
+# * of this software and associated documentation files (the 'Software'), to deal
+# * in the Software without restriction, including without limitation the rights
+# * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# * copies of the Software, and to permit persons to whom the Software is
+# * furnished to do so, subject to the following conditions:
+# *
+# * The above copyright notice and this permission notice shall be included in all
+# * copies or substantial portions of the Software.
+# *
+# * THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# * SOFTWARE.
+# *
+# * @project: ab-elements-app
+# * @name: Lighthouse CI workflow
+# * @file: .github/workflows/lighthouse.yml
+# * @type: GitHub Actions workflow
+# * @authors: Abraham Ukachi <abrahamukachi@gmail.com>
+# *
+# * Example usage:
+# *   1+|> runs on every pull request & every push to main
+# *    -|>
+# *
+# */
+#
+#
+# /*
+# * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# * MOTTO: We'll always do more 😜!!!
+# * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# */
+
+
+# 🚦 Lighthouse CI (0.2.25, D44) in WARN MODE: builds the app, then audits `/`, `/docs/installation` and
+#    `/fr/docs/quick-start` (mobile + desktop, median of 3) against `lighthouserc.cjs`. Every assertion is `warn`,
+#    so the job reports misses (⚠️ in the log + the HTML/JSON reports as an artifact) but never fails a PR.
+name: Lighthouse
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+# 🔒 the audit only reads the repo
+permissions:
+  contents: read
+
+# ♻️ one run per pull request (a new push cancels the previous run); runs on `main` are never cancelled
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  lighthouse:
+    name: Lighthouse (${{ matrix.preset }}, warn)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        preset: [mobile, desktop] # 📱🖥️
+    env:
+      NEXT_TELEMETRY_DISABLED: 1
+      AB_LH_PRESET: ${{ matrix.preset }}
+
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      # 📦 no `version` input: pnpm/action-setup reads the exact version from `packageManager` in package.json
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: Set up Node.js 24
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install the dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build
+
+      # 🚦 collect + assert (warn) + save; an exact @lhci/cli version, fetched on demand (not an app dependency)
+      - name: Run Lighthouse CI
+        run: pnpm dlx @lhci/cli@0.16.0 autorun
+
+      # 📄 the reports, downloadable from the run page
+      - name: Upload the reports
+        if: always()
+        uses: actions/upload-artifact@v5
+        with:
+          name: lighthouse-${{ matrix.preset }}
+          path: .lighthouseci/
+          if-no-files-found: ignore

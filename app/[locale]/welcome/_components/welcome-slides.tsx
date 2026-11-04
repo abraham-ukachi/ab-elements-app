@@ -73,7 +73,7 @@ import AbButton from 'ab-nextjs-components/ab-button';
 import AbMainLayout from 'ab-nextjs-core/ab-main-layout';
 // import the packaged aside pane (core: an in-flow column from 1180px, closed below; the playground lives there) 🗺️
 import AbAsideLayout from 'ab-nextjs-core/ab-aside-layout';
-// import the packaged v6 "Live Playground" scenes (John's 7 + the i18n placeholder: dots, rich nodes, card, pulses) 🎨
+// import the packaged v6 "Live Playground" scenes (the 7 design scenes + the i18n placeholder: dots, rich nodes, card, pulses) 🎨
 import AbPlaygroundScene, { type AbPlaygroundSceneName } from 'ab-nextjs-components/ab-playground-scene';
 // import the packaged media-query hook (phones get the compact 350×276 scene) 📱
 
@@ -385,8 +385,8 @@ export default function WelcomeSlides({ slides, labels, mobileHeader, playground
       <WelcomeScrollReset />
       {/* ⌨️ ←/→ inside <main> */}
       <WelcomeKeys />
-      {/* 🧱 the main pane: `id="main"` (the skip target ♿). God's layout rule + John's v6: the counter + slide scroll in
-          main's content; the dots + arrows sit in MAIN's own pinned footer bar (God 04:14, core 0.2.3 `mainBarPin`),
+      {/* 🧱 the main pane: `id="main"` (the skip target ♿). The layout rule + the v6 design: the counter + slide scroll in
+          main's content; the dots + arrows sit in MAIN's own pinned footer bar (core 0.2.3 `mainBarPin`),
           never an app footer */}
       <AbMainLayout
         id="main"
@@ -400,7 +400,7 @@ export default function WelcomeSlides({ slides, labels, mobileHeader, playground
         asideAnchor={counterRow}
         // 📱 below 768px only (core hides this slot at 768px+): logo · globe · 3-state theme
         mainHeader={<WelcomeMobileHeader {...mobileHeader} />}
-        // ⚫⏮️⏭️ 0.2.3 (God 04:14): the v6 nav (dots left, arrows right) in main's OWN footer, pinned to the bottom of
+        // ⚫⏮️⏭️ 0.2.3 (design): the v6 nav (dots left, arrows right) in main's OWN footer, pinned to the bottom of
         //    main at every width (sticky inside the one scroller below 1180px, under the drawer) and named for AT
         mainBar={
           <div className={styles.nav}>

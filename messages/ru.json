@@ -250,7 +250,9 @@
       "toggleClose": "Скрыть оглавление страницы",
       "onThisPage": "На этой странице",
       "editPage": "Редактировать страницу",
-      "changelog": "Изменения"
+      "changelog": "Изменения",
+      "reportIssue": "Сообщить о проблеме",
+      "viewSource": "Исходный код"
     },
     "github": "AbElements на GitHub",
     "language": {
@@ -413,6 +415,24 @@
     },
     "metaSuffix": "Документация AbElements",
     "copyCode": "Копировать код",
-    "copied": "Скопировано"
+    "copied": "Скопировано",
+    "chips": {
+      "label": "Сведения о странице",
+      "section": {
+        "gettingStarted": "Начало работы",
+        "guides": "Руководства",
+        "packages": "Пакеты"
+      },
+      "kind": {
+        "client": "Клиентский компонент",
+        "server": "Серверный компонент"
+      },
+      "status": {
+        "new": "Новое",
+        "beta": "Бета",
+        "stable": "Стабильно",
+        "deprecated": "Устарело"
+      }
+    }
   }
 }

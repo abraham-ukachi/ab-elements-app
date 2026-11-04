@@ -48,7 +48,7 @@
 // 📑 Home's (and, from 0.2.24, every docs page's) "On this page" pane: the packaged aside layout (core 0.2.0) + AbToc with its footer (components 0.1.14)
 // driven by useAbScrollSpy & scrollToAbSection (hooks 0.1.7). Composition only 🧩.
 // ➡️ Below 1180 the aside pane is hidden, so the SAME outline lives in AbTocDrawer, opened by a right-to-left edge
-// swipe (≤ 1179px, God 02:44) or the tablet `<<` toggle; it shares the shell's one-drawer-at-a-time state 🗄️.
+// swipe (≤ 1179px) or the tablet `<<` toggle; it shares the shell's one-drawer-at-a-time state 🗄️.
 
 // import the packaged aside pane from `ab-nextjs-core` 🧱
 import AbAsideLayout from 'ab-nextjs-core/ab-aside-layout';
@@ -76,11 +76,16 @@ import { useAbTranslations } from 'ab-nextjs-i18n';
 import { useShellDrawer, TOC_DRAWER_ID } from '@/components/app/docs-shell';
 
 
+// 🔗 one TOC extra link (an AbIcon name + a label; always opens GitHub in a new tab)
+export type HomeAsideLink = Readonly<{ id: string; href: string; label: string; icon: string }>;
+
 // 🧾 the props of `HomeAside`
 export type HomeAsideProps = Readonly<{
   items: AbTocItem[]; // 📑 the sections
   title: string; // 🏷️ "On this page"
-  links: { edit: { href: string; label: string }; changelog: { href: string; label: string } }; // 🔗 the TOC extras (spec §4)
+  // 🔗 the TOC extras (spec §4), in order: Home = Edit + Changelog; docs pages (0.2.25) = Edit + Report + Source.
+  //    One list feeds BOTH the aside's AbToc footer & AbTocDrawer's links, so the two can never drift 🧭
+  links: readonly HomeAsideLink[];
   promo?: { kind: string; title: string; body: string }; // 🆕 the "New" card (Home only; the docs pages have none)
   pageName?: string; // 🏷️ the aside's page name (core `pageName`, default `home`; the docs pages pass `docs`, 0.2.24)
 }>;
@@ -131,8 +136,10 @@ export default function HomeAside({ items, title, links, promo, pageName = 'home
         onNavigate={(id) => scrollToAbSection(id, { container: scroller, updateHash: true })}
         footer={
           <>
-            <AbLink href={links.edit.href} target="_blank" rel="noopener"><AbIcon name="github" size={15} />{links.edit.label}</AbLink>
-            <AbLink href={links.changelog.href} target="_blank" rel="noopener"><AbIcon name="north_east" size={15} />{links.changelog.label}</AbLink>
+            {/* 🔗 every extra as a packaged link (`data-toc-link` = its id, for the tests 🧪) */}
+            {links.map((link) => (
+              <AbLink key={link.id} href={link.href} target="_blank" rel="noopener" data-toc-link={link.id}><AbIcon name={link.icon} size={15} />{link.label}</AbLink>
+            ))}
             {/* 🆕 the packaged "New" promo card */}
             {promo ? <AbTocPromo title={promo.title} badge={promo.kind}>{promo.body}</AbTocPromo> : null}
           </>
@@ -146,10 +153,7 @@ export default function HomeAside({ items, title, links, promo, pageName = 'home
         items={items}
         activeId={activeId}
         onNavigate={(id) => scrollToAbSection(id, { container: scroller, updateHash: true })}
-        links={[
-          { href: links.edit.href, label: links.edit.label, icon: 'github', external: true },
-          { href: links.changelog.href, label: links.changelog.label, icon: 'north_east', external: true },
-        ]}
+        links={links.map(({ href, label, icon }) => ({ href, label, icon, external: true }))}
         labels={{ title, close: t('drawers.closeOutline') }}
       />
     </AbAsideLayout>

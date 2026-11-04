@@ -44,7 +44,7 @@
 
 
 // 🏠 Home (0.2.23 + fidelity pass 2): hero (copy · install terminal), the 8 package cards, then Guides + What's new
-// as row lists, inside the packaged shell panes. Sizes / spacing follow `home-fidelity-spec.md` §2–§4 (approved by God).
+// as row lists, inside the packaged shell panes. Sizes / spacing follow `home-fidelity-spec.md` §2–§4 (approved).
 // Composition only: AbMainLayout + AbAsideLayout (core 0.2.0), AbChip / AbButton / AbInstallSnippet / AbPackageCard /
 // AbList (components 0.1.14). The theme 0.3.5 `@layer base` lets plain Tailwind utilities style h1 / h2 / p again 🧅.
 
@@ -291,11 +291,11 @@ export default async function Home({ params }: HomeProps) {
           { id: 'guides', label: t('toc.guides') },
           { id: 'whats-new', label: t('toc.whatsNew') },
         ]}
-        links={{
+        links={[
           // ✏️ "Edit this page" → this file on GitHub; ↗ "Changelog" → the repo's releases
-          edit: { href: `${GITHUB_URL}/blob/main/app/%5Blocale%5D/(docs)/page.tsx`, label: ts('aside.editPage') },
-          changelog: { href: `${GITHUB_URL}/releases`, label: ts('aside.changelog') },
-        }}
+          { id: 'edit', href: `${GITHUB_URL}/blob/main/app/%5Blocale%5D/(docs)/page.tsx`, label: ts('aside.editPage'), icon: 'github' },
+          { id: 'changelog', href: `${GITHUB_URL}/releases`, label: ts('aside.changelog'), icon: 'north_east' },
+        ]}
         promo={{ kind: t('whatsNew.kind.new'), title: t('whatsNew.promo'), body: t('whatsNew.asideLabel', { pkg: 'ab-nextjs-components' }) }}
       />
     </>

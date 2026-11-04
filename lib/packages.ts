@@ -68,10 +68,10 @@ export type AbPackage = Readonly<{
   versionLabel: string; // 🏷️ the chip (`v0.3.x`)
   description: string | null; // 📝 npm's description (null → `Home.packages.<id>.desc` copy)
   href: string; // 🔗 the package docs page
-  beta: boolean; // 🧪 only when God marks it
+  beta: boolean; // 🧪 only when the author marks it
 }>;
 
-// 🧪 the packages God marked as beta (fidelity spec, approved 20:10: Animations gets the `beta` chip)
+// 🧪 the packages the author marked as beta (fidelity spec, approved 20:10: Animations gets the `beta` chip)
 const BETA: readonly AbPackageId[] = ['animations'];
 
 
@@ -113,7 +113,7 @@ export function getAbPackages(root: string = process.cwd()): AbPackage[] {
       version,
       versionLabel: toVersionLabel(version),
       description: pkg.description?.trim() || null,
-      href: `/#package-${id}`, // 🔗 the Home card anchor (no /docs, God 01:27)
+      href: `/#package-${id}`, // 🔗 the Home card anchor (no /docs)
       beta: BETA.includes(id),
     };
   });
