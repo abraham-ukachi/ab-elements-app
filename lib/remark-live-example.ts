@@ -92,6 +92,26 @@ export function isLiteralEstree(node: LiveEstree | undefined): boolean {
 }
 
 
+// 🔗 the props that carry a URL (a preview may link, never run script through a URL) 🛡️
+export const LIVE_URL_PROPS: readonly string[] = ['href', 'src', 'srcSet', 'action', 'formAction', 'poster', 'cite', 'data', 'ping', 'background', 'xlinkHref'];
+
+
+/**
+ * `isSafeLiveUrl` - an app path (`/…` but not `//…`), a `#hash`, an `https:` or a `mailto:` URL only 🔗
+ * (`javascript:`, `data:`, `http:`, protocol-relative & every other scheme are refused)
+ *
+ * @param { string } url
+ * @returns { boolean }
+ */
+export function isSafeLiveUrl(url: string): boolean {
+  const v = url.trim(); // 🧹 browsers ignore surrounding spaces, so do we
+  if (/[\u0000-\u001f\\]/.test(v)) return false; // 🚫 control characters / backslashes (scheme smuggling)
+  if (v.startsWith('/')) return !v.startsWith('//'); // 🏠 an app path, not protocol-relative
+  if (v.startsWith('#')) return true; // ⚓
+  return /^(https:|mailto:)/i.test(v); // 🌐 ✉️
+}
+
+
 /**
  * `checkLiveAttr` - one JSX attribute: a plain name with a string / boolean value or a literal expression 🏷️
  *
@@ -103,6 +123,9 @@ function checkLiveAttr(attr: LiveAttr): string | null {
   if (!attr.name || /^on[A-Z]/.test(attr.name)) return `the "${attr.name}" prop is not allowed (no handlers)`; // 🚫 onClick={…}
   if (attr.name === 'dangerouslySetInnerHTML') return 'dangerouslySetInnerHTML is not allowed'; // 🚫 raw HTML
   const v = attr.value;
+  const isUrlProp = LIVE_URL_PROPS.some((n) => n.toLowerCase() === attr.name!.toLowerCase()); // 🔗
+  if (isUrlProp && typeof v !== 'string') return `the "${attr.name}" prop must be a plain URL string`; // 🚫 href={…}
+  if (isUrlProp && !isSafeLiveUrl(v as string)) return `the "${attr.name}" URL "${v}" is not allowed (use /path, #hash, https: or mailto:)`; // 🚫 javascript: / data: / http: / //
   if (v == null || typeof v === 'string') return null; // ✅ `disabled` / `label="Save"`
   // 🔍 `{…}`: fumadocs / mdx-js keep the parsed estree on `data.estree` → only a lone literal expression passes
   const program = (v as { data?: { estree?: { body?: Array<{ type: string; expression?: LiveEstree }> } } }).data?.estree;

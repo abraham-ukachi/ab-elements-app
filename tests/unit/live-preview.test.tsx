@@ -52,7 +52,7 @@ import { describe, expect, it } from 'vitest';
 // import the server renderer (both tab panels are in the server HTML) 🖨️
 import { renderToStaticMarkup } from 'react-dom/server';
 // import the remark step & its helpers 🔌
-import remarkLiveExample, { checkLiveNode, dedent, exampleSource, isLiteralEstree, LIVE_EXAMPLE_SCOPE, transformLiveExamples, type LiveNode } from '@/lib/remark-live-example';
+import remarkLiveExample, { checkLiveNode, isSafeLiveUrl, dedent, exampleSource, isLiteralEstree, LIVE_EXAMPLE_SCOPE, transformLiveExamples, type LiveNode } from '@/lib/remark-live-example';
 // import the docs MDX map & its preview scope 🗺️
 import { DocsExamplePreview, getDocsMdxComponents, getLivePreviewScope } from '@/components/app/docs-mdx';
 // import the docs source (the compiled MDX pages) 📚
@@ -123,6 +123,25 @@ describe('live example step (build time) 🔌', () => {
     expect(checkLiveNode({ type: 'mdxjsEsm', value: 'import x from "y"' })).toMatch(/not allowed/);
     // 🚫 nested bad children are found too
     expect(checkLiveNode(el('AbCallout', 0, 1, [], [el('iframe', 0, 1)]))).toMatch(/iframe/);
+  });
+
+  it('🔗 URL props: /path, #hash, https: & mailto: only', () => {
+    const link = (name: string, value: unknown) => el('AbButton', 0, 1, [{ type: 'mdxJsxAttribute', name, value }]);
+    for (const ok of ['/docs', '/docs/installation#x', '#top', 'https://example.com', 'HTTPS://x.dev', 'mailto:hi@example.com']) {
+      expect(isSafeLiveUrl(ok), ok).toBe(true);
+      expect(checkLiveNode(link('href', ok)), ok).toBeNull();
+    }
+    for (const bad of ['javascript:alert(1)', ' JavaScript:alert(1)', 'data:text/html,<script>', 'http://example.com', '//evil.example', 'vbscript:x', 'ftp://x', 'docs', '/\\evil.example', 'java\tscript:x', '']) {
+      expect(isSafeLiveUrl(bad), bad).toBe(false);
+      expect(checkLiveNode(link('href', bad)), bad).toMatch(/not allowed/);
+    }
+    // 🔗 every URL prop is checked (src, action, case-insensitive), and an expression URL is refused
+    expect(checkLiveNode(link('src', 'data:image/png;base64,x'))).toMatch(/not allowed/);
+    expect(checkLiveNode(link('formAction', 'javascript:x'))).toMatch(/not allowed/);
+    expect(checkLiveNode(link('href', { type: 'mdxJsxAttributeValueExpression', data: { estree: { body: [{ type: 'ExpressionStatement', expression: { type: 'Literal', value: 'javascript:x' } }] } } }))).toMatch(/plain URL string/);
+    // ❌ and it fails the build with the reason
+    const file = '<AbButton href="javascript:x" />';
+    expect(() => transformLiveExamples({ type: 'root', children: [{ type: 'mdxJsxFlowElement', name: 'Example', children: [link('href', 'javascript:x')] }] }, file, 'x.mdx')).toThrow(/x\.mdx: <Example> the "href" URL "javascript:x" is not allowed/);
   });
 
   it('🔢 a `{…}` prop must be a literal (estree)', () => {
