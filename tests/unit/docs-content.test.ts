@@ -52,6 +52,10 @@ import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
 // import the path joiner 🧭
 import { join } from 'node:path';
+// import the sidebar package order and the docs tree (the pager must follow the sidebar) 📦
+import { AB_PACKAGE_IDS } from '@/lib/packages';
+import { docsUnprefixed, flattenDocsTree, type DocsTreeNode } from '@/lib/docs';
+import { source } from '@/lib/source';
 
 
 // 📚 the eleven pages in scope (English source)
@@ -96,6 +100,23 @@ describe('docs content 0.2.27 📚', () => {
     expect(text.match(/title="next\.config\.ts"/g)).toHaveLength(1);
     expect(text).toContain('type="tip"');
     expect(text).toContain('type="warning"');
+  });
+
+  it('📝 the introduction does not read like a design spec', () => {
+    const text = read('index.mdx');
+    expect(text).not.toMatch(/#[0-9A-Fa-f]{3,8}/);
+    expect(text).not.toMatch(/\b(Mulish|Inter|Roboto Mono)\b/);
+  });
+
+  it('⬅️➡️ the package pager follows the sidebar order', () => {
+    const meta = JSON.parse(readFileSync(join(process.cwd(), 'content/docs/en/packages/meta.json'), 'utf8')) as { pages: string[] };
+    expect(meta.pages).toEqual([...AB_PACKAGE_IDS]);
+    const packages = AB_PACKAGE_IDS.map((id) => `/docs/packages/${id}`);
+    for (const locale of ['en', 'fr'] as const) {
+      const urls = flattenDocsTree(source.getPageTree(locale).children as DocsTreeNode[]).map((page) => docsUnprefixed(page.url, ['en', 'fr', 'es', 'ru']));
+      const at = urls.indexOf('/docs/quick-start');
+      expect(urls.slice(at, at + 1 + packages.length), locale).toEqual(['/docs/quick-start', ...packages]);
+    }
   });
 
   it('🔭 quick start still ends on "Keep it accessible"', () => {
