@@ -1,15 +1,26 @@
 ---
 title: Hooks
-description: "Typed React hooks for theme, media and storage."
+description: "Client hooks for theme, media, clipboard, storage and the outline scroll spy, plus a few server helpers."
 package: ab-nextjs-hooks
 kind: client
-status: beta
-icon: package_2
+status: stable
+icon: webhook
 ---
 
 ## Overview
 
-**ab-nextjs-hooks** — Typed React hooks for theme, media and storage.
+**ab-nextjs-hooks** holds the React hooks the shell uses. Most of them are client hooks. A small server entry covers the first-visit cookies.
+
+The hooks this site relies on:
+
+- `useAbTheme` and `useAbThemeMode` — light, dark or system, stored under the key `theme`
+- `getAbThemeScript` — the no-flash script for the root layout
+- `useAbScrollSpy` and `scrollToAbSection` — which heading is current in the main pane
+- `useAbMedia` — a media query, including the system colour scheme
+- `useAbLocalStorage` — the same storage helper the theme uses
+- `useAbClipboard` — copy a code block
+- `useAbReducedMotion` — whether the reader asked for less motion
+- `useAbSwipe` — the edge swipe that opens a drawer
 
 ## Install
 
@@ -19,4 +30,63 @@ pnpm add ab-nextjs-hooks
 
 ## Usage
 
-Import what you need from its entry points; everything is typed.
+`useAbTheme` returns a tuple. The default when nothing is saved is `light`. Since 0.1.6 the saved value may also be `system`, which follows `prefers-color-scheme`.
+
+```tsx title="app/theme-toggle.tsx"
+'use client';
+
+import { useAbThemeMode } from 'ab-nextjs-hooks/useAbTheme';
+
+export function ThemeLabel() {
+  const { mode, resolvedTheme, setMode } = useAbThemeMode();
+  return (
+    <button type="button" onClick={() => setMode(resolvedTheme === 'dark' ? 'light' : 'dark')}>
+      {mode}
+    </button>
+  );
+}
+```
+
+`resolvedTheme` is what actually paints (`light` or `dark`). `mode` is what the reader chose, including `system`.
+
+In the root layout, paint that choice before React hydrates:
+
+```tsx title="app/layout.tsx"
+import { getAbThemeScript } from 'ab-nextjs-hooks/abThemeScript';
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en">
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: getAbThemeScript({ defaultTheme: 'system' }) }} />
+      </head>
+      <body>{children}</body>
+    </html>
+  );
+}
+```
+
+`abThemeScript` is that call with the default options. The storage key stays `theme`, matching `AB_THEME_STORAGE_KEY`.
+
+The outline watches the main pane, not the window. See [Quick start](/docs/quick-start) for the full snippet. The pane root margin is `AB_SCROLL_SPY_PANE_ROOT_MARGIN` (`0px 0px -60% 0px`).
+
+```tsx title="app/spy.tsx"
+'use client';
+
+import { useAbPage } from 'ab-nextjs-core/ab-page-provider';
+import { useAbScrollSpy } from 'ab-nextjs-hooks/useAbScrollSpy';
+
+export function CurrentSection({ ids }: { ids: readonly string[] }) {
+  const { mainScrollElement } = useAbPage();
+  const activeId = useAbScrollSpy(ids, { root: mainScrollElement });
+  return <span>{activeId}</span>;
+}
+```
+
+Server helpers for the welcome cookie live at `ab-nextjs-hooks/server/useAbApp`: `isAppHello`, `toggleAppHello`, and `AB_APP_COOKIE_MAX_AGE` (including `oneYear`). They are server actions. Do not import them from a client component.
+
+## What it ships
+
+The package root re-exports the hooks above, plus `useAbDialog`, `useAbToast`, `useAbMenu` and `useAbConfetti`. Product hooks (`useAbProduct`, `useAbBrand`, and the label hooks) are in the same barrel; they are not part of the docs shell.
+
+`useAbHotkey` and `useAbOnline` are not in this release. Search on this site opens from a button, not from a keyboard shortcut.

@@ -1,15 +1,19 @@
 ---
 title: Theme
-description: "Design tokens, light and dark modes, CSS variables."
+description: "Design tokens for AbElements: light and dark colour schemes, type, and the prose styles the docs use."
 package: ab-nextjs-theme
 kind: server
-status: beta
-icon: package_2
+status: stable
+icon: palette
 ---
 
 ## Overview
 
-**ab-nextjs-theme** — Design tokens, light and dark modes, CSS variables.
+**ab-nextjs-theme** is the colour and type of every Ab screen. One stylesheet defines the tokens. Light and dark (plus medium and high contrast) are CSS variables on the page, switched by the class on `<html>`.
+
+The light page background is `#FFF8F5`. The dark page background is `#19120C`. Body text is `#211A16` on light and `#F4ECE5` on dark. The bronze seed is `#A67C52`. Links and filled buttons use `#8B6340` where that pair has to clear WCAG AA on the light background. Sage (`#566A58` in light, `#8FA491` in dark) is only a small status accent, such as a stable chip.
+
+Titles use Mulish (`--ab-font-title`). Body text uses Inter. Code uses Roboto Mono (`--ab-font-code`). Those faces come from [Fonts](/docs/packages/fonts); the theme only points at them.
 
 ## Install
 
@@ -17,6 +21,39 @@ icon: package_2
 pnpm add ab-nextjs-theme
 ```
 
+The theme peers [Fonts](/docs/packages/fonts), [Icons](/docs/packages/icons) and [Animations](/docs/packages/animations). Install the ones you import.
+
 ## Usage
 
-Import what you need from its entry points; everything is typed.
+Import the stylesheet once, before [Components](/docs/packages/components):
+
+```css title="app/globals.css"
+@import 'ab-nextjs-theme/styles.css';
+```
+
+Read a token in your own CSS. The values follow the theme on `<html>`:
+
+```css title="app/globals.css"
+body {
+  background: var(--ab-color-bg);
+  color: var(--ab-color-text);
+  font-family: var(--ab-font-body);
+}
+
+h1 { font-family: var(--ab-font-title); }
+code { font-family: var(--ab-font-code); }
+```
+
+Docs articles add the class `ab-prose`. That class styles headings, lists, links and inline code from the same tokens, which is what these pages use.
+
+The active theme is not a theme component. [Hooks](/docs/packages/hooks) writes `light`, `dark` or `system` to `localStorage` under the key `theme`, and `getAbThemeScript` paints it before the first frame so the page does not flash.
+
+`material-theme.json` is the Material colour source (schemes `light`, `dark`, `lightM`, `lightH`, `darkM`, `darkH`). App chrome such as the viewport `themeColor` can import it. Day-to-day UI should use the CSS variables, which are already contrast-checked.
+
+## What it ships
+
+- `ab-nextjs-theme/styles.css` — tokens, shell chrome and `.ab-prose`
+- `material-theme.json` — the scheme source
+- TypeScript types for palettes, core colours and scheme colours (`Palettes`, `CoreColors`, `SchemeColors`)
+
+Accent, density and a font-size scale are not tokens yet. Do not invent a second theme file in the app; those controls wait until the package ships them.

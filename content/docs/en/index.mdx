@@ -1,24 +1,34 @@
 ---
 title: Introduction
-description: "AbElements is a set of small, typed Next.js packages for building installable, multilingual docs-grade apps."
+description: "AbElements is eight typed Next.js packages — fonts, icons, animations, theme, hooks, core, components and i18n — for a docs-grade app."
 icon: description
 ---
 
 ## What is AbElements?
 
-AbElements is a family of eight `ab-nextjs-*` packages. Each one does one job: layouts, components, theme tokens,
-icons, fonts, animations, hooks and i18n. You install only what you need.
+AbElements is the docs site for a family of eight `ab-nextjs-*` packages, and it is built with those same packages. Each package does one job. You install only the ones a screen needs.
 
-## Why packages?
+Every page shares one warm design: a light page and a dark page, with a bronze accent for links and actions. Sage shows up only as a small status mark, such as a stable chip. The exact colours and typefaces are on the [Theme](/docs/packages/theme) page.
 
-- Every package is typed and tree-shakable.
-- Server Components first: client code only where interaction needs it.
-- One design language across every app that uses them.
+Abraham Ukachi writes the packages and this site. The packages are MIT licensed.
 
-### Who is it for?
+## The eight packages
 
-Teams that want a documentation-quality shell (sidebar, outline, search) without a docs framework.
+- [Fonts](/docs/packages/fonts) — self-hosted faces for titles, body text and code.
+- [Icons](/docs/packages/icons) — AbIcons as SVG and CSS, outlined and filled.
+- [Animations](/docs/packages/animations) — keyframes and class names that respect reduced motion.
+- [Theme](/docs/packages/theme) — design tokens, light and dark, and the prose styles these pages use.
+- [Hooks](/docs/packages/hooks) — theme, media, clipboard, storage and the outline's scroll spy.
+- [Core](/docs/packages/core) — the screen, the main pane and the aside. The page itself does not scroll.
+- [Components](/docs/packages/components) — buttons, chips, code blocks, drawers and the rest of the UI.
+- [i18n](/docs/packages/i18n) — English, French, Spanish and Russian. English lives at `/`; the others are prefixed.
+
+## How a docs page is put together
+
+The shell is [Core](/docs/packages/core). Below 768px the sidebar is a left drawer and **On this page** is a right drawer. From 1180px the aside sits beside the article. Headings in the article become the outline. The previous and next links follow the sidebar order.
+
+Live previews, where a page has them, render the real package components. The **Code** tab is that same source, highlighted when the site is built. There is no separate sample to drift out of date.
 
 ## Next steps
 
-Start with [Installation](/docs/installation), then follow the [Quick start](/docs/quick-start).
+Install the packages on [Installation](/docs/installation), then build a first pane on [Quick start](/docs/quick-start). After that, open the package that matches the job.

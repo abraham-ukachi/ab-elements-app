@@ -1,15 +1,25 @@
 ---
 title: Core
-description: "Screen, main and aside layouts, plus the page provider."
+description: "Screen, app, main and aside layouts. The document never scrolls; each pane scrolls on its own."
 package: ab-nextjs-core
 kind: server
-status: beta
-icon: package_2
+status: stable
+icon: dashboard_customize
 ---
 
 ## Overview
 
-**ab-nextjs-core** — Screen, main and aside layouts, plus the page provider.
+**ab-nextjs-core** is the frame. `AbAppLayout` is the page. `AbMainLayout` is the article. `AbAsideLayout` is the outline. `AbScreenLayout` is a full-screen frame without the docs sidebar, used by the welcome flow.
+
+The layout rule, from core 0.1.6 on:
+
+- The document never scrolls. Main, aside and sidebar each scroll on their own.
+- An empty header, footer or bar slot is 0px. It is not an invisible row.
+- Main and aside have their own slots: `mainHeader` / `mainBar`, and the aside's header and bar.
+- Breakpoints are 768, 1180 and 1920. Below 768 the bottom bar shows and the outline is a right drawer. From 1180 the aside is a pane beside the article.
+- `variant="panes"` on `AbAppLayout` is that shell. The default variant keeps the older stacked layout.
+
+Every layout has a client file and a server twin under `ab-nextjs-core/server/`. The props match. Use the server twin in a Server Component and the client file when a child needs state.
 
 ## Install
 
@@ -17,6 +27,55 @@ icon: package_2
 pnpm add ab-nextjs-core
 ```
 
+Core is meant to sit on [Theme](/docs/packages/theme). Import the theme stylesheet first.
+
 ## Usage
 
-Import what you need from its entry points; everything is typed.
+`orientation` is required on the app layout and on the main layout (`vertical` or `horizontal`).
+
+```tsx title="app/layout.tsx"
+import AbAppLayout from 'ab-nextjs-core/ab-app-layout';
+import AbPageProvider from 'ab-nextjs-core/ab-page-provider';
+
+export function Shell({ children }: { children: React.ReactNode }) {
+  return (
+    <AbPageProvider>
+      <AbAppLayout orientation="vertical" variant="panes" pageName="docs" mobileHeader="main" tabletHeader="main">
+        {children}
+      </AbAppLayout>
+    </AbPageProvider>
+  );
+}
+```
+
+`mobileHeader="main"` and `tabletHeader="main"` hide the app header at those widths and show `AbMainLayout`'s `mainHeader` instead. That is the 56px mobile bar.
+
+```tsx title="app/page.tsx"
+import AbMainLayout from 'ab-nextjs-core/server/ab-main-layout';
+import AbAsideLayout from 'ab-nextjs-core/server/ab-aside-layout';
+
+export function Article({ children, outline }: { children: React.ReactNode; outline: React.ReactNode }) {
+  return (
+    <>
+      <AbMainLayout id="main" orientation="vertical" pageName="docs">
+        {children}
+      </AbMainLayout>
+      <AbAsideLayout orientation="vertical" pageName="docs">
+        {outline}
+      </AbAsideLayout>
+    </>
+  );
+}
+```
+
+`useAbPage()` (client) exposes `mainScrollElement`, `setAsideOpen` and `setAsideOpenOnMobile`. Pass `mainScrollElement` to `useAbScrollSpy` as `root`. Read it inside an effect or a client child; it is `null` on the server.
+
+`AbLinearProgress` is the thin bar (`isIndeterminate`, `progress`). `AbDottedSurface` is the dotted canvas behind a preview. `AbAsideDrawerTrigger` opens the aside drawer below 1180px.
+
+## What it ships
+
+- `AbAppLayout`, `AbScreenLayout`, `AbMainLayout`, `AbAsideLayout` — client and `server/`
+- `AbPageProvider`, `useAbPage`
+- `AbLinearProgress`, `AbDottedSurface`, `AbAsideDrawerTrigger`
+
+Landmarks carry `data-ab-part` (`header`, `sidebar`, `main`, `aside`, `bottomBar`, and the pane slots). The outline component itself is `AbToc` in [Components](/docs/packages/components).

@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.27](https://github.com/abraham-ukachi/ab-elements-app/compare/v0.2.26...v0.2.27) (2026-11-06)
+
+* :memo: Write the getting started pages: Introduction, Installation (pnpm, npm, yarn and bun) and Quick start, using the published layout APIs
+* :memo: Write the eight package overviews (fonts, icons, animations, theme, hooks, core, components and i18n) against the published package APIs
+* :memo: Keep the introduction in user-facing language and point exact colours and typefaces at the Theme page
+* :recycle: Order the package pager like the sidebar: Fonts, Icons, Animations, Theme, Hooks, Core, Components, i18n
+* :white_check_mark: Test the layout rules on every docs page, and that the introduction stays free of design-spec tokens and the pager follows the sidebar
+
 ### [0.2.26](https://github.com/abraham-ukachi/ab-elements-app/compare/v0.2.25...v0.2.26) (2026-11-04)
 
 * :sparkles: Add live Preview / Code tabs to docs examples: an MDX `<Example>` renders the real package components (packaged AbPreviewCode), and its Code tab shows the exact same source, highlighted by Shiki at build time (one source per example, no eval, no runtime code strings, no iframe)
