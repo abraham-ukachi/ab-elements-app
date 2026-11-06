@@ -10,6 +10,4 @@ allowBuilds:
 # release is a day old ⏳
 # 🧹 Nov 4 2026: theme 0.3.9 & components 0.4.1 are > 1 day old, so their pins are gone (list empty again)
 # 🧹 components 0.5.0 is no longer locked (0.6.0 replaced it), so its pin is gone
-# 🧪 components 0.6.0 (AbPreviewCode / AbPreviewStage / AbDemoCode: live Preview / Code tabs), published 2026-11-04 21:13 Paris
-minimumReleaseAgeExclude:
-  - ab-nextjs-components@0.6.0 # D33: expires 2026-11-05 21:13 Paris
+# 🧹 Nov 6 2026: components 0.6.0 is > 1 day old (published 2026-11-04 21:13 Paris, pin expired 2026-11-05 21:13 Paris), so its pin is gone (list empty again)
