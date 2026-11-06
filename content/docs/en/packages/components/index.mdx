@@ -1,15 +1,19 @@
 ---
 title: Components
-description: "Accessible UI built on core and theme."
+description: "Accessible UI on top of core and theme: buttons, chips, code, drawers and the docs chrome."
 package: ab-nextjs-components
 kind: client
-status: beta
-icon: package_2
+status: stable
+icon: widgets
 ---
 
 ## Overview
 
-**ab-nextjs-components** — Accessible UI built on core and theme.
+**ab-nextjs-components** is the UI. Buttons, chips, links, code blocks, tabs, drawers and the app bar all live here, styled by [Theme](/docs/packages/theme) and framed by [Core](/docs/packages/core). Icons are drawn with `AbIcon`, which reads artwork from [Icons](/docs/packages/icons).
+
+Many pieces have a server twin under `ab-nextjs-components/server/` (`AbButton`, `AbIcon`, `AbLogo`, `AbSidebar`, `AbNavbar`). Use the server file when the element does not need state.
+
+`AbButton` types in this release are `contained`, `filled`, `outlined`, `text` and `secondary`. Sizes are `md` (the default) and `lg`. There is no separate tonal type and no small / medium / large scale yet. A props table for each component is not part of this page.
 
 ## Install
 
@@ -17,13 +21,36 @@ icon: package_2
 pnpm add ab-nextjs-components
 ```
 
+```css title="app/globals.css"
+@import 'ab-nextjs-theme/styles.css';
+@import 'ab-nextjs-components/styles.css';
+```
+
+Import the theme first. See [Installation](/docs/installation).
+
 ## Usage
 
-Import what you need from its entry points; everything is typed.
+```tsx title="app/save.tsx"
+import AbButton from 'ab-nextjs-components/ab-button';
+
+export function SaveBar() {
+  return (
+    <>
+      <AbButton label="Save" type="contained" />
+      <AbButton label="Cancel" type="outlined" />
+      <AbButton label="Learn more" type="text" />
+    </>
+  );
+}
+```
+
+`AbLink` is the locale-aware link. Wrap the tree in `AbLinkProvider` when links should pick up the locale prefix from [i18n](/docs/packages/i18n).
+
+Docs pages are built from packaged pieces only: `AbBreadcrumbs`, `AbChip`, `AbCodeBlock`, `AbCallout`, `AbContentTabs`, `AbDocPager`, `AbPreviewCode` and `AbToc`. The shell adds `AbAppBar`, `AbSidebar`, `AbNavbar`, `AbMobileHeader`, `AbNavDrawer`, `AbTocDrawer`, `AbSettingsDrawer` and `AbSearchDrawer`.
 
 ## Live examples
 
-Each example renders the real package components. Its **Code** tab shows the exact source of that preview, so the two never drift apart.
+Each example renders the real package components. Its **Code** tab shows the exact source of that preview, so the two never drift apart. The preview scope on this site is `AbButton`, `AbCallout`, `AbChip`, `AbKbd` and `AbPill`. Other components are documented as code until that scope grows.
 
 <Example title="Buttons">
   <AbButton label="Save" type="contained" />
@@ -34,7 +61,7 @@ Each example renders the real package components. Its **Code** tab shows the exa
 <Example title="Chips and pills">
   <AbChip tone="accent">Beta</AbChip>
   <AbChip tone="sage" dot="sage">Stable</AbChip>
-  <AbPill mono>v0.5.0</AbPill>
+  <AbPill mono>v0.6.0</AbPill>
 </Example>
 
 <Example title="Keyboard hint">
@@ -46,3 +73,17 @@ Each example renders the real package components. Its **Code** tab shows the exa
     Previews are real components, not screenshots.
   </AbCallout>
 </Example>
+
+## What it ships
+
+The catalog is the package root `supportedComponents` list. Highlights for a docs app:
+
+- Actions: `AbButton`, `AbIconButton`, `AbLink`
+- Status: `AbChip`, `AbPill`, `AbKbd`, `AbCallout`, `AbInfo`, `AbBadge`
+- Docs: `AbCodeBlock`, `AbContentTabs`, `AbDocPager`, `AbPreviewCode`, `AbDemoBox`, `AbDemoCode`, `AbToc`, `AbBreadcrumbs`, `AbInstallSnippet`
+- Shell: `AbAppBar`, `AbSidebar`, `AbNavbar`, `AbMobileHeader`, `AbLogo`, `AbSearchTrigger`
+- Drawers: `AbDrawer`, `AbNavDrawer`, `AbTocDrawer`, `AbBottomDrawer`, `AbSettingsDrawer`, `AbSearchDrawer`, `AbConfirmDrawer`
+
+`AbInstallSnippet` is the four-manager install block (pnpm, npm, yarn, bun) used on the home page. These docs use `AbContentTabs` for the same commands, which is the MDX tabs element.
+
+`AbPropsTable` is not in this release, so this overview does not invent a props grid.

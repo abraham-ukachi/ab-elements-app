@@ -1,35 +1,71 @@
 ---
 title: Quick start
-description: "Build your first AbElements page: a screen layout, a main pane and an outline."
+description: "Build a first AbElements page: a panes layout, a main pane and an outline that follows that pane."
 icon: bolt
 ---
 
 ## Create the layout
 
-Wrap your page in the screen layout from **ab-nextjs-core**:
+`AbAppLayout` from **ab-nextjs-core** is the page. `orientation` is required. `variant="panes"` is the docs shell: the document does not scroll, and the main pane, the aside and the sidebar each scroll on their own. An empty header, footer or bar slot is 0px tall.
+
+The import below is the client layout. A server twin lives at `ab-nextjs-core/server/ab-app-layout` with the same slots.
 
 ```tsx title="app/layout.tsx"
 import AbAppLayout from 'ab-nextjs-core/ab-app-layout';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return <AbAppLayout>{children}</AbAppLayout>;
+  return (
+    <AbAppLayout orientation="vertical" variant="panes" pageName="docs">
+      {children}
+    </AbAppLayout>
+  );
 }
 ```
 
+Pass `header`, `sideBar`, `navBar` and `footer` when those slots have UI. Leave a slot out and it takes no space.
+
 ## Add a main pane
+
+`AbMainLayout` is the article. Give it `id="main"` when that element is the skip-link target. `mainHeader` and `mainBar` are the pane's own slots, separate from the app header and the bottom bar.
 
 ```tsx title="app/page.tsx"
 import AbMainLayout from 'ab-nextjs-core/server/ab-main-layout';
 
 export default function Page() {
-  return <AbMainLayout id="main">Hello AbElements</AbMainLayout>;
+  return (
+    <AbMainLayout id="main" orientation="vertical" pageName="docs">
+      <h1>Hello AbElements</h1>
+    </AbMainLayout>
+  );
 }
 ```
 
 ## Add an outline
 
-Use `AbToc` with `useAbScrollSpy` to highlight the section in view.
+`useAbScrollSpy` from **ab-nextjs-hooks** reports which heading is current. On a panes layout the scroll root is the main pane (`useAbPage().mainScrollElement` from **ab-nextjs-core**), not the window. `scrollToAbSection` scrolls that same container.
+
+```tsx title="app/outline.tsx"
+'use client';
+
+import { useAbPage } from 'ab-nextjs-core/ab-page-provider';
+import { scrollToAbSection, useAbScrollSpy } from 'ab-nextjs-hooks/useAbScrollSpy';
+
+const ids = ['create-the-layout', 'add-a-main-pane'];
+
+export function Outline() {
+  const { mainScrollElement } = useAbPage();
+  const activeId = useAbScrollSpy(ids, { root: mainScrollElement });
+
+  return (
+    <a href={`#${activeId ?? ids[0]}`} aria-current={activeId ? 'location' : undefined}>
+      On this page
+    </a>
+  );
+}
+```
+
+Call `scrollToAbSection(id, { container: mainScrollElement })` when a control should move the pane. A plain `href="#id"` still works without JavaScript.
 
 ### Keep it accessible
 
-Every outline link points at a real heading id, so it works without JavaScript too.
+Every outline link points at a real heading id, so it works without JavaScript too. The current link uses `aria-current="location"`. One `h1` per page is enough; the outline starts at `h2`.

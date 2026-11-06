@@ -1,16 +1,20 @@
 ---
 title: Installation
-description: "Install the AbElements packages with your package manager and wire the theme."
+description: "Install the AbElements packages with pnpm, npm, yarn or bun, then wire the theme and the component styles."
 icon: download
 ---
 
 ## Requirements
 
 - Node.js 24 or newer
-- Next.js 16 with the App Router
+- Next.js 16 with the App Router (this site uses 16.3.4)
 - React 19
 
+The packages ship TypeScript source. List every `ab-nextjs-*` package you import in `transpilePackages`.
+
 ## Install the packages
+
+Start with the three packages the [Quick start](/docs/quick-start) uses. Add the others the same way when a page needs them: `ab-nextjs-fonts`, `ab-nextjs-icons`, `ab-nextjs-animations`, `ab-nextjs-hooks` and `ab-nextjs-i18n`. `ab-nextjs-i18n` also wants its peer `next-intl`.
 
 <Tabs label="Package manager">
   <Tab label="pnpm">
@@ -27,31 +31,61 @@ npm install ab-nextjs-core ab-nextjs-components ab-nextjs-theme
 ```
 
   </Tab>
+  <Tab label="yarn">
+
+```bash
+yarn add ab-nextjs-core ab-nextjs-components ab-nextjs-theme
+```
+
+  </Tab>
+  <Tab label="bun">
+
+```bash
+bun add ab-nextjs-core ab-nextjs-components ab-nextjs-theme
+```
+
+  </Tab>
 </Tabs>
 
 <Callout type="tip" title="Exact versions">
-  The packages move fast, so pin exact versions and upgrade them together.
+  The packages move together. Pin exact versions, and upgrade Next.js with the Ab packages rather than one package on its own.
 </Callout>
 
 ### Transpile them
 
-The packages ship TypeScript sources, so list them in `transpilePackages`:
-
 ```ts title="next.config.ts"
-const nextConfig = {
-  transpilePackages: ['ab-nextjs-core', 'ab-nextjs-components', 'ab-nextjs-theme'],
+import type { NextConfig } from 'next';
+
+const nextConfig: NextConfig = {
+  transpilePackages: [
+    'ab-nextjs-fonts',
+    'ab-nextjs-icons',
+    'ab-nextjs-animations',
+    'ab-nextjs-theme',
+    'ab-nextjs-hooks',
+    'ab-nextjs-core',
+    'ab-nextjs-components',
+    'ab-nextjs-i18n',
+  ],
 };
 
 export default nextConfig;
 ```
 
+If you use [i18n](/docs/packages/i18n), wrap that config with `withAbI18n` from `ab-nextjs-i18n/plugin`. It adds `ab-nextjs-i18n` to `transpilePackages` for you.
+
 ## Import the styles
 
 <Callout type="warning" title="Import order">
-  Import the theme before the components, so the components can read its tokens.
+  Import the theme before the components, so the components can read its tokens. Import the font styles you actually use.
 </Callout>
 
 ```css title="app/globals.css"
 @import 'ab-nextjs-theme/styles.css';
 @import 'ab-nextjs-components/styles.css';
+@import 'ab-nextjs-fonts/inter/styles.css';
+@import 'ab-nextjs-fonts/mulish/styles.css';
+@import 'ab-nextjs-fonts/roboto-mono/styles.css';
 ```
+
+The theme already points titles at Mulish, body text at Inter and code at Roboto Mono. See [Fonts](/docs/packages/fonts) and [Theme](/docs/packages/theme).

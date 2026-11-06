@@ -1,22 +1,97 @@
 ---
 title: i18n
-description: "Routing and messages in four languages."
+description: "Locale routing and messages for English, French, Spanish and Russian, with English unprefixed."
 package: ab-nextjs-i18n
 kind: server
-status: beta
-icon: package_2
+status: stable
+icon: translate
 ---
 
 ## Overview
 
-**ab-nextjs-i18n** — Routing and messages in four languages.
+**ab-nextjs-i18n** is a thin layer over next-intl for the App Router. Locales are `en`, `fr`, `es` and `ru`. The default locale has no prefix (`/docs`). The others live at `/fr`, `/es` and `/ru`.
+
+The `NEXT_LOCALE` cookie is written only when a person picks a language, and it lasts one year. A normal visit does not set it, so a saved pick is not overwritten.
+
+UI strings for this site are translated in all four locales. A docs article that has no translation yet shows the English page plus a banner. That is this package's fallback, not a missing route.
+
+There is no language switcher in this package. `AbLocaleSwitcher` lives in [Components](/docs/packages/components). The hook that drives it, `useAbLocaleSwitch`, is here.
 
 ## Install
 
+`next-intl` (`^4.14.9`) is a peer. Install it beside this package or the typed message keys cannot see it.
+
 ```bash
-pnpm add ab-nextjs-i18n
+pnpm add ab-nextjs-i18n next-intl
+```
+
+The library entries are TypeScript. `withAbI18n` adds `ab-nextjs-i18n` to `transpilePackages`.
+
+```ts title="next.config.i18n.ts"
+import type { NextConfig } from 'next';
+import { withAbI18n } from 'ab-nextjs-i18n/plugin';
+
+const nextConfig: NextConfig = {};
+
+export default withAbI18n(nextConfig);
+```
+
+The file above is named `next.config.i18n.ts` on purpose. A project still has a single `next.config.ts`; put `withAbI18n` in that file. See [Installation](/docs/installation).
+
+Scaffold the files once. The command only creates what is missing:
+
+```bash
+pnpm dlx ab-nextjs-i18n init
 ```
 
 ## Usage
 
-Import what you need from its entry points; everything is typed.
+`defineAbI18n` is the config. Keep the file free of TypeScript-only runtime syntax so the CLI can import it.
+
+```ts title="i18n/config.ts"
+import { defineAbI18n } from 'ab-nextjs-i18n/config';
+
+export const abI18nConfig = defineAbI18n({
+  locales: ['en', 'fr', 'es', 'ru'],
+  defaultLocale: 'en',
+  localePrefix: 'as-needed',
+  localeCookie: { name: 'NEXT_LOCALE', maxAge: 60 * 60 * 24 * 365 },
+  messagesDir: 'messages',
+});
+
+export default abI18nConfig;
+```
+
+The root layout is `app/[locale]/layout.tsx` (it has to be the root layout so static rendering can read the locale). Wrap children in `AbI18nProvider`. `generateStaticParams` can return `generateAbStaticParams(abI18nConfig)` from `ab-nextjs-i18n/server`.
+
+On the server, `getAbTranslations({ locale, namespace })` returns the strings. `getAbAlternates` builds the canonical and hreflang links. `getAbSitemapEntries` builds the sitemap rows.
+
+In a client component:
+
+```tsx title="app/language.tsx"
+'use client';
+
+import { useAbLocaleSwitch } from 'ab-nextjs-i18n';
+
+export function LanguageName() {
+  const { locale, locales, labels, switchLocale, isPending } = useAbLocaleSwitch();
+  return (
+    <button type="button" disabled={isPending} onClick={() => switchLocale(locales[0])}>
+      {labels[locale]}
+    </button>
+  );
+}
+```
+
+`createAbNavigation` (from `ab-nextjs-i18n/navigation`) returns `AbLink`, `redirect`, `usePathname`, `useRouter` and `getPathname`. `createAbI18nProxy` (from `ab-nextjs-i18n/proxy`) is the middleware. It reads `NEXT_LOCALE`. It does not write it.
+
+Path helpers on `ab-nextjs-i18n/config`: `isAbLocale`, `getAbLocaleFromPathname`, `stripAbLocalePrefix`, `localizeAbPathname`.
+
+## What it ships
+
+- Client: `AbI18nProvider`, `useAbLocaleSwitch`, `useAbTranslations`, `useAbLocale`, `useAbFormatter`, `useAbMessages`
+- Server: `createAbRequestConfig`, `getAbTranslations`, `generateAbStaticParams`, `getAbAlternates`, `getAbSitemapEntries`, `createAbLocaleCookieAction`
+- `ab-nextjs-i18n/config`, `ab-nextjs-i18n/navigation`, `ab-nextjs-i18n/proxy`, `ab-nextjs-i18n/plugin`
+- CLI: `init`, `translate`, `check`, `migrate`
+
+Message files are JSON. Keys can use ICU placeholders. The CLI `check` reports missing keys. `translate` runs locally and is not part of the running site.

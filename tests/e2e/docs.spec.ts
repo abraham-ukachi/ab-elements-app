@@ -255,7 +255,7 @@ test.describe('docs · code 🖍️', () => {
   test('🗂️ content tabs switch panels (AbContentTabs)', async ({ page }) => {
     await openPage(page, '/docs/installation');
     const tabs = page.locator('[data-docs-body] [data-ab-part="content-tabs"]').first();
-    await expect(tabs.getByRole('tab')).toHaveCount(2);
+    await expect(tabs.getByRole('tab')).toHaveCount(4);
     await expect(tabs.getByRole('tab', { name: 'pnpm', exact: true })).toHaveAttribute('aria-selected', 'true');
     await expect(tabs.getByRole('tabpanel')).toContainText('pnpm add');
     // ⌨️ → moves to npm

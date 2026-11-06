@@ -1,15 +1,23 @@
 ---
 title: Fonts
-description: "Font presets for next/font, zero layout shift."
+description: "Self-hosted font faces for Next.js: Inter, Mulish, Quicksand, Roboto, Roboto Mono and Zilla Slab, with no layout shift."
 package: ab-nextjs-fonts
 kind: server
-status: beta
-icon: package_2
+status: stable
+icon: match_case
 ---
 
 ## Overview
 
-**ab-nextjs-fonts** — Font presets for next/font, zero layout shift.
+**ab-nextjs-fonts** ships six families as local files, with a class name for each weight. The files are the font, so a page does not wait on a third-party stylesheet and the text does not jump when the face arrives.
+
+This site uses three of them, through [Theme](/docs/packages/theme):
+
+- **Inter** for body text (`interStyles`)
+- **Mulish** for titles (`--ab-font-title`)
+- **Roboto Mono** for code (`--ab-font-code`)
+
+Quicksand, Roboto and Zilla Slab are in the same package when a screen needs another voice.
 
 ## Install
 
@@ -17,6 +25,46 @@ icon: package_2
 pnpm add ab-nextjs-fonts
 ```
 
+Import only the stylesheets you use. Each one registers `@font-face` rules and the `font-*` utility classes.
+
+```css title="app/globals.css"
+@import 'ab-nextjs-fonts/inter/styles.css';
+@import 'ab-nextjs-fonts/mulish/styles.css';
+@import 'ab-nextjs-fonts/roboto-mono/styles.css';
+```
+
 ## Usage
 
-Import what you need from its entry points; everything is typed.
+The root export is a set of class-name constants. `interStyles.regular` is the string `font-inter-regular`.
+
+```tsx title="app/layout.tsx"
+import { interStyles, mulishStyles, robotoMonoStyles } from 'ab-nextjs-fonts';
+
+export default function Layout({ children }: { children: React.ReactNode }) {
+  return (
+    <body className={interStyles.regular}>
+      <h1 className={mulishStyles.extrabold}>{children}</h1>
+      <code className={robotoMonoStyles.regular}>pnpm add ab-nextjs-fonts</code>
+    </body>
+  );
+}
+```
+
+The same classes exist for the other families: `quicksandStyles`, `robotoStyles` and `zillaSlabStyles`. Weights that a family does not ship are simply not on that object. Inter and Mulish go from extralight to black. Roboto Mono goes from light to bold.
+
+Roboto Mono is licensed under the SIL Open Font License 1.1, included with the package. Apply it in CSS when you are not in React:
+
+```css title="app/globals.css"
+code { font-family: 'Roboto Mono', ui-monospace, monospace; }
+```
+
+## What it ships
+
+- `interStyles` — `font-inter-*`
+- `mulishStyles` — `font-mulish-*`
+- `quicksandStyles` — `font-quicksand-*`
+- `robotoStyles` — `font-roboto-*`
+- `robotoMonoStyles` — `font-robotomono-*`
+- `zillaSlabStyles` — `font-zillaslab-*`
+
+There is no runtime component. Pair the classes with [Theme](/docs/packages/theme) tokens, or with [Components](/docs/packages/components) which already read those tokens.

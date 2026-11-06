@@ -1,15 +1,19 @@
 ---
 title: Icons
-description: "AbIcons as SVG and CSS, outlined and filled."
+description: "AbIcons: 273 original icons as SVG and CSS, outlined and filled, with stroke weights from 100 to 700."
 package: ab-nextjs-icons
 kind: server
-status: beta
-icon: package_2
+status: stable
+icon: interests
 ---
 
 ## Overview
 
-**ab-nextjs-icons** — AbIcons as SVG and CSS, outlined and filled.
+**ab-nextjs-icons** is AbIcons, a set of original icons named with the same snake_case as Material Symbols (`home`, `search`, `palette`). The geometry is Ab's, not a copy of the Material paths. The published set has **273** names. Every name has an outlined SVG. **248** of them also have a filled SVG; `getAbIconSvg` falls back to the outlined drawing when a filled one is missing.
+
+Outlined strokes follow a weight axis from 100 to 700. The default weight is **200** (stroke width 1.25). Filled icons stay solid.
+
+To draw an icon in React, pass the SVG to `AbIcon` from [Components](/docs/packages/components). This package is the artwork.
 
 ## Install
 
@@ -19,4 +23,48 @@ pnpm add ab-nextjs-icons
 
 ## Usage
 
-Import what you need from its entry points; everything is typed.
+Prefer one icon module when a screen only needs a few glyphs. The default export is `{ outlined, filled? }`, so the rest of the set stays out of the bundle.
+
+```tsx title="app/icon.tsx"
+import home from 'ab-nextjs-icons/ab-icons/icons/home';
+import AbIcon from 'ab-nextjs-components/ab-icon';
+
+export function HomeMark() {
+  return <AbIcon name="home" svg={home} variant="outlined" weight={200} label="Home" />;
+}
+```
+
+`variant="filled"` (or the `filled` boolean) uses the filled drawing. Omit `label` and the icon is decorative (`aria-hidden`).
+
+For a browser or a build script, read the set from the barrel:
+
+```ts title="scripts/icon.ts"
+import { abIconNames, abIconWeights, getAbIconSvg } from 'ab-nextjs-icons/ab-icons';
+
+const svg = getAbIconSvg('search', 'outlined', { weight: 300 });
+```
+
+`getAbIconSvg(name, variant, options)` returns an SVG string, or `undefined` when the name is not in `abIconNames`. `abIconWeights` is `100` through `700`.
+
+CSS masks are the third path. Import the stylesheet, then use the classes:
+
+```css title="app/globals.css"
+@import 'ab-nextjs-icons/ab-icons/index.css';
+```
+
+```html title="icon.html"
+<span class="abicon abicon-home" aria-hidden="true"></span>
+<span class="abicon abicon-filled abicon-favorite" aria-hidden="true"></span>
+<span class="abicon abicon-w300 abicon-home" aria-hidden="true"></span>
+```
+
+`abicon-w300` is the mask at weight 300. Logos shipped with the package (the Ab mark and the wordmark) are what `AbLogo` draws. Use those files; do not redraw the mark.
+
+## What it ships
+
+- `abIconNames`, `abIconSvg`, `getAbIconSvg`
+- `abIconWeights`, `abIconDefaultWeight`, `abIconWeightStroke`
+- one module per name at `ab-nextjs-icons/ab-icons/icons/<name>`
+- `ab-nextjs-icons/ab-icons/index.css` and `weight.css`
+
+`AbIcon` itself lives in [Components](/docs/packages/components). Register the icons a screen uses so an unknown name never falls back to a web font.

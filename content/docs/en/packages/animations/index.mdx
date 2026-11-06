@@ -1,15 +1,17 @@
 ---
 title: Animations
-description: "Animation presets and easings, reduced-motion aware."
+description: "Animation presets for AbElements: keyframes plus class names, and they step aside when the reader prefers less motion."
 package: ab-nextjs-animations
 kind: client
 status: beta
-icon: package_2
+icon: animation
 ---
 
 ## Overview
 
-**ab-nextjs-animations** — Animation presets and easings, reduced-motion aware.
+**ab-nextjs-animations** is the animation package. The name is Animations. It ships keyframe descriptions and, for the newer presets, a CSS class you put on an element.
+
+Nothing here is a transition written in the app. A drawer, a splash bar or a spinning mark uses one of these presets. When the reader has asked the system for less motion, the components that consume the presets skip the slide and use a short fade, or no movement at all. `useAbReducedMotion` from [Hooks](/docs/packages/hooks) is the React check; `prefersAbReducedMotionNow` is the one-shot read.
 
 ## Install
 
@@ -17,6 +19,51 @@ icon: package_2
 pnpm add ab-nextjs-animations
 ```
 
+Import a preset's stylesheet next to the class name. The keyframe objects do not need a stylesheet.
+
 ## Usage
 
-Import what you need from its entry points; everything is typed.
+Older presets are a default export from their own entry: a keyframe object plus a `ref` string (a CSS `animation` value). `FadeInAnimation.ref` is `fadeIn 1s ease forwards`. They are not named exports of the package root. The root's `supportedAnimations` list is the catalog.
+
+```ts title="app/fade.ts"
+import FadeInAnimation from 'ab-nextjs-animations/fade-in';
+import PopInAnimation from 'ab-nextjs-animations/pop-in';
+
+const fade = FadeInAnimation.ref;
+const pop = PopInAnimation.ref;
+```
+
+Newer presets are class names. Import the matching CSS, then add the class:
+
+```tsx title="app/spinner.tsx"
+import { AB_SPIN_CLASS } from 'ab-nextjs-animations/spin';
+
+export function Spinner() {
+  return <span className={AB_SPIN_CLASS} role="status" aria-label="Loading" />;
+}
+```
+
+```css title="app/globals.css"
+@import 'ab-nextjs-animations/spin/styles.css';
+```
+
+`AB_SPIN_CLASS` is `ab-spin`. The rotation uses `--ab-spin-duration` (700ms unless you set it).
+
+## What it ships
+
+Keyframe presets, from the package root or from their own entry: fade in, fade out, fade, loop, pop in, and the slide family (`slide-up`, `slide-down`, `slide-left`, `slide-right`, `slide-from-up`, `slide-from-down`, `slide-from-left`, `slide-from-right`).
+
+Class-name presets, each with a `styles.css` beside the entry:
+
+- `AB_SPIN_CLASS` from `ab-nextjs-animations/spin`
+- `AB_SLIDE_STEP_IN_CLASS` and `AB_SLIDE_STEP_OUT_CLASS` from `ab-nextjs-animations/slide-step`
+- `AB_WIRE_DRAW_CLASS` and `AB_WIRE_PULSE_CLASS` from `ab-nextjs-animations/wire`
+- `AB_PROGRESS_SWEEP_CLASS` from `ab-nextjs-animations/progress-sweep`
+- `AB_LOCALE_CYCLE_WORD_CLASS` and `AB_LOCALE_CYCLE_CHIP_CLASS` from `ab-nextjs-animations/locale-cycle`
+- `AB_STATE_CYCLE_CLASSES` from `ab-nextjs-animations/state-cycle`
+
+`getAbSlideStepDirection` picks the slide-step direction. The default export `abAnimations` collects every keyframe and `ref`.
+
+Colour, press and lift class names live on `AB_MOTION` (`ab-nextjs-animations/motion`), next to `AB_REDUCED_MOTION_QUERY` (`prefers-reduced-motion: reduce`). Those are helpers inside Animations, not a separate package.
+
+This package is still marked beta: the class-name presets are the ones the shell uses, and the older keyframe objects stay for existing screens.
