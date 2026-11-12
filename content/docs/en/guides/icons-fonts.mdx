@@ -34,7 +34,7 @@ This site points the theme tokens at three of them: `--ab-font-body` (Inter), `-
 Roboto Mono is licensed under the SIL Open Font License 1.1, included with the package.
 
 <Callout type="note" title="Font stylesheets">
-  Each family also has a `styles.css` of `@font-face` rules. Fonts 0.2.7 does not publish an `exports` map, so those subpaths are files on disk, not export-surface keys. The [Fonts](/docs/packages/fonts) page lists them. Import only the families you use.
+  Each family also has a `styles.css` of `@font-face` rules. Fonts <PackageVersion name="ab-nextjs-fonts" /> does not publish an `exports` map, so those subpaths are files on disk, not export-surface keys. The [Fonts](/docs/packages/fonts) page lists them. Import only the families you use.
 </Callout>
 
 ## Draw an icon
@@ -51,7 +51,7 @@ export function HomeMark() {
 
 `filled` is the older boolean for `variant="filled"`. Filled icons stay solid. They do not take a stroke weight.
 
-The component looks up markup in this order: the `svg` prop, then the registry, then the font fallback. Pass `svg` when a screen should ship only that glyph. The per-icon module that produces that value is documented on the [Icons](/docs/packages/icons) page. Icons 0.2.7 does not publish an `exports` map, so this guide does not show that module as a sample import.
+The component looks up markup in this order: the `svg` prop, then the registry, then the font fallback. Pass `svg` when a screen should ship only that glyph. The per-icon module that produces that value is documented on the [Icons](/docs/packages/icons) page. Icons <PackageVersion name="ab-nextjs-icons" /> does not publish an `exports` map, so this guide does not show that module as a sample import.
 
 ## Register a set
 
@@ -77,6 +77,6 @@ Fill `icons` from the per-icon modules the Icons page documents. A name that is 
 
 ## CSS masks
 
-The icon package also ships a stylesheet of CSS masks (`abicon`, `abicon-filled`, `abicon-w300`). That file is not an `exports` key in icons 0.2.7. Use `AbIcon` in React. Use the mask classes only where the [Icons](/docs/packages/icons) page already shows them, for a page that is not React.
+The icon package also ships a stylesheet of CSS masks (`abicon`, `abicon-filled`, `abicon-w300`). That file is not an `exports` key in icons <PackageVersion name="ab-nextjs-icons" />. Use `AbIcon` in React. Use the mask classes only where the [Icons](/docs/packages/icons) page already shows them, for a page that is not React.
 
 `getAbIconSvg`, `abIconNames` and `abIconWeights` are the helpers for a build script. They live on the package's icon barrel, which is the same kind of path: a file the package ships, not an exports key. The Icons page has the call.

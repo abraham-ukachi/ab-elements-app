@@ -54,6 +54,7 @@
 //                   source, Shiki-highlighted at build time; lib/remark-live-example keeps both from ONE source).
 //                   No eval, no code strings turned into components, no iframe: a preview is compiled MDX 🛡️
 //   📦 `AbButton`, `AbCallout`, `AbChip`, `AbKbd`, `AbPill` → the preview scope (LIVE_EXAMPLE_SCOPE)
+//   🔢 `PackageVersion` → the installed `ab-nextjs-*` version (guide callouts, read from node_modules at build time)
 // 📄 Long-form typography (headings, lists, tables, inline code) is the theme's `.ab-prose` class on the body wrapper.
 
 // MDX types
@@ -79,6 +80,8 @@ import AbKbd from 'ab-nextjs-components/ab-kbd';
 import AbPill from 'ab-nextjs-components/ab-pill';
 // import the build-time props table wiring (packaged AbPropsTable, 0.2.28) 📋
 import { DocsPropsTable } from '@/components/app/docs-props';
+// import the installed package version (guide callouts name the version that is actually installed) 🔢
+import { installedAbVersion } from '@/lib/packages';
 
 
 // 🌍 the translated labels the map hands to the package pieces
@@ -103,6 +106,9 @@ type DocsPreProps = HTMLAttributes<HTMLPreElement> & { title?: string; 'data-lan
 
 // 💡 the MDX `<Callout>` props (fumadocs-style `type`, mapped onto AbCallout's `variant`)
 type DocsCalloutProps = Readonly<{ type?: AbCalloutVariant | 'info' | 'warn' | 'error'; title?: ReactNode; children?: ReactNode }>;
+
+// 🔢 `<PackageVersion name="ab-nextjs-theme" />` prints the installed version, so a callout cannot keep an old number
+type DocsPackageVersionProps = Readonly<{ name?: string }>;
 
 
 /**
@@ -237,6 +243,21 @@ function DocsExample({ title, code = '', children, labels, preType }: DocsExampl
 
 
 /**
+ * `DocsPackageVersion` - the installed version of one Ab package, as text 🔢
+ *
+ * A guide callout writes `<PackageVersion name="ab-nextjs-theme" />` instead of a version number, so the sentence
+ * follows `node_modules` at build time.
+ *
+ * @param { DocsPackageVersionProps } props
+ * @returns { ReactElement }
+ */
+function DocsPackageVersion({ name = '' }: DocsPackageVersionProps): ReactElement {
+  // 🔢 the version field of that package's installed package.json
+  return <>{installedAbVersion(name)}</>;
+}
+
+
+/**
  * `getDocsMdxComponents` - the component map handed to every compiled MDX page 🗺️
  *
  * @param { DocsMdxLabels } labels - the copy button's translated names
@@ -262,6 +283,8 @@ export function getDocsMdxComponents(labels: DocsMdxLabels, overrides: MDXCompon
     ExamplePreview: DocsExamplePreview,
     // 📋 `<PropsTable id="AbDrawerProps" />` (rows come from the build-time JSON, rendered by AbPropsTable)
     PropsTable: ({ id }: { id?: string }) => <DocsPropsTable id={id ?? ''} copyLabel={labels.copyLabel} copiedLabel={labels.copiedLabel} />,
+    // 🔢 `<PackageVersion name="ab-nextjs-theme" />` — the installed version, not a number typed into the guide
+    PackageVersion: DocsPackageVersion,
     // 📦 the preview scope (published package components only)
     ...getLivePreviewScope(),
     // 🧩 per-page overrides last
