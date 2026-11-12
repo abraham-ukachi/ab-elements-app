@@ -290,6 +290,33 @@ describe('gitmoji shortcodes 😀', () => {
     expect(parts.text).toBe(`keep  and map ${CHANGELOG_GITMOJI.memo}`);
   });
 
+  it('parses underscore slugs before emphasis, so :white_check_mark: is not italic check', () => {
+    // 😀 every allow-listed name that contains an underscore (the emphasis marker)
+    const slugs = Object.keys(CHANGELOG_GITMOJI).filter((name) => name.includes('_'));
+    expect(slugs).toContain('white_check_mark');
+    expect(slugs).toEqual(expect.arrayContaining(['arrow_up', 'building_construction', 'chart_with_upwards_trend', 'globe_with_meridians', 'heavy_plus_sign']));
+    for (const name of slugs) {
+      // 🚫 no italic run, and the whole slug is the emoji
+      const runs = parseChangelogInlines(`:${name}:`);
+      expect(runs, name).toEqual([{ type: 'text', text: CHANGELOG_GITMOJI[name] }]);
+    }
+    // 🔤 emphasis still wraps a real word, including one that sits beside a slug
+    expect(parseChangelogInlines('_check_')).toEqual([{ type: 'em', children: [{ type: 'text', text: 'check' }] }]);
+    expect(parseChangelogInlines('a *star* and **bold** and __also__')).toEqual([
+      { type: 'text', text: 'a ' },
+      { type: 'em', children: [{ type: 'text', text: 'star' }] },
+      { type: 'text', text: ' and ' },
+      { type: 'strong', children: [{ type: 'text', text: 'bold' }] },
+      { type: 'text', text: ' and ' },
+      { type: 'strong', children: [{ type: 'text', text: 'also' }] },
+    ]);
+    // 😀 a slug between emphasis markers stays one token inside the emphasis (text runs merge)
+    const wrapped = parseChangelogInlines('_see :white_check_mark: now_');
+    expect(wrapped).toEqual([{ type: 'em', children: [{ type: 'text', text: `see ${CHANGELOG_GITMOJI.white_check_mark} now` }] }]);
+    // 🚫 an unknown underscore slug stays literal text, not italic
+    expect(parseChangelogInlines(':not_a_slug:')).toEqual([{ type: 'text', text: ':not_a_slug:' }]);
+  });
+
   it('does not map a shortcode inside a code block', () => {
     // 💻 the fence is a pre, not an inline
     const blocks = parseChangelogBlocks('```\n:sparkles: stays\n```\n\n:sparkles: maps');

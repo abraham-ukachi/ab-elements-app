@@ -491,6 +491,43 @@ function expandGitmojiText(text: string): string {
 }
 
 
+// 😀 a `:slug:` at this index. Underscores inside the name are part of the token, not emphasis.
+const SHORTCODE_AT = /^:([a-z][a-z0-9_+-]*):/;
+
+
+/**
+ * `markerEnd` - the next emphasis marker, skipping `:slug:` tokens and code spans 🔤
+ *
+ * `:white_check_mark:` must not close an italic span on the underscore before `check`.
+ *
+ * @param { string } input
+ * @param { number } from - the first index to look at
+ * @param { string } mark - `*`, `_`, `**` or `__`
+ * @returns { number } - the index of the marker, or -1
+ */
+function markerEnd(input: string, from: number, mark: string): number {
+  // 📍 the cursor
+  let index = from;
+  // 🚶 until the marker, or the end
+  while (index < input.length) {
+    // 😀 a whole shortcode, underscores included
+    const shortcode = SHORTCODE_AT.exec(input.slice(index));
+    if (shortcode) { index += shortcode[0].length; continue; }
+    // 💻 a code span is not a place to close emphasis
+    if (input[index] === '`') {
+      const end = input.indexOf('`', index + 1); // 💻
+      index = end === -1 ? input.length : end + 1;
+      continue;
+    }
+    // 🔤 the marker
+    if (input.startsWith(mark, index)) return index;
+    index += 1;
+  }
+  // 🙅 no closer
+  return -1;
+}
+
+
 /**
  * `parseChangelogInlines` - emphasis, code, and safe links. A `<tag>` stays text. 🔤
  *
@@ -519,10 +556,10 @@ export function parseChangelogInlines(input: string): ChangelogInline[] {
   let index = 0;
   // 🚶 each character, longest marker first
   while (index < input.length) {
-    // 💪 `**bold**` or `__bold__`
+    // 💪 `**bold**` or `__bold__`. The closer is found past any `:slug:`, so a shortcode's underscores are not the marker.
     if (input.startsWith('**', index) || input.startsWith('__', index)) {
       const mark = input.slice(index, index + 2); // 💪
-      const end = input.indexOf(mark, index + 2);
+      const end = markerEnd(input, index + 2, mark);
       if (end !== -1) {
         out.push({ type: 'strong', children: parseChangelogInlines(input.slice(index + 2, end)) }); // 💪
         index = end + 2;
@@ -555,16 +592,17 @@ export function parseChangelogInlines(input: string): ChangelogInline[] {
     }
     // 😀 `:memo:` before emphasis, so the underscores in `:white_check_mark:` are not an italic span.
     //    A code span was already taken above, so a shortcode in backticks stays typed.
-    const shortcode = /^:([a-z][a-z0-9_+-]*):/.exec(input.slice(index));
+    const shortcode = SHORTCODE_AT.exec(input.slice(index));
     if (shortcode) {
       const name = shortcode[1] ?? ''; // 🏷️
       pushText(CHANGELOG_GITMOJI[name] ?? shortcode[0]); // 😀 known → emoji, unknown → the literal `:name:`
       index += shortcode[0].length;
       continue;
     }
-    // 🔤 `*em*` or `_em_` (not the strong marker)
+    // 🔤 `*em*` or `_em_` (not the strong marker). A `:slug:` between the markers stays one token.
     if ((input[index] === '*' || input[index] === '_') && input[index + 1] !== input[index]) {
-      const end = input.indexOf(input[index] as string, index + 1);
+      const mark = input[index] as string; // 🔤
+      const end = markerEnd(input, index + 1, mark);
       if (end !== -1 && end > index + 1) {
         out.push({ type: 'em', children: parseChangelogInlines(input.slice(index + 1, end)) }); // 🔤
         index = end + 1;
