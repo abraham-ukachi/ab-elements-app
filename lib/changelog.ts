@@ -392,6 +392,56 @@ export function parseChangelogBlocks(markdown: string): ChangelogBlock[] {
 
 
 /**
+ * `markdownLinkEnd` - the `)` that closes a markdown link, allowing one balanced pair inside the URL 🔗
+ *
+ * `[text](https://example.com/Foo_(bar))` keeps the parenthesis. An unclosed `(` is not a link.
+ *
+ * @param { string } input
+ * @param { number } openParen - the index of the `(` after `]`
+ * @returns { number } the index of the matching `)`, or -1
+ */
+function markdownLinkEnd(input: string, openParen: number): number {
+  // 📏 depth 1: that `(` is already open
+  let depth = 1;
+  // 🚶 the characters after it
+  for (let cursor = openParen + 1; cursor < input.length; cursor += 1) {
+    const char = input[cursor]; // 🔤
+    if (char === '(') depth += 1; // ➕ a parenthesis inside the URL
+    else if (char === ')') {
+      depth -= 1; // ➖
+      if (depth === 0) return cursor; // ✅ the link's own close
+    }
+  }
+  // 🚫 never closed
+  return -1;
+}
+
+
+/**
+ * `isSafeChangelogHref` - whether a markdown destination may become an anchor 🔒
+ *
+ * A backslash, any whitespace, or a control character fails first, before a scheme is trusted.
+ * That rejects `/\evil.com`, `/\/evil.com`, and `/` + a tab + `javascript:`.
+ * The same check covers `#` fragments and `mailto:` links. Anything rejected stays plain text.
+ *
+ * @param { string } href - the raw destination, not trimmed
+ * @returns { boolean }
+ */
+function isSafeChangelogHref(href: string): boolean {
+  // 🚫 \, space, tab, newline, or a C0 control — before any scheme check
+  if (/[\s\\\u0000-\u001f]/.test(href)) return false;
+  // 🏠 one leading slash, then no second slash (`//host` is not a site path)
+  if (href.startsWith('/')) return /^\/(?!\/)[^\s\\]*$/.test(href);
+  // ⚓ `#components-0.7.0` (the character check above already ran)
+  if (href.startsWith('#')) return true;
+  // ✉️ mailto, same character check
+  if (/^mailto:/i.test(href)) return true;
+  // 🌐 http and https only. `javascript:` and every other scheme stay text.
+  return /^https?:\/\//i.test(href);
+}
+
+
+/**
  * `parseChangelogInlines` - emphasis, code, and safe links. A `<tag>` stays text. 🔤
  *
  * @param { string } input
@@ -438,15 +488,14 @@ export function parseChangelogInlines(input: string): ChangelogInline[] {
         continue;
       }
     }
-    // 🔗 `[label](href)` — http(s), mailto, a site path, or a hash. `javascript:` stays text.
+    // 🔗 `[label](href)` — http(s), mailto, a site path, or a hash. Unsafe destinations stay text.
     if (input[index] === '[') {
-      const close = input.indexOf(']', index + 1);
+      const close = input.indexOf(']', index + 1); // 🏷️ the end of the label
       if (close !== -1 && input[close + 1] === '(') {
-        const end = input.indexOf(')', close + 2);
+        const end = markdownLinkEnd(input, close + 1); // 📏 the matching close, parentheses inside the URL included
         if (end !== -1) {
-          const href = input.slice(close + 2, end).trim(); // 🔗
-          const safe = /^(https?:\/\/|mailto:|#|\/)/.test(href) && !href.startsWith('//') && !/^javascript:/i.test(href);
-          if (safe) {
+          const href = input.slice(close + 2, end); // 🔗 raw, so a tab or a backslash is still visible
+          if (isSafeChangelogHref(href)) {
             out.push({ type: 'link', href, children: parseChangelogInlines(input.slice(index + 1, close)) }); // 🔗
             index = end + 1;
             continue;

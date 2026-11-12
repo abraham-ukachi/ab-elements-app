@@ -181,7 +181,8 @@ export default async function ChangelogPage({ params }: ChangelogPageProps): Pro
                         {entry.date ? ` (${entry.date})` : ''}
                       </h3>
                       {/* 🔗 the compare link, when the heading had one (https only; the parser already checked) */}
-                      {entry.compareUrl ? <p><a href={entry.compareUrl} target="_blank" rel="noopener">{copy('compare')}</a></p> : null}
+                      {/* 🔗 the compare link (https only). A new tab also drops the referrer. */}
+                      {entry.compareUrl ? <p><a href={entry.compareUrl} target="_blank" rel="noopener noreferrer">{copy('compare')}</a></p> : null}
                       <ChangelogMarkdown markdown={entry.body} labels={labels} />
                     </section>
                   ))}

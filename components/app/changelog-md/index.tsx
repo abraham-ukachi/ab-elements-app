@@ -85,7 +85,8 @@ function InlineRuns({ runs }: { runs: readonly ChangelogInline[] }): ReactElemen
           const children = <InlineRuns runs={run.children} />; // 🔤
           if (run.href.startsWith('/') && !run.href.startsWith('//')) return <AbLink key={index} href={run.href}>{children}</AbLink>;
           // 🌐 external links open in a new tab; a hash stays on this page
-          if (/^https?:\/\//.test(run.href)) return <a key={index} href={run.href} target="_blank" rel="noopener">{children}</a>;
+          // 🌐 a new tab. `noreferrer` goes with `noopener` so the opened page cannot see this one.
+          if (/^https?:\/\//.test(run.href)) return <a key={index} href={run.href} target="_blank" rel="noopener noreferrer">{children}</a>;
           return <a key={index} href={run.href}>{children}</a>;
         }
         // 🔤 text, escaped by React

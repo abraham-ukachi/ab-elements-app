@@ -104,6 +104,23 @@ async function axeBlocking(page: Page): Promise<string[]> {
 }
 
 
+test('external links in the changelog body set noopener and noreferrer 🔒', async ({ page }) => {
+  // 📜 one English changelog page is enough: the compare links and the https notes live in the body
+  await openPage(page, '/changelog');
+  // 🌐 every new-tab anchor inside the notes
+  const links = page.locator('[data-changelog-body] a[target="_blank"]');
+  expect(await links.count()).toBeGreaterThan(0);
+  const count = await links.count();
+  for (let index = 0; index < count; index += 1) {
+    const link = links.nth(index); // 🔗
+    const href = await link.getAttribute('href'); // 🌐
+    const rel = (await link.getAttribute('rel')) ?? ''; // 🔒
+    expect(href ?? '').toMatch(/^https?:\/\//);
+    expect(rel.split(/\s+/)).toEqual(expect.arrayContaining(['noopener', 'noreferrer']));
+  }
+});
+
+
 for (const scheme of THEMES) {
   for (const vp of WIDTHS) {
     for (const loc of LOCALES) {

@@ -58,6 +58,7 @@ import {
   parseChangelog,
   parseChangelogBlocks,
   parseChangelogInlines,
+  type ChangelogInline,
 } from '@/lib/changelog';
 
 
@@ -136,6 +137,73 @@ describe('plain markdown 🚫', () => {
     // 🔗 javascript: is not a link
     const runs = parseChangelogInlines('[click](javascript:alert(1))');
     expect(runs.some((run) => run.type === 'link')).toBe(false);
+  });
+});
+
+
+/**
+ * `linkHrefs` - every href the inline parser actually kept 🔗
+ *
+ * @param { string } source
+ * @returns { string[] }
+ */
+function linkHrefs(source: string): string[] {
+  // 🔗 the destinations
+  const found: string[] = [];
+  // 🚶 links can sit inside emphasis
+  const walk = (runs: readonly ChangelogInline[]): void => {
+    for (const run of runs) {
+      if (run.type === 'link') found.push(run.href); // 🔗
+      if (run.type === 'em' || run.type === 'strong' || run.type === 'link') walk(run.children); // 🔁
+    }
+  };
+  walk(parseChangelogInlines(source));
+  // 🔗 the list
+  return found;
+}
+
+
+describe('changelog link safety 🔒', () => {
+  it('rejects /\\evil.com as plain text', () => {
+    // 🚫 a slash then a backslash is not a site path
+    expect(linkHrefs('[go](/\\evil.com)')).toEqual([]);
+  });
+
+  it('rejects /\\/evil.com as plain text', () => {
+    // 🚫 a backslash before the host
+    expect(linkHrefs('[go](/\\/evil.com)')).toEqual([]);
+  });
+
+  it('rejects a site path with a tab before javascript: as plain text', () => {
+    // 🚫 `/` + TAB + `javascript:x` must not become an anchor
+    expect(linkHrefs(`[go](/${'\t'}javascript:x)`)).toEqual([]);
+  });
+
+  it('rejects a fragment with a hidden host, a backslash, or a tab', () => {
+    // 🚫 the same three shapes, after `#`
+    expect(linkHrefs('[go](#/\\evil.com)')).toEqual([]);
+    expect(linkHrefs('[go](#/\\/evil.com)')).toEqual([]);
+    expect(linkHrefs(`[go](#/${'\t'}javascript:x)`)).toEqual([]);
+  });
+
+  it('rejects a mailto with a hidden host, a backslash, or a tab', () => {
+    // 🚫 the same three shapes, after `mailto:`
+    expect(linkHrefs('[go](mailto:/\\evil.com)')).toEqual([]);
+    expect(linkHrefs('[go](mailto:/\\/evil.com)')).toEqual([]);
+    expect(linkHrefs(`[go](mailto:/${'\t'}javascript:x)`)).toEqual([]);
+  });
+
+  it('keeps a site path, a fragment, a mailto, and an https URL', () => {
+    // ✅ the four destinations the page is allowed to link
+    expect(linkHrefs('[docs](/docs/guides/layout-rule)')).toEqual(['/docs/guides/layout-rule']);
+    expect(linkHrefs('[here](#components-0.7.0)')).toEqual(['#components-0.7.0']);
+    expect(linkHrefs('[mail](mailto:abrahamukachi@gmail.com)')).toEqual(['mailto:abrahamukachi@gmail.com']);
+    expect(linkHrefs('[gh](https://github.com/abraham-ukachi/ab-elements-app)')).toEqual(['https://github.com/abraham-ukachi/ab-elements-app']);
+  });
+
+  it('keeps a markdown URL that contains balanced parentheses', () => {
+    // ✅ the `)` inside the URL is not the end of the link
+    expect(linkHrefs('[wiki](https://example.com/Foo_(bar))')).toEqual(['https://example.com/Foo_(bar)']);
   });
 });
 
