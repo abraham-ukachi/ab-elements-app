@@ -243,7 +243,7 @@ describe('installed packages 🚦', () => {
     // ✅ nothing missing, Unreleased, or badly headed
     expect(audit.failures).toEqual([]);
     expect(audit.passed.map((item) => `${item.name}@${item.version}`)).toEqual([
-      'ab-elements-app@0.2.28',
+      'ab-elements-app@0.2.29',
       'ab-nextjs-fonts@0.2.8',
       'ab-nextjs-icons@0.2.8',
       'ab-nextjs-animations@0.2.6',
