@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="600" viewBox="0 0 960 600" role="img" aria-labelledby="t d">
+<title id="t">Welcome mapped onto the layout rule</title>
+<desc id="d">The Welcome top bar becomes the app header, the slide counter becomes mainHeader, the slide becomes main content, the arrows and Skip become mainBar, and on mobile the globe opens a bottom app-scoped drawer with the languages. Footer and aside are empty and take no space.</desc>
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#A67C52"/></marker></defs>
+<rect width="100%" height="100%" fill="#FFF8F5"/>
+<text x="180" y="32" font-size="15" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#211A16" text-anchor="middle" font-weight="bold">Welcome today</text>
+<text x="700" y="32" font-size="15" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#211A16" text-anchor="middle" font-weight="bold">Welcome on the layout rule</text>
+<rect x="80" y="50" width="200" height="520" rx="22" fill="#FFFFFF" stroke="#C4B2A4" stroke-width="2.5" opacity="1"/>
+<rect x="92" y="62" width="176" height="40" rx="6" fill="#FBF3EC" stroke="#C4B2A4" stroke-width="1.5" opacity="1"/>
+<text x="180" y="87.0" font-size="12" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#211A16" text-anchor="middle" font-weight="normal">top bar · logo · globe</text>
+<rect x="92" y="112" width="176" height="30" rx="6" fill="#FBF3EC" stroke="#C4B2A4" stroke-width="1.5" opacity="1"/>
+<text x="180" y="132.0" font-size="12" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#211A16" text-anchor="middle" font-weight="normal">counter 3 / 9</text>
+<rect x="92" y="152" width="176" height="300" rx="6" fill="#FBF3EC" stroke="#C4B2A4" stroke-width="1.5" opacity="1"/>
+<text x="180" y="307.0" font-size="12" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#211A16" text-anchor="middle" font-weight="normal">slide</text>
+<rect x="92" y="462" width="176" height="40" rx="6" fill="#FBF3EC" stroke="#C4B2A4" stroke-width="1.5" opacity="1"/>
+<text x="180" y="487.0" font-size="12" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#211A16" text-anchor="middle" font-weight="normal">‹  Skip  ›</text>
+<rect x="500" y="50" width="420" height="520" rx="12" fill="#FFFFFF" stroke="#C4B2A4" stroke-width="2.5" opacity="1"/>
+<rect x="512" y="62" width="396" height="40" rx="6" fill="#FFF8F5" stroke="#8A6440" stroke-width="1.5" stroke-dasharray="6 4" opacity="1"/>
+<text x="710.0" y="87.0" font-size="13" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#211A16" text-anchor="middle" font-weight="bold">app header  ·  AbAppLayout header</text>
+<rect x="512" y="112" width="396" height="30" rx="6" fill="#FFF8F5" stroke="#8A6440" stroke-width="1.5" stroke-dasharray="6 4" opacity="1"/>
+<text x="710.0" y="132.0" font-size="13" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#211A16" text-anchor="middle" font-weight="bold">mainHeader  ·  AbMainLayout mainHeader</text>
+<rect x="512" y="152" width="396" height="240" rx="6" fill="#F4E7DB" stroke="#8A6440" stroke-width="1.5" opacity="1"/>
+<text x="710.0" y="270.0" font-size="14" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#211A16" text-anchor="middle" font-weight="bold">main content</text>
+<text x="710.0" y="290.0" font-size="12" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#566A58" text-anchor="middle" font-weight="normal">slide · ↕ scrolls if tall</text>
+<rect x="512" y="402" width="396" height="40" rx="6" fill="#FFF8F5" stroke="#8A6440" stroke-width="1.5" stroke-dasharray="6 4" opacity="1"/>
+<text x="710.0" y="427.0" font-size="13" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#211A16" text-anchor="middle" font-weight="bold">mainBar  ·  AbMainLayout mainBar</text>
+<rect x="512" y="452" width="396" height="106" rx="6" fill="#E4C9AE" stroke="#A67C52" stroke-width="2.5" opacity="1"/>
+<text x="710.0" y="510.0" font-size="12" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#211A16" text-anchor="middle" font-weight="bold">globe → AbDrawerList side="bottom"</text>
+<line x1="270" y1="82.0" x2="508" y2="82.0" stroke="#A67C52" stroke-width="2" marker-end="url(#ah)"/>
+<line x1="270" y1="127.0" x2="508" y2="127.0" stroke="#A67C52" stroke-width="2" marker-end="url(#ah)"/>
+<line x1="270" y1="302.0" x2="508" y2="272.0" stroke="#A67C52" stroke-width="2" marker-end="url(#ah)"/>
+<line x1="270" y1="482.0" x2="508" y2="422.0" stroke="#A67C52" stroke-width="2" marker-end="url(#ah)"/>
+<line x1="250" y1="82" x2="508" y2="505" stroke="#A67C52" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#ah)"/>
+<text x="390" y="590" font-size="12" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#6B5B50" text-anchor="middle" font-weight="normal">footer: none → 0px · no aside on Welcome → aside not rendered · desktop keeps the globe popover menu</text>
+</svg>

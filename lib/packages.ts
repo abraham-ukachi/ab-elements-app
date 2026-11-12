@@ -121,6 +121,29 @@ export function getAbPackages(root: string = process.cwd()): AbPackage[] {
 
 
 /**
+ * `installedAbVersion` - the version string in an installed `ab-nextjs-*` package.json 🔢
+ *
+ * Guides and callouts read this at build time, so a package bump updates the sentence without a hand edit.
+ *
+ * @param { string } name - the npm name (`ab-nextjs-theme`)
+ * @param { string } root - the app root (where `node_modules` lives; defaults to the cwd)
+ * @returns { string } - the installed `version`
+ */
+export function installedAbVersion(name: string, root: string = process.cwd()): string {
+  // 📛 only the published Ab packages (a typo fails the build, it does not print a guess)
+  if (!/^ab-nextjs-[a-z0-9-]+$/.test(name)) throw new Error(`installedAbVersion: not an ab-nextjs package: ${name}`);
+  // 📖 the installed package.json
+  const pkg = JSON.parse(readFileSync(join(root, 'node_modules', name, 'package.json'), 'utf8')) as { version?: string };
+  // 🔢 the version field
+  const version = String(pkg.version ?? '');
+  // 🚨 a missing version is a broken install, not a blank callout
+  if (!/^\d+\.\d+\.\d+/.test(version)) throw new Error(`installedAbVersion: ${name} has no semver version`);
+  // 🔢 what the callout prints
+  return version;
+}
+
+
+/**
  * `getAbPackageSymbols` - the public `Ab*` components & `useAb*` hooks a package exports (the search drawer's index) 🔎
  * Read from the installed package's root `index.ts` (or `index.js`); a package without one simply has no symbols.
  *

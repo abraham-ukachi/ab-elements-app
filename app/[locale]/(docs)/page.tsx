@@ -86,28 +86,27 @@ import { DocsMainBar } from '@/components/app/docs-shell';
 import { getPackagePreviews } from '@/components/app/package-previews';
 // import the repo URL (Edit this page / Changelog) 🐙
 import { GITHUB_URL } from '@/lib/nav';
+// import the build-time changelog (What's new is the latest released entry of each package) 📜
+import { loadChangelogs, whatsNewItems } from '@/lib/changelog';
 
 
 // create the props type of the home page as `HomeProps` (Next.js 16 hands us the `params` as a Promise)
 type HomeProps = Readonly<{ params: Promise<{ locale: string }> }>;
 
-// 📚 the 4 guide rows (no pages yet, D26: plain cards without links) + their icons (spec §4)
+// 📚 the guide rows. PWA stays a plain card (that guide is deferred). The others link their pages.
 const GUIDES = [
-  { id: 'install', icon: 'rocket_launch' },
-  { id: 'theming', icon: 'palette' },
-  { id: 'iconsFonts', icon: 'match_case' },
+  { id: 'install', icon: 'rocket_launch', href: '/docs/installation' },
+  { id: 'theming', icon: 'palette', href: '/docs/guides/theming-dark-mode' },
+  { id: 'iconsFonts', icon: 'match_case', href: '/docs/guides/icons-fonts' },
+  { id: 'layoutRule', icon: 'widgets', href: '/docs/guides/layout-rule' },
   { id: 'pwaShell', icon: 'dashboard_customize' },
 ] as const;
 
-// 🆕 What's new: real entries from the published changelogs (core 0.1.6, hooks 0.1.7, components 0.1.13) 📰
-const WHATS_NEW = [
-  { id: 'core', kind: 'new' },
-  { id: 'hooks', kind: 'new' },
-  { id: 'components', kind: 'new' },
-] as const;
+// 📜 parsed once (the gate lives in prebuild; reading the files here does not throw)
+const CHANGELOGS = loadChangelogs();
 
-// 📜 each package's changelog on GitHub (the What's new rows link there) 🔗
-const changelogUrl = (id: string) => `https://github.com/abraham-ukachi/ab-nextjs-${id}/blob/main/CHANGELOG.md`;
+// 🆕 What's new: the latest released entry of core, hooks and components. Title and date come from that entry.
+const WHATS_NEW = whatsNewItems(CHANGELOGS, ['core', 'hooks', 'components']);
 
 // 🔠 the shared title look (spec §2/§8): Mulish 800 via the theme's `--ab-font-title`, tight tracking
 const TITLE = 'font-(family-name:--ab-font-title) font-extrabold tracking-[-0.03em] text-(--ab-color-text)';
@@ -246,14 +245,16 @@ export default async function Home({ params }: HomeProps) {
             <div className="grid grid-cols-1 gap-6 @min-[760px]:grid-cols-2">
               <section id="guides" aria-labelledby="guides-title" className="flex min-w-0 flex-col gap-[10px] min-[768px]:gap-[14px]">
                 <h2 id="guides-title" className={H2}>{t('guides.title')}</h2>
-                {/* 📚 no guide pages yet (D26): plain rows, no links, so no chevrons */}
+                {/* 📚 the guides that have pages link them; PWA stays a card until that guide exists */}
                 <AbList label={t('guides.title')}>
-                  {GUIDES.map(({ id, icon }) => (
+                  {GUIDES.map(({ id, icon, ...row }) => (
                     <AbListItem
                       key={id}
+                      href={'href' in row ? row.href : undefined}
                       media={<AbIcon name={icon} size={18} />}
                       title={<span id={`guide-${id}`}>{t(`guides.items.${id}.title`)}</span>}
                       meta={t(`guides.items.${id}.tag`)}
+                      trailing={'href' in row ? 'chevron' : undefined}
                     />
                   ))}
                 </AbList>
@@ -261,16 +262,16 @@ export default async function Home({ params }: HomeProps) {
 
               <section id="whats-new" aria-labelledby="whats-new-title" className="flex min-w-0 flex-col gap-[10px] min-[768px]:gap-[14px]">
                 <h2 id="whats-new-title" className={H2}>{t('whatsNew.title')}</h2>
-                {/* 📰 badge New / Improved · title · mono package · date → that package's changelog */}
+                {/* 📰 badge New · the latest entry's first line · mono package · that entry's date */}
                 <AbList label={t('whatsNew.title')}>
-                  {WHATS_NEW.map(({ id, kind }) => (
+                  {WHATS_NEW.map((item) => (
                     <AbListItem
-                      key={id}
-                      href={changelogUrl(id)}
-                      badge={t(`whatsNew.kind.${kind}`)}
-                      badgeTone={kind === 'new' ? 'primary' : 'tonal'}
-                      title={t(`whatsNew.items.${id}.title`)}
-                      meta={<><code>{`ab-nextjs-${id}`}</code> · {t(`whatsNew.items.${id}.date`)}</>}
+                      key={item.id}
+                      href={item.href}
+                      badge={t('whatsNew.kind.new')}
+                      badgeTone="primary"
+                      title={item.title}
+                      meta={<><code>{`ab-nextjs-${item.id}`}</code>{item.date ? ` · ${item.date}` : null}</>}
                       trailing="chevron"
                     />
                   ))}
@@ -294,7 +295,7 @@ export default async function Home({ params }: HomeProps) {
         links={[
           // ✏️ "Edit this page" → this file on GitHub; ↗ "Changelog" → the repo's releases
           { id: 'edit', href: `${GITHUB_URL}/blob/main/app/%5Blocale%5D/(docs)/page.tsx`, label: ts('aside.editPage'), icon: 'github' },
-          { id: 'changelog', href: `${GITHUB_URL}/releases`, label: ts('aside.changelog'), icon: 'north_east' },
+          { id: 'changelog', href: '/changelog', label: ts('aside.changelog'), icon: 'north_east' },
         ]}
         promo={{ kind: t('whatsNew.kind.new'), title: t('whatsNew.promo'), body: t('whatsNew.asideLabel', { pkg: 'ab-nextjs-components' }) }}
       />

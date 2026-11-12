@@ -13,3 +13,20 @@ allowBuilds:
 # 🧹 Nov 6 2026: components 0.6.0 is > 1 day old (published 2026-11-04 21:13 Paris, pin expired 2026-11-05 21:13 Paris), so its pin is gone (list empty again)
 # 🧹 Nov 12 2026: components 0.7.0 is past a day old (published 2026-11-06 09:40:48.855 Paris,
 #    safe to drop at or after 2026-11-07 09:41 Paris), so its pin is gone (list empty again)
+# The seven releases below were published 2026-11-12 (Paris, UTC+1). Each pin expires 24h later.
+# A minute-only stamp would drop the pin before the release is a full day old.
+# core 0.2.4 published 2026-11-12T05:29:35.727Z (06:29:35.727 Paris). Expires 2026-11-13 06:29:35.727 Paris.
+# theme 0.3.10 published 2026-11-12T05:29:47.532Z (06:29:47.532 Paris). Expires 2026-11-13 06:29:47.532 Paris.
+# fonts 0.2.8 published 2026-11-12T05:30:04.716Z (06:30:04.716 Paris). Expires 2026-11-13 06:30:04.716 Paris.
+# components 0.7.1 published 2026-11-12T05:30:35.341Z (06:30:35.341 Paris). Expires 2026-11-13 06:30:35.341 Paris.
+# animations 0.2.6 published 2026-11-12T05:30:36.673Z (06:30:36.673 Paris). Expires 2026-11-13 06:30:36.673 Paris.
+# icons 0.2.8 published 2026-11-12T05:31:09.969Z (06:31:09.969 Paris). Expires 2026-11-13 06:31:09.969 Paris.
+# hooks 0.1.8 published 2026-11-12T05:31:29.486Z (06:31:29.486 Paris). Expires 2026-11-13 06:31:29.486 Paris.
+minimumReleaseAgeExclude:
+  - ab-nextjs-animations@0.2.6 # D33: expires 2026-11-13 06:30:36.673 Paris
+  - ab-nextjs-components@0.7.1 # D33: expires 2026-11-13 06:30:35.341 Paris
+  - ab-nextjs-core@0.2.4 # D33: expires 2026-11-13 06:29:35.727 Paris
+  - ab-nextjs-fonts@0.2.8 # D33: expires 2026-11-13 06:30:04.716 Paris
+  - ab-nextjs-hooks@0.1.8 # D33: expires 2026-11-13 06:31:29.486 Paris
+  - ab-nextjs-icons@0.2.8 # D33: expires 2026-11-13 06:31:09.969 Paris
+  - ab-nextjs-theme@0.3.10 # D33: expires 2026-11-13 06:29:47.532 Paris

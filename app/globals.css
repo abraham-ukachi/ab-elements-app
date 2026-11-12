@@ -27,6 +27,37 @@ body {
   color: var(--ab-color-text, light-dark(#211A16, #F4ECE5)); /* 🖋️ */
 }
 
+/* 🖼️ layout-rule figures follow the picked theme (`data-theme`), not only the OS scheme.
+   The dark file is hidden until the page is dark, so a reader never sees both.
+   On a phone the figure keeps its captions at native size and scrolls sideways inside this
+   frame, so the document and the main pane stay free of a horizontal scrollbar. */
+.ab-layout-fig-scroll {
+  display: block;
+  max-width: 100%;
+  min-width: 0;
+  margin: 0 0 1.25em;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+}
+.ab-layout-fig-light,
+.ab-layout-fig-dark {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+/* 📱 1280px keeps a 10px SVG caption at 12px even on the widest figure (1060px viewBox) */
+@media (max-width: 767px) {
+  .ab-prose .ab-layout-fig-scroll :is(.ab-layout-fig-light, .ab-layout-fig-dark) {
+    width: 1280px;
+    max-width: none;
+  }
+}
+.ab-layout-fig-dark { display: none; }
+html.dark .ab-layout-fig-dark,
+html[data-theme="dark"] .ab-layout-fig-dark { display: block; }
+html.dark .ab-layout-fig-light,
+html[data-theme="dark"] .ab-layout-fig-light { display: none; }
+
 
 /* 📐 Home fidelity (spec §3): breakpoints, pane widths, header heights, gaps, radii and every pane surface
    (incl. the white ≥1920 light panes, theme 0.3.6) come from the packages, so the app sets no overrides here 🎉 */

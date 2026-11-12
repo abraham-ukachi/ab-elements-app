@@ -109,6 +109,12 @@ export default function HomeAside({ items, title, links, promo, pageName = 'home
   }, [mainScrollElement]);
   // 🎯 the published scroller wins, the DOM lookup fills the gap
   const scroller = mainScrollElement ?? foundScroller;
+  // ⚓ a URL hash scrolls the main pane (the document never scrolls). Clicking the outline already does this.
+  useEffect(() => {
+    const id = window.location.hash.replace(/^#/, ''); // 🔗
+    if (!id || !scroller) return; // 🙅 no hash yet, or the pane is not mounted
+    scrollToAbSection(id, { container: scroller, updateHash: false }); // 📜
+  }, [scroller]);
   // 🗄️ the shell's drawer state (one drawer at a time)
   const { open, setOpen } = useShellDrawer();
   // 🌐 the drawer's close label

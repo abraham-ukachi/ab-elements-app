@@ -2,6 +2,7 @@
   "title": "Guides",
   "pages": [
     "theming-dark-mode",
-    "icons-fonts"
+    "icons-fonts",
+    "layout-rule"
   ]
 }

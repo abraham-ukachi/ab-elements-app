@@ -227,6 +227,7 @@
         "quickStart": "Inicio rápido",
         "themingDarkMode": "Temas y modo oscuro",
         "iconsFonts": "Iconos y fuentes",
+        "layoutRule": "Regla de diseño",
         "pwaShell": "Shell PWA"
       },
       "collapse": "Contraer la barra lateral",
@@ -365,6 +366,10 @@
           "title": "Iconos y fuentes sin saltos de diseño",
           "tag": "Iconos · Fuentes"
         },
+        "layoutRule": {
+          "title": "Un diseño para cada pantalla",
+          "tag": "Diseños"
+        },
         "pwaShell": {
           "title": "Crear un shell de docs PWA",
           "tag": "Componentes"
@@ -380,20 +385,6 @@
         "fixed": "Corregido"
       },
       "asideLabel": "Novedad en {pkg}",
-      "items": {
-        "core": {
-          "title": "Paneles que se desplazan solos (la regla de diseño)",
-          "date": "oct 2026"
-        },
-        "hooks": {
-          "title": "useAbScrollSpy y el script de tema sin destellos",
-          "date": "oct 2026"
-        },
-        "components": {
-          "title": "Tabla de contenidos, barra de app y tarjetas de paquetes",
-          "date": "oct 2026"
-        }
-      },
       "promo": "Tabla de contenidos y barra de app"
     },
     "toc": {
@@ -442,5 +433,9 @@
         "deprecated": "Obsoleto"
       }
     }
+  },
+  "Changelog": {
+    "lede": "Notas de versión de esta aplicación y de cada paquete Ab instalado.",
+    "compare": "Comparar"
   }
 }

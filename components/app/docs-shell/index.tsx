@@ -469,7 +469,7 @@ export default function DocsShell({ locale, labels, locales, sections, topLinks,
             version={labels.version}
             sections={navSections}
             activeHref={pathname}
-            footer={[{ href: '/#whats-new', label: topLinks.find((link) => link.href === '/#whats-new')?.label ?? 'Changelog', icon: 'north_east' }]}
+            footer={[{ href: topLinks.find((link) => link.href === '/changelog')?.href ?? '/changelog', label: topLinks.find((link) => link.href === '/changelog')?.label ?? 'Changelog', icon: 'north_east' }]}
             onSettings={() => setTimeout(() => setOpen('settings'), 0)}
             labels={{ title: t('drawers.siteNav'), close: t('drawers.closeNav'), settings: t('drawers.settings') }}
           />

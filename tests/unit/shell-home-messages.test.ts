@@ -129,6 +129,16 @@ describe('messages: the Shell & Home namespaces 🧭', () => {
     });
   }
 
+  it('fr, es and ru translate the top-nav Packages and Guides labels 🌍', () => {
+    // 🔝 the laptop header (Shell.nav), not a hard-coded string. "Guides" is the French word.
+    expect(load('fr')['Shell.nav.packages']).toBe('Paquets');
+    expect(load('fr')['Shell.nav.guides']).toBe('Guides');
+    expect(load('es')['Shell.nav.packages']).toBe('Paquetes');
+    expect(load('es')['Shell.nav.guides']).toBe('Guías');
+    expect(load('ru')['Shell.nav.packages']).toBe('Пакеты');
+    expect(load('ru')['Shell.nav.guides']).toBe('Руководства');
+  });
+
   it('fr: uses a non-breaking space before `…` 🇫🇷', () => {
     const fr = load('fr');
     for (const [key, value] of Object.entries(fr)) if (value.includes('…')) expect(value, key).toMatch(/\u00a0…/);

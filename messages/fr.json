@@ -208,7 +208,7 @@
     "brandLabel": "Accueil AbElements",
     "nav": {
       "primary": "Principal",
-      "packages": "Packages",
+      "packages": "Paquets",
       "guides": "Guides",
       "changelog": "Journal des modifications",
       "more": "Plus"
@@ -227,6 +227,7 @@
         "quickStart": "Démarrage rapide",
         "themingDarkMode": "Thèmes et mode sombre",
         "iconsFonts": "Icônes et polices",
+        "layoutRule": "Règle de mise en page",
         "pwaShell": "Shell PWA"
       },
       "collapse": "Réduire la barre latérale",
@@ -365,6 +366,10 @@
           "title": "Icônes et polices sans décalage de mise en page",
           "tag": "Icônes · Polices"
         },
+        "layoutRule": {
+          "title": "Une mise en page pour chaque écran",
+          "tag": "Mises en page"
+        },
         "pwaShell": {
           "title": "Créer un shell de docs PWA",
           "tag": "Composants"
@@ -380,20 +385,6 @@
         "fixed": "Corrigé"
       },
       "asideLabel": "Nouveau dans {pkg}",
-      "items": {
-        "core": {
-          "title": "Des volets qui défilent seuls (la règle de mise en page)",
-          "date": "oct. 2026"
-        },
-        "hooks": {
-          "title": "useAbScrollSpy et le script de thème sans flash",
-          "date": "oct. 2026"
-        },
-        "components": {
-          "title": "Table des matières, barre d’app et cartes de packages",
-          "date": "oct. 2026"
-        }
-      },
       "promo": "Table des matières et barre d’app"
     },
     "toc": {
@@ -442,5 +433,9 @@
         "deprecated": "Obsolète"
       }
     }
+  },
+  "Changelog": {
+    "lede": "Notes de version de cette application et de chaque paquet Ab installé.",
+    "compare": "Comparer"
   }
 }

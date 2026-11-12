@@ -89,7 +89,7 @@ describe('lib/nav 🧭', () => {
       const slug = href.replace(/^\/docs\/?/, '');
       return [`${slug || 'index'}.mdx`, `${slug}/index.mdx`].some((file) => existsSync(join(process.cwd(), 'content/docs/en', file)));
     };
-    for (const href of hrefs) expect(href === '/' || href.startsWith('/#') || (href.startsWith('/docs') && isDocsPage(href)), href).toBe(true);
+    for (const href of hrefs) expect(href === '/' || href === '/changelog' || href.startsWith('/#') || (href.startsWith('/docs') && isDocsPage(href)), href).toBe(true);
   });
 });
 
