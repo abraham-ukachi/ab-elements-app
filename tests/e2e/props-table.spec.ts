@@ -67,7 +67,7 @@ test.describe('props tables 📋', () => {
       await page.setViewportSize({ width: 1440, height: 900 });
       await openPage(page, doc.path);
       const table = page.locator('[data-ab-part="props-table"]').first();
-      // ⌨️ one tab stop for the overflow region (arrow keys scroll it natively)
+      // ⌨️ one tab stop. At 1440 the table fits, so this is not a scroll measurement.
       await expect(table).toHaveAttribute('tabindex', '0');
       await expect(table).toHaveAttribute('role', 'region');
       await table.focus();
@@ -77,13 +77,38 @@ test.describe('props tables 📋', () => {
       await expect(table.locator('tbody th[scope="row"]').first()).toBeVisible();
     });
 
-    test(`↔️ ${doc.path} at 390px the table scrolls and the document does not`, async ({ page }) => {
+    test(`↔️ ${doc.path} at 390px ArrowRight scrolls the table after it settles`, async ({ page }) => {
       await page.setViewportSize({ width: 390, height: 844 });
       await openPage(page, doc.path);
       const table = page.locator('[data-ab-part="props-table"]').first();
-      const overflow = await table.evaluate((el) => ({ x: el.scrollWidth - el.clientWidth, doc: document.documentElement.scrollWidth - document.documentElement.clientWidth }));
+      // 📏 mobile is the overflowing case (about 356px of a 640px table). 1440 does not overflow.
+      const overflow = await table.evaluate((el) => ({
+        x: el.scrollWidth - el.clientWidth,
+        doc: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+      }));
       expect(overflow.x).toBeGreaterThan(0);
       expect(overflow.doc).toBe(0);
+      await table.focus();
+      await expect(table).toBeFocused();
+      const before = await table.evaluate((el) => el.scrollLeft);
+      const main = page.locator('[data-ab-part="main-content"]');
+      const mainBefore = await main.evaluate((el) => el.scrollTop);
+      await page.keyboard.press('ArrowRight');
+      // 🎞️ Chromium smooth-scrolls a focused overflow region. scrollLeft is still 0 on the next line.
+      await table.evaluate((el) => new Promise((resolve) => {
+        const finish = () => resolve(undefined);
+        el.addEventListener('scrollend', finish, { once: true });
+        setTimeout(finish, 1500);
+      }));
+      const after = await table.evaluate((el) => ({
+        left: el.scrollLeft,
+        docX: document.documentElement.scrollLeft,
+        docY: document.documentElement.scrollTop,
+      }));
+      expect(after.left).toBeGreaterThan(before);
+      expect(after.docX).toBe(0);
+      expect(after.docY).toBe(0);
+      expect(await main.evaluate((el) => el.scrollTop)).toBe(mainBefore);
     });
 
     test(`🏳️ ${doc.path} French falls back to the English article`, async ({ page }) => {
