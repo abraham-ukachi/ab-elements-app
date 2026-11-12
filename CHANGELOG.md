@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file. See [standa
 * :art: Retint the layout-rule figures to the bronze theme, with sage only on the small scrolls caption
 * :iphone: Let layout-rule figures scroll inside the article on a phone, so captions stay at least 12px
 * :globe_with_meridians: Translate the top-nav Packages and Guides labels in French, Spanish and Russian
+* :lock: Keep changelog shortcode lookup off the prototype chain, and send every href through the same gate
 
 ### [0.2.28](https://github.com/abraham-ukachi/ab-elements-app/compare/v0.2.27...v0.2.28) (2026-11-12)
 

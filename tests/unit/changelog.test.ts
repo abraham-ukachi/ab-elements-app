@@ -48,8 +48,14 @@
 // import the file reader 📁
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
+// import the element helper (the HTTPS link is a rendered anchor) 🧩
+import { createElement } from 'react';
+// import the static renderer 🖨️
+import { renderToStaticMarkup } from 'react-dom/server';
 // import the test helpers 🧪
 import { afterEach, describe, expect, it } from 'vitest';
+// import the changelog body (external links get target and rel) 📜
+import { ChangelogMarkdown } from '@/components/app/changelog-md';
 // import the parser and the gate 📜
 import {
   AB_CHANGELOG_GATE,
@@ -206,6 +212,23 @@ describe('changelog link safety 🔒', () => {
     expect(linkHrefs('[gh](https://github.com/abraham-ukachi/ab-elements-app)')).toEqual(['https://github.com/abraham-ukachi/ab-elements-app']);
   });
 
+  it('rejects a DEL and a NEL in a destination', () => {
+    // 🚫 U+007F and U+0085 are controls, in a path, a fragment, a mailto, and an https URL
+    expect(linkHrefs(`[go](/docs/${'\u007f'})`)).toEqual([]);
+    expect(linkHrefs(`[go](#x${'\u0085'})`)).toEqual([]);
+    expect(linkHrefs(`[go](mailto:a@b.c${'\u007f'})`)).toEqual([]);
+    expect(linkHrefs(`[go](https://example.com/${'\u0085'})`)).toEqual([]);
+  });
+
+  it('drops an unsafe compare URL', () => {
+    // 🚫 javascript: is not a changelog href, so the heading keeps the version and loses the link
+    expect(classifyHeading('[1.2.3](javascript:x) (2026-11-12)')).toMatchObject({ kind: 'version', version: '1.2.3', compareUrl: null });
+    // 🚫 a DEL in an otherwise https URL fails the same gate
+    expect(classifyHeading(`[1.2.3](https://example.com/${'\u007f'}) (2026-11-12)`)).toMatchObject({ compareUrl: null });
+    // ✅ a real compare link is kept
+    expect(classifyHeading('[1.2.3](https://example.com/compare) (2026-11-12)')).toMatchObject({ compareUrl: 'https://example.com/compare' });
+  });
+
   it('keeps a markdown URL that contains balanced parentheses', () => {
     // ✅ the `)` inside the URL is not the end of the link
     expect(linkHrefs('[wiki](https://example.com/Foo_(bar))')).toEqual(['https://example.com/Foo_(bar)']);
@@ -317,6 +340,17 @@ describe('gitmoji shortcodes 😀', () => {
     expect(parseChangelogInlines(':not_a_slug:')).toEqual([{ type: 'text', text: ':not_a_slug:' }]);
   });
 
+  it('leaves :constructor:, :__proto__:, :toString: and :hasOwnProperty: as literal text', () => {
+    // 🚫 these names live on Object.prototype. The table must not read them.
+    for (const name of ['constructor', '__proto__', 'toString', 'hasOwnProperty']) {
+      const token = `:${name}:`;
+      // 📰 the heading path (expandGitmojiText)
+      expect(parseChangelogBlocks(`### ${token}`)[0], name).toMatchObject({ type: 'h', text: token });
+      // 🔤 the inline path
+      expect(parseChangelogInlines(token), name).toEqual([{ type: 'text', text: token }]);
+    }
+  });
+
   it('does not map a shortcode inside a code block', () => {
     // 💻 the fence is a pre, not an inline
     const blocks = parseChangelogBlocks('```\n:sparkles: stays\n```\n\n:sparkles: maps');
@@ -343,6 +377,20 @@ describe('gitmoji shortcodes 😀', () => {
 const plainInline = (runs: readonly ChangelogInline[]): string => runs.map((run) => (
   run.type === 'text' || run.type === 'code' ? run.text : plainInline(run.children)
 )).join('');
+
+
+describe('changelog external anchors 🔒', () => {
+  it('gives an HTTPS:// link a new tab and noreferrer', () => {
+    // 🌐 the scheme is uppercase. It is still an external link.
+    const html = renderToStaticMarkup(createElement(ChangelogMarkdown, {
+      markdown: '[site](HTTPS://example.com/a)',
+      labels: { copy: 'Copy', copied: 'Copied' },
+    }));
+    expect(html).toContain('href="HTTPS://example.com/a"');
+    expect(html).toContain('target="_blank"');
+    expect(html).toContain('rel="noopener noreferrer"');
+  });
+});
 
 
 describe('What\'s new rows 📰', () => {

@@ -201,7 +201,8 @@ export function classifyHeading(text: string): ClassifiedHeading {
   const linked = /^\[([^\]]+)\]\(([^)\s]*)\)\s*(.*)$/.exec(text.trim());
   // 🔤 the label, the compare URL, and whatever follows the link
   const label = linked ? linked[1].trim() : text.trim();
-  const compareUrl = linked && /^https?:\/\//.test(linked[2]) ? linked[2] : null;
+  // 🔒 the same gate as every other changelog href (http, https, a site path, a hash, or mailto)
+  const compareUrl = linked && isSafeChangelogHref(linked[2]) ? linked[2] : null;
   const rest = (linked ? linked[3] : '').trim();
   // 📅 a single trailing parenthetical is the date (or the word Unreleased)
   const dated = /^(.*?)(?:\s+\(([^)]*)\))?\s*$/.exec(linked ? `${label} ${rest}`.trim() : text.trim());
@@ -421,16 +422,16 @@ function markdownLinkEnd(input: string, openParen: number): number {
 /**
  * `isSafeChangelogHref` - whether a markdown destination may become an anchor 🔒
  *
- * A backslash, any whitespace, or a control character fails first, before a scheme is trusted.
- * That rejects `/\evil.com`, `/\/evil.com`, and `/` + a tab + `javascript:`.
+ * A backslash, any whitespace, or a C0/C1 control (including DEL) fails first, before a scheme is trusted.
+ * That rejects `/\evil.com`, `/\/evil.com`, `/` + a tab + `javascript:`, and a DEL or NEL in the destination.
  * The same check covers `#` fragments and `mailto:` links. Anything rejected stays plain text.
  *
  * @param { string } href - the raw destination, not trimmed
  * @returns { boolean }
  */
 function isSafeChangelogHref(href: string): boolean {
-  // 🚫 \, space, tab, newline, or a C0 control — before any scheme check
-  if (/[\s\\\u0000-\u001f]/.test(href)) return false;
+  // 🚫 \, space, tab, newline, a C0 control, DEL, or a C1 control — before any scheme check
+  if (/[\s\\\u0000-\u001f\u007f-\u009f]/.test(href)) return false;
   // 🏠 one leading slash, then no second slash (`//host` is not a site path)
   if (href.startsWith('/')) return /^\/(?!\/)[^\s\\]*$/.test(href);
   // ⚓ `#components-0.7.0` (the character check above already ran)
@@ -443,8 +444,9 @@ function isSafeChangelogHref(href: string): boolean {
 
 
 // 😀 gitmoji shortcodes that appear in this app's CHANGELOG or an installed package CHANGELOG.
-//    A name that is not in this table stays the literal `:name:` text. Nothing here is HTML.
-export const CHANGELOG_GITMOJI: Readonly<Record<string, string>> = {
+//    A name that is not an own key stays the literal `:name:` text. Nothing here is HTML.
+//    The table has no prototype, so `:constructor:` and `:toString:` are not inherited properties.
+export const CHANGELOG_GITMOJI: Readonly<Record<string, string>> = Object.freeze(Object.assign(Object.create(null) as Record<string, string>, {
   arrow_up: '⬆️',
   art: '🎨',
   bento: '🍱',
@@ -471,10 +473,29 @@ export const CHANGELOG_GITMOJI: Readonly<Record<string, string>> = {
   wheelchair: '♿',
   white_check_mark: '✅',
   wrench: '🔧',
-};
+}));
 
 // 😀 `:name:` when `name` is one token. A digit-leading match (`:40:` inside a timestamp) is not a shortcode we map.
-const GITMOJI_SHORTCODE = /:([a-z][a-z0-9_+-]*):/g;
+//    A leading `_` is included so `:__proto__:` is one token and then rejected by the own-key check.
+const GITMOJI_SHORTCODE = /:([a-z_][a-z0-9_+-]*):/g;
+
+
+/**
+ * `gitmojiEmoji` - the emoji for an own key of the table, or nothing 🔒
+ *
+ * `table[name]` would read `Object.prototype`, so `:constructor:` would become a function.
+ * `Object.hasOwn` refuses that. The null prototype is the same rule a second time.
+ *
+ * @param { string } name - the shortcode without colons
+ * @returns { string | undefined }
+ */
+function gitmojiEmoji(name: string): string | undefined {
+  // 🚫 inherited names are not emoji
+  if (!Object.hasOwn(CHANGELOG_GITMOJI, name)) return undefined;
+  const emoji = CHANGELOG_GITMOJI[name];
+  // 😀 only a string from the table
+  return typeof emoji === 'string' ? emoji : undefined;
+}
 
 
 /**
@@ -487,12 +508,12 @@ const GITMOJI_SHORTCODE = /:([a-z][a-z0-9_+-]*):/g;
  */
 function expandGitmojiText(text: string): string {
   // 😀 one pass. An emoji has no `:name:` in it, so a second pass would change nothing.
-  return text.replace(GITMOJI_SHORTCODE, (full, name: string) => CHANGELOG_GITMOJI[name] ?? full);
+  return text.replace(GITMOJI_SHORTCODE, (full, name: string) => gitmojiEmoji(name) ?? full);
 }
 
 
 // 😀 a `:slug:` at this index. Underscores inside the name are part of the token, not emphasis.
-const SHORTCODE_AT = /^:([a-z][a-z0-9_+-]*):/;
+const SHORTCODE_AT = /^:([a-z_][a-z0-9_+-]*):/;
 
 
 /**
@@ -595,7 +616,7 @@ export function parseChangelogInlines(input: string): ChangelogInline[] {
     const shortcode = SHORTCODE_AT.exec(input.slice(index));
     if (shortcode) {
       const name = shortcode[1] ?? ''; // 🏷️
-      pushText(CHANGELOG_GITMOJI[name] ?? shortcode[0]); // 😀 known → emoji, unknown → the literal `:name:`
+      pushText(gitmojiEmoji(name) ?? shortcode[0]); // 😀 own key → emoji, anything else → the literal `:name:`
       index += shortcode[0].length;
       continue;
     }
