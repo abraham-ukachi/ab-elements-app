@@ -85,6 +85,10 @@ export function CurrentSection({ ids }: { ids: readonly string[] }) {
 
 Server helpers for the welcome cookie live at `ab-nextjs-hooks/server/useAbApp`: `isAppHello`, `toggleAppHello`, and `AB_APP_COOKIE_MAX_AGE` (including `oneYear`). They are server actions. Do not import them from a client component.
 
+## Scroll spy
+
+`useAbScrollSpy`, `scrollToAbSection` and the root-margin constants are on [Scroll spy](/docs/packages/hooks/scroll-spy). `getAbMainScroller` is documented there too, and it comes from components, not from this package.
+
 ## What it ships
 
 The package root re-exports the hooks above, plus `useAbDialog`, `useAbToast`, `useAbMenu` and `useAbConfetti`. Product hooks (`useAbProduct`, `useAbBrand`, and the label hooks) are in the same barrel; they are not part of the docs shell.

@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.28](https://github.com/abraham-ukachi/ab-elements-app/compare/v0.2.27...v0.2.28) (2026-11-12)
+
+* :sparkles: Add API props tables extracted at build time with ts-morph from the published declarations, and render them with the packaged AbPropsTable on the drawer, layout-slot and scroll-spy pages
+* :memo: Record a symbol inventory of what those pages cover, what stays deferred, and which names are not a public import
+* :arrow_up: Use ab-nextjs-components 0.7.0
+* :white_check_mark: Test that ArrowRight scrolls each props table at 390px after the scroll settles, and that the document does not
+* :wrench: Drop the expired components 0.7.0 release-age pin
+
 ### [0.2.27](https://github.com/abraham-ukachi/ab-elements-app/compare/v0.2.26...v0.2.27) (2026-11-06)
 
 * :memo: Write the getting started pages: Introduction, Installation (pnpm, npm, yarn and bun) and Quick start, using the published layout APIs

@@ -53,12 +53,12 @@
 //   6️⃣ on tablet the outline toggle opens a drawer inside the viewport.
 
 // import the test runner 🎭
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
 // import the shared layout probes 🧰
 import { LAPTOP_MIN, PART, TABLET_MIN, THEMES, WIDTHS, boxOf, documentScroll, openPage, scrollPane, scrollTopOf } from './layout-helpers';
 
 
-// 📚 the eleven pages (English). French fallbacks use the same article, so the rules are the same.
+// 📚 every docs page (getting started, packages, the API pages, and the guides)
 const DOCS = [
   { id: 'intro', path: '/docs' },
   { id: 'install', path: '/docs/installation' },
@@ -68,9 +68,27 @@ const DOCS = [
   { id: 'animations', path: '/docs/packages/animations' },
   { id: 'theme', path: '/docs/packages/theme' },
   { id: 'hooks', path: '/docs/packages/hooks' },
+  { id: 'scroll-spy', path: '/docs/packages/hooks/scroll-spy' },
   { id: 'core', path: '/docs/packages/core' },
+  { id: 'layouts', path: '/docs/packages/core/layouts' },
   { id: 'components', path: '/docs/packages/components' },
+  { id: 'drawer', path: '/docs/packages/components/drawer' },
   { id: 'i18n', path: '/docs/packages/i18n' },
+  { id: 'guide-theming', path: '/docs/guides/theming-dark-mode' },
+  { id: 'guide-icons', path: '/docs/guides/icons-fonts' },
+] as const;
+
+// 📏 1440 is the review laptop. The three API pages, in English and on the French fallback, are checked here too.
+const LAPTOP_1440 = { name: 'laptop-1440', width: 1440, height: 900 } as const;
+// 📄 those three routes, plus the French URL of each (the article is still the English one)
+const API_PAGES = [
+  { id: 'scroll-spy', path: '/docs/packages/hooks/scroll-spy' },
+  { id: 'layouts', path: '/docs/packages/core/layouts' },
+  { id: 'drawer', path: '/docs/packages/components/drawer' },
+] as const;
+const API_AT_1440 = [
+  ...API_PAGES,
+  ...API_PAGES.map((doc) => ({ id: `${doc.id}-fr`, path: `/fr${doc.path}` })),
 ] as const;
 
 // 📜 scrollers the rule allows
@@ -79,15 +97,17 @@ const ALLOWED_SCROLLERS = ['main-content', 'aside-content', 'sidebar', 'drawer-b
 const SLOT_PARTS = ['header', 'main-header', 'main-bar', 'main-footer', 'aside-header', 'aside-bar', 'aside-footer', 'footer', 'bottomBar'];
 
 
-for (const doc of DOCS) {
-  for (const vp of WIDTHS) {
-    for (const scheme of THEMES) {
-      test.describe(`${doc.id} · ${vp.name} ${vp.width}px · ${scheme} 📐`, () => {
-        test.use({ viewport: { width: vp.width, height: vp.height }, colorScheme: scheme });
-
-        test('1️⃣–6️⃣ layout rules hold on this docs page', async ({ page }) => {
-          await openPage(page, doc.path);
-
+/**
+ * `expectDocsLayout` 📐
+ *
+ * The 0.2.23 rules for one open docs page: the document does not scroll, only the panes do,
+ * empty slots measure 0, the aside exists from 1180px, and the tablet outline opens inside the viewport.
+ *
+ * @param { Page } page - already on the docs page
+ * @param { { width: number; height: number } } vp - the viewport the page was opened at
+ * @returns { Promise<void> }
+ */
+async function expectDocsLayout(page: Page, vp: { width: number; height: number }): Promise<void> {
           // 1️⃣ the document never scrolls
           const rest = await documentScroll(page);
           expect(rest.overflow, 'document overflow').toBe(0);
@@ -175,8 +195,35 @@ for (const doc of DOCS) {
             await expect(page.getByRole('dialog')).toBeHidden();
             await expect(toggle).toBeFocused();
           }
+}
+
+
+for (const doc of DOCS) {
+  for (const vp of WIDTHS) {
+    for (const scheme of THEMES) {
+      test.describe(`${doc.id} · ${vp.name} ${vp.width}px · ${scheme} 📐`, () => {
+        test.use({ viewport: { width: vp.width, height: vp.height }, colorScheme: scheme });
+
+        test('1️⃣–6️⃣ layout rules hold on this docs page', async ({ page }) => {
+          await openPage(page, doc.path);
+          await expectDocsLayout(page, vp);
         });
       });
     }
+  }
+}
+
+
+// 💻 1440, English and French, for the three API pages only (the other widths already cover the English routes)
+for (const doc of API_AT_1440) {
+  for (const scheme of THEMES) {
+    test.describe(`${doc.id} · ${LAPTOP_1440.name} ${LAPTOP_1440.width}px · ${scheme} 📐`, () => {
+      test.use({ viewport: { width: LAPTOP_1440.width, height: LAPTOP_1440.height }, colorScheme: scheme });
+
+      test('1️⃣–6️⃣ layout rules hold at 1440', async ({ page }) => {
+        await openPage(page, doc.path);
+        await expectDocsLayout(page, LAPTOP_1440);
+      });
+    });
   }
 }

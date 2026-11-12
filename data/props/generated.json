@@ -1,0 +1,2362 @@
+{
+  "symbols": [
+    {
+      "id": "AbDrawerProps",
+      "name": "AbDrawerProps",
+      "packageName": "ab-nextjs-components",
+      "entry": "ab-nextjs-components/ab-drawer",
+      "file": "node_modules/ab-nextjs-components/ab-drawer/index.tsx",
+      "description": "⚙️ props",
+      "kind": "props",
+      "rows": [
+        {
+          "name": "open",
+          "type": "boolean",
+          "required": true,
+          "description": "🚪 controlled",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "onClose",
+          "type": "() => void",
+          "required": true,
+          "description": "⎋ Escape, scrim click and the close button call it",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "scope",
+          "type": "AbDrawerScope | undefined",
+          "description": "🗺️ which box clips it (default app)",
+          "default": {
+            "kind": "value",
+            "value": "'app'"
+          },
+          "defaultSource": "declared"
+        },
+        {
+          "name": "side",
+          "type": "AbDrawerSide | undefined",
+          "description": "🧭 default bottom",
+          "default": {
+            "kind": "value",
+            "value": "'bottom'"
+          },
+          "defaultSource": "declared"
+        },
+        {
+          "name": "title",
+          "type": "ReactNode",
+          "description": "🏷️ a string becomes the <h2> that labels the dialog",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "'aria-labelledby'",
+          "type": "string | undefined",
+          "description": "♿ your own visible title id (wins over title)",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "'aria-label'",
+          "type": "string | undefined",
+          "description": "♿ when there is no visible title",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "id",
+          "type": "string | undefined",
+          "description": "🆔 the dialog id (aria-controls target)",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "description": "📄 the body (it scrolls on its own)",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "footer",
+          "type": "ReactNode",
+          "description": "🔚 actions row (stays put)",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "size",
+          "type": "string | undefined",
+          "description": "📏 width (start/end/left/right) or height (top/bottom), e.g. 360px",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "modal",
+          "type": "boolean | undefined",
+          "description": "🔒 trap focus + make the rest of the scope inert (default true)",
+          "default": {
+            "kind": "value",
+            "value": "true"
+          },
+          "defaultSource": "declared"
+        },
+        {
+          "name": "closeLabel",
+          "type": "string | undefined",
+          "description": "🌍 default \"Close\"",
+          "default": {
+            "kind": "value",
+            "value": "'Close'"
+          },
+          "defaultSource": "declared"
+        },
+        {
+          "name": "noJsFallback",
+          "type": "boolean | undefined",
+          "description": "🧩 D41: without JS, render the content in flow (default true)",
+          "default": {
+            "kind": "value",
+            "value": "true"
+          },
+          "defaultSource": "declared"
+        },
+        {
+          "name": "initialFocus",
+          "type": "\"first\" | \"panel\" | (string & {}) | undefined",
+          "description": "🎯 on open: the first control (default), the panel itself, or (0.2.0) a CSS selector inside the panel, e.g. [role=radio][aria-checked=true]",
+          "default": {
+            "kind": "value",
+            "value": "'first'"
+          },
+          "defaultSource": "declared"
+        },
+        {
+          "name": "tier",
+          "type": "AbDrawerTier | undefined",
+          "description": "🥞 stacking tier: 'aside' (z 60) < 'nav' (61) < 'sheet' (62)",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "swipe",
+          "type": "boolean | undefined",
+          "description": "🤏 side drawers: swipe the sheet back toward its edge to close (30% of the width or ≥ 0.5px/ms)",
+          "default": {
+            "kind": "value",
+            "value": "false"
+          },
+          "defaultSource": "declared"
+        },
+        {
+          "name": "snapPoints",
+          "type": "boolean | undefined",
+          "description": "🧲 bottom only, below 768px: snaps at 70% (S1) and full height (S2) with a handle; gestures per the spec",
+          "default": {
+            "kind": "value",
+            "value": "false"
+          },
+          "defaultSource": "declared"
+        },
+        {
+          "name": "defaultSnap",
+          "type": "AbSheetSnap | undefined",
+          "description": "🧲 where it opens (default 'partial'; e.g. 'full' for a search sheet)",
+          "default": {
+            "kind": "value",
+            "value": "'partial'"
+          },
+          "defaultSource": "declared"
+        },
+        {
+          "name": "fullOnly",
+          "type": "boolean | undefined",
+          "description": "🧲 no 70% stop: opens at full height, a gentle drag springs back, a hard one closes (search: the keyboard is up)",
+          "default": {
+            "kind": "value",
+            "value": "false"
+          },
+          "defaultSource": "declared"
+        },
+        {
+          "name": "onSnapChange",
+          "type": "((snap: AbSheetSnap) => void) | undefined",
+          "description": "🔔",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "handleLabels",
+          "type": "{ expand: string; collapse: string; } | undefined",
+          "description": "♿ the handle button (default \"Expand\" / \"Collapse\")",
+          "default": {
+            "kind": "unknown"
+          },
+          "defaultSource": "comment"
+        },
+        {
+          "name": "centerIn",
+          "type": "\"main\" | undefined",
+          "description": "💻 bottom only, 768px and up: centred in the main pane, min(640px, main width) wide, ≤ 70% tall",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "returnFocus",
+          "type": "string | undefined",
+          "description": "↩️ selector focused on close when there was no focusable opener (an edge swipe); default AB_DRAWER_RETURN_FOCUS (the header / brand logo)",
+          "default": {
+            "kind": "unknown"
+          },
+          "defaultSource": "comment"
+        },
+        {
+          "name": "closeIcon",
+          "type": "ReactNode",
+          "description": "✕ the close glyph (default a text ✕)",
+          "default": {
+            "kind": "unknown"
+          },
+          "defaultSource": "comment"
+        },
+        {
+          "name": "headerStart",
+          "type": "ReactNode",
+          "description": "🏷️ header content that does NOT label the dialog (e.g. a logo; then use aria-label). title wins",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "className",
+          "type": "string | undefined",
+          "description": "🏷️",
+          "default": {
+            "kind": "none"
+          }
+        }
+      ]
+    },
+    {
+      "id": "AbDrawerSide",
+      "name": "AbDrawerSide",
+      "packageName": "ab-nextjs-components",
+      "entry": "ab-nextjs-components/ab-drawer",
+      "file": "node_modules/ab-nextjs-components/ab-drawer/index.tsx",
+      "description": "🧭 where it slides in from. start / end follow the writing direction (RTL-aware).",
+      "kind": "union",
+      "type": "'top' | 'bottom' | 'left' | 'right' | 'start' | 'end'"
+    },
+    {
+      "id": "AbDrawerTier",
+      "name": "AbDrawerTier",
+      "packageName": "ab-nextjs-components",
+      "entry": "ab-nextjs-components/ab-drawer",
+      "file": "node_modules/ab-nextjs-components/ab-drawer/index.tsx",
+      "description": "🥞 drawers v2 stacking tiers (spec z-order): aside (right) < nav (left) < sheet (bottom). Unset = the old single level.",
+      "kind": "union",
+      "type": "'aside' | 'nav' | 'sheet'"
+    },
+    {
+      "id": "AbDrawerScope",
+      "name": "AbDrawerScope",
+      "packageName": "ab-nextjs-components",
+      "entry": "ab-nextjs-components/ab-drawer",
+      "file": "node_modules/ab-nextjs-components/ab-drawer/use-ab-drawer.ts",
+      "description": "🗺️ which box clips the drawer (G53): the whole app, the main pane or the aside pane",
+      "kind": "union",
+      "type": "'app' | 'main' | 'aside'"
+    },
+    {
+      "id": "AbSheetSnap",
+      "name": "AbSheetSnap",
+      "packageName": "ab-nextjs-components",
+      "entry": "ab-nextjs-components/ab-drawer",
+      "file": "node_modules/ab-nextjs-components/ab-drawer/gestures.ts",
+      "description": "🧲 bottom-sheet snap states: S1 (partial, 70%), S2 (full) or gone",
+      "kind": "union",
+      "type": "'partial' | 'full'"
+    },
+    {
+      "id": "UseAbDrawer",
+      "name": "UseAbDrawer",
+      "packageName": "ab-nextjs-components",
+      "entry": "ab-nextjs-components/ab-drawer",
+      "file": "node_modules/ab-nextjs-components/ab-drawer/use-ab-drawer.ts",
+      "description": "🎛️ what useAbDrawer returns",
+      "kind": "props",
+      "rows": [
+        {
+          "name": "scope",
+          "type": "AbDrawerScope",
+          "required": true,
+          "description": "🗺️",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "🆔 the drawer id (aria-controls target)",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "open",
+          "type": "boolean",
+          "required": true,
+          "description": "🚪 is it open?",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "show",
+          "type": "() => void",
+          "required": true,
+          "description": "➕ open it",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "close",
+          "type": "() => void",
+          "required": true,
+          "description": "➖ close it (Escape / scrim / buttons)",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "toggle",
+          "type": "() => void",
+          "required": true,
+          "description": "🔁",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "setOpen",
+          "type": "(open: boolean) => void",
+          "required": true,
+          "description": "🎚️ controlled setter",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "triggerProps",
+          "type": "{ 'aria-expanded': boolean; 'aria-controls': string; 'aria-haspopup': \"dialog\"; onClick: () => void; }",
+          "required": true,
+          "description": "🔘 spread on the trigger button: aria-expanded / aria-controls / aria-haspopup / onClick",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "drawerProps",
+          "type": "{ id: string; scope: AbDrawerScope; open: boolean; onClose: () => void; }",
+          "required": true,
+          "description": "🗄️ spread on the drawer: id / scope / open / onClose",
+          "default": {
+            "kind": "none"
+          }
+        }
+      ]
+    },
+    {
+      "id": "useAbDrawer",
+      "name": "useAbDrawer",
+      "packageName": "ab-nextjs-components",
+      "entry": "ab-nextjs-components/ab-drawer",
+      "file": "node_modules/ab-nextjs-components/ab-drawer/use-ab-drawer.ts",
+      "description": "🎛️ useAbDrawer(scope) — one drawer's open state + the trigger / drawer prop bags (G53). 🧭 Lives in **components** (next to AbDrawer), not in core: it holds no layout state, only open, and components doesn't depend on core. Focus return is handled by AbDrawer itself.",
+      "kind": "function",
+      "signature": "useAbDrawer(scope: AbDrawerScope = 'app', options: { defaultOpen?: boolean; id?: string } = {}): UseAbDrawer",
+      "rows": [
+        {
+          "name": "scope",
+          "type": "AbDrawerScope",
+          "description": "",
+          "default": {
+            "kind": "value",
+            "value": "'app'"
+          }
+        },
+        {
+          "name": "options",
+          "type": "{ defaultOpen?: boolean; id?: string }",
+          "description": "",
+          "default": {
+            "kind": "value",
+            "value": "{}"
+          }
+        }
+      ]
+    },
+    {
+      "id": "UseAbEdgeSwipeOptions",
+      "name": "UseAbEdgeSwipeOptions",
+      "packageName": "ab-nextjs-components",
+      "entry": "ab-nextjs-components/ab-drawer",
+      "file": "node_modules/ab-nextjs-components/ab-drawer/use-ab-edge-swipe.ts",
+      "description": "⚙️ options",
+      "kind": "props",
+      "rows": [
+        {
+          "name": "edge",
+          "type": "\"left\" | \"right\"",
+          "required": true,
+          "description": "🧱 which edge the swipe starts from (left = left-to-right, opens the left drawer)",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "onOpen",
+          "type": "() => void",
+          "required": true,
+          "description": "🚪 called when the swipe commits",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "enabled",
+          "type": "boolean | undefined",
+          "description": "🎚️ e.g. false while that drawer is open, or when the page has no aside (default true)",
+          "default": {
+            "kind": "value",
+            "value": "true"
+          },
+          "defaultSource": "declared"
+        },
+        {
+          "name": "width",
+          "type": "number | undefined",
+          "description": "📏 the drawer width the 30% rule uses (default 320)",
+          "default": {
+            "kind": "value",
+            "value": "320"
+          },
+          "defaultSource": "declared"
+        },
+        {
+          "name": "pointerTypes",
+          "type": "readonly string[] | undefined",
+          "description": "🖐️ default touch + pen (a mouse never edge-swipes)",
+          "default": {
+            "kind": "value",
+            "value": "['touch', 'pen']"
+          },
+          "defaultSource": "declared"
+        },
+        {
+          "name": "maxWidth",
+          "type": "number | undefined",
+          "default": {
+            "kind": "none"
+          }
+        }
+      ]
+    },
+    {
+      "id": "useAbEdgeSwipe",
+      "name": "useAbEdgeSwipe",
+      "packageName": "ab-nextjs-components",
+      "entry": "ab-nextjs-components/ab-drawer",
+      "file": "node_modules/ab-nextjs-components/ab-drawer/use-ab-edge-swipe.ts",
+      "description": "🤏 useAbEdgeSwipe — open a side drawer with an edge swipe (drawer spec §2 / §3): - 🧱 the press starts in a 24px zone on that edge of the app box (16px in on iOS standalone) - ↔️ it commits past 30% of the drawer width or above 0.5px/ms toward the middle; slower or shorter does nothing - 🎠 ignored inside things that scroll sideways (code blocks, carousels) and [data-ab-no-edge-swipe] - 🧭 a mostly vertical move is a scroll, not a swipe - 📱 iOS Safari's own back gesture starts at the very screen edge and takes the touch before the page sees it, so the two don't fight; in standalone mode the 16px inset leaves that edge to the system - 👆 touch uses touch events (non-passive touchmove only during an edge press, preventDefault only once it's sideways), so Android Chrome's pointercancel-on-pan can't swallow it The drawer opens on release (it doesn't follow the finger), then slides in with its normal 200ms motion.",
+      "kind": "function",
+      "signature": "useAbEdgeSwipe({ edge, onOpen, enabled = true, width = 320, pointerTypes = ['touch', 'pen'], maxWidth }: UseAbEdgeSwipeOptions): void",
+      "rows": [
+        {
+          "name": "{ edge, onOpen, enabled = true, width = 320, pointerTypes = ['touch', 'pen'], maxWidth }",
+          "type": "UseAbEdgeSwipeOptions",
+          "required": true,
+          "description": "",
+          "default": {
+            "kind": "none"
+          }
+        }
+      ]
+    },
+    {
+      "id": "AB_ASIDE_DRAWER_MAX_WIDTH",
+      "name": "AB_ASIDE_DRAWER_MAX_WIDTH",
+      "packageName": "ab-nextjs-components",
+      "entry": "ab-nextjs-components/ab-drawer",
+      "file": "node_modules/ab-nextjs-components/ab-drawer/use-ab-edge-swipe.ts",
+      "description": "📐 0.2.1: the widest viewport where the aside is a right drawer (mobile + tablet; the column starts at 1180px)",
+      "kind": "const",
+      "type": "1179",
+      "value": "1179"
+    },
+    {
+      "id": "AB_SWIPE",
+      "name": "AB_SWIPE",
+      "packageName": "ab-nextjs-components",
+      "entry": "ab-nextjs-components/ab-drawer",
+      "file": "node_modules/ab-nextjs-components/ab-drawer/gestures.ts",
+      "description": "🎚️ the spec numbers (drawer-spec.md \"Gestures\" + \"Edge zones\")",
+      "kind": "const",
+      "value": "{\n  ratio: 0.3, // 📏 30% of the travel / sheet / drawer width\n  velocity: 0.5, // ⚡ px per ms: at or above this a release counts as a fast swipe\n  edge: 24, // 🧱 edge zone width (px) for the side-drawer swipes\n  standaloneInset: 16, // 📱 iOS standalone: the zone starts 16px in (the system owns the very edge)\n  slop: 8, // 🫳 px of movement before a press becomes a drag (taps stay taps)\n  secondSwipe: 24, // ✌️ px: after a gentle return to S1, a swipe down this long closes (the \"second swipe\")\n}",
+      "rows": [
+        {
+          "name": "ratio",
+          "type": "0.3",
+          "description": "📏 30% of the travel / sheet / drawer width",
+          "default": {
+            "kind": "value",
+            "value": "0.3"
+          }
+        },
+        {
+          "name": "velocity",
+          "type": "0.5",
+          "description": "⚡ px per ms: at or above this a release counts as a fast swipe",
+          "default": {
+            "kind": "value",
+            "value": "0.5"
+          }
+        },
+        {
+          "name": "edge",
+          "type": "24",
+          "description": "🧱 edge zone width (px) for the side-drawer swipes",
+          "default": {
+            "kind": "value",
+            "value": "24"
+          }
+        },
+        {
+          "name": "standaloneInset",
+          "type": "16",
+          "description": "📱 iOS standalone: the zone starts 16px in (the system owns the very edge)",
+          "default": {
+            "kind": "value",
+            "value": "16"
+          }
+        },
+        {
+          "name": "slop",
+          "type": "8",
+          "description": "🫳 px of movement before a press becomes a drag (taps stay taps)",
+          "default": {
+            "kind": "value",
+            "value": "8"
+          }
+        },
+        {
+          "name": "secondSwipe",
+          "type": "24",
+          "description": "✌️ px: after a gentle return to S1, a swipe down this long closes (the \"second swipe\")",
+          "default": {
+            "kind": "value",
+            "value": "24"
+          }
+        }
+      ]
+    },
+    {
+      "id": "AB_DRAWER_DURATION",
+      "name": "AB_DRAWER_DURATION",
+      "packageName": "ab-nextjs-components",
+      "entry": "ab-nextjs-components/ab-drawer",
+      "file": "node_modules/ab-nextjs-components/ab-drawer/index.tsx",
+      "description": "⏱️ the slide, same as the panes aside (core 0.1.6)",
+      "kind": "const",
+      "type": "240",
+      "value": "240"
+    },
+    {
+      "id": "AB_PREVIEW_SCOPE_SELECTOR",
+      "name": "AB_PREVIEW_SCOPE_SELECTOR",
+      "packageName": "ab-nextjs-components",
+      "entry": "ab-nextjs-components/ab-drawer",
+      "file": "node_modules/ab-nextjs-components/ab-drawer/index.tsx",
+      "description": "🧪 0.6.0 (G16): the attribute that marks a preview scope (AbDemoBox sets it); drawers inside stay inside",
+      "kind": "const",
+      "type": "\"[data-ab-preview-scope]\"",
+      "value": "'[data-ab-preview-scope]'"
+    },
+    {
+      "id": "AB_DRAWER_RETURN_FOCUS",
+      "name": "AB_DRAWER_RETURN_FOCUS",
+      "packageName": "ab-nextjs-components",
+      "entry": "ab-nextjs-components/ab-drawer",
+      "file": "node_modules/ab-nextjs-components/ab-drawer/index.tsx",
+      "description": "↩️ 0.2.1: where focus goes after a drawer that had no focusable opener closes (an edge swipe): the mobile header's logo link, else AbAppBar's brand link, else AbSidebar's logo row link. returnFocus overrides it.",
+      "kind": "const",
+      "type": "\"[data-ab-part=\\\"mobile-header\\\"] a[href], [data-ab-part=\\\"app-bar-brand\\\"] a[href], [data-ab-part=\\\"sidebar-logo\\\"] a[href]\"",
+      "value": "'[data-ab-part=\"mobile-header\"] a[href], [data-ab-part=\"app-bar-brand\"] a[href], [data-ab-part=\"sidebar-logo\"] a[href]'"
+    },
+    {
+      "id": "getAbDrawerHost",
+      "name": "getAbDrawerHost",
+      "packageName": "ab-nextjs-components",
+      "entry": "ab-nextjs-components/ab-drawer",
+      "file": "node_modules/ab-nextjs-components/ab-drawer/index.tsx",
+      "description": "🗺️ getAbDrawerHost — the box a drawer of scope is clipped by: the scope element that contains from (so two layouts on a page each get their own), else the first one in the document, else <body>. Effects / handlers only (it reads the DOM).",
+      "kind": "function",
+      "signature": "getAbDrawerHost(scope: AbDrawerScope, from?: Element | null): HTMLElement",
+      "rows": [
+        {
+          "name": "scope",
+          "type": "AbDrawerScope",
+          "required": true,
+          "description": "",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "from",
+          "type": "Element | null",
+          "description": "",
+          "default": {
+            "kind": "none"
+          }
+        }
+      ]
+    },
+    {
+      "id": "resolveAbSheetRelease",
+      "name": "resolveAbSheetRelease",
+      "packageName": "ab-nextjs-components",
+      "entry": "ab-nextjs-components/ab-drawer",
+      "file": "node_modules/ab-nextjs-components/ab-drawer/gestures.ts",
+      "description": "🧲 resolveAbSheetRelease — where a released bottom sheet goes (spec §1 \"Gestures\"): - ⬆️ up past 30% of S1→S2, or faster than 0.5px/ms → full - ⬇️ at S2: fast (≥ 0.5px/ms) or past 30% of the sheet → closed; a gentle drag → back to partial - ⬇️ at S1: fast or past 30% of S1 → closed; after a gentle return from S2 any real swipe down (≥ 24px) → closed - otherwise it springs back to where it was",
+      "kind": "function",
+      "signature": "resolveAbSheetRelease({ from, dy, velocity, partialHeight, fullHeight, returned = false }: AbSheetReleaseInput): AbSheetRelease",
+      "rows": [
+        {
+          "name": "{ from, dy, velocity, partialHeight, fullHeight, returned = false }",
+          "type": "AbSheetReleaseInput",
+          "required": true,
+          "description": "",
+          "default": {
+            "kind": "none"
+          }
+        }
+      ]
+    },
+    {
+      "id": "resolveAbSideRelease",
+      "name": "resolveAbSideRelease",
+      "packageName": "ab-nextjs-components",
+      "entry": "ab-nextjs-components/ab-drawer",
+      "file": "node_modules/ab-nextjs-components/ab-drawer/gestures.ts",
+      "description": "↔️ resolveAbSideRelease — does a side swipe commit? Past 30% of the width, or faster than 0.5px/ms that way.",
+      "kind": "function",
+      "signature": "resolveAbSideRelease({ distance, velocity, width }: AbSideReleaseInput): boolean",
+      "rows": [
+        {
+          "name": "{ distance, velocity, width }",
+          "type": "AbSideReleaseInput",
+          "required": true,
+          "description": "",
+          "default": {
+            "kind": "none"
+          }
+        }
+      ]
+    },
+    {
+      "id": "AbAppLayoutProps",
+      "name": "AbAppLayoutProps",
+      "packageName": "ab-nextjs-core",
+      "entry": "ab-nextjs-core/ab-app-layout",
+      "file": "node_modules/ab-nextjs-core/ab-app-layout/index.tsx",
+      "description": "",
+      "kind": "props",
+      "rows": [
+        {
+          "name": "orientation",
+          "type": "\"vertical\" | \"horizontal\"",
+          "required": true,
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "className",
+          "type": "string | undefined",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "hidden",
+          "type": "boolean | undefined",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "pageName",
+          "type": "string | undefined",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "header",
+          "type": "ReactNode",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "sideBar",
+          "type": "ReactNode",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "content",
+          "type": "ReactNode",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "navBar",
+          "type": "ReactNode",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "footer",
+          "type": "ReactNode",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "menus",
+          "type": "ReactNode",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "variant",
+          "type": "\"default\" | \"panes\" | undefined",
+          "description": "🧭 0.1.6 (G17): 'panes' = the docs shell (4 breakpoints, rail, overlay aside). Default keeps the old layout.",
+          "default": {
+            "kind": "value",
+            "value": "'default'"
+          },
+          "defaultSource": "declared"
+        },
+        {
+          "name": "railCollapsed",
+          "type": "boolean | undefined",
+          "description": "🧷 0.1.6: collapse the sidebar to the icon rail (tablet and up, variant=\"panes\").",
+          "default": {
+            "kind": "value",
+            "value": "false"
+          },
+          "defaultSource": "declared"
+        },
+        {
+          "name": "tabletHeader",
+          "type": "\"header\" | \"main\" | undefined",
+          "description": "📟 0.2.0 (P2): 'main' = on tablet (768–1179) hide the app header and show AbMainLayout's mainHeader instead (hidden at other widths). Default 'header'.",
+          "default": {
+            "kind": "value",
+            "value": "'header'"
+          },
+          "defaultSource": "declared"
+        },
+        {
+          "name": "mobileHeader",
+          "type": "\"header\" | \"main\" | undefined",
+          "description": "📱 0.2.1: 'main' = below 768px hide the app header and show AbMainLayout's mainHeader as the 56px mobile bar (16px inset, 1px divider). Default 'header' (unchanged).",
+          "default": {
+            "kind": "value",
+            "value": "'header'"
+          },
+          "defaultSource": "declared"
+        },
+        {
+          "name": "mainHeaderAt",
+          "type": "\"auto\" | \"all\" | undefined",
+          "description": "📌 0.2.3: 'all' = AbMainLayout's mainHeader stays visible at EVERY width (with mobileHeader=\"main\" it is the mobile bar below 768px, and an extra header row under the app header from 768px), so ONE header can carry e.g. a counter row everywhere instead of rendering it twice. Default 'auto' (unchanged).",
+          "default": {
+            "kind": "value",
+            "value": "'auto'"
+          },
+          "defaultSource": "declared"
+        },
+        {
+          "name": "asideBelow",
+          "type": "\"hidden\" | \"inline-before-main\" | \"inline-in-main\" | undefined",
+          "description": "📑 0.2.3: where the aside pane goes below the laptop breakpoint (< 1180px). 'hidden' (default) = unchanged: an overlay sheet / right drawer opened by the TOC button. 'inline-before-main' = the SAME aside element (rendered once, no duplicate DOM) sits in the flow above the main pane (mobile: aside · main · bottom bar; tablet: sidebar | aside over main), e.g. the Welcome live playground. For any other spot, render your aside content into your own node (a portal) and keep 'hidden'. 📜 0.2.3 'inline-in-main' = the SAME aside element joins the main pane's ONE scroller below 1180px, after the main header (and after AbMainLayout's asideAnchor block when given): v6 phone order header bar · counter · scene · text · nav, nothing pinned. ≥ 1180px: the normal side pane.",
+          "default": {
+            "kind": "value",
+            "value": "'hidden'"
+          },
+          "defaultSource": "declared"
+        },
+        {
+          "name": "surface",
+          "type": "\"page\" | undefined",
+          "description": "🎠 0.2.3: 'page' sets data-ab-surface=\"page\": with theme ≥ 0.3.7 every pane paints the v6 page surface (--ab-color-welcome-pane / -main) instead of the white ≥ 1920px light panes. Default: none.",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "asideDrawerAt",
+          "type": "\"mobile\" | undefined",
+          "description": "📱 0.2.3: 'mobile' = below 768px the aside is a RIGHT DRAWER (out of the page flow until opened by AbAsideDrawerTrigger / useAbPage().setAsideOpenOnMobile(true)), while asideBelow=\"inline-in-main\" still puts the SAME element inline at 768–1179px. Rendered once. Default: none (unchanged).",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "mainBarPin",
+          "type": "\"never\" | \"always\" | undefined",
+          "description": "📌 0.2.3: mirror of AbMainLayout mainBarPin on the root (either one pins the bar).",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "overlays",
+          "type": "boolean | undefined",
+          "description": "🧰 0.1.6: render the legacy #backdrop / #menus / #dialogs / #toasts / progress / canvas layers. Default: on for variant=\"default\", off for \"panes\" (the shell brings its own menus and dialogs).",
+          "default": {
+            "kind": "unknown"
+          },
+          "defaultSource": "comment"
+        }
+      ]
+    },
+    {
+      "id": "server.AbAppLayoutProps",
+      "name": "AbAppLayoutProps",
+      "packageName": "ab-nextjs-core",
+      "entry": "ab-nextjs-core/server/ab-app-layout",
+      "file": "node_modules/ab-nextjs-core/server/ab-app-layout/index.tsx",
+      "description": "",
+      "kind": "alias",
+      "rows": [
+        {
+          "name": "orientation",
+          "type": "\"vertical\" | \"horizontal\"",
+          "required": true,
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "className",
+          "type": "string | undefined",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "hidden",
+          "type": "boolean | undefined",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "pageName",
+          "type": "string | undefined",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "header",
+          "type": "ReactNode",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "sideBar",
+          "type": "ReactNode",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "content",
+          "type": "ReactNode",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "navBar",
+          "type": "ReactNode",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "footer",
+          "type": "ReactNode",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "menus",
+          "type": "ReactNode",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "variant",
+          "type": "\"default\" | \"panes\" | undefined",
+          "description": "🧭 0.1.6 (G17): 'panes' = the docs shell (4 breakpoints, rail, overlay aside). Default keeps the old layout.",
+          "default": {
+            "kind": "value",
+            "value": "'default'"
+          },
+          "defaultSource": "declared"
+        },
+        {
+          "name": "railCollapsed",
+          "type": "boolean | undefined",
+          "description": "🧷 0.1.6: collapse the sidebar to the icon rail (tablet and up, variant=\"panes\").",
+          "default": {
+            "kind": "value",
+            "value": "false"
+          },
+          "defaultSource": "declared"
+        },
+        {
+          "name": "tabletHeader",
+          "type": "\"header\" | \"main\" | undefined",
+          "description": "📟 0.2.0 (P2): 'main' = on tablet (768–1179) hide the app header and show AbMainLayout's mainHeader instead (hidden at other widths). Default 'header'.",
+          "default": {
+            "kind": "value",
+            "value": "'header'"
+          },
+          "defaultSource": "declared"
+        },
+        {
+          "name": "mobileHeader",
+          "type": "\"header\" | \"main\" | undefined",
+          "description": "📱 0.2.1: 'main' = below 768px hide the app header and show AbMainLayout's mainHeader as the 56px mobile bar (16px inset, 1px divider). Default 'header' (unchanged).",
+          "default": {
+            "kind": "value",
+            "value": "'header'"
+          },
+          "defaultSource": "declared"
+        },
+        {
+          "name": "mainHeaderAt",
+          "type": "\"auto\" | \"all\" | undefined",
+          "description": "📌 0.2.3: 'all' = AbMainLayout's mainHeader stays visible at EVERY width (with mobileHeader=\"main\" it is the mobile bar below 768px, and an extra header row under the app header from 768px), so ONE header can carry e.g. a counter row everywhere instead of rendering it twice. Default 'auto' (unchanged).",
+          "default": {
+            "kind": "value",
+            "value": "'auto'"
+          },
+          "defaultSource": "declared"
+        },
+        {
+          "name": "asideBelow",
+          "type": "\"hidden\" | \"inline-before-main\" | \"inline-in-main\" | undefined",
+          "description": "📑 0.2.3: where the aside pane goes below the laptop breakpoint (< 1180px). 'hidden' (default) = unchanged: an overlay sheet / right drawer opened by the TOC button. 'inline-before-main' = the SAME aside element (rendered once, no duplicate DOM) sits in the flow above the main pane (mobile: aside · main · bottom bar; tablet: sidebar | aside over main), e.g. the Welcome live playground. For any other spot, render your aside content into your own node (a portal) and keep 'hidden'. 📜 0.2.3 'inline-in-main' = the SAME aside element joins the main pane's ONE scroller below 1180px, after the main header (and after AbMainLayout's asideAnchor block when given): v6 phone order header bar · counter · scene · text · nav, nothing pinned. ≥ 1180px: the normal side pane.",
+          "default": {
+            "kind": "value",
+            "value": "'hidden'"
+          },
+          "defaultSource": "declared"
+        },
+        {
+          "name": "surface",
+          "type": "\"page\" | undefined",
+          "description": "🎠 0.2.3: 'page' sets data-ab-surface=\"page\": with theme ≥ 0.3.7 every pane paints the v6 page surface (--ab-color-welcome-pane / -main) instead of the white ≥ 1920px light panes. Default: none.",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "asideDrawerAt",
+          "type": "\"mobile\" | undefined",
+          "description": "📱 0.2.3: 'mobile' = below 768px the aside is a RIGHT DRAWER (out of the page flow until opened by AbAsideDrawerTrigger / useAbPage().setAsideOpenOnMobile(true)), while asideBelow=\"inline-in-main\" still puts the SAME element inline at 768–1179px. Rendered once. Default: none (unchanged).",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "mainBarPin",
+          "type": "\"never\" | \"always\" | undefined",
+          "description": "📌 0.2.3: mirror of AbMainLayout mainBarPin on the root (either one pins the bar).",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "overlays",
+          "type": "boolean | undefined",
+          "description": "🧰 0.1.6: render the legacy #backdrop / #menus / #dialogs / #toasts / progress / canvas layers. Default: on for variant=\"default\", off for \"panes\" (the shell brings its own menus and dialogs).",
+          "default": {
+            "kind": "unknown"
+          },
+          "defaultSource": "comment"
+        }
+      ],
+      "aliasOf": "AbAppLayoutProps",
+      "note": "Server entry. Same members as ab-nextjs-core/ab-app-layout."
+    },
+    {
+      "id": "AbMainLayoutProps",
+      "name": "AbMainLayoutProps",
+      "packageName": "ab-nextjs-core",
+      "entry": "ab-nextjs-core/ab-main-layout",
+      "file": "node_modules/ab-nextjs-core/ab-main-layout/index.tsx",
+      "description": "",
+      "kind": "props",
+      "rows": [
+        {
+          "name": "orientation",
+          "type": "\"vertical\" | \"horizontal\"",
+          "required": true,
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "className",
+          "type": "string | undefined",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "hidden",
+          "type": "boolean | undefined",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "pageName",
+          "type": "string | undefined",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "screenName",
+          "type": "string | undefined",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "mainHeader",
+          "type": "ReactNode",
+          "description": "🔝 0.1.6 (G52): the main pane's header slot (data-ab-part=\"main-header\"); 0px and not rendered when empty.",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "mainBar",
+          "type": "ReactNode",
+          "description": "🔚 0.1.6 (G52): the main pane's bottom bar slot (data-ab-part=\"main-bar\"); 0px and not rendered when empty.",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "mainBarPin",
+          "type": "\"never\" | \"always\" | undefined",
+          "description": "📌 0.2.3: 'always' pins the main bar to the bottom of the scroller at every width (sticky, opaque).",
+          "default": {
+            "kind": "value",
+            "value": "'never'"
+          },
+          "defaultSource": "declared"
+        },
+        {
+          "name": "mainBarLabel",
+          "type": "string | undefined",
+          "description": "🏷️ 0.2.3: the main bar's accessible name (aria-label on the <footer>).",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "header",
+          "type": "ReactNode",
+          "description": "Alias of mainHeader.",
+          "deprecated": "0.1.6: use mainHeader (kept as an alias for one minor).",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "content",
+          "type": "ReactNode",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "footer",
+          "type": "ReactNode",
+          "description": "Alias of mainBar.",
+          "deprecated": "0.1.6: use mainBar (kept as an alias for one minor).",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "menus",
+          "type": "ReactNode",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "id",
+          "type": "string | undefined",
+          "description": "🆔 0.1.6: element id (e.g. the skip-link target), no inner wrapper needed.",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "chrome",
+          "type": "boolean | undefined",
+          "deprecated": "0.1.6: false drops the legacy backdrop / menus / dialogs / toasts / progress / canvas layers. Empty header / bar slots are never rendered any more, so this only gates those layers (default true).",
+          "default": {
+            "kind": "value",
+            "value": "true"
+          },
+          "defaultSource": "declared"
+        },
+        {
+          "name": "scrollerLabel",
+          "type": "string | undefined",
+          "description": "⌨️ 0.2.3: accessible name of the main scroller (the focusable data-ab-part=\"main-content\" region). Pass a translated string (default 'Main content').",
+          "default": {
+            "kind": "value",
+            "value": "'Main content'"
+          },
+          "defaultSource": "declared"
+        },
+        {
+          "name": "scrollerFocusable",
+          "type": "boolean | undefined",
+          "description": "⌨️ 0.2.3: false takes the main scroller out of the tab order (default true: tabIndex 0).",
+          "default": {
+            "kind": "value",
+            "value": "true"
+          },
+          "defaultSource": "declared"
+        },
+        {
+          "name": "asideAnchor",
+          "type": "ReactNode",
+          "description": "⚓ 0.2.3: content that comes BEFORE the aside when AbAppLayout asideBelow=\"inline-in-main\" pulls the aside into this scroller (< 1180px), e.g. a counter row: order = main header · asideAnchor · aside · children. At ≥ 1180px (or any other asideBelow) it simply renders first in the scroller, so the reading order is the same everywhere.",
+          "default": {
+            "kind": "none"
+          }
+        }
+      ]
+    },
+    {
+      "id": "server.AbMainLayoutProps",
+      "name": "AbMainLayoutProps",
+      "packageName": "ab-nextjs-core",
+      "entry": "ab-nextjs-core/server/ab-main-layout",
+      "file": "node_modules/ab-nextjs-core/server/ab-main-layout/index.tsx",
+      "description": "",
+      "kind": "alias",
+      "rows": [
+        {
+          "name": "orientation",
+          "type": "\"vertical\" | \"horizontal\"",
+          "required": true,
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "className",
+          "type": "string | undefined",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "hidden",
+          "type": "boolean | undefined",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "pageName",
+          "type": "string | undefined",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "screenName",
+          "type": "string | undefined",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "mainHeader",
+          "type": "ReactNode",
+          "description": "🔝 0.1.6 (G52): the main pane's header slot (data-ab-part=\"main-header\"); 0px and not rendered when empty.",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "mainBar",
+          "type": "ReactNode",
+          "description": "🔚 0.1.6 (G52): the main pane's bottom bar slot (data-ab-part=\"main-bar\"); 0px and not rendered when empty.",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "mainBarPin",
+          "type": "\"never\" | \"always\" | undefined",
+          "description": "📌 0.2.3: 'always' pins the main bar to the bottom of the scroller at every width (sticky, opaque).",
+          "default": {
+            "kind": "value",
+            "value": "'never'"
+          },
+          "defaultSource": "declared"
+        },
+        {
+          "name": "mainBarLabel",
+          "type": "string | undefined",
+          "description": "🏷️ 0.2.3: the main bar's accessible name (aria-label on the <footer>).",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "header",
+          "type": "ReactNode",
+          "description": "Alias of mainHeader.",
+          "deprecated": "0.1.6: use mainHeader (kept as an alias for one minor).",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "content",
+          "type": "ReactNode",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "footer",
+          "type": "ReactNode",
+          "description": "Alias of mainBar.",
+          "deprecated": "0.1.6: use mainBar (kept as an alias for one minor).",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "menus",
+          "type": "ReactNode",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "id",
+          "type": "string | undefined",
+          "description": "🆔 0.1.6: element id (e.g. the skip-link target), no inner wrapper needed.",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "chrome",
+          "type": "boolean | undefined",
+          "deprecated": "0.1.6: false drops the legacy backdrop / menus / dialogs / toasts / progress / canvas layers. Empty header / bar slots are never rendered any more, so this only gates those layers (default true).",
+          "default": {
+            "kind": "value",
+            "value": "true"
+          },
+          "defaultSource": "declared"
+        },
+        {
+          "name": "scrollerLabel",
+          "type": "string | undefined",
+          "description": "⌨️ 0.2.3: accessible name of the main scroller (the focusable data-ab-part=\"main-content\" region). Pass a translated string (default 'Main content').",
+          "default": {
+            "kind": "value",
+            "value": "'Main content'"
+          },
+          "defaultSource": "declared"
+        },
+        {
+          "name": "scrollerFocusable",
+          "type": "boolean | undefined",
+          "description": "⌨️ 0.2.3: false takes the main scroller out of the tab order (default true: tabIndex 0).",
+          "default": {
+            "kind": "value",
+            "value": "true"
+          },
+          "defaultSource": "declared"
+        },
+        {
+          "name": "asideAnchor",
+          "type": "ReactNode",
+          "description": "⚓ 0.2.3: content that comes BEFORE the aside when AbAppLayout asideBelow=\"inline-in-main\" pulls the aside into this scroller (< 1180px), e.g. a counter row: order = main header · asideAnchor · aside · children. At ≥ 1180px (or any other asideBelow) it simply renders first in the scroller, so the reading order is the same everywhere.",
+          "default": {
+            "kind": "none"
+          }
+        }
+      ],
+      "aliasOf": "AbMainLayoutProps",
+      "note": "Server entry. Same members as ab-nextjs-core/ab-main-layout."
+    },
+    {
+      "id": "AbAsideLayoutProps",
+      "name": "AbAsideLayoutProps",
+      "packageName": "ab-nextjs-core",
+      "entry": "ab-nextjs-core/ab-aside-layout",
+      "file": "node_modules/ab-nextjs-core/ab-aside-layout/index.tsx",
+      "description": "",
+      "kind": "props",
+      "rows": [
+        {
+          "name": "orientation",
+          "type": "\"vertical\" | \"horizontal\"",
+          "required": true,
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "className",
+          "type": "string | undefined",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "hidden",
+          "type": "boolean | undefined",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "pageName",
+          "type": "string | undefined",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "asideHeader",
+          "type": "ReactNode",
+          "description": "🔝 0.1.6 (G52): the aside pane's header slot (data-ab-part=\"aside-header\"); 0px and not rendered when empty.",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "asideBar",
+          "type": "ReactNode",
+          "description": "🔚 0.1.6 (G52): the aside pane's bottom bar slot (data-ab-part=\"aside-bar\"); 0px and not rendered when empty.",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "header",
+          "type": "ReactNode",
+          "description": "Alias of asideHeader.",
+          "deprecated": "0.1.6: use asideHeader (kept as an alias for one minor).",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "content",
+          "type": "ReactNode",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "footer",
+          "type": "ReactNode",
+          "description": "Alias of asideBar.",
+          "deprecated": "0.1.6: use asideBar (kept as an alias for one minor).",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "dividerHidden",
+          "type": "boolean | undefined",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "menus",
+          "type": "ReactNode",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "id",
+          "type": "string | undefined",
+          "description": "🆔 0.1.6: element id (e.g. the skip-link target), no inner wrapper needed.",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "chrome",
+          "type": "boolean | undefined",
+          "deprecated": "0.1.6: false drops the legacy backdrop / menus / dialogs / toasts / progress / canvas layers. Empty header / bar slots are never rendered any more, so this only gates those layers (default true).",
+          "default": {
+            "kind": "value",
+            "value": "true"
+          },
+          "defaultSource": "declared"
+        },
+        {
+          "name": "'aria-label'",
+          "type": "string | undefined",
+          "description": "🏷️ 0.2.3: names the <aside> landmark (e.g. \"Live Playground\"), so screen readers don't list an anonymous \"complementary\". Pass a translated string.",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "'aria-labelledby'",
+          "type": "string | undefined",
+          "description": "🏷️ 0.2.3: or point at a visible heading's id (wins over aria-label per ARIA).",
+          "default": {
+            "kind": "none"
+          }
+        }
+      ]
+    },
+    {
+      "id": "server.AbAsideLayoutProps",
+      "name": "AbAsideLayoutProps",
+      "packageName": "ab-nextjs-core",
+      "entry": "ab-nextjs-core/server/ab-aside-layout",
+      "file": "node_modules/ab-nextjs-core/server/ab-aside-layout/index.tsx",
+      "description": "",
+      "kind": "alias",
+      "rows": [
+        {
+          "name": "orientation",
+          "type": "\"vertical\" | \"horizontal\"",
+          "required": true,
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "className",
+          "type": "string | undefined",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "hidden",
+          "type": "boolean | undefined",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "pageName",
+          "type": "string | undefined",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "asideHeader",
+          "type": "ReactNode",
+          "description": "🔝 0.1.6 (G52): the aside pane's header slot (data-ab-part=\"aside-header\"); 0px and not rendered when empty.",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "asideBar",
+          "type": "ReactNode",
+          "description": "🔚 0.1.6 (G52): the aside pane's bottom bar slot (data-ab-part=\"aside-bar\"); 0px and not rendered when empty.",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "header",
+          "type": "ReactNode",
+          "description": "Alias of asideHeader.",
+          "deprecated": "0.1.6: use asideHeader (kept as an alias for one minor).",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "content",
+          "type": "ReactNode",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "footer",
+          "type": "ReactNode",
+          "description": "Alias of asideBar.",
+          "deprecated": "0.1.6: use asideBar (kept as an alias for one minor).",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "dividerHidden",
+          "type": "boolean | undefined",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "menus",
+          "type": "ReactNode",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "id",
+          "type": "string | undefined",
+          "description": "🆔 0.1.6: element id (e.g. the skip-link target), no inner wrapper needed.",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "chrome",
+          "type": "boolean | undefined",
+          "deprecated": "0.1.6: false drops the legacy backdrop / menus / dialogs / toasts / progress / canvas layers. Empty header / bar slots are never rendered any more, so this only gates those layers (default true).",
+          "default": {
+            "kind": "value",
+            "value": "true"
+          },
+          "defaultSource": "declared"
+        },
+        {
+          "name": "'aria-label'",
+          "type": "string | undefined",
+          "description": "🏷️ 0.2.3: names the <aside> landmark (e.g. \"Live Playground\"), so screen readers don't list an anonymous \"complementary\". Pass a translated string.",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "'aria-labelledby'",
+          "type": "string | undefined",
+          "description": "🏷️ 0.2.3: or point at a visible heading's id (wins over aria-label per ARIA).",
+          "default": {
+            "kind": "none"
+          }
+        }
+      ],
+      "aliasOf": "AbAsideLayoutProps",
+      "note": "Server entry. Same members as ab-nextjs-core/ab-aside-layout."
+    },
+    {
+      "id": "AbPageContextValue",
+      "name": "AbPageContextValue",
+      "packageName": "ab-nextjs-core",
+      "entry": "ab-nextjs-core/ab-page-provider",
+      "file": "node_modules/ab-nextjs-core/ab-page-provider/index.tsx",
+      "description": "",
+      "kind": "props",
+      "rows": [
+        {
+          "name": "mainScrollElement",
+          "type": "HTMLElement | null",
+          "required": true,
+          "description": "📜 0.1.6 (G55): the main pane's scroller (AbMainLayout's content wrapper), e.g. useAbScrollSpy({ root }).",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "asideScrollElement",
+          "type": "HTMLElement | null",
+          "required": true,
+          "description": "📜 0.1.6 (G55): the aside pane's scroller.",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "setMainScrollElement",
+          "type": "(el: HTMLElement | null) => void",
+          "required": true,
+          "description": "🔗 ref callbacks used by AbMainLayout / AbAsideLayout.",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "appScrollElement",
+          "type": "HTMLElement | null",
+          "required": true,
+          "description": "📜 0.2.3: AbAppLayout's content wrapper: THE scroller in asideBelow=\"inline-in-main\" (< 1180px).",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "setAppScrollElement",
+          "type": "(el: HTMLElement | null) => void",
+          "required": true,
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "setAsideScrollElement",
+          "type": "(el: HTMLElement | null) => void",
+          "required": true,
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "isAsideOpen",
+          "type": "boolean",
+          "required": true,
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "isAsideOpenOnMobile",
+          "type": "boolean",
+          "required": true,
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "asideDuration",
+          "type": "number",
+          "required": true,
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "asideElement",
+          "type": "HTMLElement | null",
+          "required": true,
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "setAsideElement",
+          "type": "(el: HTMLElement | null) => void",
+          "required": true,
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "isAsideOpening",
+          "type": "boolean",
+          "required": true,
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "isAsideClosing",
+          "type": "boolean",
+          "required": true,
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "isAsideLoading",
+          "type": "boolean",
+          "required": true,
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "setAsideOpen",
+          "type": "(open: boolean) => void",
+          "required": true,
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "setAsideOpenOnMobile",
+          "type": "(open: boolean) => void",
+          "required": true,
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "setAsideLoading",
+          "type": "(loading: boolean) => void",
+          "required": true,
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "asideId",
+          "type": "string",
+          "required": true,
+          "description": "🆔 0.1.6: id of the aside element (for aria-controls on the TOC / »« buttons).",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "toggleAside",
+          "type": "() => void",
+          "required": true,
+          "description": "🔁 0.1.6: flip the laptop+ aside (»/« toggle).",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "toggleAsideOnMobile",
+          "type": "() => void",
+          "required": true,
+          "description": "📱 0.1.6: flip the mobile/tablet aside sheet (TOC button).",
+          "default": {
+            "kind": "none"
+          }
+        }
+      ]
+    },
+    {
+      "id": "AbPageProviderProps",
+      "name": "AbPageProviderProps",
+      "packageName": "ab-nextjs-core",
+      "entry": "ab-nextjs-core/ab-page-provider",
+      "file": "node_modules/ab-nextjs-core/ab-page-provider/index.tsx",
+      "description": "",
+      "kind": "props",
+      "rows": [
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "defaultAsideOpen",
+          "type": "boolean | undefined",
+          "description": "Initial aside open state (default true so shells render visibly).",
+          "default": {
+            "kind": "value",
+            "value": "true"
+          },
+          "defaultSource": "declared"
+        },
+        {
+          "name": "asideDuration",
+          "type": "number | undefined",
+          "description": "🎞️ slide duration in ms (default 240, 0.1.6; was 300). Reduced motion always makes it instant.",
+          "default": {
+            "kind": "value",
+            "value": "AB_ASIDE_DURATION"
+          },
+          "defaultSource": "declared"
+        },
+        {
+          "name": "asideId",
+          "type": "string | undefined",
+          "description": "🆔 aside element id for aria-controls (default 'ab-aside').",
+          "default": {
+            "kind": "value",
+            "value": "'ab-aside'"
+          },
+          "defaultSource": "declared"
+        }
+      ]
+    },
+    {
+      "id": "useAbPage",
+      "name": "useAbPage",
+      "packageName": "ab-nextjs-core",
+      "entry": "ab-nextjs-core/ab-page-provider",
+      "file": "node_modules/ab-nextjs-core/ab-page-provider/index.tsx",
+      "description": "Hook contract used by client AbAsideLayout. Returns safe defaults when used outside AbPageProvider.",
+      "kind": "function",
+      "signature": "useAbPage(): AbPageContextValue",
+      "rows": []
+    },
+    {
+      "id": "AbAsideToggle",
+      "name": "AbAsideToggle",
+      "packageName": "ab-nextjs-core",
+      "entry": "ab-nextjs-core/ab-page-provider",
+      "file": "node_modules/ab-nextjs-core/ab-page-provider/index.tsx",
+      "description": "🎛️ What useAbAsideToggle returns: spread props on the button.",
+      "kind": "props",
+      "rows": [
+        {
+          "name": "isSheet",
+          "type": "boolean",
+          "required": true,
+          "description": "📐 true below 1180px (the aside is a sheet, driven by isAsideOpenOnMobile).",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "expanded",
+          "type": "boolean",
+          "required": true,
+          "description": "👀 is the aside shown for the current viewport?",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "toggle",
+          "type": "() => void",
+          "required": true,
+          "description": "🔁 flip it for the current viewport.",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "props",
+          "type": "{ 'aria-expanded': boolean; 'aria-controls': string; onClick: () => void; }",
+          "required": true,
+          "description": "♿ aria-expanded + aria-controls + onClick for a toggle button.",
+          "default": {
+            "kind": "none"
+          }
+        }
+      ]
+    },
+    {
+      "id": "useAbAsideToggle",
+      "name": "useAbAsideToggle",
+      "packageName": "ab-nextjs-core",
+      "entry": "ab-nextjs-core/ab-page-provider",
+      "file": "node_modules/ab-nextjs-core/ab-page-provider/index.tsx",
+      "description": "📑 useAbAsideToggle (0.1.6) — one toggle for the TOC button (mobile/tablet sheet) and the »/« button (laptop+ pane). It picks the right state for the viewport and keeps aria-expanded / aria-controls right.",
+      "kind": "function",
+      "signature": "useAbAsideToggle(): AbAsideToggle",
+      "rows": []
+    },
+    {
+      "id": "AbAsideDrawer",
+      "name": "AbAsideDrawer",
+      "packageName": "ab-nextjs-core",
+      "entry": "ab-nextjs-core/ab-page-provider",
+      "file": "node_modules/ab-nextjs-core/ab-page-provider/index.tsx",
+      "description": "📱 What useAbAsideDrawer returns: spread props on any button or link.",
+      "kind": "props",
+      "rows": [
+        {
+          "name": "isOpen",
+          "type": "boolean",
+          "required": true,
+          "description": "👀 is the mobile drawer open?",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "open",
+          "type": "() => void",
+          "required": true,
+          "description": "🔓 open it (remembers the focused element, so focus returns there on close).",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "close",
+          "type": "() => void",
+          "required": true,
+          "description": "🔒 close it (focus returns to the opener).",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "props",
+          "type": "{ 'aria-haspopup': \"dialog\"; 'aria-expanded': boolean; 'aria-controls': string; onClick: (e: { currentTarget: { focus?: (o?: FocusOptions) => void; }; }) => void; }",
+          "required": true,
+          "description": "♿ aria-haspopup + aria-expanded + aria-controls + onClick (focuses itself first: Safari never focuses buttons on click).",
+          "default": {
+            "kind": "none"
+          }
+        }
+      ]
+    },
+    {
+      "id": "useAbAsideDrawer",
+      "name": "useAbAsideDrawer",
+      "packageName": "ab-nextjs-core",
+      "entry": "ab-nextjs-core/ab-page-provider",
+      "file": "node_modules/ab-nextjs-core/ab-page-provider/index.tsx",
+      "description": "📱 useAbAsideDrawer — open the aside as the mobile RIGHT DRAWER (asideDrawerAt=\"mobile\") from anywhere, e.g. a \"Show playground\" link on every slide. Esc, backdrop click and a right swipe close it, and focus returns to whatever opened it (AbPageProvider). Works for the plain sheet too.",
+      "kind": "function",
+      "signature": "useAbAsideDrawer(): AbAsideDrawer",
+      "rows": []
+    },
+    {
+      "id": "useAbInlineScroller",
+      "name": "useAbInlineScroller",
+      "packageName": "ab-nextjs-core",
+      "entry": "ab-nextjs-core/ab-page-provider",
+      "file": "node_modules/ab-nextjs-core/ab-page-provider/index.tsx",
+      "description": "📜 useAbInlineScroller — the element that ACTUALLY scrolls the main content right now: AbAppLayout's content wrapper while asideBelow=\"inline-in-main\" makes it the one scroller (< 1180px, aside inline), otherwise AbMainLayout's own scroller (mainScrollElement). Re-checked on resize; null on the server. Use it as a scroll-spy root or to scroll a slide back to the top.",
+      "kind": "function",
+      "signature": "useAbInlineScroller(): HTMLElement | null",
+      "rows": []
+    },
+    {
+      "id": "AB_ASIDE_DURATION",
+      "name": "AB_ASIDE_DURATION",
+      "packageName": "ab-nextjs-core",
+      "entry": "ab-nextjs-core/ab-page-provider",
+      "file": "node_modules/ab-nextjs-core/ab-page-provider/index.tsx",
+      "description": "🎞️ 0.1.6: aside slide duration (brief §4: slide-from-right 240ms).",
+      "kind": "const",
+      "type": "240",
+      "value": "240"
+    },
+    {
+      "id": "AB_ASIDE_SHEET_QUERY",
+      "name": "AB_ASIDE_SHEET_QUERY",
+      "packageName": "ab-nextjs-core",
+      "entry": "ab-nextjs-core/ab-page-provider",
+      "file": "node_modules/ab-nextjs-core/ab-page-provider/index.tsx",
+      "description": "📐 0.1.6: below this the aside is a sheet driven by isAsideOpenOnMobile (mobile + tablet).",
+      "kind": "const",
+      "type": "\"(max-width: 1179px)\"",
+      "value": "'(max-width: 1179px)'"
+    },
+    {
+      "id": "getAbAsideDuration",
+      "name": "getAbAsideDuration",
+      "packageName": "ab-nextjs-core",
+      "entry": "ab-nextjs-core/ab-page-provider",
+      "file": "node_modules/ab-nextjs-core/ab-page-provider/index.tsx",
+      "description": "⏱️ getAbAsideDuration — the duration the open/close timers should use: 0 under reduced motion (instant toggle, brief §1.4), otherwise the provider's duration.",
+      "kind": "function",
+      "signature": "getAbAsideDuration(duration: number, reducedMotion: boolean): number",
+      "rows": [
+        {
+          "name": "duration",
+          "type": "number",
+          "required": true,
+          "description": "",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "reducedMotion",
+          "type": "boolean",
+          "required": true,
+          "description": "",
+          "default": {
+            "kind": "none"
+          }
+        }
+      ]
+    },
+    {
+      "id": "AB_REDUCED_MOTION_QUERY",
+      "name": "AB_REDUCED_MOTION_QUERY",
+      "packageName": "ab-nextjs-core",
+      "entry": "ab-nextjs-core/ab-page-provider",
+      "file": "node_modules/ab-nextjs-core/ab-page-provider/index.tsx",
+      "description": "♿ reduced-motion query (same string as ab-nextjs-hooks' AB_REDUCED_MOTION_QUERY).",
+      "kind": "const",
+      "type": "\"(prefers-reduced-motion: reduce)\"",
+      "value": "'(prefers-reduced-motion: reduce)'"
+    },
+    {
+      "id": "shouldCloseAbAsideOnSwipe",
+      "name": "shouldCloseAbAsideOnSwipe",
+      "packageName": "ab-nextjs-core",
+      "entry": "ab-nextjs-core/ab-aside-layout",
+      "file": "node_modules/ab-nextjs-core/ab-aside-layout/index.tsx",
+      "description": "Ab Aside Layout — Core Client Component (from LYD client LydAsideLayout). Uses minimal useAbPage contract (AbPageProvider), not LydPageProvider. 👉 0.2.3: does a pointer move (dx, dy px) close the right drawer? ≥ 60px to the right and mostly horizontal.",
+      "kind": "function",
+      "signature": "shouldCloseAbAsideOnSwipe(dx: number, dy: number, threshold = 60): boolean",
+      "rows": [
+        {
+          "name": "dx",
+          "type": "number",
+          "required": true,
+          "description": "",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "dy",
+          "type": "number",
+          "required": true,
+          "description": "",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "threshold",
+          "type": "number",
+          "description": "",
+          "default": {
+            "kind": "value",
+            "value": "60"
+          }
+        }
+      ]
+    },
+    {
+      "id": "UseAbScrollSpyOptions",
+      "name": "UseAbScrollSpyOptions",
+      "packageName": "ab-nextjs-hooks",
+      "entry": "ab-nextjs-hooks/useAbScrollSpy",
+      "file": "node_modules/ab-nextjs-hooks/useAbScrollSpy.ts",
+      "description": "🎛️ Options for useAbScrollSpy.",
+      "kind": "props",
+      "rows": [
+        {
+          "name": "rootMargin",
+          "type": "string | undefined",
+          "description": "📏 IntersectionObserver rootMargin. Default: AB_SCROLL_SPY_ROOT_MARGIN for the window (64px sticky bar), AB_SCROLL_SPY_PANE_ROOT_MARGIN when root is set (a pane has no bar inside it).",
+          "default": {
+            "kind": "unknown"
+          },
+          "defaultSource": "comment"
+        },
+        {
+          "name": "threshold",
+          "type": "number | number[] | undefined",
+          "description": "🎚️ IntersectionObserver threshold (default 0).",
+          "default": {
+            "kind": "value",
+            "value": "0"
+          },
+          "defaultSource": "declared"
+        },
+        {
+          "name": "root",
+          "type": "Element | null | undefined",
+          "description": "🪟 scroll container (default: the viewport). With core 0.1.6 panes pass useAbPage().mainScrollElement (G55).",
+          "default": {
+            "kind": "value",
+            "value": "null"
+          },
+          "defaultSource": "declared"
+        },
+        {
+          "name": "lastAtBottom",
+          "type": "boolean | undefined",
+          "description": "🔚 at the bottom of the root the **last** id wins, even if it can't reach the top (default true).",
+          "default": {
+            "kind": "value",
+            "value": "true"
+          },
+          "defaultSource": "declared"
+        },
+        {
+          "name": "enabled",
+          "type": "boolean | undefined",
+          "description": "🔌 turn the spy off without unmounting (default true).",
+          "default": {
+            "kind": "value",
+            "value": "true"
+          },
+          "defaultSource": "declared"
+        },
+        {
+          "name": "initialId",
+          "type": "string | null | undefined",
+          "description": "🧭 id to report before anything intersects (default: the first id).",
+          "default": {
+            "kind": "unknown"
+          },
+          "defaultSource": "comment"
+        }
+      ]
+    },
+    {
+      "id": "useAbScrollSpy",
+      "name": "useAbScrollSpy",
+      "packageName": "ab-nextjs-hooks",
+      "entry": "ab-nextjs-hooks/useAbScrollSpy",
+      "file": "node_modules/ab-nextjs-hooks/useAbScrollSpy.ts",
+      "description": "🔭 useAbScrollSpy — which section of the page is \"current\" for an \"On this page\" TOC. - 👀 One IntersectionObserver watches every id; the **first id in document order** that is visible wins. - 📌 When nothing is visible (between two long sections) the last active id is kept, so the rail never blinks. - 🔚 When the root (or the page) is scrolled to the bottom, the last id wins: short last sections still light up. - 🖥️ SSR / no IntersectionObserver: returns initialId (default the first id) and never throws.",
+      "kind": "function",
+      "signature": "useAbScrollSpy(ids: readonly string[], options: UseAbScrollSpyOptions = {}): string | null",
+      "rows": [
+        {
+          "name": "ids",
+          "type": "readonly string[]",
+          "required": true,
+          "description": "",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "options",
+          "type": "UseAbScrollSpyOptions",
+          "description": "",
+          "default": {
+            "kind": "value",
+            "value": "{}"
+          }
+        }
+      ]
+    },
+    {
+      "id": "ScrollToAbSectionOptions",
+      "name": "ScrollToAbSectionOptions",
+      "packageName": "ab-nextjs-hooks",
+      "entry": "ab-nextjs-hooks/useAbScrollSpy",
+      "file": "node_modules/ab-nextjs-hooks/useAbScrollSpy.ts",
+      "description": "🎛️ Options for scrollToAbSection.",
+      "kind": "props",
+      "rows": [
+        {
+          "name": "offset",
+          "type": "number | undefined",
+          "description": "📏 pixels to leave above the section (e.g. the sticky app bar height). Default 0.",
+          "default": {
+            "kind": "value",
+            "value": "0"
+          },
+          "defaultSource": "declared"
+        },
+        {
+          "name": "container",
+          "type": "Element | null | undefined",
+          "description": "📜 the scroll container (e.g. useAbPage().mainScrollElement, the panes main, G55). Default: the window. Effective fallback when omitted: null. Not a declared initializer.",
+          "default": {
+            "kind": "value",
+            "value": "null"
+          },
+          "defaultSource": "effective"
+        },
+        {
+          "name": "root",
+          "type": "Element | null | undefined",
+          "description": "Effective fallback when omitted: null. Not a declared initializer. Alias of container.",
+          "deprecated": "0.1.7: use container (same thing; kept as an alias).",
+          "default": {
+            "kind": "value",
+            "value": "null"
+          },
+          "defaultSource": "effective"
+        },
+        {
+          "name": "updateHash",
+          "type": "boolean | undefined",
+          "description": "🔗 also update the URL hash with history.replaceState (no jump). Default true.",
+          "default": {
+            "kind": "value",
+            "value": "true"
+          },
+          "defaultSource": "declared"
+        }
+      ]
+    },
+    {
+      "id": "scrollToAbSection",
+      "name": "scrollToAbSection",
+      "packageName": "ab-nextjs-hooks",
+      "entry": "ab-nextjs-hooks/useAbScrollSpy",
+      "file": "node_modules/ab-nextjs-hooks/useAbScrollSpy.ts",
+      "description": "🧭 scrollToAbSection — scrolls to #id, **smoothly unless the user prefers reduced motion** (then instant). Returns false when the element doesn't exist (or on the server).",
+      "kind": "function",
+      "signature": "scrollToAbSection(id: string, options: ScrollToAbSectionOptions = {}): boolean",
+      "rows": [
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "",
+          "default": {
+            "kind": "none"
+          }
+        },
+        {
+          "name": "options",
+          "type": "ScrollToAbSectionOptions",
+          "description": "",
+          "default": {
+            "kind": "value",
+            "value": "{}"
+          }
+        }
+      ]
+    },
+    {
+      "id": "AB_SCROLL_SPY_ROOT_MARGIN",
+      "name": "AB_SCROLL_SPY_ROOT_MARGIN",
+      "packageName": "ab-nextjs-hooks",
+      "entry": "ab-nextjs-hooks/useAbScrollSpy",
+      "file": "node_modules/ab-nextjs-hooks/useAbScrollSpy.ts",
+      "description": "📏 Default margin: ignore the top 64px (sticky app bar) and the bottom 60% (so the section near the top wins).",
+      "kind": "const",
+      "type": "\"-64px 0px -60% 0px\"",
+      "value": "'-64px 0px -60% 0px'"
+    },
+    {
+      "id": "AB_SCROLL_SPY_PANE_ROOT_MARGIN",
+      "name": "AB_SCROLL_SPY_PANE_ROOT_MARGIN",
+      "packageName": "ab-nextjs-hooks",
+      "entry": "ab-nextjs-hooks/useAbScrollSpy",
+      "file": "node_modules/ab-nextjs-hooks/useAbScrollSpy.ts",
+      "description": "📏 Default margin with a root (core 0.1.6 panes main): the bar sits outside the pane, only the bottom 60% is ignored.",
+      "kind": "const",
+      "type": "\"0px 0px -60% 0px\"",
+      "value": "'0px 0px -60% 0px'"
+    },
+    {
+      "id": "getAbMainScroller",
+      "name": "getAbMainScroller",
+      "packageName": "ab-nextjs-components",
+      "entry": "ab-nextjs-components/ab-toc",
+      "file": "node_modules/ab-nextjs-components/ab-toc/index.tsx",
+      "description": "📜 getAbMainScroller — the element that scrolls the page content: the core panes main pane when present, else null (= the window). Pass from (e.g. the heading) to pick the pane that contains it. Use it as useAbScrollSpy({ root }) / scrollToAbSection(id, { container }). ⚠️ Call it only in an effect or an event handler, **never during render**: it reads the DOM, so a render call returns null on the server and the element on the client (hydration mismatch). (nit)",
+      "note": "Exported from ab-nextjs-components/ab-toc. It is not a core export.",
+      "kind": "function",
+      "signature": "getAbMainScroller(from?: Element | null): HTMLElement | null",
+      "rows": [
+        {
+          "name": "from",
+          "type": "Element | null",
+          "description": "",
+          "default": {
+            "kind": "none"
+          }
+        }
+      ]
+    },
+    {
+      "id": "AB_MAIN_SCROLLER_SELECTOR",
+      "name": "AB_MAIN_SCROLLER_SELECTOR",
+      "packageName": "ab-nextjs-components",
+      "entry": "ab-nextjs-components/ab-toc",
+      "file": "node_modules/ab-nextjs-components/ab-toc/index.tsx",
+      "description": "📜 0.1.13 (D35/G55): core 0.1.6 marks the panes main scroller with this attribute (components doesn't depend on core).",
+      "note": "The selector getAbMainScroller reads. Also from ab-nextjs-components/ab-toc, not core.",
+      "kind": "const",
+      "type": "\"[data-ab-part=\\\"main-content\\\"]\"",
+      "value": "'[data-ab-part=\"main-content\"]'"
+    }
+  ]
+}

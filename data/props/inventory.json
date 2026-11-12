@@ -1,0 +1,793 @@
+{
+  "covered": [
+    {
+      "id": "AbDrawerProps",
+      "name": "AbDrawerProps",
+      "packageName": "ab-nextjs-components",
+      "entry": "ab-nextjs-components/ab-drawer",
+      "kind": "props",
+      "aliasOf": null,
+      "page": "components/drawer",
+      "note": null,
+      "props": 27
+    },
+    {
+      "id": "AbDrawerSide",
+      "name": "AbDrawerSide",
+      "packageName": "ab-nextjs-components",
+      "entry": "ab-nextjs-components/ab-drawer",
+      "kind": "union",
+      "aliasOf": null,
+      "page": "components/drawer",
+      "note": null,
+      "props": 0
+    },
+    {
+      "id": "AbDrawerTier",
+      "name": "AbDrawerTier",
+      "packageName": "ab-nextjs-components",
+      "entry": "ab-nextjs-components/ab-drawer",
+      "kind": "union",
+      "aliasOf": null,
+      "page": "components/drawer",
+      "note": null,
+      "props": 0
+    },
+    {
+      "id": "AbDrawerScope",
+      "name": "AbDrawerScope",
+      "packageName": "ab-nextjs-components",
+      "entry": "ab-nextjs-components/ab-drawer",
+      "kind": "union",
+      "aliasOf": null,
+      "page": "components/drawer",
+      "note": null,
+      "props": 0
+    },
+    {
+      "id": "AbSheetSnap",
+      "name": "AbSheetSnap",
+      "packageName": "ab-nextjs-components",
+      "entry": "ab-nextjs-components/ab-drawer",
+      "kind": "union",
+      "aliasOf": null,
+      "page": "components/drawer",
+      "note": null,
+      "props": 0
+    },
+    {
+      "id": "UseAbDrawer",
+      "name": "UseAbDrawer",
+      "packageName": "ab-nextjs-components",
+      "entry": "ab-nextjs-components/ab-drawer",
+      "kind": "props",
+      "aliasOf": null,
+      "page": "components/drawer",
+      "note": null,
+      "props": 9
+    },
+    {
+      "id": "useAbDrawer",
+      "name": "useAbDrawer",
+      "packageName": "ab-nextjs-components",
+      "entry": "ab-nextjs-components/ab-drawer",
+      "kind": "function",
+      "aliasOf": null,
+      "page": "components/drawer",
+      "note": null,
+      "props": 2
+    },
+    {
+      "id": "UseAbEdgeSwipeOptions",
+      "name": "UseAbEdgeSwipeOptions",
+      "packageName": "ab-nextjs-components",
+      "entry": "ab-nextjs-components/ab-drawer",
+      "kind": "props",
+      "aliasOf": null,
+      "page": "components/drawer",
+      "note": null,
+      "props": 6
+    },
+    {
+      "id": "useAbEdgeSwipe",
+      "name": "useAbEdgeSwipe",
+      "packageName": "ab-nextjs-components",
+      "entry": "ab-nextjs-components/ab-drawer",
+      "kind": "function",
+      "aliasOf": null,
+      "page": "components/drawer",
+      "note": null,
+      "props": 1
+    },
+    {
+      "id": "AB_ASIDE_DRAWER_MAX_WIDTH",
+      "name": "AB_ASIDE_DRAWER_MAX_WIDTH",
+      "packageName": "ab-nextjs-components",
+      "entry": "ab-nextjs-components/ab-drawer",
+      "kind": "const",
+      "aliasOf": null,
+      "page": "components/drawer",
+      "note": null,
+      "props": 0
+    },
+    {
+      "id": "AB_SWIPE",
+      "name": "AB_SWIPE",
+      "packageName": "ab-nextjs-components",
+      "entry": "ab-nextjs-components/ab-drawer",
+      "kind": "const",
+      "aliasOf": null,
+      "page": "components/drawer",
+      "note": null,
+      "props": 6
+    },
+    {
+      "id": "AB_DRAWER_DURATION",
+      "name": "AB_DRAWER_DURATION",
+      "packageName": "ab-nextjs-components",
+      "entry": "ab-nextjs-components/ab-drawer",
+      "kind": "const",
+      "aliasOf": null,
+      "page": "components/drawer",
+      "note": null,
+      "props": 0
+    },
+    {
+      "id": "AB_PREVIEW_SCOPE_SELECTOR",
+      "name": "AB_PREVIEW_SCOPE_SELECTOR",
+      "packageName": "ab-nextjs-components",
+      "entry": "ab-nextjs-components/ab-drawer",
+      "kind": "const",
+      "aliasOf": null,
+      "page": "components/drawer",
+      "note": null,
+      "props": 0
+    },
+    {
+      "id": "AB_DRAWER_RETURN_FOCUS",
+      "name": "AB_DRAWER_RETURN_FOCUS",
+      "packageName": "ab-nextjs-components",
+      "entry": "ab-nextjs-components/ab-drawer",
+      "kind": "const",
+      "aliasOf": null,
+      "page": "components/drawer",
+      "note": null,
+      "props": 0
+    },
+    {
+      "id": "getAbDrawerHost",
+      "name": "getAbDrawerHost",
+      "packageName": "ab-nextjs-components",
+      "entry": "ab-nextjs-components/ab-drawer",
+      "kind": "function",
+      "aliasOf": null,
+      "page": "components/drawer",
+      "note": null,
+      "props": 2
+    },
+    {
+      "id": "resolveAbSheetRelease",
+      "name": "resolveAbSheetRelease",
+      "packageName": "ab-nextjs-components",
+      "entry": "ab-nextjs-components/ab-drawer",
+      "kind": "function",
+      "aliasOf": null,
+      "page": "components/drawer",
+      "note": null,
+      "props": 1
+    },
+    {
+      "id": "resolveAbSideRelease",
+      "name": "resolveAbSideRelease",
+      "packageName": "ab-nextjs-components",
+      "entry": "ab-nextjs-components/ab-drawer",
+      "kind": "function",
+      "aliasOf": null,
+      "page": "components/drawer",
+      "note": null,
+      "props": 1
+    },
+    {
+      "id": "AbAppLayoutProps",
+      "name": "AbAppLayoutProps",
+      "packageName": "ab-nextjs-core",
+      "entry": "ab-nextjs-core/ab-app-layout",
+      "kind": "props",
+      "aliasOf": null,
+      "page": "core/layouts",
+      "note": null,
+      "props": 21
+    },
+    {
+      "id": "server.AbAppLayoutProps",
+      "name": "AbAppLayoutProps",
+      "packageName": "ab-nextjs-core",
+      "entry": "ab-nextjs-core/server/ab-app-layout",
+      "kind": "alias",
+      "aliasOf": "AbAppLayoutProps",
+      "page": "core/layouts",
+      "note": "Server entry. Same members as ab-nextjs-core/ab-app-layout.",
+      "props": 21
+    },
+    {
+      "id": "AbMainLayoutProps",
+      "name": "AbMainLayoutProps",
+      "packageName": "ab-nextjs-core",
+      "entry": "ab-nextjs-core/ab-main-layout",
+      "kind": "props",
+      "aliasOf": null,
+      "page": "core/layouts",
+      "note": null,
+      "props": 19
+    },
+    {
+      "id": "server.AbMainLayoutProps",
+      "name": "AbMainLayoutProps",
+      "packageName": "ab-nextjs-core",
+      "entry": "ab-nextjs-core/server/ab-main-layout",
+      "kind": "alias",
+      "aliasOf": "AbMainLayoutProps",
+      "page": "core/layouts",
+      "note": "Server entry. Same members as ab-nextjs-core/ab-main-layout.",
+      "props": 19
+    },
+    {
+      "id": "AbAsideLayoutProps",
+      "name": "AbAsideLayoutProps",
+      "packageName": "ab-nextjs-core",
+      "entry": "ab-nextjs-core/ab-aside-layout",
+      "kind": "props",
+      "aliasOf": null,
+      "page": "core/layouts",
+      "note": null,
+      "props": 16
+    },
+    {
+      "id": "server.AbAsideLayoutProps",
+      "name": "AbAsideLayoutProps",
+      "packageName": "ab-nextjs-core",
+      "entry": "ab-nextjs-core/server/ab-aside-layout",
+      "kind": "alias",
+      "aliasOf": "AbAsideLayoutProps",
+      "page": "core/layouts",
+      "note": "Server entry. Same members as ab-nextjs-core/ab-aside-layout.",
+      "props": 16
+    },
+    {
+      "id": "AbPageContextValue",
+      "name": "AbPageContextValue",
+      "packageName": "ab-nextjs-core",
+      "entry": "ab-nextjs-core/ab-page-provider",
+      "kind": "props",
+      "aliasOf": null,
+      "page": "core/layouts",
+      "note": null,
+      "props": 20
+    },
+    {
+      "id": "AbPageProviderProps",
+      "name": "AbPageProviderProps",
+      "packageName": "ab-nextjs-core",
+      "entry": "ab-nextjs-core/ab-page-provider",
+      "kind": "props",
+      "aliasOf": null,
+      "page": "core/layouts",
+      "note": null,
+      "props": 4
+    },
+    {
+      "id": "useAbPage",
+      "name": "useAbPage",
+      "packageName": "ab-nextjs-core",
+      "entry": "ab-nextjs-core/ab-page-provider",
+      "kind": "function",
+      "aliasOf": null,
+      "page": "core/layouts",
+      "note": null,
+      "props": 0
+    },
+    {
+      "id": "AbAsideToggle",
+      "name": "AbAsideToggle",
+      "packageName": "ab-nextjs-core",
+      "entry": "ab-nextjs-core/ab-page-provider",
+      "kind": "props",
+      "aliasOf": null,
+      "page": "core/layouts",
+      "note": null,
+      "props": 4
+    },
+    {
+      "id": "useAbAsideToggle",
+      "name": "useAbAsideToggle",
+      "packageName": "ab-nextjs-core",
+      "entry": "ab-nextjs-core/ab-page-provider",
+      "kind": "function",
+      "aliasOf": null,
+      "page": "core/layouts",
+      "note": null,
+      "props": 0
+    },
+    {
+      "id": "AbAsideDrawer",
+      "name": "AbAsideDrawer",
+      "packageName": "ab-nextjs-core",
+      "entry": "ab-nextjs-core/ab-page-provider",
+      "kind": "props",
+      "aliasOf": null,
+      "page": "core/layouts",
+      "note": null,
+      "props": 4
+    },
+    {
+      "id": "useAbAsideDrawer",
+      "name": "useAbAsideDrawer",
+      "packageName": "ab-nextjs-core",
+      "entry": "ab-nextjs-core/ab-page-provider",
+      "kind": "function",
+      "aliasOf": null,
+      "page": "core/layouts",
+      "note": null,
+      "props": 0
+    },
+    {
+      "id": "useAbInlineScroller",
+      "name": "useAbInlineScroller",
+      "packageName": "ab-nextjs-core",
+      "entry": "ab-nextjs-core/ab-page-provider",
+      "kind": "function",
+      "aliasOf": null,
+      "page": "core/layouts",
+      "note": null,
+      "props": 0
+    },
+    {
+      "id": "AB_ASIDE_DURATION",
+      "name": "AB_ASIDE_DURATION",
+      "packageName": "ab-nextjs-core",
+      "entry": "ab-nextjs-core/ab-page-provider",
+      "kind": "const",
+      "aliasOf": null,
+      "page": "core/layouts",
+      "note": null,
+      "props": 0
+    },
+    {
+      "id": "AB_ASIDE_SHEET_QUERY",
+      "name": "AB_ASIDE_SHEET_QUERY",
+      "packageName": "ab-nextjs-core",
+      "entry": "ab-nextjs-core/ab-page-provider",
+      "kind": "const",
+      "aliasOf": null,
+      "page": "core/layouts",
+      "note": null,
+      "props": 0
+    },
+    {
+      "id": "getAbAsideDuration",
+      "name": "getAbAsideDuration",
+      "packageName": "ab-nextjs-core",
+      "entry": "ab-nextjs-core/ab-page-provider",
+      "kind": "function",
+      "aliasOf": null,
+      "page": "core/layouts",
+      "note": null,
+      "props": 2
+    },
+    {
+      "id": "AB_REDUCED_MOTION_QUERY",
+      "name": "AB_REDUCED_MOTION_QUERY",
+      "packageName": "ab-nextjs-core",
+      "entry": "ab-nextjs-core/ab-page-provider",
+      "kind": "const",
+      "aliasOf": null,
+      "page": "core/layouts",
+      "note": null,
+      "props": 0
+    },
+    {
+      "id": "shouldCloseAbAsideOnSwipe",
+      "name": "shouldCloseAbAsideOnSwipe",
+      "packageName": "ab-nextjs-core",
+      "entry": "ab-nextjs-core/ab-aside-layout",
+      "kind": "function",
+      "aliasOf": null,
+      "page": "core/layouts",
+      "note": null,
+      "props": 3
+    },
+    {
+      "id": "UseAbScrollSpyOptions",
+      "name": "UseAbScrollSpyOptions",
+      "packageName": "ab-nextjs-hooks",
+      "entry": "ab-nextjs-hooks/useAbScrollSpy",
+      "kind": "props",
+      "aliasOf": null,
+      "page": "hooks/scroll-spy",
+      "note": null,
+      "props": 6
+    },
+    {
+      "id": "useAbScrollSpy",
+      "name": "useAbScrollSpy",
+      "packageName": "ab-nextjs-hooks",
+      "entry": "ab-nextjs-hooks/useAbScrollSpy",
+      "kind": "function",
+      "aliasOf": null,
+      "page": "hooks/scroll-spy",
+      "note": null,
+      "props": 2
+    },
+    {
+      "id": "ScrollToAbSectionOptions",
+      "name": "ScrollToAbSectionOptions",
+      "packageName": "ab-nextjs-hooks",
+      "entry": "ab-nextjs-hooks/useAbScrollSpy",
+      "kind": "props",
+      "aliasOf": null,
+      "page": "hooks/scroll-spy",
+      "note": null,
+      "props": 4
+    },
+    {
+      "id": "scrollToAbSection",
+      "name": "scrollToAbSection",
+      "packageName": "ab-nextjs-hooks",
+      "entry": "ab-nextjs-hooks/useAbScrollSpy",
+      "kind": "function",
+      "aliasOf": null,
+      "page": "hooks/scroll-spy",
+      "note": null,
+      "props": 2
+    },
+    {
+      "id": "AB_SCROLL_SPY_ROOT_MARGIN",
+      "name": "AB_SCROLL_SPY_ROOT_MARGIN",
+      "packageName": "ab-nextjs-hooks",
+      "entry": "ab-nextjs-hooks/useAbScrollSpy",
+      "kind": "const",
+      "aliasOf": null,
+      "page": "hooks/scroll-spy",
+      "note": null,
+      "props": 0
+    },
+    {
+      "id": "AB_SCROLL_SPY_PANE_ROOT_MARGIN",
+      "name": "AB_SCROLL_SPY_PANE_ROOT_MARGIN",
+      "packageName": "ab-nextjs-hooks",
+      "entry": "ab-nextjs-hooks/useAbScrollSpy",
+      "kind": "const",
+      "aliasOf": null,
+      "page": "hooks/scroll-spy",
+      "note": null,
+      "props": 0
+    },
+    {
+      "id": "getAbMainScroller",
+      "name": "getAbMainScroller",
+      "packageName": "ab-nextjs-components",
+      "entry": "ab-nextjs-components/ab-toc",
+      "kind": "function",
+      "aliasOf": null,
+      "page": "hooks/scroll-spy",
+      "note": "Exported from ab-nextjs-components/ab-toc. It is not a core export.",
+      "props": 1
+    },
+    {
+      "id": "AB_MAIN_SCROLLER_SELECTOR",
+      "name": "AB_MAIN_SCROLLER_SELECTOR",
+      "packageName": "ab-nextjs-components",
+      "entry": "ab-nextjs-components/ab-toc",
+      "kind": "const",
+      "aliasOf": null,
+      "page": "hooks/scroll-spy",
+      "note": "The selector getAbMainScroller reads. Also from ab-nextjs-components/ab-toc, not core.",
+      "props": 0
+    }
+  ],
+  "deferred": [
+    {
+      "name": "AbBottomDrawer",
+      "entry": "ab-nextjs-components/ab-bottom-drawer",
+      "reason": "Product drawer export. This pass documents the shared drawer contract, not this name."
+    },
+    {
+      "name": "AbBottomDrawerProps",
+      "entry": "ab-nextjs-components/ab-bottom-drawer",
+      "reason": "Product drawer props. This pass documents the shared drawer contract, not each product drawer."
+    },
+    {
+      "name": "isAbScrolledInside",
+      "entry": "ab-nextjs-components/ab-bottom-drawer",
+      "reason": "Product drawer export. This pass documents the shared drawer contract, not this name."
+    },
+    {
+      "name": "useAbSwipeDown",
+      "entry": "ab-nextjs-components/ab-bottom-drawer",
+      "reason": "Product drawer export. This pass documents the shared drawer contract, not this name."
+    },
+    {
+      "name": "UseAbSwipeDownOptions",
+      "entry": "ab-nextjs-components/ab-bottom-drawer",
+      "reason": "Product drawer export. This pass documents the shared drawer contract, not this name."
+    },
+    {
+      "name": "AbConfirmDrawer",
+      "entry": "ab-nextjs-components/ab-confirm-drawer",
+      "reason": "Product drawer export. This pass documents the shared drawer contract, not this name."
+    },
+    {
+      "name": "AbConfirmDrawerProps",
+      "entry": "ab-nextjs-components/ab-confirm-drawer",
+      "reason": "Product drawer export. This pass documents the shared drawer contract, not this name."
+    },
+    {
+      "name": "AbDrawer",
+      "entry": "ab-nextjs-components/ab-drawer",
+      "reason": "The component value. Its props are AbDrawerProps on this page."
+    },
+    {
+      "name": "AbDrawerList",
+      "entry": "ab-nextjs-components/ab-drawer-list",
+      "reason": "Product drawer export. This pass documents the shared drawer contract, not this name."
+    },
+    {
+      "name": "AbDrawerListItem",
+      "entry": "ab-nextjs-components/ab-drawer-list",
+      "reason": "Product drawer export. This pass documents the shared drawer contract, not this name."
+    },
+    {
+      "name": "AbDrawerListProps",
+      "entry": "ab-nextjs-components/ab-drawer-list",
+      "reason": "Product drawer export. This pass documents the shared drawer contract, not this name."
+    },
+    {
+      "name": "AbDrawerScope",
+      "entry": "ab-nextjs-components/ab-drawer/use-ab-drawer",
+      "reason": "Documented at ab-nextjs-components/ab-drawer. This path exports the same name."
+    },
+    {
+      "name": "useAbDrawer",
+      "entry": "ab-nextjs-components/ab-drawer/use-ab-drawer",
+      "reason": "Documented at ab-nextjs-components/ab-drawer. This path exports the same name."
+    },
+    {
+      "name": "UseAbDrawer",
+      "entry": "ab-nextjs-components/ab-drawer/use-ab-drawer",
+      "reason": "Documented at ab-nextjs-components/ab-drawer. This path exports the same name."
+    },
+    {
+      "name": "AbNavDrawer",
+      "entry": "ab-nextjs-components/ab-nav-drawer",
+      "reason": "Product drawer export. This pass documents the shared drawer contract, not this name."
+    },
+    {
+      "name": "AbNavDrawerItem",
+      "entry": "ab-nextjs-components/ab-nav-drawer",
+      "reason": "Product drawer export. This pass documents the shared drawer contract, not this name."
+    },
+    {
+      "name": "AbNavDrawerProps",
+      "entry": "ab-nextjs-components/ab-nav-drawer",
+      "reason": "Product drawer props. This pass documents the shared drawer contract, not each product drawer."
+    },
+    {
+      "name": "AbNavDrawerSection",
+      "entry": "ab-nextjs-components/ab-nav-drawer",
+      "reason": "Product drawer export. This pass documents the shared drawer contract, not this name."
+    },
+    {
+      "name": "AB_SEARCH_RECENT_KEY",
+      "entry": "ab-nextjs-components/ab-search-drawer",
+      "reason": "Product drawer export. This pass documents the shared drawer contract, not this name."
+    },
+    {
+      "name": "AbSearchDrawer",
+      "entry": "ab-nextjs-components/ab-search-drawer",
+      "reason": "Product drawer export. This pass documents the shared drawer contract, not this name."
+    },
+    {
+      "name": "AbSearchDrawerGroup",
+      "entry": "ab-nextjs-components/ab-search-drawer",
+      "reason": "Product drawer export. This pass documents the shared drawer contract, not this name."
+    },
+    {
+      "name": "AbSearchDrawerItem",
+      "entry": "ab-nextjs-components/ab-search-drawer",
+      "reason": "Product drawer export. This pass documents the shared drawer contract, not this name."
+    },
+    {
+      "name": "AbSearchDrawerLabels",
+      "entry": "ab-nextjs-components/ab-search-drawer",
+      "reason": "Product drawer export. This pass documents the shared drawer contract, not this name."
+    },
+    {
+      "name": "AbSearchDrawerProps",
+      "entry": "ab-nextjs-components/ab-search-drawer",
+      "reason": "Product drawer export. This pass documents the shared drawer contract, not this name."
+    },
+    {
+      "name": "addAbSearchRecent",
+      "entry": "ab-nextjs-components/ab-search-drawer",
+      "reason": "Product drawer export. This pass documents the shared drawer contract, not this name."
+    },
+    {
+      "name": "highlightAbSearch",
+      "entry": "ab-nextjs-components/ab-search-drawer",
+      "reason": "Product drawer export. This pass documents the shared drawer contract, not this name."
+    },
+    {
+      "name": "AbSettingsDrawer",
+      "entry": "ab-nextjs-components/ab-settings-drawer",
+      "reason": "Product drawer export. This pass documents the shared drawer contract, not this name."
+    },
+    {
+      "name": "AbSettingsDrawerLabels",
+      "entry": "ab-nextjs-components/ab-settings-drawer",
+      "reason": "Product drawer export. This pass documents the shared drawer contract, not this name."
+    },
+    {
+      "name": "AbSettingsDrawerProps",
+      "entry": "ab-nextjs-components/ab-settings-drawer",
+      "reason": "Product drawer export. This pass documents the shared drawer contract, not this name."
+    },
+    {
+      "name": "AbSettingsLocale",
+      "entry": "ab-nextjs-components/ab-settings-drawer",
+      "reason": "Product drawer export. This pass documents the shared drawer contract, not this name."
+    },
+    {
+      "name": "AbSettingsTheme",
+      "entry": "ab-nextjs-components/ab-settings-drawer",
+      "reason": "Product drawer export. This pass documents the shared drawer contract, not this name."
+    },
+    {
+      "name": "AbToc",
+      "entry": "ab-nextjs-components/ab-toc",
+      "reason": "Outline chrome. This pass only documents getAbMainScroller and its selector from this entry."
+    },
+    {
+      "name": "AbTocItem",
+      "entry": "ab-nextjs-components/ab-toc",
+      "reason": "Outline item shape, not the scroller helper."
+    },
+    {
+      "name": "AbTocPromo",
+      "entry": "ab-nextjs-components/ab-toc",
+      "reason": "Aside promo card, not the scroller helper."
+    },
+    {
+      "name": "AbTocPromoProps",
+      "entry": "ab-nextjs-components/ab-toc",
+      "reason": "Outline promo props. This pass only documents getAbMainScroller and its selector from this entry."
+    },
+    {
+      "name": "AbTocProps",
+      "entry": "ab-nextjs-components/ab-toc",
+      "reason": "Outline chrome, not the scroller helper."
+    },
+    {
+      "name": "AbTocDrawer",
+      "entry": "ab-nextjs-components/ab-toc-drawer",
+      "reason": "Product drawer export. This pass documents the shared drawer contract, not this name."
+    },
+    {
+      "name": "AbTocDrawerLink",
+      "entry": "ab-nextjs-components/ab-toc-drawer",
+      "reason": "Product drawer link shape. This pass does not add a page for the outline drawer."
+    },
+    {
+      "name": "AbTocDrawerProps",
+      "entry": "ab-nextjs-components/ab-toc-drawer",
+      "reason": "Product drawer export. This pass documents the shared drawer contract, not this name."
+    },
+    {
+      "name": "AbAppLayout",
+      "entry": "ab-nextjs-core/ab-app-layout",
+      "reason": "Public core export. This pass documents the layout slots and the page provider, not this name."
+    },
+    {
+      "name": "acquireAbLayoutLock",
+      "entry": "ab-nextjs-core/ab-app-layout",
+      "reason": "Public helper, not a layout slot. This pass documents the slot props."
+    },
+    {
+      "name": "AbAsideLayout",
+      "entry": "ab-nextjs-core/ab-aside-layout",
+      "reason": "Public core export. This pass documents the layout slots and the page provider, not this name."
+    },
+    {
+      "name": "AbMainLayout",
+      "entry": "ab-nextjs-core/ab-main-layout",
+      "reason": "Public core export. This pass documents the layout slots and the page provider, not this name."
+    },
+    {
+      "name": "AbPageProvider",
+      "entry": "ab-nextjs-core/ab-page-provider",
+      "reason": "Public core export. This pass documents the layout slots and the page provider, not this name."
+    },
+    {
+      "name": "AbAppLayout",
+      "entry": "ab-nextjs-core/server/ab-app-layout",
+      "reason": "Public core export. This pass documents the layout slots and the page provider, not this name."
+    },
+    {
+      "name": "AbAsideLayout",
+      "entry": "ab-nextjs-core/server/ab-aside-layout",
+      "reason": "Public core export. This pass documents the layout slots and the page provider, not this name."
+    },
+    {
+      "name": "AbMainLayout",
+      "entry": "ab-nextjs-core/server/ab-main-layout",
+      "reason": "Public core export. This pass documents the layout slots and the page provider, not this name."
+    }
+  ],
+  "internal": [
+    {
+      "name": "AbSheetRelease",
+      "page": "components/drawer",
+      "source": "node_modules/ab-nextjs-components/ab-drawer/gestures.ts",
+      "reason": "Declared beside resolveAbSheetRelease. ab-nextjs-components/ab-drawer does not re-export it, and no exports entry points at its source file."
+    },
+    {
+      "name": "AbSheetReleaseInput",
+      "page": "components/drawer",
+      "source": "node_modules/ab-nextjs-components/ab-drawer/gestures.ts",
+      "reason": "Parameter type of resolveAbSheetRelease. ab-nextjs-components/ab-drawer does not re-export it, and no exports entry points at its source file."
+    },
+    {
+      "name": "AbSideReleaseInput",
+      "page": "components/drawer",
+      "source": "node_modules/ab-nextjs-components/ab-drawer/gestures.ts",
+      "reason": "Parameter type of resolveAbSideRelease. ab-nextjs-components/ab-drawer does not re-export it, and no exports entry points at its source file."
+    },
+    {
+      "name": "isInAbEdgeZone",
+      "page": "components/drawer",
+      "source": "node_modules/ab-nextjs-components/ab-drawer/gestures.ts",
+      "reason": "ab-nextjs-components/ab-drawer does not re-export it, and no exports entry points at its source file."
+    },
+    {
+      "name": "createAbVelocityTracker",
+      "page": "components/drawer",
+      "source": "node_modules/ab-nextjs-components/ab-drawer/gestures.ts",
+      "reason": "ab-nextjs-components/ab-drawer does not re-export it, and no exports entry points at its source file."
+    },
+    {
+      "name": "isInAbHorizontalScroller",
+      "page": "components/drawer",
+      "source": "node_modules/ab-nextjs-components/ab-drawer/gestures.ts",
+      "reason": "ab-nextjs-components/ab-drawer does not re-export it, and no exports entry points at its source file."
+    },
+    {
+      "name": "toAbSlot",
+      "page": "core/layouts",
+      "source": "node_modules/ab-nextjs-core/ab-page-provider/slot.ts",
+      "reason": "Used by the layout implementations. ab-nextjs-core/ab-page-provider does not export it, and no exports entry points at its source file."
+    },
+    {
+      "name": "AbScrollRegistrar",
+      "page": "core/layouts",
+      "source": "node_modules/ab-nextjs-core/ab-page-provider/scroll-registrar.tsx",
+      "reason": "Used by the server layouts. ab-nextjs-core/ab-page-provider does not export it, and no exports entry points at its source file."
+    },
+    {
+      "name": "AbScrollRegistrarProps",
+      "page": "core/layouts",
+      "source": "node_modules/ab-nextjs-core/ab-page-provider/scroll-registrar.tsx",
+      "reason": "Props of AbScrollRegistrar. ab-nextjs-core/ab-page-provider does not export it, and no exports entry points at its source file."
+    },
+    {
+      "name": "AbMainBarHeight",
+      "page": "core/layouts",
+      "source": "node_modules/ab-nextjs-core/ab-main-layout/main-bar-height.tsx",
+      "reason": "Rendered inside the main layout. ab-nextjs-core/ab-main-layout does not export it, and no exports entry points at its source file."
+    }
+  ],
+  "counts": {
+    "covered": 44,
+    "deferred": 47,
+    "internal": 10,
+    "publicExports": 91
+  }
+}
