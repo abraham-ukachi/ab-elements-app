@@ -6,7 +6,8 @@ All notable changes to this project will be documented in this file. See [standa
 
 * :memo: Write the theming, icons and fonts, and layout-rule guides against the published package APIs, with the layout figures in `.github/layout/`
 * :sparkles: Add `/[locale]/changelog`, built from the app changelog and each installed package changelog, as plain Markdown with stable anchors
-* :lock: Fail the build when an installed package version has no released changelog entry (`AB_CHANGELOG_GATE=warn` is review-only and stays off in CI)
+* :lock: Fail the build when an installed package version, or the app's own version, has no released changelog entry (`AB_CHANGELOG_GATE=warn` is review-only and stays off in CI)
+* :arrow_up: Use ab-nextjs-core 0.2.4, ab-nextjs-theme 0.3.10, ab-nextjs-fonts 0.2.8, ab-nextjs-components 0.7.1, ab-nextjs-animations 0.2.6, ab-nextjs-icons 0.2.8 and ab-nextjs-hooks 0.1.8, with an exact release-age pin for each that expires 24h after its publish
 * :white_check_mark: Test the changelog parser and the three guides plus `/changelog`
 
 ### [0.2.28](https://github.com/abraham-ukachi/ab-elements-app/compare/v0.2.27...v0.2.28) (2026-11-12)

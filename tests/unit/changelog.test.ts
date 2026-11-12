@@ -141,39 +141,33 @@ describe('plain markdown 🚫', () => {
 
 
 describe('installed packages 🚦', () => {
-  it('fails core 0.2.3 and theme 0.3.9 as missing, and keeps the packages that have a released heading', () => {
-    // 📚 today's node_modules
+  it('accepts the app and every installed package version', () => {
+    // 📚 today's node_modules, after the 2026-11-12 changelog releases
     const audit = auditChangelogs(loadChangelogs());
-    // 🚨 the exact failures
-    expect(audit.failures.map((failure) => `${failure.name}@${failure.version} ${failure.reason}`)).toEqual([
-      'ab-nextjs-theme@0.3.9 missing',
-      'ab-nextjs-core@0.2.3 missing',
-    ]);
-    // 📝 the why, so a missing file is not confused with Unreleased or a bad heading
-    expect(audit.failures[1]?.detail).toContain('no ## or ### heading for 0.2.3');
-    expect(audit.failures[1]?.detail).toContain('0.2.1 (Unreleased)');
-    expect(audit.failures[0]?.detail).toContain('no ## or ### heading for 0.3.9');
-    expect(audit.failures[0]?.detail).toContain('0.3.7 (Unreleased)');
-    // ✅ these installed versions do have a released ## or ### heading
-    expect(audit.passed.map((item) => `${item.name}@${item.version}`)).toEqual(expect.arrayContaining([
-      'ab-nextjs-fonts@0.2.7',
-      'ab-nextjs-icons@0.2.7',
-      'ab-nextjs-animations@0.2.5',
-      'ab-nextjs-hooks@0.1.7',
-      'ab-nextjs-components@0.7.0',
+    // ✅ nothing missing, Unreleased, or badly headed
+    expect(audit.failures).toEqual([]);
+    expect(audit.passed.map((item) => `${item.name}@${item.version}`)).toEqual([
+      'ab-elements-app@0.2.28',
+      'ab-nextjs-fonts@0.2.8',
+      'ab-nextjs-icons@0.2.8',
+      'ab-nextjs-animations@0.2.6',
+      'ab-nextjs-theme@0.3.10',
+      'ab-nextjs-hooks@0.1.8',
+      'ab-nextjs-core@0.2.4',
+      'ab-nextjs-components@0.7.1',
       'ab-nextjs-i18n@0.1.0',
-    ]));
+    ]);
   });
 
-  it('throws unless AB_CHANGELOG_GATE=warn', () => {
-    // 🚨 strict is the default
+  it('stays strict unless AB_CHANGELOG_GATE is exactly warn', () => {
+    // 🚨 strict is the default, and these releases have entries, so it does not throw
     delete process.env[AB_CHANGELOG_GATE];
     expect(changelogGateMode()).toBe('strict');
-    expect(() => enforceChangelogGate()).toThrow(/ab-nextjs-core@0\.2\.3 missing/);
-    // 🟡 the review switch prints and returns
+    expect(enforceChangelogGate().failures).toEqual([]);
+    // 🟡 warn is the review switch, and it still does not throw when nothing fails
     process.env[AB_CHANGELOG_GATE] = 'warn';
     expect(changelogGateMode()).toBe('warn');
-    expect(enforceChangelogGate().failures.length).toBeGreaterThan(0);
+    expect(enforceChangelogGate().failures).toEqual([]);
     // 🚫 a near miss stays strict
     process.env[AB_CHANGELOG_GATE] = 'WARN';
     expect(changelogGateMode()).toBe('strict');
