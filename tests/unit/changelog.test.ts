@@ -45,11 +45,15 @@
 
 // 🧪 The changelog parser (## and ###), the HTML-as-text rule, and the strict gate against today's packages.
 
+// import the file reader 📁
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 // import the test helpers 🧪
 import { afterEach, describe, expect, it } from 'vitest';
 // import the parser and the gate 📜
 import {
   AB_CHANGELOG_GATE,
+  CHANGELOG_GITMOJI,
   auditChangelogs,
   changelogGateMode,
   classifyHeading,
@@ -239,5 +243,69 @@ describe('installed packages 🚦', () => {
     // 🚫 a near miss stays strict
     process.env[AB_CHANGELOG_GATE] = 'WARN';
     expect(changelogGateMode()).toBe('strict');
+  });
+});
+
+
+// 😀 the text runs of one inline parse (code spans are listed separately)
+const inlineParts = (source: string): { text: string; code: string[] } => {
+  const code: string[] = [];
+  const walk = (runs: readonly ChangelogInline[]): string => runs.map((run) => {
+    if (run.type === 'text') return run.text;
+    if (run.type === 'code') { code.push(run.text); return ''; }
+    return walk(run.children);
+  }).join('');
+  return { text: walk(parseChangelogInlines(source)), code };
+};
+
+// 😀 `:name:` tokens outside fenced blocks and inline code
+const shortcodesOutsideCode = (markdown: string): string[] => {
+  const stripped = markdown.replace(/```[\s\S]*?```/g, '').replace(/`[^`\n]*`/g, '');
+  return [...stripped.matchAll(/:([a-z][a-z0-9_+-]*):/g)].map((match) => match[1] ?? '');
+};
+
+
+describe('gitmoji shortcodes 😀', () => {
+  it('maps an allow-listed shortcode to its emoji', () => {
+    // 📝 ✨ the two the page was showing as raw text
+    expect(inlineParts(':memo: Write the guides').text).toBe(`${CHANGELOG_GITMOJI.memo} Write the guides`);
+    expect(inlineParts('then :sparkles: add a page').text).toBe(`then ${CHANGELOG_GITMOJI.sparkles} add a page`);
+    expect(CHANGELOG_GITMOJI.memo).toBe('📝');
+    expect(CHANGELOG_GITMOJI.sparkles).toBe('✨');
+    // 😀 a name with underscores is one token, not an italic span
+    expect(inlineParts(':white_check_mark: done').text).toBe(`${CHANGELOG_GITMOJI.white_check_mark} done`);
+  });
+
+  it('leaves an unknown shortcode as literal text', () => {
+    // 🚫 not in the table, and a timestamp's `:40:` is not a shortcode
+    expect(inlineParts('see :not_a_gitmoji: later').text).toBe('see :not_a_gitmoji: later');
+    expect(inlineParts('expires 2026-10-21T20:40:07Z').text).toBe('expires 2026-10-21T20:40:07Z');
+  });
+
+  it('does not map a shortcode inside a code span', () => {
+    // 💻 the backticks win
+    const parts = inlineParts('keep `:memo:` and map :memo:');
+    expect(parts.code).toEqual([':memo:']);
+    expect(parts.text).toBe(`keep  and map ${CHANGELOG_GITMOJI.memo}`);
+  });
+
+  it('does not map a shortcode inside a code block', () => {
+    // 💻 the fence is a pre, not an inline
+    const blocks = parseChangelogBlocks('```\n:sparkles: stays\n```\n\n:sparkles: maps');
+    expect(blocks[0]).toMatchObject({ type: 'pre', code: ':sparkles: stays' });
+    expect(blocks[1]).toMatchObject({ type: 'p', children: [{ type: 'text', text: `${CHANGELOG_GITMOJI.sparkles} maps` }] });
+  });
+
+  it('covers every shortcode used outside code in the app and installed changelogs', () => {
+    // 📁 this app, then each installed package
+    const files = ['CHANGELOG.md', ...[
+      'fonts', 'icons', 'animations', 'theme', 'hooks', 'core', 'components', 'i18n',
+    ].map((id) => join('node_modules', `ab-nextjs-${id}`, 'CHANGELOG.md'))];
+    // 😀 every `:name:` that is not inside a fence or a code span
+    const used = new Set(files.flatMap((file) => shortcodesOutsideCode(readFileSync(join(process.cwd(), file), 'utf8'))));
+    // ✅ the table has each of them, and the source files still contain the shortcode (we did not rewrite them)
+    expect(used.size).toBeGreaterThan(0);
+    for (const name of used) expect(CHANGELOG_GITMOJI, name).toHaveProperty(name);
+    expect(readFileSync(join(process.cwd(), 'CHANGELOG.md'), 'utf8')).toContain(':memo:');
   });
 });

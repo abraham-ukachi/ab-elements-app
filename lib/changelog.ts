@@ -46,6 +46,7 @@
 // 📜 Build-time changelog (0.2.29): read each installed `ab-nextjs-*` CHANGELOG.md plus the app's own file,
 //    accept both `##` and `###` version headings, and fail the build when the installed version has no released entry.
 //    The page renders the parsed blocks as React elements. Raw HTML in the markdown stays text. It is never a node 🚫.
+//    Gitmoji shortcodes (`:memo:`) become emoji here, from a fixed table, and only in text runs. The CHANGELOG files stay as written.
 
 // import the file reader 📁
 import { readFileSync } from 'node:fs';
@@ -353,7 +354,7 @@ export function parseChangelogBlocks(markdown: string): ChangelogBlock[] {
     // 📰 a subsection heading inside the entry (rendered as an h4 by the page)
     const sub = /^(#{2,6})[ \t]+(.+?)\s*$/.exec(line);
     if (sub) {
-      blocks.push({ type: 'h', text: sub[2].trim() }); // 📰
+      blocks.push({ type: 'h', text: expandGitmojiText(sub[2].trim()) }); // 📰 emoji in a subsection heading, still plain text
       index += 1;
       continue;
     }
@@ -441,6 +442,55 @@ function isSafeChangelogHref(href: string): boolean {
 }
 
 
+// 😀 gitmoji shortcodes that appear in this app's CHANGELOG or an installed package CHANGELOG.
+//    A name that is not in this table stays the literal `:name:` text. Nothing here is HTML.
+export const CHANGELOG_GITMOJI: Readonly<Record<string, string>> = {
+  arrow_up: '⬆️',
+  art: '🎨',
+  bento: '🍱',
+  bookmark_tabs: '📑',
+  bug: '🐛',
+  building_construction: '🏗️',
+  bulb: '💡',
+  card_file_box: '🗃️',
+  chart_with_upwards_trend: '📈',
+  construction_worker: '👷',
+  fire: '🔥',
+  globe_with_meridians: '🌐',
+  heavy_plus_sign: '➕',
+  iphone: '📱',
+  lipstick: '💄',
+  lock: '🔒',
+  memo: '📝',
+  passport_control: '🛂',
+  pencil2: '✏️',
+  pushpin: '📌',
+  recycle: '♻️',
+  shield: '🛡️',
+  sparkles: '✨',
+  wheelchair: '♿',
+  white_check_mark: '✅',
+  wrench: '🔧',
+};
+
+// 😀 `:name:` when `name` is one token. A digit-leading match (`:40:` inside a timestamp) is not a shortcode we map.
+const GITMOJI_SHORTCODE = /:([a-z][a-z0-9_+-]*):/g;
+
+
+/**
+ * `expandGitmojiText` - replace allow-listed `:shortcode:` tokens with their emoji 😀
+ *
+ * Unknown names stay as typed. This is plain text, not HTML.
+ *
+ * @param { string } text
+ * @returns { string }
+ */
+function expandGitmojiText(text: string): string {
+  // 😀 one pass. An emoji has no `:name:` in it, so a second pass would change nothing.
+  return text.replace(GITMOJI_SHORTCODE, (full, name: string) => CHANGELOG_GITMOJI[name] ?? full);
+}
+
+
 /**
  * `parseChangelogInlines` - emphasis, code, and safe links. A `<tag>` stays text. 🔤
  *
@@ -503,6 +553,15 @@ export function parseChangelogInlines(input: string): ChangelogInline[] {
         }
       }
     }
+    // 😀 `:memo:` before emphasis, so the underscores in `:white_check_mark:` are not an italic span.
+    //    A code span was already taken above, so a shortcode in backticks stays typed.
+    const shortcode = /^:([a-z][a-z0-9_+-]*):/.exec(input.slice(index));
+    if (shortcode) {
+      const name = shortcode[1] ?? ''; // 🏷️
+      pushText(CHANGELOG_GITMOJI[name] ?? shortcode[0]); // 😀 known → emoji, unknown → the literal `:name:`
+      index += shortcode[0].length;
+      continue;
+    }
     // 🔤 `*em*` or `_em_` (not the strong marker)
     if ((input[index] === '*' || input[index] === '_') && input[index + 1] !== input[index]) {
       const end = input.indexOf(input[index] as string, index + 1);
@@ -524,7 +583,7 @@ export function parseChangelogInlines(input: string): ChangelogInline[] {
     pushText(input[index] ?? '');
     index += 1;
   }
-  // 🔤 the runs
+  // 🔤 the runs. Shortcodes were swapped while scanning, and only outside code spans.
   return out;
 }
 
