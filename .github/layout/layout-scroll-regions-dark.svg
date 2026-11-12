@@ -1,45 +1,45 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="900" height="600" viewBox="0 0 900 600" role="img" aria-labelledby="t d">
 <title id="t">What scrolls in the Ab layout</title>
 <desc id="d">The document is locked. Only three regions scroll, each on its own: the sidebar, main content and aside content. The panes row has min-height 0, the app uses 100dvh, header and footer pad with safe-area insets, and every scroller uses overscroll-behavior contain.</desc>
-<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#D9AB7F"/></marker></defs>
-<rect width="100%" height="100%" fill="#111411"/>
-<rect x="20" y="20" width="860" height="60" rx="6" fill="#1D201D" stroke="#FFB4AB" stroke-width="1.5" stroke-dasharray="6 4" opacity="1"/>
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#D8B085"/></marker></defs>
+<rect width="100%" height="100%" fill="#19120C"/>
+<rect x="20" y="20" width="860" height="60" rx="6" fill="#241A12" stroke="#FFB4AB" stroke-width="1.5" stroke-dasharray="6 4" opacity="1"/>
 <text x="450" y="46" font-size="14" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#FFB4AB" text-anchor="middle" font-weight="bold">🔒 html, body { overflow:hidden; height:100% } — the document never scrolls</text>
-<text x="450" y="68" font-size="12" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#C1C9BF" text-anchor="middle" font-weight="normal">no window scroll listeners · no rubber-band of the whole page on iOS</text>
-<rect x="20" y="95" width="860" height="410" rx="12" fill="#1D201D" stroke="#8B938A" stroke-width="2.5" opacity="1"/>
-<text x="450" y="115" font-size="12" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#C1C9BF" text-anchor="middle" font-weight="normal">AbAppLayout · grid-template-rows: auto 1fr auto · height:100dvh (fallback 100vh)</text>
-<rect x="40" y="125" width="820" height="34" rx="6" fill="#394B3B" stroke="#81D997" stroke-width="1.5" stroke-dasharray="6 4" opacity="1"/>
-<text x="450.0" y="147.0" font-size="13" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#C5C7C2" text-anchor="middle" font-weight="bold">header · padding-top: env(safe-area-inset-top)</text>
-<rect x="40" y="169" width="820" height="262" rx="6" fill="#282B27" stroke="#8B938A" stroke-width="1.5" opacity="1"/>
-<text x="450" y="186" font-size="12" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#C1C9BF" text-anchor="middle" font-weight="normal">panes row · min-height:0 (lets children shrink so they can scroll)</text>
-<rect x="50" y="194" width="150" height="226" rx="6" fill="#005227" stroke="#81D997" stroke-width="1.5" opacity="1"/>
-<text x="125.0" y="305.0" font-size="14" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#9DF6B1" text-anchor="middle" font-weight="bold">sidebar</text>
-<text x="125.0" y="325.0" font-size="12" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#9DF6B1" text-anchor="middle" font-weight="normal">overflow:auto</text>
-<text x="115.0" y="388" font-size="11" font-family="Roboto Mono,DejaVu Sans Mono,monospace" fill="#9DF6B1" text-anchor="middle" font-weight="normal">overscroll:contain</text>
-<line x1="182" y1="240" x2="182" y2="370" stroke="#D9AB7F" stroke-width="3" marker-end="url(#ah)"/>
-<line x1="182" y1="370" x2="182" y2="240" stroke="#D9AB7F" stroke-width="3" marker-end="url(#ah)"/>
-<rect x="210" y="194" width="380" height="226" rx="6" fill="#005227" stroke="#81D997" stroke-width="1.5" opacity="1"/>
-<text x="400.0" y="305.0" font-size="14" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#9DF6B1" text-anchor="middle" font-weight="bold">main content</text>
-<text x="400.0" y="325.0" font-size="12" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#9DF6B1" text-anchor="middle" font-weight="normal">overflow:auto</text>
-<text x="400.0" y="388" font-size="11" font-family="Roboto Mono,DejaVu Sans Mono,monospace" fill="#9DF6B1" text-anchor="middle" font-weight="normal">overscroll-behavior:contain</text>
-<line x1="572" y1="240" x2="572" y2="370" stroke="#D9AB7F" stroke-width="3" marker-end="url(#ah)"/>
-<line x1="572" y1="370" x2="572" y2="240" stroke="#D9AB7F" stroke-width="3" marker-end="url(#ah)"/>
-<rect x="600" y="194" width="250" height="226" rx="6" fill="#005227" stroke="#81D997" stroke-width="1.5" opacity="1"/>
-<text x="725.0" y="305.0" font-size="14" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#9DF6B1" text-anchor="middle" font-weight="bold">aside content</text>
-<text x="725.0" y="325.0" font-size="12" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#9DF6B1" text-anchor="middle" font-weight="normal">overflow:auto</text>
-<text x="725.0" y="388" font-size="11" font-family="Roboto Mono,DejaVu Sans Mono,monospace" fill="#9DF6B1" text-anchor="middle" font-weight="normal">overscroll-behavior:contain</text>
-<line x1="832" y1="240" x2="832" y2="370" stroke="#D9AB7F" stroke-width="3" marker-end="url(#ah)"/>
-<line x1="832" y1="370" x2="832" y2="240" stroke="#D9AB7F" stroke-width="3" marker-end="url(#ah)"/>
-<rect x="40" y="441" width="820" height="34" rx="6" fill="#394B3B" stroke="#81D997" stroke-width="1.5" stroke-dasharray="6 4" opacity="1"/>
-<text x="450.0" y="463.0" font-size="13" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#C5C7C2" text-anchor="middle" font-weight="bold">footer · padding-bottom: env(safe-area-inset-bottom)</text>
-<text x="450" y="494" font-size="12" font-family="Roboto Mono,DejaVu Sans Mono,monospace" fill="#C1C9BF" text-anchor="middle" font-weight="normal">each pane: min-height:0; overflow:hidden → its content wrapper: overflow:auto; scrollbar-gutter:stable</text>
-<rect x="30" y="530" width="22" height="16" rx="3" fill="#394B3B" stroke="#81D997" stroke-width="1.5" stroke-dasharray="6 4" opacity="1"/>
-<text x="60" y="543" font-size="12" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#C1C9BF" text-anchor="start" font-weight="normal">slot · 0px when empty</text>
-<rect x="245" y="530" width="22" height="16" rx="3" fill="#005227" stroke="#81D997" stroke-width="1.5" opacity="1"/>
-<text x="275" y="543" font-size="12" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#C1C9BF" text-anchor="start" font-weight="normal">scroller (overflow:auto)</text>
-<rect x="460" y="530" width="22" height="16" rx="3" fill="#1D201D" stroke="#8B938A" stroke-width="1.5" opacity="1"/>
-<text x="490" y="543" font-size="12" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#C1C9BF" text-anchor="start" font-weight="normal">fixed box (overflow:hidden)</text>
-<rect x="675" y="530" width="22" height="16" rx="3" fill="#3A2C1F" stroke="#D9AB7F" stroke-width="1.5" opacity="1"/>
-<text x="705" y="543" font-size="12" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#C1C9BF" text-anchor="start" font-weight="normal">drawer</text>
-<text x="450" y="580" font-size="12" font-family="Roboto Mono,DejaVu Sans Mono,monospace" fill="#C1C9BF" text-anchor="middle" font-weight="normal">&lt;meta name="viewport" content="…, viewport-fit=cover"&gt;</text>
+<text x="450" y="68" font-size="12" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#B5A597" text-anchor="middle" font-weight="normal">no window scroll listeners · no rubber-band of the whole page on iOS</text>
+<rect x="20" y="95" width="860" height="410" rx="12" fill="#241A12" stroke="#6B5346" stroke-width="2.5" opacity="1"/>
+<text x="450" y="115" font-size="12" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#B5A597" text-anchor="middle" font-weight="normal">AbAppLayout · grid-template-rows: auto 1fr auto · height:100dvh (fallback 100vh)</text>
+<rect x="40" y="125" width="820" height="34" rx="6" fill="#19120C" stroke="#D9AB7F" stroke-width="1.5" stroke-dasharray="6 4" opacity="1"/>
+<text x="450.0" y="147.0" font-size="13" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#F4ECE5" text-anchor="middle" font-weight="bold">header · padding-top: env(safe-area-inset-top)</text>
+<rect x="40" y="169" width="820" height="262" rx="6" fill="#2C2118" stroke="#6B5346" stroke-width="1.5" opacity="1"/>
+<text x="450" y="186" font-size="12" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#B5A597" text-anchor="middle" font-weight="normal">panes row · min-height:0 (lets children shrink so they can scroll)</text>
+<rect x="50" y="194" width="150" height="226" rx="6" fill="#2C2118" stroke="#D9AB7F" stroke-width="1.5" opacity="1"/>
+<text x="125.0" y="305.0" font-size="14" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#F4ECE5" text-anchor="middle" font-weight="bold">sidebar</text>
+<text x="125.0" y="325.0" font-size="12" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#8FA491" text-anchor="middle" font-weight="normal">overflow:auto</text>
+<text x="115.0" y="388" font-size="11" font-family="Roboto Mono,DejaVu Sans Mono,monospace" fill="#F4ECE5" text-anchor="middle" font-weight="normal">overscroll:contain</text>
+<line x1="182" y1="240" x2="182" y2="370" stroke="#D8B085" stroke-width="3" marker-end="url(#ah)"/>
+<line x1="182" y1="370" x2="182" y2="240" stroke="#D8B085" stroke-width="3" marker-end="url(#ah)"/>
+<rect x="210" y="194" width="380" height="226" rx="6" fill="#2C2118" stroke="#D9AB7F" stroke-width="1.5" opacity="1"/>
+<text x="400.0" y="305.0" font-size="14" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#F4ECE5" text-anchor="middle" font-weight="bold">main content</text>
+<text x="400.0" y="325.0" font-size="12" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#8FA491" text-anchor="middle" font-weight="normal">overflow:auto</text>
+<text x="400.0" y="388" font-size="11" font-family="Roboto Mono,DejaVu Sans Mono,monospace" fill="#F4ECE5" text-anchor="middle" font-weight="normal">overscroll-behavior:contain</text>
+<line x1="572" y1="240" x2="572" y2="370" stroke="#D8B085" stroke-width="3" marker-end="url(#ah)"/>
+<line x1="572" y1="370" x2="572" y2="240" stroke="#D8B085" stroke-width="3" marker-end="url(#ah)"/>
+<rect x="600" y="194" width="250" height="226" rx="6" fill="#2C2118" stroke="#D9AB7F" stroke-width="1.5" opacity="1"/>
+<text x="725.0" y="305.0" font-size="14" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#F4ECE5" text-anchor="middle" font-weight="bold">aside content</text>
+<text x="725.0" y="325.0" font-size="12" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#8FA491" text-anchor="middle" font-weight="normal">overflow:auto</text>
+<text x="725.0" y="388" font-size="11" font-family="Roboto Mono,DejaVu Sans Mono,monospace" fill="#F4ECE5" text-anchor="middle" font-weight="normal">overscroll-behavior:contain</text>
+<line x1="832" y1="240" x2="832" y2="370" stroke="#D8B085" stroke-width="3" marker-end="url(#ah)"/>
+<line x1="832" y1="370" x2="832" y2="240" stroke="#D8B085" stroke-width="3" marker-end="url(#ah)"/>
+<rect x="40" y="441" width="820" height="34" rx="6" fill="#19120C" stroke="#D9AB7F" stroke-width="1.5" stroke-dasharray="6 4" opacity="1"/>
+<text x="450.0" y="463.0" font-size="13" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#F4ECE5" text-anchor="middle" font-weight="bold">footer · padding-bottom: env(safe-area-inset-bottom)</text>
+<text x="450" y="494" font-size="12" font-family="Roboto Mono,DejaVu Sans Mono,monospace" fill="#B5A597" text-anchor="middle" font-weight="normal">each pane: min-height:0; overflow:hidden → its content wrapper: overflow:auto; scrollbar-gutter:stable</text>
+<rect x="30" y="530" width="22" height="16" rx="3" fill="#19120C" stroke="#D9AB7F" stroke-width="1.5" stroke-dasharray="6 4" opacity="1"/>
+<text x="60" y="543" font-size="12" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#B5A597" text-anchor="start" font-weight="normal">slot · 0px when empty</text>
+<rect x="245" y="530" width="22" height="16" rx="3" fill="#2C2118" stroke="#D9AB7F" stroke-width="1.5" opacity="1"/>
+<text x="275" y="543" font-size="12" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#B5A597" text-anchor="start" font-weight="normal">scroller (overflow:auto)</text>
+<rect x="460" y="530" width="22" height="16" rx="3" fill="#241A12" stroke="#6B5346" stroke-width="1.5" opacity="1"/>
+<text x="490" y="543" font-size="12" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#B5A597" text-anchor="start" font-weight="normal">fixed box (overflow:hidden)</text>
+<rect x="675" y="530" width="22" height="16" rx="3" fill="#3A2C1F" stroke="#D8B085" stroke-width="1.5" opacity="1"/>
+<text x="705" y="543" font-size="12" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#B5A597" text-anchor="start" font-weight="normal">drawer</text>
+<text x="450" y="580" font-size="12" font-family="Roboto Mono,DejaVu Sans Mono,monospace" fill="#B5A597" text-anchor="middle" font-weight="normal">&lt;meta name="viewport" content="…, viewport-fit=cover"&gt;</text>
 </svg>

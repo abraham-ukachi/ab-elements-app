@@ -2,10 +2,16 @@
 # @authors: Abraham Ukachi <abrahamukachi@gmail.com>
 # Generates the 14 layout-rule SVGs (light + dark) into .github/layout/.
 # No animation. Each file has a title and a description. Text colours clear WCAG AA.
+# Palette is the app's bronze theme (ab-nextjs-theme 0.3.10 tokens), not Material green.
+#   light bg #FFF8F5, card #FFFFFF, card2 #FBF3EC, tint #F4E7DB, text #211A16, muted #6B5B50,
+#   bronze #A67C52, bronze text #8A6440, sage accent #566A58, danger #904A43
+#   dark bg #19120C, card #241A12, card2 #2C2118, text #F4ECE5, muted #B5A597,
+#   bronze text #D9AB7F, accent text #D8B085, sage accent #8FA491, danger #FFB4AB
+# Sage is only the small "scrolls" caption. Structure is bronze on warm surfaces.
 import os
 OUT = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), ".github", "layout")
-T={"light":dict(bg="#F9FAF4",fg="#191C19",fg2="#414941",pane="#EDEEE9",pane2="#E7E9E3",slot="#D3E8D3",line="#717970",line2="#C1C9BF",scroll="#9DF6B1",scrollfg="#00210C",prim="#066D37",bronze="#8A6440",drawer="#F3E6D8",drawerfg="#4A3420",tert="#3A656E",bad="#BA1A1A"),
-   "dark":dict(bg="#111411",fg="#C5C7C2",fg2="#C1C9BF",pane="#1D201D",pane2="#282B27",slot="#394B3B",line="#8B938A",line2="#414941",scroll="#005227",scrollfg="#9DF6B1",prim="#81D997",bronze="#D9AB7F",drawer="#3A2C1F",drawerfg="#F3E6D8",tert="#A2CED9",bad="#FFB4AB")}
+T={"light":dict(bg="#FFF8F5",fg="#211A16",fg2="#6B5B50",pane="#FFFFFF",pane2="#FBF3EC",slot="#FFF8F5",line="#C4B2A4",line2="#E4D5C8",scroll="#F4E7DB",scrollfg="#211A16",sage="#566A58",prim="#8A6440",bronze="#A67C52",drawer="#E4C9AE",drawerfg="#211A16",scrim="#19120C",tert="#566A58",bad="#904A43"),
+   "dark":dict(bg="#19120C",fg="#F4ECE5",fg2="#B5A597",pane="#241A12",pane2="#2C2118",slot="#19120C",line="#6B5346",line2="#3A2C22",scroll="#2C2118",scrollfg="#F4ECE5",sage="#8FA491",prim="#D9AB7F",bronze="#D8B085",drawer="#3A2C1F",drawerfg="#F3E6D8",scrim="#000000",tert="#8FA491",bad="#FFB4AB")}
 class S:
     def __init__(s,c,w,h): s.c=c;s.w=w;s.h=h;s.o=[]
     def r(s,x,y,w,h,fill,stroke=None,dash=False,rx=6,sw=1.5,op=1):
@@ -27,7 +33,8 @@ class S:
     def scroll(s,x,y,w,h,label,sub="↕ scrolls on its own"):
         s.r(x,y,w,h,s.c["scroll"],s.c["prim"])
         s.t(x+w/2,y+h/2-2,label,14,s.c["scrollfg"],weight="bold")
-        if sub: s.t(x+w/2,y+h/2+18,sub,12,s.c["scrollfg"])
+        # 🌿 sage is only this small caption, not the region fill
+        if sub: s.t(x+w/2,y+h/2+18,sub,12,s.c["sage"])
     def drawer(s,x,y,w,h,label):
         s.r(x,y,w,h,s.c["drawer"],s.c["bronze"],sw=2.5)
         s.t(x+w/2,y+h/2+5,label,12,s.c["drawerfg"],weight="bold")
@@ -107,9 +114,9 @@ for mode,c in T.items():
         s.r(ox,90,300,260,c["pane"],c["line"],sw=2,rx=8); s.r(ox+8,98,284,20,c["slot"],c["prim"],True,rx=3)
         s.r(ox+8,124,70,218,c["pane2"],c["line"],rx=4); s.r(ox+84,124,128,218,c["pane2"],c["line"],rx=4); s.r(ox+218,124,74,218,c["pane2"],c["line"],rx=4)
         s.t(ox+43,240,"side",10,c["fg2"]); s.t(ox+148,240,"main",11,c["fg2"]); s.t(ox+255,240,"aside",10,c["fg2"])
-        if sc=="app": s.r(ox,90,300,260,"#000",None,op=0.35,rx=8); s.drawer(ox,250,300,100,'side="bottom" · languages')
-        if sc=="main": s.r(ox+84,124,128,218,"#000",None,op=0.35,rx=4); s.drawer(ox+84,124,128,90,'side="top"'); s.t(ox+148,232,"confirm / cancel",10,c["drawerfg"]) if False else None
-        if sc=="aside": s.r(ox+218,124,74,218,"#000",None,op=0.35,rx=4); s.drawer(ox+226,124,66,218,'right')
+        if sc=="app": s.r(ox,90,300,260,c["scrim"],None,op=0.35,rx=8); s.drawer(ox,250,300,100,'side="bottom" · languages')
+        if sc=="main": s.r(ox+84,124,128,218,c["scrim"],None,op=0.35,rx=4); s.drawer(ox+84,124,128,90,'side="top"'); s.t(ox+148,232,"confirm / cancel",10,c["drawerfg"]) if False else None
+        if sc=="aside": s.r(ox+218,124,74,218,c["scrim"],None,op=0.35,rx=4); s.drawer(ox+226,124,66,218,'right')
     s.t(480,385,"side = top · bottom · left · right (any scope)",14,weight="bold")
     for i,side in enumerate(["top","bottom","left","right"]):
         ox=60+i*220; s.r(ox,400,180,120,c["pane2"],c["line"],rx=6)

@@ -1,65 +1,65 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="960" height="600" viewBox="0 0 960 600" role="img" aria-labelledby="t d">
 <title id="t">AbDrawer scopes and sides</title>
 <desc id="d">Three scopes: app (covers everything, here a bottom language drawer), main (clipped to the main layout, here from the top) and aside (clipped to the aside, here from the right). Below, the four sides: top, bottom, left, right.</desc>
-<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#D9AB7F"/></marker></defs>
-<rect width="100%" height="100%" fill="#111411"/>
-<text x="480" y="32" font-size="16" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#C5C7C2" text-anchor="middle" font-weight="bold">AbDrawer · scope = where it is clipped · side = where it slides from</text>
-<text x="170" y="62" font-size="14" font-family="Roboto Mono,DejaVu Sans Mono,monospace" fill="#81D997" text-anchor="middle" font-weight="bold">scope="app"</text>
-<text x="170" y="80" font-size="12" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#C1C9BF" text-anchor="middle" font-weight="normal">covers the whole app</text>
-<rect x="20" y="90" width="300" height="260" rx="8" fill="#1D201D" stroke="#8B938A" stroke-width="2" opacity="1"/>
-<rect x="28" y="98" width="284" height="20" rx="3" fill="#394B3B" stroke="#81D997" stroke-width="1.5" stroke-dasharray="6 4" opacity="1"/>
-<rect x="28" y="124" width="70" height="218" rx="4" fill="#282B27" stroke="#8B938A" stroke-width="1.5" opacity="1"/>
-<rect x="104" y="124" width="128" height="218" rx="4" fill="#282B27" stroke="#8B938A" stroke-width="1.5" opacity="1"/>
-<rect x="238" y="124" width="74" height="218" rx="4" fill="#282B27" stroke="#8B938A" stroke-width="1.5" opacity="1"/>
-<text x="63" y="240" font-size="10" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#C1C9BF" text-anchor="middle" font-weight="normal">side</text>
-<text x="168" y="240" font-size="11" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#C1C9BF" text-anchor="middle" font-weight="normal">main</text>
-<text x="275" y="240" font-size="10" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#C1C9BF" text-anchor="middle" font-weight="normal">aside</text>
-<rect x="20" y="90" width="300" height="260" rx="8" fill="#000" opacity="0.35"/>
-<rect x="20" y="250" width="300" height="100" rx="6" fill="#3A2C1F" stroke="#D9AB7F" stroke-width="2.5" opacity="1"/>
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#D8B085"/></marker></defs>
+<rect width="100%" height="100%" fill="#19120C"/>
+<text x="480" y="32" font-size="16" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#F4ECE5" text-anchor="middle" font-weight="bold">AbDrawer · scope = where it is clipped · side = where it slides from</text>
+<text x="170" y="62" font-size="14" font-family="Roboto Mono,DejaVu Sans Mono,monospace" fill="#D9AB7F" text-anchor="middle" font-weight="bold">scope="app"</text>
+<text x="170" y="80" font-size="12" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#B5A597" text-anchor="middle" font-weight="normal">covers the whole app</text>
+<rect x="20" y="90" width="300" height="260" rx="8" fill="#241A12" stroke="#6B5346" stroke-width="2" opacity="1"/>
+<rect x="28" y="98" width="284" height="20" rx="3" fill="#19120C" stroke="#D9AB7F" stroke-width="1.5" stroke-dasharray="6 4" opacity="1"/>
+<rect x="28" y="124" width="70" height="218" rx="4" fill="#2C2118" stroke="#6B5346" stroke-width="1.5" opacity="1"/>
+<rect x="104" y="124" width="128" height="218" rx="4" fill="#2C2118" stroke="#6B5346" stroke-width="1.5" opacity="1"/>
+<rect x="238" y="124" width="74" height="218" rx="4" fill="#2C2118" stroke="#6B5346" stroke-width="1.5" opacity="1"/>
+<text x="63" y="240" font-size="10" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#B5A597" text-anchor="middle" font-weight="normal">side</text>
+<text x="168" y="240" font-size="11" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#B5A597" text-anchor="middle" font-weight="normal">main</text>
+<text x="275" y="240" font-size="10" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#B5A597" text-anchor="middle" font-weight="normal">aside</text>
+<rect x="20" y="90" width="300" height="260" rx="8" fill="#000000" opacity="0.35"/>
+<rect x="20" y="250" width="300" height="100" rx="6" fill="#3A2C1F" stroke="#D8B085" stroke-width="2.5" opacity="1"/>
 <text x="170.0" y="305.0" font-size="12" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#F3E6D8" text-anchor="middle" font-weight="bold">side="bottom" · languages</text>
-<text x="485" y="62" font-size="14" font-family="Roboto Mono,DejaVu Sans Mono,monospace" fill="#81D997" text-anchor="middle" font-weight="bold">scope="main"</text>
-<text x="485" y="80" font-size="12" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#C1C9BF" text-anchor="middle" font-weight="normal">inside AbMainLayout only</text>
-<rect x="335" y="90" width="300" height="260" rx="8" fill="#1D201D" stroke="#8B938A" stroke-width="2" opacity="1"/>
-<rect x="343" y="98" width="284" height="20" rx="3" fill="#394B3B" stroke="#81D997" stroke-width="1.5" stroke-dasharray="6 4" opacity="1"/>
-<rect x="343" y="124" width="70" height="218" rx="4" fill="#282B27" stroke="#8B938A" stroke-width="1.5" opacity="1"/>
-<rect x="419" y="124" width="128" height="218" rx="4" fill="#282B27" stroke="#8B938A" stroke-width="1.5" opacity="1"/>
-<rect x="553" y="124" width="74" height="218" rx="4" fill="#282B27" stroke="#8B938A" stroke-width="1.5" opacity="1"/>
-<text x="378" y="240" font-size="10" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#C1C9BF" text-anchor="middle" font-weight="normal">side</text>
-<text x="483" y="240" font-size="11" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#C1C9BF" text-anchor="middle" font-weight="normal">main</text>
-<text x="590" y="240" font-size="10" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#C1C9BF" text-anchor="middle" font-weight="normal">aside</text>
-<rect x="419" y="124" width="128" height="218" rx="4" fill="#000" opacity="0.35"/>
-<rect x="419" y="124" width="128" height="90" rx="6" fill="#3A2C1F" stroke="#D9AB7F" stroke-width="2.5" opacity="1"/>
+<text x="485" y="62" font-size="14" font-family="Roboto Mono,DejaVu Sans Mono,monospace" fill="#D9AB7F" text-anchor="middle" font-weight="bold">scope="main"</text>
+<text x="485" y="80" font-size="12" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#B5A597" text-anchor="middle" font-weight="normal">inside AbMainLayout only</text>
+<rect x="335" y="90" width="300" height="260" rx="8" fill="#241A12" stroke="#6B5346" stroke-width="2" opacity="1"/>
+<rect x="343" y="98" width="284" height="20" rx="3" fill="#19120C" stroke="#D9AB7F" stroke-width="1.5" stroke-dasharray="6 4" opacity="1"/>
+<rect x="343" y="124" width="70" height="218" rx="4" fill="#2C2118" stroke="#6B5346" stroke-width="1.5" opacity="1"/>
+<rect x="419" y="124" width="128" height="218" rx="4" fill="#2C2118" stroke="#6B5346" stroke-width="1.5" opacity="1"/>
+<rect x="553" y="124" width="74" height="218" rx="4" fill="#2C2118" stroke="#6B5346" stroke-width="1.5" opacity="1"/>
+<text x="378" y="240" font-size="10" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#B5A597" text-anchor="middle" font-weight="normal">side</text>
+<text x="483" y="240" font-size="11" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#B5A597" text-anchor="middle" font-weight="normal">main</text>
+<text x="590" y="240" font-size="10" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#B5A597" text-anchor="middle" font-weight="normal">aside</text>
+<rect x="419" y="124" width="128" height="218" rx="4" fill="#000000" opacity="0.35"/>
+<rect x="419" y="124" width="128" height="90" rx="6" fill="#3A2C1F" stroke="#D8B085" stroke-width="2.5" opacity="1"/>
 <text x="483.0" y="174.0" font-size="12" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#F3E6D8" text-anchor="middle" font-weight="bold">side="top"</text>
-<text x="800" y="62" font-size="14" font-family="Roboto Mono,DejaVu Sans Mono,monospace" fill="#81D997" text-anchor="middle" font-weight="bold">scope="aside"</text>
-<text x="800" y="80" font-size="12" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#C1C9BF" text-anchor="middle" font-weight="normal">inside AbAsideLayout only</text>
-<rect x="650" y="90" width="300" height="260" rx="8" fill="#1D201D" stroke="#8B938A" stroke-width="2" opacity="1"/>
-<rect x="658" y="98" width="284" height="20" rx="3" fill="#394B3B" stroke="#81D997" stroke-width="1.5" stroke-dasharray="6 4" opacity="1"/>
-<rect x="658" y="124" width="70" height="218" rx="4" fill="#282B27" stroke="#8B938A" stroke-width="1.5" opacity="1"/>
-<rect x="734" y="124" width="128" height="218" rx="4" fill="#282B27" stroke="#8B938A" stroke-width="1.5" opacity="1"/>
-<rect x="868" y="124" width="74" height="218" rx="4" fill="#282B27" stroke="#8B938A" stroke-width="1.5" opacity="1"/>
-<text x="693" y="240" font-size="10" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#C1C9BF" text-anchor="middle" font-weight="normal">side</text>
-<text x="798" y="240" font-size="11" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#C1C9BF" text-anchor="middle" font-weight="normal">main</text>
-<text x="905" y="240" font-size="10" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#C1C9BF" text-anchor="middle" font-weight="normal">aside</text>
-<rect x="868" y="124" width="74" height="218" rx="4" fill="#000" opacity="0.35"/>
-<rect x="876" y="124" width="66" height="218" rx="6" fill="#3A2C1F" stroke="#D9AB7F" stroke-width="2.5" opacity="1"/>
+<text x="800" y="62" font-size="14" font-family="Roboto Mono,DejaVu Sans Mono,monospace" fill="#D9AB7F" text-anchor="middle" font-weight="bold">scope="aside"</text>
+<text x="800" y="80" font-size="12" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#B5A597" text-anchor="middle" font-weight="normal">inside AbAsideLayout only</text>
+<rect x="650" y="90" width="300" height="260" rx="8" fill="#241A12" stroke="#6B5346" stroke-width="2" opacity="1"/>
+<rect x="658" y="98" width="284" height="20" rx="3" fill="#19120C" stroke="#D9AB7F" stroke-width="1.5" stroke-dasharray="6 4" opacity="1"/>
+<rect x="658" y="124" width="70" height="218" rx="4" fill="#2C2118" stroke="#6B5346" stroke-width="1.5" opacity="1"/>
+<rect x="734" y="124" width="128" height="218" rx="4" fill="#2C2118" stroke="#6B5346" stroke-width="1.5" opacity="1"/>
+<rect x="868" y="124" width="74" height="218" rx="4" fill="#2C2118" stroke="#6B5346" stroke-width="1.5" opacity="1"/>
+<text x="693" y="240" font-size="10" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#B5A597" text-anchor="middle" font-weight="normal">side</text>
+<text x="798" y="240" font-size="11" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#B5A597" text-anchor="middle" font-weight="normal">main</text>
+<text x="905" y="240" font-size="10" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#B5A597" text-anchor="middle" font-weight="normal">aside</text>
+<rect x="868" y="124" width="74" height="218" rx="4" fill="#000000" opacity="0.35"/>
+<rect x="876" y="124" width="66" height="218" rx="6" fill="#3A2C1F" stroke="#D8B085" stroke-width="2.5" opacity="1"/>
 <text x="909.0" y="238.0" font-size="12" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#F3E6D8" text-anchor="middle" font-weight="bold">right</text>
-<text x="480" y="385" font-size="14" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#C5C7C2" text-anchor="middle" font-weight="bold">side = top · bottom · left · right (any scope)</text>
-<rect x="60" y="400" width="180" height="120" rx="6" fill="#282B27" stroke="#8B938A" stroke-width="1.5" opacity="1"/>
-<rect x="60" y="400" width="180" height="50" rx="6" fill="#3A2C1F" stroke="#D9AB7F" stroke-width="2.5" opacity="1"/>
+<text x="480" y="385" font-size="14" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#F4ECE5" text-anchor="middle" font-weight="bold">side = top · bottom · left · right (any scope)</text>
+<rect x="60" y="400" width="180" height="120" rx="6" fill="#2C2118" stroke="#6B5346" stroke-width="1.5" opacity="1"/>
+<rect x="60" y="400" width="180" height="50" rx="6" fill="#3A2C1F" stroke="#D8B085" stroke-width="2.5" opacity="1"/>
 <text x="150.0" y="430.0" font-size="12" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#F3E6D8" text-anchor="middle" font-weight="bold">top</text>
-<line x1="150" y1="455" x2="150" y2="480" stroke="#D9AB7F" stroke-width="2.5" marker-end="url(#ah)"/>
-<rect x="280" y="400" width="180" height="120" rx="6" fill="#282B27" stroke="#8B938A" stroke-width="1.5" opacity="1"/>
-<rect x="280" y="470" width="180" height="50" rx="6" fill="#3A2C1F" stroke="#D9AB7F" stroke-width="2.5" opacity="1"/>
+<line x1="150" y1="455" x2="150" y2="480" stroke="#D8B085" stroke-width="2.5" marker-end="url(#ah)"/>
+<rect x="280" y="400" width="180" height="120" rx="6" fill="#2C2118" stroke="#6B5346" stroke-width="1.5" opacity="1"/>
+<rect x="280" y="470" width="180" height="50" rx="6" fill="#3A2C1F" stroke="#D8B085" stroke-width="2.5" opacity="1"/>
 <text x="370.0" y="500.0" font-size="12" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#F3E6D8" text-anchor="middle" font-weight="bold">bottom</text>
-<line x1="370" y1="465" x2="370" y2="440" stroke="#D9AB7F" stroke-width="2.5" marker-end="url(#ah)"/>
-<rect x="500" y="400" width="180" height="120" rx="6" fill="#282B27" stroke="#8B938A" stroke-width="1.5" opacity="1"/>
-<rect x="500" y="400" width="70" height="120" rx="6" fill="#3A2C1F" stroke="#D9AB7F" stroke-width="2.5" opacity="1"/>
+<line x1="370" y1="465" x2="370" y2="440" stroke="#D8B085" stroke-width="2.5" marker-end="url(#ah)"/>
+<rect x="500" y="400" width="180" height="120" rx="6" fill="#2C2118" stroke="#6B5346" stroke-width="1.5" opacity="1"/>
+<rect x="500" y="400" width="70" height="120" rx="6" fill="#3A2C1F" stroke="#D8B085" stroke-width="2.5" opacity="1"/>
 <text x="535.0" y="465.0" font-size="12" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#F3E6D8" text-anchor="middle" font-weight="bold">left</text>
-<line x1="575" y1="460" x2="605" y2="460" stroke="#D9AB7F" stroke-width="2.5" marker-end="url(#ah)"/>
-<rect x="720" y="400" width="180" height="120" rx="6" fill="#282B27" stroke="#8B938A" stroke-width="1.5" opacity="1"/>
-<rect x="830" y="400" width="70" height="120" rx="6" fill="#3A2C1F" stroke="#D9AB7F" stroke-width="2.5" opacity="1"/>
+<line x1="575" y1="460" x2="605" y2="460" stroke="#D8B085" stroke-width="2.5" marker-end="url(#ah)"/>
+<rect x="720" y="400" width="180" height="120" rx="6" fill="#2C2118" stroke="#6B5346" stroke-width="1.5" opacity="1"/>
+<rect x="830" y="400" width="70" height="120" rx="6" fill="#3A2C1F" stroke="#D8B085" stroke-width="2.5" opacity="1"/>
 <text x="865.0" y="465.0" font-size="12" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#F3E6D8" text-anchor="middle" font-weight="bold">right</text>
-<line x1="825" y1="460" x2="795" y2="460" stroke="#D9AB7F" stroke-width="2.5" marker-end="url(#ah)"/>
-<text x="480" y="550" font-size="12" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#C1C9BF" text-anchor="middle" font-weight="normal">Scrim dims only its scope · rest of the scope is inert · Escape / scrim click closes · focus returns to the trigger</text>
-<text x="480" y="572" font-size="12" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#C1C9BF" text-anchor="middle" font-weight="normal">240ms slide · no motion under prefers-reduced-motion · no JS: rendered as an in-flow section</text>
+<line x1="825" y1="460" x2="795" y2="460" stroke="#D8B085" stroke-width="2.5" marker-end="url(#ah)"/>
+<text x="480" y="550" font-size="12" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#B5A597" text-anchor="middle" font-weight="normal">Scrim dims only its scope · rest of the scope is inert · Escape / scrim click closes · focus returns to the trigger</text>
+<text x="480" y="572" font-size="12" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#B5A597" text-anchor="middle" font-weight="normal">240ms slide · no motion under prefers-reduced-motion · no JS: rendered as an in-flow section</text>
 </svg>
