@@ -808,6 +808,79 @@ export function changelogToc(docs: readonly ChangelogDocument[]): { id: string; 
 }
 
 
+// 📰 one Home "What's new" row, taken from a package's latest released changelog entry
+export type WhatsNewItem = {
+  id: AbPackageId; // 🆔 core, hooks, components
+  version: string; // 🔢 that entry's semver
+  date: string; // 📅 the heading's date, or empty when the heading has none
+  title: string; // 📝 the first bullet, as plain text
+  href: string; // 🔗 `/changelog#id-version`
+};
+
+
+/**
+ * `inlinePlain` - the text of an inline run, including code spans as their characters 🔤
+ *
+ * @param { readonly ChangelogInline[] } runs
+ * @returns { string }
+ */
+function inlinePlain(runs: readonly ChangelogInline[]): string {
+  // 🔤 text and code contribute characters; emphasis and links contribute their children
+  return runs.map((run) => (run.type === 'text' || run.type === 'code' ? run.text : inlinePlain(run.children))).join('');
+}
+
+
+/**
+ * `firstNote` - the first bullet of an entry, or its first paragraph 📝
+ *
+ * @param { string } body
+ * @returns { string }
+ */
+function firstNote(body: string): string {
+  // 🧱 the same blocks the page renders
+  const blocks = parseChangelogBlocks(body);
+  // 🚶 the first list or paragraph
+  for (const block of blocks) {
+    if ((block.type === 'ul' || block.type === 'ol') && block.items[0]) return inlinePlain(block.items[0]).replace(/\s+/g, ' ').trim();
+    if (block.type === 'p') return inlinePlain(block.children).replace(/\s+/g, ' ').trim();
+  }
+  // 🙅 an empty entry
+  return '';
+}
+
+
+/**
+ * `whatsNewItems` - Home's What's new rows, from the latest released entry of each package 📰
+ *
+ * The title is that entry's first bullet. The date is the date on its heading. Nothing here is typed by hand.
+ *
+ * @param { readonly ChangelogDocument[] } docs
+ * @param { readonly AbPackageId[] } ids
+ * @returns { WhatsNewItem[] }
+ */
+export function whatsNewItems(docs: readonly ChangelogDocument[], ids: readonly AbPackageId[]): WhatsNewItem[] {
+  // 📰 one row per id, in the order the page asked for
+  return ids.map((id) => {
+    // 📦 that package's file
+    const doc = docs.find((item) => item.id === id);
+    // 🆕 the newest released heading (entries are in file order)
+    const entry = doc?.entries.find((item) => item.kind === 'version' && item.version);
+    // 🔢 the semver, when there is one
+    const version = entry?.version ?? '';
+    // 📝 the first bullet, or the version when the entry has no prose
+    const title = entry ? firstNote(entry.body) : '';
+    // 📰 the row
+    return {
+      id,
+      version,
+      date: entry?.date ?? '',
+      title: title || version,
+      href: entry ? `/changelog#${entry.anchor}` : '/changelog',
+    };
+  });
+}
+
+
 /**
  * `changelogHref` - `/changelog#id-version` when that installed version has a released entry, else `/changelog` 🔗
  *

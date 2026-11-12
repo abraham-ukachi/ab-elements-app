@@ -385,20 +385,6 @@
         "fixed": "Corrigé"
       },
       "asideLabel": "Nouveau dans {pkg}",
-      "items": {
-        "core": {
-          "title": "Des volets qui défilent seuls (la règle de mise en page)",
-          "date": "oct. 2026"
-        },
-        "hooks": {
-          "title": "useAbScrollSpy et le script de thème sans flash",
-          "date": "oct. 2026"
-        },
-        "components": {
-          "title": "Table des matières, barre d’app et cartes de packages",
-          "date": "oct. 2026"
-        }
-      },
       "promo": "Table des matières et barre d’app"
     },
     "toc": {

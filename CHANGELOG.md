@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file. See [standa
 * :white_check_mark: Test the changelog parser and the three guides plus `/changelog`
 * :memo: Name the theme, fonts and icons versions in the guide callouts from the installed package, not a typed number
 * :lipstick: Show gitmoji shortcodes as emoji on the changelog page, from a fixed table, and leave every other shortcode as text
+* :bug: Take Home's What's new titles and dates from the latest released changelog entries
 
 ### [0.2.28](https://github.com/abraham-ukachi/ab-elements-app/compare/v0.2.27...v0.2.28) (2026-11-12)
 

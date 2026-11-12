@@ -86,8 +86,8 @@ import { DocsMainBar } from '@/components/app/docs-shell';
 import { getPackagePreviews } from '@/components/app/package-previews';
 // import the repo URL (Edit this page / Changelog) 🐙
 import { GITHUB_URL } from '@/lib/nav';
-// import the build-time changelog (What's new points at a released entry, or the page when that version has none) 📜
-import { changelogHref, loadChangelogs } from '@/lib/changelog';
+// import the build-time changelog (What's new is the latest released entry of each package) 📜
+import { loadChangelogs, whatsNewItems } from '@/lib/changelog';
 
 
 // create the props type of the home page as `HomeProps` (Next.js 16 hands us the `params` as a Promise)
@@ -102,15 +102,11 @@ const GUIDES = [
   { id: 'pwaShell', icon: 'dashboard_customize' },
 ] as const;
 
-// 🆕 What's new: three rows. Each href is /changelog, or /changelog#id-version when that release has an entry.
-const WHATS_NEW = [
-  { id: 'core', kind: 'new' },
-  { id: 'hooks', kind: 'new' },
-  { id: 'components', kind: 'new' },
-] as const;
-
 // 📜 parsed once (the gate lives in prebuild; reading the files here does not throw)
 const CHANGELOGS = loadChangelogs();
+
+// 🆕 What's new: the latest released entry of core, hooks and components. Title and date come from that entry.
+const WHATS_NEW = whatsNewItems(CHANGELOGS, ['core', 'hooks', 'components']);
 
 // 🔠 the shared title look (spec §2/§8): Mulish 800 via the theme's `--ab-font-title`, tight tracking
 const TITLE = 'font-(family-name:--ab-font-title) font-extrabold tracking-[-0.03em] text-(--ab-color-text)';
@@ -266,16 +262,16 @@ export default async function Home({ params }: HomeProps) {
 
               <section id="whats-new" aria-labelledby="whats-new-title" className="flex min-w-0 flex-col gap-[10px] min-[768px]:gap-[14px]">
                 <h2 id="whats-new-title" className={H2}>{t('whatsNew.title')}</h2>
-                {/* 📰 badge New / Improved · title · mono package · date → /changelog */}
+                {/* 📰 badge New · the latest entry's first line · mono package · that entry's date */}
                 <AbList label={t('whatsNew.title')}>
-                  {WHATS_NEW.map(({ id, kind }) => (
+                  {WHATS_NEW.map((item) => (
                     <AbListItem
-                      key={id}
-                      href={changelogHref(CHANGELOGS, id)}
-                      badge={t(`whatsNew.kind.${kind}`)}
-                      badgeTone={kind === 'new' ? 'primary' : 'tonal'}
-                      title={t(`whatsNew.items.${id}.title`)}
-                      meta={<><code>{`ab-nextjs-${id}`}</code> · {t(`whatsNew.items.${id}.date`)}</>}
+                      key={item.id}
+                      href={item.href}
+                      badge={t('whatsNew.kind.new')}
+                      badgeTone="primary"
+                      title={item.title}
+                      meta={<><code>{`ab-nextjs-${item.id}`}</code>{item.date ? ` · ${item.date}` : null}</>}
                       trailing="chevron"
                     />
                   ))}

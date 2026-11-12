@@ -385,20 +385,6 @@
         "fixed": "Corregido"
       },
       "asideLabel": "Novedad en {pkg}",
-      "items": {
-        "core": {
-          "title": "Paneles que se desplazan solos (la regla de diseño)",
-          "date": "oct 2026"
-        },
-        "hooks": {
-          "title": "useAbScrollSpy y el script de tema sin destellos",
-          "date": "oct 2026"
-        },
-        "components": {
-          "title": "Tabla de contenidos, barra de app y tarjetas de paquetes",
-          "date": "oct 2026"
-        }
-      },
       "promo": "Tabla de contenidos y barra de app"
     },
     "toc": {

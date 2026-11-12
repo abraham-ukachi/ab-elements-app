@@ -60,6 +60,7 @@ import {
   enforceChangelogGate,
   loadChangelogs,
   parseChangelog,
+  whatsNewItems,
   parseChangelogBlocks,
   parseChangelogInlines,
   type ChangelogInline,
@@ -307,5 +308,51 @@ describe('gitmoji shortcodes 😀', () => {
     expect(used.size).toBeGreaterThan(0);
     for (const name of used) expect(CHANGELOG_GITMOJI, name).toHaveProperty(name);
     expect(readFileSync(join(process.cwd(), 'CHANGELOG.md'), 'utf8')).toContain(':memo:');
+  });
+});
+
+
+// 🔤 the characters of an inline run (the same reading order as the What's new title)
+const plainInline = (runs: readonly ChangelogInline[]): string => runs.map((run) => (
+  run.type === 'text' || run.type === 'code' ? run.text : plainInline(run.children)
+)).join('');
+
+
+describe('What\'s new rows 📰', () => {
+  it('takes the title and the date from the latest released entry', () => {
+    // 📚 the files the build reads
+    const docs = loadChangelogs();
+    // 📰 the three Home rows
+    const items = whatsNewItems(docs, ['core', 'hooks', 'components']);
+    expect(items.map((item) => item.id)).toEqual(['core', 'hooks', 'components']);
+    // 📅 each row is that package's newest released heading, not a date typed into the page
+    for (const item of items) {
+      const doc = docs.find((entry) => entry.id === item.id);
+      const entry = doc?.entries.find((candidate) => candidate.kind === 'version' && candidate.version);
+      expect(entry, item.id).toBeTruthy();
+      if (!entry) continue;
+      const blocks = parseChangelogBlocks(entry.body);
+      const list = blocks.find((block) => block.type === 'ul' || block.type === 'ol');
+      expect(list && (list.type === 'ul' || list.type === 'ol'), item.id).toBeTruthy();
+      if (list && (list.type === 'ul' || list.type === 'ol')) {
+        expect(item.title, item.id).toBe(plainInline(list.items[0] ?? []).replace(/\s+/g, ' ').trim());
+      }
+      expect(item.date, item.id).toBe(entry.date);
+      expect(item.version, item.id).toBe(entry.version);
+      expect(item.href, item.id).toBe(`/changelog#${entry.anchor}`);
+      expect(item.date, item.id).not.toMatch(/oct/i);
+    }
+  });
+
+  it('does not keep an October 2026 date in the Home copy', () => {
+    // 📄 the page reads the helper, not a message
+    const page = readFileSync(join(process.cwd(), 'app/[locale]/(docs)/page.tsx'), 'utf8');
+    expect(page).toContain('whatsNewItems');
+    expect(page).not.toContain('whatsNew.items');
+    // 🌍 none of the four message files still carries the old month
+    for (const locale of ['en', 'fr', 'es', 'ru']) {
+      const messages = readFileSync(join(process.cwd(), 'messages', `${locale}.json`), 'utf8');
+      expect(messages, locale).not.toMatch(/[Oo]ct\.?\s*2026|окт\.\s*2026/);
+    }
   });
 });

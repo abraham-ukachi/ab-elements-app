@@ -385,20 +385,6 @@
         "fixed": "Fixed"
       },
       "asideLabel": "Now in {pkg}",
-      "items": {
-        "core": {
-          "title": "Panes that scroll on their own (the layout rule)",
-          "date": "Oct 2026"
-        },
-        "hooks": {
-          "title": "useAbScrollSpy and the no-flash theme script",
-          "date": "Oct 2026"
-        },
-        "components": {
-          "title": "Table of contents, app bar and package cards",
-          "date": "Oct 2026"
-        }
-      },
       "promo": "Table of contents & app bar"
     },
     "toc": {
