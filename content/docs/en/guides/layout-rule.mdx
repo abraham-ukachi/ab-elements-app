@@ -16,8 +16,10 @@ Every screen uses the same frame from **ab-nextjs-core**.
 
 `variant="panes"` on `AbAppLayout` is that frame. The default variant keeps the older stacked layout. New pages use `panes`.
 
+<div className="ab-layout-fig-scroll" tabIndex={0}>
 <img className="ab-layout-fig-light" src="/layout-figures/layout-anatomy-light.svg" alt="AbAppLayout with header, sidebar, main layout (mainHeader, content, mainBar), aside layout (asideHeader, content, asideBar) and footer" width="900" />
 <img className="ab-layout-fig-dark" src="/layout-figures/layout-anatomy-dark.svg" alt="AbAppLayout with header, sidebar, main layout (mainHeader, content, mainBar), aside layout (asideHeader, content, asideBar) and footer, in dark colours" width="900" />
+</div>
 
 ## Anatomy and slots
 
@@ -64,8 +66,10 @@ Leave a slot out, or pass `null`, and that row is not rendered. Tests can target
 
 ## What scrolls
 
+<div className="ab-layout-fig-scroll" tabIndex={0}>
 <img className="ab-layout-fig-light" src="/layout-figures/layout-scroll-regions-light.svg" alt="The document is locked. The sidebar, main content and aside content each scroll on their own." width="900" />
 <img className="ab-layout-fig-dark" src="/layout-figures/layout-scroll-regions-dark.svg" alt="The document is locked. The sidebar, main content and aside content each scroll on their own, in dark colours." width="900" />
+</div>
 
 With `variant="panes"` mounted, the app is a `100dvh` grid (`auto` / `minmax(0, 1fr)` / `auto`) and `overflow: hidden`. The package locks `html` and `body` while that layout is mounted, so the document cannot rubber-band. The lock uses `:has()`, and `data-ab-layout-lock` where `:has()` is missing. `acquireAbLayoutLock` from `ab-nextjs-core/ab-app-layout` counts the mounted layouts so unmounting one of two keeps the lock.
 
@@ -77,8 +81,10 @@ There is no `--ab-app-bar-height` offset and no `padding-top: 64px` to clear a f
 
 ## Empty slots
 
+<div className="ab-layout-fig-scroll" tabIndex={0}>
 <img className="ab-layout-fig-light" src="/layout-figures/layout-empty-chrome-light.svg" alt="With content the header and bars take space. When empty they measure 0px and main gets the space." width="900" />
 <img className="ab-layout-fig-dark" src="/layout-figures/layout-empty-chrome-dark.svg" alt="With content the header and bars take space. When empty they measure 0px and main gets the space, in dark colours." width="900" />
+</div>
 
 Two layers hide an empty slot:
 
@@ -89,8 +95,10 @@ Do not render an empty `<div>` to keep a row. Omit the prop.
 
 ## Drawers
 
+<div className="ab-layout-fig-scroll" tabIndex={0}>
 <img className="ab-layout-fig-light" src="/layout-figures/layout-drawer-scopes-light.svg" alt="AbDrawer scopes app, main and aside, and sides top, bottom, left and right." width="900" />
 <img className="ab-layout-fig-dark" src="/layout-figures/layout-drawer-scopes-dark.svg" alt="AbDrawer scopes app, main and aside, and sides top, bottom, left and right, in dark colours." width="900" />
+</div>
 
 `AbDrawer` and `useAbDrawer` are published from `ab-nextjs-components/ab-drawer`. `AbDrawerList` is the selectable list, from `ab-nextjs-components/ab-drawer-list`.
 
@@ -142,8 +150,10 @@ Every drawer:
 
 ## Breakpoints
 
+<div className="ab-layout-fig-scroll" tabIndex={0}>
 <img className="ab-layout-fig-light" src="/layout-figures/layout-breakpoints-light.svg" alt="Layouts at 390, 768, 1180 and 1920 pixels wide" width="900" />
 <img className="ab-layout-fig-dark" src="/layout-figures/layout-breakpoints-dark.svg" alt="Layouts at 390, 768, 1180 and 1920 pixels wide, in dark colours" width="900" />
+</div>
 
 - **390.** The bottom bar, or a drawer, replaces the sidebar. Main is the one visible pane. The aside is a drawer.
 - **768.** The sidebar (or the rail) and main are visible. The aside is a right drawer.
@@ -156,8 +166,10 @@ The document never scrolls at any width. Check 390, 768, 1180 and 1920 in light 
 
 ## Scroll spy and anchors
 
+<div className="ab-layout-fig-scroll" tabIndex={0}>
 <img className="ab-layout-fig-light" src="/layout-figures/layout-scroll-spy-light.svg" alt="The scroll spy uses the main scroller as its IntersectionObserver root and highlights the active outline item." width="900" />
 <img className="ab-layout-fig-dark" src="/layout-figures/layout-scroll-spy-dark.svg" alt="The scroll spy uses the main scroller as its IntersectionObserver root and highlights the active outline item, in dark colours." width="900" />
+</div>
 
 The window never scrolls, so a listener on `window` never fires. Pass the main scroller.
 
@@ -210,8 +222,10 @@ export function MainScrollerLabel() {
 
 ## Welcome
 
+<div className="ab-layout-fig-scroll" tabIndex={0}>
 <img className="ab-layout-fig-light" src="/layout-figures/layout-welcome-mapping-light.svg" alt="Welcome: the top bar is the app header, the counter is mainHeader, the slide is main content, the arrows and Skip are mainBar, and the playground is the aside." width="900" />
 <img className="ab-layout-fig-dark" src="/layout-figures/layout-welcome-mapping-dark.svg" alt="Welcome: the top bar is the app header, the counter is mainHeader, the slide is main content, the arrows and Skip are mainBar, and the playground is the aside, in dark colours." width="900" />
+</div>
 
 Welcome is already on this frame (`pageName="welcome"`).
 

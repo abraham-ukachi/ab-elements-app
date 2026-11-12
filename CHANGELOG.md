@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file. See [standa
 * :bug: Take Home's What's new titles and dates from the latest released changelog entries
 * :bug: Parse a changelog `:slug:` before emphasis, so `:white_check_mark:` is not an italic "check"
 * :art: Retint the layout-rule figures to the bronze theme, with sage only on the small scrolls caption
+* :iphone: Let layout-rule figures scroll inside the article on a phone, so captions stay at least 12px
 
 ### [0.2.28](https://github.com/abraham-ukachi/ab-elements-app/compare/v0.2.27...v0.2.28) (2026-11-12)
 

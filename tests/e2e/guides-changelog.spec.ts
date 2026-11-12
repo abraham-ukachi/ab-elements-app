@@ -181,3 +181,46 @@ for (const scheme of THEMES) {
     }
   }
 }
+
+
+// 📱 O5: a 900–1060px diagram must not shrink its captions to a few pixels on a phone.
+//    The figure scrolls inside the article. The document does not.
+test('layout figures keep 12px captions at 390 and do not scroll the document 📱', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.addInitScript(() => localStorage.setItem('theme', 'light'));
+  await openPage(page, '/docs/guides/layout-rule');
+  // 🖼️ every light figure (the dark twin is hidden)
+  const imgs = page.locator('.ab-layout-fig-scroll .ab-layout-fig-light');
+  await expect(imgs).toHaveCount(7);
+  for (let i = 0; i < 7; i += 1) {
+    const img = imgs.nth(i);
+    const box = await img.boundingBox();
+    const src = await img.getAttribute('src');
+    expect(box, src).toBeTruthy();
+    expect(src).toBeTruthy();
+    const svg = await (await page.request.get(src ?? '')).text();
+    const viewBox = /viewBox="0 0 ([\d.]+)/.exec(svg);
+    expect(viewBox, src).toBeTruthy();
+    // 🔤 real captions only (the generator's empty 1px spacers are not text)
+    const sizes = [...svg.matchAll(/<text\b([^>]*)>([^<]*)<\/text>/g)]
+      .filter((match) => (match[2] ?? '').trim().length > 0)
+      .map((match) => Number(/font-size="([\d.]+)"/.exec(match[1] ?? '')?.[1] ?? '0'));
+    const minFont = Math.min(...sizes);
+    const viewW = Number(viewBox?.[1] ?? '1');
+    const effective = minFont * ((box?.width ?? 0) / viewW);
+    expect(effective, `${src} ${minFont}px at ${box?.width} / ${viewW}`).toBeGreaterThanOrEqual(12);
+  }
+  // 🚫 the document does not gain a horizontal scrollbar
+  const doc = await documentScroll(page);
+  expect(doc.overflowX).toBe(0);
+  expect(doc.scrollX).toBe(0);
+  // 📜 the figure frame is the horizontal scroller, inside the main pane
+  const frame = page.locator('.ab-layout-fig-scroll').first();
+  await expect(frame).toHaveAttribute('tabindex', '0');
+  const inside = await frame.evaluate((el, sel) => !!document.querySelector(sel)?.contains(el), PART.mainContent);
+  expect(inside).toBe(true);
+  const wider = await frame.evaluate((el) => el.scrollWidth > el.clientWidth + 1);
+  expect(wider).toBe(true);
+  const pane = await page.locator(PART.mainContent).evaluate((el) => el.scrollWidth - el.clientWidth);
+  expect(pane).toBeLessThanOrEqual(1);
+});
