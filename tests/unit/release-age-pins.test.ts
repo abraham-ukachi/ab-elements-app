@@ -39,9 +39,11 @@
 * 🛡️ D33 guard: every `minimumReleaseAgeExclude` pin in pnpm-workspace.yaml must
 *    1. 📌 name ONE exact `name@version` (no ranges, no wildcards),
 *    2. 🎯 match the version that is actually locked (no stale pins left behind),
-*    3. ⏳ when marked `D33: expires YYYY-MM-DD HH:MM Paris`, still be in date.
+*    3. ⏳ when marked `D33: expires YYYY-MM-DD HH:MM[:SS[.mmm]] Paris`, still be in date.
+*       Seconds matter: a minute-only stamp would fail 48.855s before this pin is a day old.
 *       Once a pin expires this test FAILS on purpose: the release is a day old,
 *       so pnpm's normal release-age rule covers it and the pin should be deleted.
+*       Safe cleanup for 0.7.0 is at or after 09:41 Paris on 2026-11-07.
 */
 
 import { readFileSync } from 'node:fs'; // 📂
@@ -50,6 +52,13 @@ import { describe, expect, it } from 'vitest'; // 🧪
 
 // 📂 read a repo file as text
 const read = (file: string) => readFileSync(join(process.cwd(), file), 'utf8');
+
+// 🕰️ one Paris civil time. A minute stamp is the start of that minute; seconds and millis are kept.
+function parisExpiry(date: string, time: string): Date {
+  const offset = date < '2026-10-25' ? '+02:00' : '+01:00';
+  const clock = time.split(':').length === 2 ? `${time}:00` : time;
+  return new Date(`${date}T${clock}${offset}`);
+}
 
 // 📌 one parsed pin: name, version and its optional expiry
 type Pin = { name: string; version: string; expires?: Date; raw: string };
@@ -64,12 +73,13 @@ function readPins(): Pin[] {
     if (!m) break; // 🛑 end of the list
     const [, spec, comment = ''] = m;
     const at = spec.lastIndexOf('@');
-    const exp = /D33: expires (\d{4}-\d{2}-\d{2}) (\d{2}:\d{2}) Paris/.exec(comment);
+    const exp = /D33: expires (\d{4}-\d{2}-\d{2}) (\d{2}:\d{2}(?::\d{2}(?:\.\d{1,3})?)?) Paris/.exec(comment);
     pins.push({
       name: spec.slice(0, at),
       version: spec.slice(at + 1),
-      // 🕰️ Paris is UTC+2 until the 25 Oct 2026 DST switch, UTC+1 after
-      expires: exp ? new Date(`${exp[1]}T${exp[2]}:00${exp[1] < '2026-10-25' ? '+02:00' : '+01:00'}`) : undefined,
+      // 🕰️ Paris is UTC+2 until the 25 Oct 2026 DST switch, UTC+1 after.
+      //    HH:MM is read as HH:MM:00. HH:MM:SS and HH:MM:SS.mmm are kept, so a pin is not treated as expired early.
+      expires: exp ? parisExpiry(exp[1], exp[2]) : undefined,
       raw: line.trim(),
     });
   }
@@ -101,4 +111,12 @@ describe('🛡️ D33 minimumReleaseAgeExclude pins', () => {
       expect(pin.expires!.getTime()).toBeGreaterThan(Date.now());
     },
   );
+
+  it('⏳ components 0.7.0 expires at 09:40:48.855 Paris, 24h after publish, not at 09:40:00', () => {
+    const pin = pins.find((item) => item.name === 'ab-nextjs-components' && item.version === '0.7.0');
+    // 📅 2026-11-06T08:40:48.855Z plus 24h
+    const exact = new Date('2026-11-07T08:40:48.855Z');
+    expect(pin?.expires?.toISOString()).toBe(exact.toISOString());
+    expect(pin!.expires!.getTime()).toBeGreaterThan(new Date('2026-11-07T08:40:00.000Z').getTime());
+  });
 });

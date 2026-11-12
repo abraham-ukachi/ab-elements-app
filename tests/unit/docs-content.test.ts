@@ -114,8 +114,9 @@ describe('docs content 0.2.27 📚', () => {
     const packages = AB_PACKAGE_IDS.map((id) => `/docs/packages/${id}`);
     for (const locale of ['en', 'fr'] as const) {
       const urls = flattenDocsTree(source.getPageTree(locale).children as DocsTreeNode[]).map((page) => docsUnprefixed(page.url, ['en', 'fr', 'es', 'ru']));
-      const at = urls.indexOf('/docs/quick-start');
-      expect(urls.slice(at, at + 1 + packages.length), locale).toEqual(['/docs/quick-start', ...packages]);
+      // 📚 API child pages may sit under a package. The package indexes themselves stay in sidebar order.
+      const wanted = new Set(['/docs/quick-start', ...packages]);
+      expect(urls.filter((url) => wanted.has(url)), locale).toEqual(['/docs/quick-start', ...packages]);
     }
   });
 

@@ -77,6 +77,8 @@ import AbButton from 'ab-nextjs-components/ab-button';
 import AbChip from 'ab-nextjs-components/ab-chip';
 import AbKbd from 'ab-nextjs-components/ab-kbd';
 import AbPill from 'ab-nextjs-components/ab-pill';
+// import the build-time props table wiring (packaged AbPropsTable, 0.2.28) 📋
+import { DocsPropsTable } from '@/components/app/docs-props';
 
 
 // 🌍 the translated labels the map hands to the package pieces
@@ -258,6 +260,8 @@ export function getDocsMdxComponents(labels: DocsMdxLabels, overrides: MDXCompon
     // 🧪 `<Example title="…">…package components…</Example>` (0.2.26 live previews) + its preview marker
     Example: (props: DocsExampleProps) => <DocsExample {...props} labels={labels} preType={DocsPre} />,
     ExamplePreview: DocsExamplePreview,
+    // 📋 `<PropsTable id="AbDrawerProps" />` (rows come from the build-time JSON, rendered by AbPropsTable)
+    PropsTable: ({ id }: { id?: string }) => <DocsPropsTable id={id ?? ''} copyLabel={labels.copyLabel} copiedLabel={labels.copiedLabel} />,
     // 📦 the preview scope (published package components only)
     ...getLivePreviewScope(),
     // 🧩 per-page overrides last

@@ -164,9 +164,14 @@ test.describe('Welcome tab order ⌨️', () => {
   test('s10: theme → language → slide content (Get Started → GitHub) → dots', async ({ page }) => {
     // open s10 (no Skip, no arrows)
     await openWelcome(page, 'en', SLIDE_COUNT);
+    // ⌨️ components 0.7.0: `disabled` plus a badge is aria-disabled and stays a tab stop, so "Coming soon" can be reached.
+    //    Wait for that mode before tabbing. A native `disabled` button would be skipped, and that is not this button.
+    const github = page.getByRole('button', { name: /GitHub/ });
+    await expect(github).toHaveAttribute('data-disabled-mode', 'aria');
+    await expect(github).toHaveAttribute('aria-disabled', 'true');
     // tab through it
     const order = await tabOrder(page, 20);
-    // expect the end-of-walkthrough order ✅
+    // theme, language, Get Started, Continue with GitHub, then the dots
     expect(order.filter((key) => key !== 'slide').slice(0, 5)).toEqual(['theme', 'language', 'cta', 'github', 'dot']);
   });
 });

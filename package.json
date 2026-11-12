@@ -30,6 +30,8 @@
   "license": "MIT",
   "scripts": {
     "postinstall": "fumadocs-mdx",
+    "props:extract": "node --experimental-strip-types scripts/extract-props.mts",
+    "prebuild": "node --experimental-strip-types scripts/extract-props.mts",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -48,7 +50,7 @@
   "dependencies": {
     "@types/mdx": "2.0.14",
     "ab-nextjs-animations": "0.2.5",
-    "ab-nextjs-components": "0.6.0",
+    "ab-nextjs-components": "0.7.0",
     "ab-nextjs-core": "0.2.3",
     "ab-nextjs-fonts": "0.2.7",
     "ab-nextjs-hooks": "0.1.7",
@@ -76,6 +78,7 @@
     "eslint-config-next": "16.3.4",
     "lighthouse": "13.6.0",
     "tailwindcss": "^4.3.3",
+    "ts-morph": "26.0.0",
     "typescript": "^6.0.3",
     "vitest": "^5.0.3"
   }

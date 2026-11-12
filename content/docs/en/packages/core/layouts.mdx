@@ -1,0 +1,144 @@
+---
+title: Layout slots
+description: "Slot props for the app, main and aside layouts, plus the page provider."
+package: ab-nextjs-core
+kind: client
+status: stable
+icon: dashboard_customize
+---
+
+These tables are the slot props of `AbAppLayout`, `AbMainLayout` and `AbAsideLayout`, and the page-provider API next to them (`useAbPage`). A heading marked server is that package's server entry. It declares the same members as the client entry, so the members are not repeated. `getAbMainScroller` is not a core export. It lives on [Scroll spy](/docs/packages/hooks/scroll-spy), from `ab-nextjs-components/ab-toc`.
+
+## AbAppLayoutProps (client)
+
+`ab-nextjs-core/ab-app-layout`
+
+<PropsTable id="AbAppLayoutProps" />
+
+## AbAppLayoutProps (server)
+
+`ab-nextjs-core/server/ab-app-layout` Server entry. Same members as ab-nextjs-core/ab-app-layout.
+
+<PropsTable id="server.AbAppLayoutProps" />
+
+## AbMainLayoutProps (client)
+
+`ab-nextjs-core/ab-main-layout`
+
+<PropsTable id="AbMainLayoutProps" />
+
+## AbMainLayoutProps (server)
+
+`ab-nextjs-core/server/ab-main-layout` Server entry. Same members as ab-nextjs-core/ab-main-layout.
+
+<PropsTable id="server.AbMainLayoutProps" />
+
+## AbAsideLayoutProps (client)
+
+`ab-nextjs-core/ab-aside-layout`
+
+<PropsTable id="AbAsideLayoutProps" />
+
+## AbAsideLayoutProps (server)
+
+`ab-nextjs-core/server/ab-aside-layout` Server entry. Same members as ab-nextjs-core/ab-aside-layout.
+
+<PropsTable id="server.AbAsideLayoutProps" />
+
+## AbPageContextValue
+
+`ab-nextjs-core/ab-page-provider`
+
+<PropsTable id="AbPageContextValue" />
+
+## AbPageProviderProps
+
+`ab-nextjs-core/ab-page-provider`
+
+<PropsTable id="AbPageProviderProps" />
+
+## useAbPage
+
+`ab-nextjs-core/ab-page-provider`
+
+<PropsTable id="useAbPage" />
+
+## AbAsideToggle
+
+`ab-nextjs-core/ab-page-provider`
+
+<PropsTable id="AbAsideToggle" />
+
+## useAbAsideToggle
+
+`ab-nextjs-core/ab-page-provider`
+
+<PropsTable id="useAbAsideToggle" />
+
+## AbAsideDrawer
+
+`ab-nextjs-core/ab-page-provider`
+
+<PropsTable id="AbAsideDrawer" />
+
+## useAbAsideDrawer
+
+`ab-nextjs-core/ab-page-provider`
+
+<PropsTable id="useAbAsideDrawer" />
+
+## useAbInlineScroller
+
+`ab-nextjs-core/ab-page-provider`
+
+<PropsTable id="useAbInlineScroller" />
+
+## AB_ASIDE_DURATION
+
+`ab-nextjs-core/ab-page-provider`
+
+<PropsTable id="AB_ASIDE_DURATION" />
+
+## AB_ASIDE_SHEET_QUERY
+
+`ab-nextjs-core/ab-page-provider`
+
+<PropsTable id="AB_ASIDE_SHEET_QUERY" />
+
+## getAbAsideDuration
+
+`ab-nextjs-core/ab-page-provider`
+
+<PropsTable id="getAbAsideDuration" />
+
+## AB_REDUCED_MOTION_QUERY
+
+`ab-nextjs-core/ab-page-provider`
+
+<PropsTable id="AB_REDUCED_MOTION_QUERY" />
+
+## shouldCloseAbAsideOnSwipe
+
+`ab-nextjs-core/ab-aside-layout`
+
+<PropsTable id="shouldCloseAbAsideOnSwipe" />
+
+## Not on this page
+
+- `AbAppLayout` (`ab-nextjs-core/ab-app-layout`) — Public core export. This pass documents the layout slots and the page provider, not this name.
+- `acquireAbLayoutLock` (`ab-nextjs-core/ab-app-layout`) — Public helper, not a layout slot. This pass documents the slot props.
+- `AbAsideLayout` (`ab-nextjs-core/ab-aside-layout`) — Public core export. This pass documents the layout slots and the page provider, not this name.
+- `AbMainLayout` (`ab-nextjs-core/ab-main-layout`) — Public core export. This pass documents the layout slots and the page provider, not this name.
+- `AbPageProvider` (`ab-nextjs-core/ab-page-provider`) — Public core export. This pass documents the layout slots and the page provider, not this name.
+- `AbAppLayout` (`ab-nextjs-core/server/ab-app-layout`) — Public core export. This pass documents the layout slots and the page provider, not this name.
+- `AbAsideLayout` (`ab-nextjs-core/server/ab-aside-layout`) — Public core export. This pass documents the layout slots and the page provider, not this name.
+- `AbMainLayout` (`ab-nextjs-core/server/ab-main-layout`) — Public core export. This pass documents the layout slots and the page provider, not this name.
+
+## Not a public import
+
+These names are not exported from a package entry. There is no supported import path.
+
+- `toAbSlot` — Used by the layout implementations. ab-nextjs-core/ab-page-provider does not export it, and no exports entry points at its source file.
+- `AbScrollRegistrar` — Used by the server layouts. ab-nextjs-core/ab-page-provider does not export it, and no exports entry points at its source file.
+- `AbScrollRegistrarProps` — Props of AbScrollRegistrar. ab-nextjs-core/ab-page-provider does not export it, and no exports entry points at its source file.
+- `AbMainBarHeight` — Rendered inside the main layout. ab-nextjs-core/ab-main-layout does not export it, and no exports entry points at its source file.
