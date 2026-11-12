@@ -195,10 +195,10 @@ test('layout figures keep 12px captions at 390 and do not scroll the document ðŸ
   for (let i = 0; i < 7; i += 1) {
     const img = imgs.nth(i);
     const box = await img.boundingBox();
-    const src = await img.getAttribute('src');
+    const src = (await img.getAttribute('src')) ?? '';
     expect(box, src).toBeTruthy();
-    expect(src).toBeTruthy();
-    const svg = await (await page.request.get(src ?? '')).text();
+    expect(src).not.toBe('');
+    const svg = await (await page.request.get(src)).text();
     const viewBox = /viewBox="0 0 ([\d.]+)/.exec(svg);
     expect(viewBox, src).toBeTruthy();
     // ðŸ”¤ real captions only (the generator's empty 1px spacers are not text)
