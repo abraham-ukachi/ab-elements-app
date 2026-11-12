@@ -43,7 +43,7 @@
 *       Seconds matter: a minute-only stamp would fail 48.855s before this pin is a day old.
 *       Once a pin expires this test FAILS on purpose: the release is a day old,
 *       so pnpm's normal release-age rule covers it and the pin should be deleted.
-*       Safe cleanup for 0.7.0 is at or after 09:41 Paris on 2026-11-07.
+*       The 0.7.0 pin used seconds and was removed after 09:41 Paris on 2026-11-07.
 */
 
 import { readFileSync } from 'node:fs'; // 📂
@@ -111,12 +111,4 @@ describe('🛡️ D33 minimumReleaseAgeExclude pins', () => {
       expect(pin.expires!.getTime()).toBeGreaterThan(Date.now());
     },
   );
-
-  it('⏳ components 0.7.0 expires at 09:40:48.855 Paris, 24h after publish, not at 09:40:00', () => {
-    const pin = pins.find((item) => item.name === 'ab-nextjs-components' && item.version === '0.7.0');
-    // 📅 2026-11-06T08:40:48.855Z plus 24h
-    const exact = new Date('2026-11-07T08:40:48.855Z');
-    expect(pin?.expires?.toISOString()).toBe(exact.toISOString());
-    expect(pin!.expires!.getTime()).toBeGreaterThan(new Date('2026-11-07T08:40:00.000Z').getTime());
-  });
 });
