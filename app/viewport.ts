@@ -65,6 +65,8 @@ export const THEME_COLORS = {
 export const StaticViewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
+  // 📱 safe-area insets (the panes pad with env(safe-area-inset-*)) stay 0 without this
+  viewportFit: 'cover',
 
   /* Color Scheme */
   colorScheme: 'light dark',

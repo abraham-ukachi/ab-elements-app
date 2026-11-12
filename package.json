@@ -31,7 +31,7 @@
   "scripts": {
     "postinstall": "fumadocs-mdx",
     "props:extract": "node --experimental-strip-types scripts/extract-props.mts",
-    "prebuild": "node --experimental-strip-types scripts/extract-props.mts",
+    "prebuild": "node --experimental-strip-types scripts/extract-props.mts && node --experimental-strip-types scripts/changelog-gate.mts",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",

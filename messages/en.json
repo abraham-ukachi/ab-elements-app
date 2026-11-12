@@ -227,6 +227,7 @@
         "quickStart": "Quick start",
         "themingDarkMode": "Theming & dark mode",
         "iconsFonts": "Icons & fonts",
+        "layoutRule": "Layout rule",
         "pwaShell": "PWA shell"
       },
       "collapse": "Collapse sidebar",
@@ -365,6 +366,10 @@
           "title": "Icons and fonts without layout shift",
           "tag": "Icons · Fonts"
         },
+        "layoutRule": {
+          "title": "One layout for every screen",
+          "tag": "Layouts"
+        },
         "pwaShell": {
           "title": "Build a PWA docs shell",
           "tag": "Components"
@@ -442,5 +447,9 @@
         "deprecated": "Deprecated"
       }
     }
+  },
+  "Changelog": {
+    "lede": "Release notes for this app and for every installed Ab package.",
+    "compare": "Compare"
   }
 }

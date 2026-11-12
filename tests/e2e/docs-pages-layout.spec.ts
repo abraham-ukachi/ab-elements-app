@@ -76,6 +76,7 @@ const DOCS = [
   { id: 'i18n', path: '/docs/packages/i18n' },
   { id: 'guide-theming', path: '/docs/guides/theming-dark-mode' },
   { id: 'guide-icons', path: '/docs/guides/icons-fonts' },
+  { id: 'guide-layout', path: '/docs/guides/layout-rule' },
 ] as const;
 
 // 📏 1440 is the review laptop. The three API pages, in English and on the French fallback, are checked here too.

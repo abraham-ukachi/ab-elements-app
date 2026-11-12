@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1060" height="520" viewBox="0 0 1060 520" role="img" aria-labelledby="t d">
+<title id="t">Layout at 390, 768, 1180 and 1920 pixels</title>
+<desc id="d">At 390 one pane and the aside is a drawer; at 768 the sidebar is a rail and the aside is a right drawer; at 1180 and 1920 the sidebar, main and aside are all visible, with a gap at 1920. The document never scrolls at any width.</desc>
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8A6440"/></marker></defs>
+<rect width="100%" height="100%" fill="#F9FAF4"/>
+<text x="80.0" y="40" font-size="14" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#191C19" text-anchor="middle" font-weight="bold">390 · phone</text>
+<rect x="20" y="60" width="120" height="340" rx="8" fill="#EDEEE9" stroke="#717970" stroke-width="2" opacity="1"/>
+<rect x="26" y="66" width="108" height="18" rx="3" fill="#D3E8D3" stroke="#066D37" stroke-width="1.5" stroke-dasharray="6 4" opacity="1"/>
+<rect x="26" y="90" width="108" height="280" rx="6" fill="#9DF6B1" stroke="#066D37" stroke-width="1.5" opacity="1"/>
+<text x="80.0" y="228.0" font-size="14" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#00210C" text-anchor="middle" font-weight="bold">main</text>
+<text x="80.0" y="248.0" font-size="12" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#00210C" text-anchor="middle" font-weight="normal">↕</text>
+<rect x="26" y="374" width="108" height="20" rx="3" fill="#D3E8D3" stroke="#066D37" stroke-width="1.5" stroke-dasharray="6 4" opacity="1"/>
+<text x="80.0" y="388" font-size="10" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#191C19" text-anchor="middle" font-weight="normal">mainBar / nav</text>
+<text x="80.0" y="424" font-size="11" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#414941" text-anchor="middle" font-weight="normal">one pane</text>
+<text x="80.0" y="441" font-size="11" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#414941" text-anchor="middle" font-weight="normal">bottom bar</text>
+<text x="80.0" y="458" font-size="11" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#414941" text-anchor="middle" font-weight="normal">aside is a drawer</text>
+<text x="260.0" y="40" font-size="14" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#191C19" text-anchor="middle" font-weight="bold">768 · tablet</text>
+<rect x="170" y="60" width="180" height="280" rx="8" fill="#EDEEE9" stroke="#717970" stroke-width="2" opacity="1"/>
+<rect x="176" y="66" width="168" height="18" rx="3" fill="#D3E8D3" stroke="#066D37" stroke-width="1.5" stroke-dasharray="6 4" opacity="1"/>
+<rect x="176" y="90" width="24" height="220" rx="6" fill="#9DF6B1" stroke="#066D37" stroke-width="1.5" opacity="1"/>
+<text x="188.0" y="198.0" font-size="14" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#00210C" text-anchor="middle" font-weight="bold"></text>
+<text x="188.0" y="200.0" font-size="10" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#00210C" text-anchor="middle" font-weight="normal">rail</text>
+<rect x="206" y="90" width="138" height="220" rx="6" fill="#9DF6B1" stroke="#066D37" stroke-width="1.5" opacity="1"/>
+<text x="275.0" y="198.0" font-size="14" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#00210C" text-anchor="middle" font-weight="bold"></text>
+<text x="243.0" y="200.0" font-size="13" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#00210C" text-anchor="middle" font-weight="bold">main</text>
+<text x="243.0" y="218.0" font-size="12" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#00210C" text-anchor="middle" font-weight="normal">↕</text>
+<rect x="280" y="90" width="64" height="220" rx="6" fill="#F3E6D8" stroke="#8A6440" stroke-width="2.5" opacity="1"/>
+<text x="312.0" y="205.0" font-size="12" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#4A3420" text-anchor="middle" font-weight="bold">aside</text>
+<rect x="176" y="314" width="168" height="20" rx="3" fill="#D3E8D3" stroke="#066D37" stroke-width="1.5" stroke-dasharray="6 4" opacity="1"/>
+<text x="260.0" y="364" font-size="11" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#414941" text-anchor="middle" font-weight="normal">sidebar or rail</text>
+<text x="260.0" y="381" font-size="11" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#414941" text-anchor="middle" font-weight="normal">aside is a right drawer</text>
+<text x="510.0" y="40" font-size="14" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#191C19" text-anchor="middle" font-weight="bold">1180 · laptop</text>
+<rect x="380" y="60" width="260" height="280" rx="8" fill="#EDEEE9" stroke="#717970" stroke-width="2" opacity="1"/>
+<rect x="386" y="66" width="248" height="18" rx="3" fill="#D3E8D3" stroke="#066D37" stroke-width="1.5" stroke-dasharray="6 4" opacity="1"/>
+<rect x="386" y="90" width="60" height="220" rx="6" fill="#9DF6B1" stroke="#066D37" stroke-width="1.5" opacity="1"/>
+<text x="416.0" y="198.0" font-size="14" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#00210C" text-anchor="middle" font-weight="bold"></text>
+<text x="416.0" y="200.0" font-size="10" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#00210C" text-anchor="middle" font-weight="normal">side</text>
+<rect x="452" y="90" width="86" height="220" rx="6" fill="#9DF6B1" stroke="#066D37" stroke-width="1.5" opacity="1"/>
+<text x="495.0" y="198.0" font-size="14" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#00210C" text-anchor="middle" font-weight="bold"></text>
+<text x="495.0" y="200.0" font-size="13" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#00210C" text-anchor="middle" font-weight="bold">main</text>
+<text x="495.0" y="218.0" font-size="12" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#00210C" text-anchor="middle" font-weight="normal">↕</text>
+<rect x="544" y="90" width="90" height="220" rx="6" fill="#9DF6B1" stroke="#066D37" stroke-width="1.5" opacity="1"/>
+<text x="589.0" y="198.0" font-size="14" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#00210C" text-anchor="middle" font-weight="bold">aside</text>
+<text x="589.0" y="218.0" font-size="12" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#00210C" text-anchor="middle" font-weight="normal">↕</text>
+<rect x="386" y="314" width="248" height="20" rx="3" fill="#D3E8D3" stroke="#066D37" stroke-width="1.5" stroke-dasharray="6 4" opacity="1"/>
+<text x="510.0" y="364" font-size="11" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#414941" text-anchor="middle" font-weight="normal">sidebar + main + aside pane</text>
+<text x="840.0" y="40" font-size="14" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#191C19" text-anchor="middle" font-weight="bold">1920 · desktop</text>
+<rect x="670" y="60" width="340" height="280" rx="8" fill="#EDEEE9" stroke="#717970" stroke-width="2" opacity="1"/>
+<rect x="676" y="66" width="328" height="18" rx="3" fill="#D3E8D3" stroke="#066D37" stroke-width="1.5" stroke-dasharray="6 4" opacity="1"/>
+<rect x="676" y="90" width="70" height="220" rx="6" fill="#9DF6B1" stroke="#066D37" stroke-width="1.5" opacity="1"/>
+<text x="711.0" y="198.0" font-size="14" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#00210C" text-anchor="middle" font-weight="bold"></text>
+<text x="711.0" y="200.0" font-size="10" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#00210C" text-anchor="middle" font-weight="normal">side</text>
+<rect x="752" y="90" width="156" height="220" rx="6" fill="#9DF6B1" stroke="#066D37" stroke-width="1.5" opacity="1"/>
+<text x="830.0" y="198.0" font-size="14" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#00210C" text-anchor="middle" font-weight="bold"></text>
+<text x="830.0" y="200.0" font-size="13" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#00210C" text-anchor="middle" font-weight="bold">main</text>
+<text x="830.0" y="218.0" font-size="12" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#00210C" text-anchor="middle" font-weight="normal">↕</text>
+<rect x="914" y="90" width="90" height="220" rx="6" fill="#9DF6B1" stroke="#066D37" stroke-width="1.5" opacity="1"/>
+<text x="959.0" y="198.0" font-size="14" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#00210C" text-anchor="middle" font-weight="bold">aside</text>
+<text x="959.0" y="218.0" font-size="12" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#00210C" text-anchor="middle" font-weight="normal">↕</text>
+<rect x="676" y="314" width="328" height="20" rx="3" fill="#D3E8D3" stroke="#066D37" stroke-width="1.5" stroke-dasharray="6 4" opacity="1"/>
+<text x="840.0" y="364" font-size="11" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#414941" text-anchor="middle" font-weight="normal">same panes, with a gap</text>
+<rect x="30" y="480" width="22" height="16" rx="3" fill="#D3E8D3" stroke="#066D37" stroke-width="1.5" stroke-dasharray="6 4" opacity="1"/>
+<text x="60" y="493" font-size="12" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#414941" text-anchor="start" font-weight="normal">slot · 0px when empty</text>
+<rect x="245" y="480" width="22" height="16" rx="3" fill="#9DF6B1" stroke="#066D37" stroke-width="1.5" opacity="1"/>
+<text x="275" y="493" font-size="12" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#414941" text-anchor="start" font-weight="normal">scroller (overflow:auto)</text>
+<rect x="460" y="480" width="22" height="16" rx="3" fill="#EDEEE9" stroke="#717970" stroke-width="1.5" opacity="1"/>
+<text x="490" y="493" font-size="12" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#414941" text-anchor="start" font-weight="normal">fixed box (overflow:hidden)</text>
+<rect x="675" y="480" width="22" height="16" rx="3" fill="#F3E6D8" stroke="#8A6440" stroke-width="1.5" opacity="1"/>
+<text x="705" y="493" font-size="12" font-family="Roboto,Inter,DejaVu Sans,sans-serif" fill="#414941" text-anchor="start" font-weight="normal">drawer</text>
+</svg>

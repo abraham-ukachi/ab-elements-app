@@ -159,3 +159,183 @@ export function relevantExports(root: string): PublicExport[] {
   cache = { root, rows };
   return rows;
 }
+
+
+// 📖 one name a guide sample imports
+export type GuideImportName = { name: string; kind: 'named' | 'default' | 'namespace' };
+
+// 🧠 one project for the guide check (a new project per file re-parses the same graph)
+let guideProject: Project | null = null;
+
+
+/**
+ * `guidePackageSpecifier` - `ab-nextjs-core/ab-app-layout` → package + exports key 📦
+ *
+ * @param { string } specifier
+ * @returns { { packageName: string; subpath: string } | null }
+ */
+export function guidePackageSpecifier(specifier: string): { packageName: string; subpath: string } | null {
+  // 📦 only the Ab packages (react and next are not this check)
+  if (!specifier.startsWith('ab-nextjs-')) return null;
+  // ✂️ the package name is two segments (`ab-nextjs-core`); the rest is the subpath
+  const parts = specifier.split('/'); // ✂️
+  // 📦 `ab-nextjs-hooks` is one path segment (the hyphen is part of the name)
+  const packageName = parts[0] ?? '';
+  const rest = parts.slice(1).join('/');
+  // 🧭 `.` is the package root; `./ab-app-layout` is a subpath key
+  return { packageName, subpath: rest ? `./${rest}` : '.' };
+}
+
+
+/**
+ * `exportedNamesOf` - named exports and whether a default exists, for one file on disk 📋
+ *
+ * @param { string } file
+ * @returns { { named: Set<string>; hasDefault: boolean } }
+ */
+function exportedNamesOf(file: string): { named: Set<string>; hasDefault: boolean } {
+  // 🧠 reuse one project so later files share the graph already parsed
+  if (!guideProject) {
+    guideProject = new Project({
+      compilerOptions: { strict: true, target: 99, module: 99, moduleResolution: 100, jsx: 4, esModuleInterop: true, skipLibCheck: true },
+      skipAddingFilesFromTsConfig: true,
+    });
+  }
+  // 📖 the source (add once)
+  const source = guideProject.getSourceFile(file) ?? guideProject.addSourceFileAtPath(file);
+  const named = new Set<string>();
+  let hasDefault = false;
+  for (const [name] of source.getExportedDeclarations()) {
+    if (name === 'default') hasDefault = true; // 📦
+    else named.add(name); // 🏷️
+  }
+  // 📋 both
+  return { named, hasDefault };
+}
+
+
+/**
+ * `checkGuideImport` - one sample import against the published exports map 🛂
+ *
+ * A package with no `exports` field may only be imported at its root (`main`). A file on disk is not a subpath.
+ * Returns null when the import is a real public export, or a short reason when it is not.
+ *
+ * @param { string } root
+ * @param { string } specifier
+ * @param { readonly GuideImportName[] } names
+ * @returns { string | null }
+ */
+export function checkGuideImport(root: string, specifier: string, names: readonly GuideImportName[]): string | null {
+  // 🧭 split the specifier
+  const spec = guidePackageSpecifier(specifier);
+  if (!spec) return null; // 🙅 not an Ab import
+  // 📖 package.json
+  const pkg = JSON.parse(readFileSync(join(root, 'node_modules', spec.packageName, 'package.json'), 'utf8')) as { exports?: Record<string, unknown>; main?: string };
+  const hasExports = pkg.exports != null && typeof pkg.exports === 'object';
+  // 📁 where the entry file lives
+  let target: string | null = null;
+  if (hasExports) {
+    target = exportMap(root, spec.packageName).get(spec.subpath) ?? null; // 🗺️ only an exports key
+    if (!target) return `${specifier} is not an exports key of ${spec.packageName}`;
+  } else if (spec.subpath !== '.') {
+    // 🚫 no exports map: a subpath is a file on disk, not a public import
+    return `${spec.packageName} has no exports map, so ${specifier} is not a public import`;
+  } else {
+    target = pkg.main ?? 'index.ts'; // 📦 the root entry
+  }
+  // 🎨 a stylesheet has no named exports
+  if (target.endsWith('.css') || target.endsWith('.json')) {
+    if (names.length) return `${specifier} is a ${target.split('.').pop()} entry and does not export ${names.map((item) => item.name).join(', ')}`;
+    return null;
+  }
+  // 📋 the names the file actually exports
+  const exported = exportedNamesOf(join(root, 'node_modules', spec.packageName, target.replace(/^\.\//, '')));
+  // 🔎 each imported name
+  for (const item of names) {
+    if (item.kind === 'namespace') continue; // 📦 `import * as` only needs the module
+    if (item.kind === 'default' && !exported.hasDefault) return `${specifier} has no default export (${item.name})`;
+    if (item.kind === 'named' && !exported.named.has(item.name)) return `${specifier} does not export ${item.name}`;
+  }
+  // ✅
+  return null;
+}
+
+
+// 📖 one import found in a guide sample
+export type GuideImportUse = { specifier: string; names: GuideImportName[]; where: string };
+
+
+/**
+ * `guideImportsIn` - every `ab-nextjs-*` import in fenced samples of a markdown / MDX string 🔎
+ *
+ * @param { string } source
+ * @param { string } where - the file, for the error
+ * @returns { GuideImportUse[] }
+ */
+export function guideImportsIn(source: string, where: string): GuideImportUse[] {
+  // 💻 only fenced samples (prose that names a path is not an import)
+  const fences = [...source.matchAll(/```[^\n]*\n([\s\S]*?)```/g)].map((match) => match[1] ?? '');
+  const uses: GuideImportUse[] = [];
+  // 🚶 each fence
+  for (const fence of fences) {
+    // 🔗 `from '…'` and side-effect `import '…'` and CSS `@import`
+    const froms = [...fence.matchAll(/from\s+['"]([^'"]+)['"]/g)];
+    const sides = [...fence.matchAll(/(?:^|\n)\s*import\s+['"]([^'"]+)['"]/g)];
+    const css = [...fence.matchAll(/@import\s+['"]([^'"]+)['"]/g)];
+    // 📦 a from-import: recover the clause in front of `from`
+    for (const match of froms) {
+      const specifier = match[1] ?? '';
+      if (!specifier.startsWith('ab-nextjs-')) continue; // 🙅
+      const start = fence.lastIndexOf('\n', (match.index ?? 0) - 1);
+      const clause = fence.slice(start + 1, match.index).replace(/^\s*import\s+(type\s+)?/, '').trim();
+      const names: GuideImportName[] = [];
+      // 📦 `* as Name`
+      const star = /^\*\s+as\s+(\w+)/.exec(clause);
+      if (star) names.push({ name: star[1] ?? '*', kind: 'namespace' });
+      // 🏷️ `{ a, type b as c }`
+      const braces = /\{([^}]*)\}/.exec(clause);
+      if (braces) {
+        for (const part of (braces[1] ?? '').split(',')) {
+          const piece = part.trim().replace(/^type\s+/, '');
+          if (!piece) continue;
+          const alias = /^(?:\w+\s+as\s+)?(\w+)$/.exec(piece);
+          const name = (piece.includes(' as ') ? piece.split(/\s+as\s+/)[0] : alias?.[1])?.trim();
+          if (name) names.push({ name, kind: 'named' });
+        }
+      }
+      // 📦 a default before the braces, or the whole clause
+      const before = clause.replace(/\{[^}]*\}/, '').replace(/^\*\s+as\s+\w+/, '').replace(/,/g, '').trim();
+      if (before && !before.startsWith('*')) names.push({ name: before, kind: 'default' });
+      uses.push({ specifier, names, where });
+    }
+    // 📦 side-effect and CSS imports have no names
+    for (const match of [...sides, ...css]) {
+      const specifier = match[1] ?? '';
+      if (specifier.startsWith('ab-nextjs-')) uses.push({ specifier, names: [], where });
+    }
+  }
+  // 📖 the list
+  return uses;
+}
+
+
+/**
+ * `checkGuideSources` - every fenced Ab import in these sources 🛂
+ *
+ * @param { string } root
+ * @param { readonly { file: string; source: string }[] } files
+ * @returns { string[] } one line per failure
+ */
+export function checkGuideSources(root: string, files: readonly { file: string; source: string }[]): string[] {
+  // 🚨 the failures
+  const errors: string[] = [];
+  // 📄 each guide
+  for (const file of files) {
+    for (const use of guideImportsIn(file.source, file.file)) {
+      const reason = checkGuideImport(root, use.specifier, use.names); // 🛂
+      if (reason) errors.push(`${file.file}: ${reason}`); // 🚨
+    }
+  }
+  // 🚨 or none
+  return errors;
+}

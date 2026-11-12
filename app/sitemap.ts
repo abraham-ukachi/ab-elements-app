@@ -62,6 +62,8 @@ import { docsPath } from '@/lib/docs';
 const SITEMAP_PATHS: readonly AbSitemapPath[] = [
   // the home page 🏠
   { path: '/', changeFrequency: 'weekly', priority: 1 },
+  // 📜 the build-time changelog (0.2.29)
+  { path: '/changelog', changeFrequency: 'weekly', priority: 0.6 },
   // 📚 every docs page (the English tree is the full list: the other locales fall back to it)
   ...source.getPages(abI18nConfig.defaultLocale).map((page): AbSitemapPath => ({ path: docsPath(page.slugs), changeFrequency: 'weekly', priority: page.slugs.length ? 0.7 : 0.9 })),
 ];

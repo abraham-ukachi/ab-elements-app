@@ -71,7 +71,7 @@ export const GITHUB_URL = 'https://github.com/abraham-ukachi/ab-elements-app';
 export const TOP_LINKS: readonly ShellNavLink[] = [
   { id: 'packages', href: '/#packages', label: 'nav.packages', ready: true },
   { id: 'guides', href: '/#guides', label: 'nav.guides', ready: true },
-  { id: 'changelog', href: '/#whats-new', label: 'nav.changelog', ready: true },
+  { id: 'changelog', href: '/changelog', label: 'nav.changelog', ready: true },
 ];
 
 // 🏠 the sidebar's first row
@@ -93,7 +93,8 @@ export const SIDEBAR_SECTIONS: readonly ShellNavSection[] = [
     id: 'guides', label: 'sidebar.sections.guides', items: [
       { id: 'themingDarkMode', href: '/docs/guides/theming-dark-mode', label: 'sidebar.items.themingDarkMode', icon: 'palette', ready: true },
       { id: 'iconsFonts', href: '/docs/guides/icons-fonts', label: 'sidebar.items.iconsFonts', icon: 'match_case', ready: true },
-      { id: 'pwaShell', href: '/#guide-pwaShell', label: 'sidebar.items.pwaShell', icon: 'dashboard_customize', ready: true },
+      // 📐 the layout rule replaces the deferred PWA row here: four guide rows put the last label under the sidebar footer at 1280×720
+      { id: 'layoutRule', href: '/docs/guides/layout-rule', label: 'sidebar.items.layoutRule', icon: 'widgets', ready: true },
     ],
   },
 ];

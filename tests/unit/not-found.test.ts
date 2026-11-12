@@ -98,7 +98,7 @@ describe('404: the "Did you mean …?" matcher 💡', () => {
     expect(closestRoute('/docs/componnets')?.href).toBe('/#package-components'); // 🧩 2 edits ≤ 3
     expect(closestRoute('/hoks')?.href).toBe('/#package-hooks'); // 🪝 1 edit
     expect(closestRoute('/Welcom')?.href).toBe('/welcome'); // 👋 case-insensitive
-    expect(closestRoute('/changelg?ref=x#top')?.href).toBe('/#whats-new'); // 📰 query & hash ignored
+    expect(closestRoute('/changelg?ref=x#top')?.href).toBe('/changelog'); // 📰 query & hash ignored
   });
 
   it('suggests nothing when nothing is close (no wild guesses) 🙅', () => {
@@ -108,7 +108,7 @@ describe('404: the "Did you mean …?" matcher 💡', () => {
   });
 
   it('only links to pages that exist (Home sections or /welcome, D26: no 404 → 404) 🔁', () => {
-    for (const { href } of [...NOT_FOUND_ROUTES, ...NOT_FOUND_SUGGESTED, ...NOT_FOUND_POPULAR]) expect(href, href).toMatch(/^\/(#[a-z0-9-]+|welcome)?$/);
+    for (const { href } of [...NOT_FOUND_ROUTES, ...NOT_FOUND_SUGGESTED, ...NOT_FOUND_POPULAR]) expect(href, href).toMatch(/^\/(#[a-z0-9-]+|welcome|changelog)?$/);
   });
 });
 

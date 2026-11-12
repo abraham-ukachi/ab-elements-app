@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.29](https://github.com/abraham-ukachi/ab-elements-app/compare/v0.2.28...v0.2.29) (unreleased)
+
+* :memo: Write the theming, icons and fonts, and layout-rule guides against the published package APIs, with the layout figures in `.github/layout/`
+* :sparkles: Add `/[locale]/changelog`, built from the app changelog and each installed package changelog, as plain Markdown with stable anchors
+* :lock: Fail the build when an installed package version has no released changelog entry (`AB_CHANGELOG_GATE=warn` is review-only and stays off in CI)
+* :white_check_mark: Test the changelog parser and the three guides plus `/changelog`
+
 ### [0.2.28](https://github.com/abraham-ukachi/ab-elements-app/compare/v0.2.27...v0.2.28) (2026-11-12)
 
 * :sparkles: Add API props tables extracted at build time with ts-morph from the published declarations, and render them with the packaged AbPropsTable on the drawer, layout-slot and scroll-spy pages

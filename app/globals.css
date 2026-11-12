@@ -27,6 +27,20 @@ body {
   color: var(--ab-color-text, light-dark(#211A16, #F4ECE5)); /* 🖋️ */
 }
 
+/* 🖼️ layout-rule figures follow the picked theme (`data-theme`), not only the OS scheme.
+   The dark file is hidden until the page is dark, so a reader never sees both. */
+.ab-layout-fig-light,
+.ab-layout-fig-dark {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.ab-layout-fig-dark { display: none; }
+html.dark .ab-layout-fig-dark,
+html[data-theme="dark"] .ab-layout-fig-dark { display: block; }
+html.dark .ab-layout-fig-light,
+html[data-theme="dark"] .ab-layout-fig-light { display: none; }
+
 
 /* 📐 Home fidelity (spec §3): breakpoints, pane widths, header heights, gaps, radii and every pane surface
    (incl. the white ≥1920 light panes, theme 0.3.6) come from the packages, so the app sets no overrides here 🎉 */

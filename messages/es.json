@@ -227,6 +227,7 @@
         "quickStart": "Inicio rápido",
         "themingDarkMode": "Temas y modo oscuro",
         "iconsFonts": "Iconos y fuentes",
+        "layoutRule": "Regla de diseño",
         "pwaShell": "Shell PWA"
       },
       "collapse": "Contraer la barra lateral",
@@ -365,6 +366,10 @@
           "title": "Iconos y fuentes sin saltos de diseño",
           "tag": "Iconos · Fuentes"
         },
+        "layoutRule": {
+          "title": "Un diseño para cada pantalla",
+          "tag": "Diseños"
+        },
         "pwaShell": {
           "title": "Crear un shell de docs PWA",
           "tag": "Componentes"
@@ -442,5 +447,9 @@
         "deprecated": "Obsoleto"
       }
     }
+  },
+  "Changelog": {
+    "lede": "Notas de versión de esta aplicación y de cada paquete Ab instalado.",
+    "compare": "Comparar"
   }
 }

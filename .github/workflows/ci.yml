@@ -51,6 +51,8 @@ jobs:
       - name: Test
         run: pnpm test
 
+      # prebuild fails when an installed package version has no released changelog entry.
+      # Do not set AB_CHANGELOG_GATE. `warn` is a local review switch and stays off here.
       - name: Build
         run: pnpm build
 

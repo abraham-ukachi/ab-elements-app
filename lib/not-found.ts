@@ -86,7 +86,7 @@ export const NOT_FOUND_POPULAR: readonly NotFoundLink[] = [
   { id: 'button', href: '/#package-components', icon: 'widgets' }, // 🔘 Button · Components
   { id: 'themeTokens', href: '/#package-theme', icon: 'palette' }, // 🎨 Theme tokens · ab-nextjs-theme
   { id: 'useMedia', href: '/#package-hooks', icon: 'webhook' }, // 🪝 useMedia · ab-nextjs-hooks
-  { id: 'changelog', href: '/#whats-new', icon: 'check_circle' }, // ✅ Changelog · Home's What's new
+  { id: 'changelog', href: '/changelog', icon: 'check_circle' }, // ✅ Changelog
 ];
 
 // 📦 the 8 package ids (kept here, in sync with `AB_PACKAGE_IDS`, so the client never imports `lib/packages.ts`)
@@ -100,7 +100,7 @@ export const NOT_FOUND_ROUTES: readonly NotFoundRoute[] = [
   { key: 'installation', href: '/#install' }, // ⬇️ (the sidebar's word)
   { key: 'packages', href: '/#packages' }, // 📦
   { key: 'guides', href: '/#guides' }, // 📚
-  { key: 'changelog', href: '/#whats-new' }, // 📰
+  { key: 'changelog', href: '/changelog' }, // 📰
   ...PACKAGE_IDS.map((id) => ({ key: id, href: `/#package-${id}` })), // 📦 `/docs/componnets` → the components card
 ];
 

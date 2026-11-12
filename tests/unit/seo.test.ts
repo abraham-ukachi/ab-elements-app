@@ -81,9 +81,13 @@ describe('app/sitemap', () => {
   });
 
   it('lists every docs page in every locale, each with its own hreflang alternates 📚', () => {
-    // the docs entries (everything after Home's 4)
-    const docs = sitemap().slice(4);
+    // the entries after Home's 4: the changelog (0.2.29), then every docs page
+    const rest = sitemap().slice(4);
+    const changelog = rest.filter((entry) => entry.url.includes('/changelog'));
+    const docs = rest.filter((entry) => !entry.url.includes('/changelog'));
 
+    // 📜 /changelog in all 4 locales
+    expect(changelog.map((entry) => entry.url)).toEqual([url('/changelog'), url('/fr/changelog'), url('/es/changelog'), url('/ru/changelog')]);
     // 🌍 4 locales per docs page
     expect(docs.length).toBeGreaterThan(0);
     expect(docs.length % 4).toBe(0);
