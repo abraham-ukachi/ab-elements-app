@@ -44,6 +44,11 @@
 *       Once a pin expires this test FAILS on purpose: the release is a day old,
 *       so pnpm's normal release-age rule covers it and the pin should be deleted.
 *       The 0.7.0 pin used seconds and was removed after 09:41 Paris on 2026-11-07.
+*       🧹 The seven 2026-11-12 pins used seconds too and were removed after 06:32 Paris
+*       on 2026-11-13: core 0.2.4, theme 0.3.10, fonts 0.2.8, components 0.7.1,
+*       animations 0.2.6, icons 0.2.8 and hooks 0.1.8. i18n 0.1.0 was never pinned. 🌍
+*       Each of those pins had three cases (exact version, locked version, still in date).
+*       With the list gone, those 21 cases are gone and only the empty-list guard remains.
 */
 
 import { readFileSync } from 'node:fs'; // 📂
