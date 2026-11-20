@@ -147,6 +147,9 @@ describe('props extraction 🏗️', () => {
     expect(fresh).not.toMatch(/\b(?:God|Joseph|Julie|Jane|James|Jeff|John|Captain|Cook)\b/);
   });
 
+  // ⏳ Two cold ts-morph projects: the catalog, then the export surface on the first pagesMarkdown.
+  //    Vitest stops a test at 5s. A quiet runner finishes just under that, and a busy one does not.
+  //    The regenerate case below already allows 30s for the same kind of work. 🐢
   it('📝 every covered symbol is named on its page, and the page says it is not everything', () => {
     const doc = extractCatalog(PROPS_CATALOG, process.cwd());
     for (const page of ['components/drawer', 'core/layouts', 'hooks/scroll-spy']) {
@@ -160,7 +163,7 @@ describe('props extraction 🏗️', () => {
     expect(pagesMarkdown('core/layouts', doc)).toContain('## AbAppLayoutProps (server)');
     expect(pagesMarkdown('core/layouts', doc)).not.toContain('ab-nextjs-core/ab-page-provider/slot');
     expect(pagesMarkdown('components/drawer', doc)).not.toContain('ab-nextjs-components/ab-drawer/gestures');
-  });
+  }, 30_000);
 
   it('📦 an exports key and a re-exported name are required, and a source file is not enough', () => {
     const root = process.cwd();
