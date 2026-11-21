@@ -282,14 +282,20 @@ test.describe('docs · sitemap & search 🗺️🔎', () => {
     }
   });
 
-  test('🔎 /api/search serves the static per-locale index', async ({ request }) => {
-    const response = await request.get('/api/search');
-    expect(response.status()).toBe(200);
-    const data = await response.json();
-    // 🌍 one index per locale
-    const text = JSON.stringify(data);
-    for (const locale of ['en', 'fr', 'es', 'ru']) expect(text).toContain(`"${locale}"`);
-    expect(text).toContain('Installation');
+  test('🔎 /api/search/<locale> serves one static snapshot per locale', async ({ request }) => {
+    // 🌍 each locale is its own JSON file (a later Cmd/Ctrl+K fetch uses the same URL)
+    for (const locale of ['en', 'fr', 'es', 'ru']) {
+      const response = await request.get(`/api/search/${locale}`);
+      expect(response.status(), locale).toBe(200);
+      expect(response.headers()['content-type'] ?? '').toContain('application/json');
+      const data = await response.json();
+      expect(data.locale).toBe(locale);
+      expect(data.engine).toBe('zbsearch');
+      expect(Array.isArray(data.suggestions)).toBe(true);
+      expect(data.snapshot).toBeTruthy();
+    }
+    // 🚫 the old unified route is gone
+    expect((await request.get('/api/search')).status()).toBe(404);
   });
 });
 
