@@ -51,6 +51,11 @@ jobs:
       - name: Test
         run: pnpm test
 
+      # 🔎 0.2.30: one zbsearch snapshot per locale, then the size / shape gate.
+      # prebuild runs the same two commands again, so `pnpm build` fails on its own too.
+      - name: Search index
+        run: pnpm search:index && pnpm search:gate
+
       # prebuild fails when an installed package version has no released changelog entry.
       # Do not set AB_CHANGELOG_GATE. `warn` is a local review switch and stays off here.
       - name: Build
