@@ -66,7 +66,7 @@ import { DOCS_SEARCH_HOTKEY, docsSearchHotkeyOptions } from '@/lib/search-hotkey
 const read = (path: string): string => readFileSync(join(process.cwd(), path), 'utf8');
 
 // 🎹 a keyboard event with only the fields the matcher reads
-type Key = { key: string; code?: string; ctrlKey?: boolean; metaKey?: boolean; altKey?: boolean; shiftKey?: boolean };
+type Key = { key: string; code: string; ctrlKey?: boolean; metaKey?: boolean; altKey?: boolean; shiftKey?: boolean };
 
 // 🧱 a tiny element: tag, input type, contenteditable, and an optional role
 function element(tag: string, extra: { type?: string; editable?: boolean; role?: string } = {}): EventTarget {
@@ -87,8 +87,17 @@ function element(tag: string, extra: { type?: string; editable?: boolean; role?:
 
 // 🔔 would the shell's combo call its handler for this key, on this target?
 function fires(target: EventTarget | null, event: Key, platform: 'apple' | 'other'): boolean {
+  // 🎹 every modifier is a real boolean (KeyboardEvent's fields are never undefined)
+  const key = {
+    key: event.key,
+    code: event.code,
+    ctrlKey: event.ctrlKey ?? false,
+    metaKey: event.metaKey ?? false,
+    altKey: event.altKey ?? false,
+    shiftKey: event.shiftKey ?? false,
+  };
   // 🎯 the combo itself (platform-strict, exact modifiers)
-  if (!matchAbHotkey(event, DOCS_SEARCH_HOTKEY, platform)) return false;
+  if (!matchAbHotkey(key, DOCS_SEARCH_HOTKEY, platform)) return false;
   // ✍️ a text field needs the explicit flag; anything else always may fire
   if (isAbEditableTarget(target) && !allowsAbHotkeyInInputs(DOCS_SEARCH_HOTKEY, docsSearchHotkeyOptions.allowInInputs)) return false;
   return true; // 🔔
