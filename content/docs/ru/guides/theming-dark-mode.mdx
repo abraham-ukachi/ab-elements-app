@@ -1,0 +1,111 @@
+---
+title: "Темы и тёмный режим"
+description: "Задайте светлую, тёмную или системную тему опубликованными токенами, скриптом без вспышки и общим переключателем темы."
+icon: palette
+---
+
+## Обзор
+
+Каждый экран Ab использует один набор токенов цвета и шрифта из **ab-nextjs-theme**. Светлая и тёмная темы — это CSS-переменные на странице. Класс на `<html>` решает, какие значения вы видите.
+
+Хук, который хранит выбор, и скрипт, который рисует его до первого кадра, живут в **ab-nextjs-hooks**. Сегментированный переключатель живёт в **ab-nextjs-components**. Это руководство связывает все три. Сами значения цвета — на странице [Theme](/docs/packages/theme).
+
+## Токены
+
+Читайте переменные. Не копируйте шестнадцатеричные значения в компонент.
+
+```css title="app/globals.css"
+body {
+  background: var(--ab-color-bg);
+  color: var(--ab-color-text);
+  font-family: var(--ab-font-body);
+}
+
+h1 { font-family: var(--ab-font-title); }
+code { font-family: var(--ab-font-code); }
+a { color: var(--ab-link-color); }
+```
+
+Светлый фон страницы — `#FFF8F5`. Тёмный фон страницы — `#19120C`. Текст — `#211A16` на светлом и `#F4ECE5` на тёмном. Ссылки и залитые кнопки используют бронзовый цвет, который проходит WCAG AA на светлом фоне. Шалфейный — только небольшая метка состояния.
+
+Статьи документации добавляют класс `ab-prose`. Этот класс оформляет заголовки, списки, ссылки и встроенный код из тех же токенов.
+
+`material-theme.json` — источник цветов Material (`light`, `dark` и схемы средней и высокой контрастности). `themeColor` у viewport может его импортировать. В повседневном интерфейсе используйте CSS-переменные.
+
+<Callout type="note" title="Импорт таблицы стилей">
+  Импортируйте таблицу стилей темы один раз, до стилей компонентов, как показывает страница [Theme](/docs/packages/theme). Theme <PackageVersion name="ab-nextjs-theme" /> не публикует карту `exports` в `package.json`, поэтому этот подпуть — файл, который поставляет пакет, а не ключ поверхности экспорта. Это руководство не повторяет его как пример импорта.
+</Callout>
+
+## Без вспышки
+
+`getAbThemeScript` возвращает строку. Поместите её в `<head>`, чтобы первая отрисовка уже имела нужный класс. Ключ хранилища — `theme`. Сохранённое значение может быть `light`, `dark` или `system`. `system` следует `prefers-color-scheme`.
+
+```tsx title="app/layout.tsx"
+import { getAbThemeScript } from 'ab-nextjs-hooks/abThemeScript';
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en">
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: getAbThemeScript({ defaultTheme: 'system' }) }} />
+      </head>
+      <body>{children}</body>
+    </html>
+  );
+}
+```
+
+`abThemeScript` — это тот же вызов с параметрами по умолчанию (`defaultTheme: 'light'`). Этот сайт передаёт `system`: именно его видит читатель, пока не выберет сам.
+
+Скрипт задаёт `class`, `data-theme` (разрешённая тема, `light` или `dark`), `data-theme-mode` (выбор, включая `system`) и `color-scheme`. Если хранилище заблокировано, запасной вариант — операционная система.
+
+## Читайте и меняйте режим
+
+`useAbThemeMode` возвращает выбор, тему, которая действительно рисуется, и сеттер. На сервере он безопасен: во время рендера он не читает `localStorage`.
+
+```tsx title="app/theme-toggle.tsx"
+'use client';
+
+import { useAbThemeMode } from 'ab-nextjs-hooks/useAbTheme';
+
+export function ThemeLabel() {
+  const { mode, resolvedTheme, setMode } = useAbThemeMode('system');
+  return (
+    <button type="button" onClick={() => setMode(resolvedTheme === 'dark' ? 'light' : 'dark')}>
+      {mode}
+    </button>
+  );
+}
+```
+
+`resolvedTheme` — это `light` или `dark`. `mode` — то, что выбрал читатель, включая `system`. `useAbTheme` — прежний кортеж, `[mode, setMode]`, из той же точки входа.
+
+## Один переключатель на всю страницу
+
+`AbThemeToggle` — сегментированный переключатель (или одна кнопка-иконка). Оберните страницу в `AbThemeModeProvider`, когда несколько переключателей должны оставаться согласованными. Без провайдера каждый переключатель хранит своё состояние.
+
+```tsx title="app/theme-bar.tsx"
+'use client';
+
+import AbThemeModeProvider from 'ab-nextjs-components/ab-theme-mode';
+import AbThemeToggle from 'ab-nextjs-components/ab-theme-toggle';
+
+export function ThemeBar() {
+  return (
+    <AbThemeModeProvider defaultMode="system">
+      <AbThemeToggle
+        variant="segmented"
+        labels={{ group: 'Theme', light: 'Light', dark: 'Dark', system: 'System' }}
+      />
+    </AbThemeModeProvider>
+  );
+}
+```
+
+`variant="icon"` — форма из одной кнопки. `labels.switchTo` называет режим, в который перейдёт щелчок. Глифы — `light_mode`, `dark_mode` и `brightness_auto`. Зарегистрируйте эти иконки так, как описывает руководство [Иконки и шрифты](/docs/guides/icons-fonts), иначе кнопка откатится к лигатуре шрифта.
+
+## Что не трогать
+
+Акцентный цвет, плотность и шкала размера шрифта ещё не токены. Не добавляйте в приложение второй файл темы. Когда пакет их выпустит, эта страница начнёт их использовать.
+
+Уменьшенное движение — отдельно. `useAbReducedMotion` из `ab-nextjs-hooks/useAbReducedMotion` читает `prefers-reduced-motion`. Цветовую схему он не меняет.

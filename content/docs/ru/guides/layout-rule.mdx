@@ -1,0 +1,259 @@
+---
+title: "Правило вёрстки"
+description: "Один каркас для каждого экрана: документ никогда не прокручивается, пустые слоты имеют высоту 0px, а шторки остаются внутри панели."
+icon: widgets
+---
+
+## Правило
+
+Каждый экран использует один и тот же каркас из **ab-nextjs-core**.
+
+1. Приложение, основная панель и боковая колонка — блоки фиксированной высоты. Документ не прокручивается.
+2. Боковая панель, основное содержимое и содержимое боковой колонки прокручиваются каждое само по себе.
+3. Шапка, подвал или панель, которые вы оставляете пустыми, имеют высоту 0px. Это не невидимый ряд.
+4. Шторка выезжает внутри приложения, основной панели или боковой колонки. Окно браузера она не накрывает.
+5. Контрольные точки — 768, 1180 и 1920. Ниже 1180 боковая колонка — это шторка. С 1180 это панель.
+
+`variant="panes"` у `AbAppLayout` и есть этот каркас. Вариант по умолчанию сохраняет прежнюю сложенную вёрстку. Новые страницы используют `panes`.
+
+<div className="ab-layout-fig-scroll" tabIndex={0}>
+<img className="ab-layout-fig-light" src="/layout-figures/layout-anatomy-light.svg" alt="AbAppLayout с шапкой, боковой панелью, основной вёрсткой (mainHeader, содержимое, mainBar), боковой вёрсткой (asideHeader, содержимое, asideBar) и подвалом" width="900" />
+<img className="ab-layout-fig-dark" src="/layout-figures/layout-anatomy-dark.svg" alt="AbAppLayout с шапкой, боковой панелью, основной вёрсткой (mainHeader, содержимое, mainBar), боковой вёрсткой (asideHeader, содержимое, asideBar) и подвалом, в тёмных цветах" width="900" />
+</div>
+
+## Анатомия и слоты
+
+`orientation` обязателен (`vertical` или `horizontal`). У каждой вёрстки есть клиентский файл и серверный двойник в `ab-nextjs-core/server/`. Пропы совпадают. В серверном компоненте используйте серверный двойник.
+
+- Шапка приложения: проп `header` у `AbAppLayout`, часть `header`. Не прокручивается. 0px, когда пуста.
+- Боковая панель: проп `sideBar` у `AbAppLayout`, часть `sidebar`. Прокручивается сама.
+- Нижняя панель: проп `navBar` у `AbAppLayout`, часть `bottomBar`. Не прокручивается. 0px, когда пуста.
+- Подвал приложения: проп `footer` у `AbAppLayout`, часть `footer`. Не прокручивается. 0px, когда пуст.
+- Шапка основной панели: проп `mainHeader` у `AbMainLayout`, часть `main-header`. Не прокручивается. 0px, когда пуста.
+- Основное содержимое: дети `AbMainLayout`, часть `main-content`. Прокручивается само.
+- Панель основной области: проп `mainBar` у `AbMainLayout`, часть `main-bar`. Не прокручивается. 0px, когда пуста.
+- Шапка боковой колонки: проп `asideHeader` у `AbAsideLayout`, часть `aside-header`. Не прокручивается. 0px, когда пуста.
+- Содержимое боковой колонки: дети `AbAsideLayout`, часть `aside-content`. Прокручивается само.
+- Панель боковой колонки: проп `asideBar` у `AbAsideLayout`, часть `aside-bar`. Не прокручивается. 0px, когда пуста.
+
+Прежние пропы `header` и `footer` у `AbMainLayout` и `AbAsideLayout` — устаревшие псевдонимы `mainHeader` / `mainBar` и `asideHeader` / `asideBar`. Новый код использует имена из таблицы. Проп вёрстки приложения — `sideBar`, а не `sidebar`.
+
+`mobileHeader="main"` прячет шапку приложения ниже 768px и показывает `mainHeader` как панель телефона. `tabletHeader="main"` делает то же самое от 768px до 1179px. `mainHeaderAt="all"` оставляет эту шапку основной панели видимой на любой ширине.
+
+```tsx title="app/shell.tsx"
+import AbAppLayout from 'ab-nextjs-core/ab-app-layout';
+import AbPageProvider from 'ab-nextjs-core/ab-page-provider';
+import AbMainLayout from 'ab-nextjs-core/server/ab-main-layout';
+import AbAsideLayout from 'ab-nextjs-core/server/ab-aside-layout';
+
+export function Shell({ children, outline }: { children: React.ReactNode; outline: React.ReactNode }) {
+  return (
+    <AbPageProvider>
+      <AbAppLayout orientation="vertical" variant="panes" pageName="docs" mobileHeader="main" tabletHeader="main">
+        <AbMainLayout id="main" orientation="vertical" pageName="docs" mainHeader={<p>Docs</p>}>
+          {children}
+        </AbMainLayout>
+        <AbAsideLayout orientation="vertical" pageName="docs" asideHeader={<h2>On this page</h2>}>
+          {outline}
+        </AbAsideLayout>
+      </AbAppLayout>
+    </AbPageProvider>
+  );
+}
+```
+
+Пропустите слот или передайте `null` — и этот ряд не отрисуется. Тесты могут целиться в области прокрутки через `[data-ab-part="main-content"]` и `[data-ab-part="aside-content"]`.
+
+## Что прокручивается
+
+<div className="ab-layout-fig-scroll" tabIndex={0}>
+<img className="ab-layout-fig-light" src="/layout-figures/layout-scroll-regions-light.svg" alt="Документ заблокирован. Боковая панель, основное содержимое и содержимое боковой колонки прокручиваются каждое само по себе." width="900" />
+<img className="ab-layout-fig-dark" src="/layout-figures/layout-scroll-regions-dark.svg" alt="Документ заблокирован. Боковая панель, основное содержимое и содержимое боковой колонки прокручиваются каждое само по себе, в тёмных цветах." width="900" />
+</div>
+
+Когда смонтирован `variant="panes"`, приложение — это сетка `100dvh` (`auto` / `minmax(0, 1fr)` / `auto`) и `overflow: hidden`. Пакет блокирует `html` и `body`, пока эта вёрстка смонтирована, поэтому документ не может пружинить. Блокировка использует `:has()`, а там, где `:has()` нет, — `data-ab-layout-lock`. `acquireAbLayoutLock` из `ab-nextjs-core/ab-app-layout` считает смонтированные вёрстки, так что размонтирование одной из двух сохраняет блокировку.
+
+Каждая прокручиваемая область содержимого использует `overflow: auto`, `scrollbar-gutter: stable` и `overscroll-behavior: contain`. Ребёнку сетки или flex, который должен прокручиваться, также нужен `min-height: 0`. Пакет ставит его на панели. Если вы добавляете собственную сетку внутри панели, поставьте его и там, иначе ребёнок растёт вместе с содержимым и никогда не прокручивается.
+
+Шапка, подвал и панели отступают через `env(safe-area-inset-*)`. Эти отступы равны 0, если viewport не задаёт `viewport-fit=cover`.
+
+Нет смещения `--ab-app-bar-height` и нет `padding-top: 64px`, чтобы освободить место под фиксированную панель. Ряд сетки — `auto`. Пусто значит 0px.
+
+## Пустые слоты
+
+<div className="ab-layout-fig-scroll" tabIndex={0}>
+<img className="ab-layout-fig-light" src="/layout-figures/layout-empty-chrome-light.svg" alt="С содержимым шапка и панели занимают место. Когда они пусты, их высота 0px, и основное содержимое забирает пространство." width="900" />
+<img className="ab-layout-fig-dark" src="/layout-figures/layout-empty-chrome-dark.svg" alt="С содержимым шапка и панели занимают место. Когда они пусты, их высота 0px, и основное содержимое забирает пространство, в тёмных цветах." width="900" />
+</div>
+
+Пустой слот прячут два слоя:
+
+1. Вёрстка не рисует обёртку для `null`, `undefined`, `false`, `''` или пустого массива.
+2. Правило CSS схлопывает слот, который отрисовался, но не имеет дочерних элементов.
+
+Не рисуйте пустой `<div>`, чтобы сохранить ряд. Опустите проп.
+
+## Шторки
+
+<div className="ab-layout-fig-scroll" tabIndex={0}>
+<img className="ab-layout-fig-light" src="/layout-figures/layout-drawer-scopes-light.svg" alt="Области AbDrawer: app, main и aside, и стороны top, bottom, left и right." width="900" />
+<img className="ab-layout-fig-dark" src="/layout-figures/layout-drawer-scopes-dark.svg" alt="Области AbDrawer: app, main и aside, и стороны top, bottom, left и right, в тёмных цветах." width="900" />
+</div>
+
+`AbDrawer` и `useAbDrawer` публикуются из `ab-nextjs-components/ab-drawer`. `AbDrawerList` — выбираемый список, из `ab-nextjs-components/ab-drawer-list`.
+
+`scope` — это `app`, `main` или `aside`. Он выбирает блок, который обрезает шторку. `side` — это `top`, `bottom`, `left`, `right`, `start` или `end`. `start` и `end` следуют направлению письма.
+
+`useAbDrawer(scope)` возвращает `open`, `show`, `close`, `toggle`, `triggerProps` и `drawerProps`. Распространите `drawerProps` на шторку и `triggerProps` на кнопку. Возврат фокуса берёт на себя `AbDrawer`.
+
+```tsx title="app/language-drawer.tsx"
+'use client';
+
+import AbDrawerList from 'ab-nextjs-components/ab-drawer-list';
+import { useAbDrawer } from 'ab-nextjs-components/ab-drawer';
+
+export function LanguageDrawer() {
+  const drawer = useAbDrawer('app');
+  return (
+    <>
+      <button type="button" {...drawer.triggerProps}>Language</button>
+      <AbDrawerList
+        {...drawer.drawerProps}
+        side="bottom"
+        title="Language"
+        items={[
+          { value: 'en', label: 'English' },
+          { value: 'fr', label: 'Français', lang: 'fr' },
+          { value: 'es', label: 'Español', lang: 'es' },
+          { value: 'ru', label: 'Русский', lang: 'ru' },
+        ]}
+      />
+    </>
+  );
+}
+```
+
+Каждая шторка:
+
+- Это диалог. `title` становится заголовком, который её называет, либо задайте `aria-labelledby` / `aria-label` сами.
+- Фокус входит при открытии и возвращается к триггеру при закрытии.
+- Escape её закрывает. Затемнение тоже. Оба вызывают `onClose`.
+- С `modal` (по умолчанию) остальная часть этой области инертна. Не всё приложение, если только не `scope="app"`.
+- Выезд длится `AB_DRAWER_DURATION` (240ms). Уменьшенное движение его убирает.
+- `noJsFallback` (по умолчанию) рисует содержимое в потоке страницы, когда JavaScript не выполнился.
+
+`tier` складывает шторки: `aside`, затем `nav`, затем `sheet`. Продуктовые шторки (навигация, оглавление, поиск, настройки) — отдельные компоненты. Их пропы — на странице [Drawer](/docs/packages/components/drawer).
+
+- Шторка: список или форма, которые принадлежат области, или которым нужно место на маленьком экране.
+- Меню: короткий список, привязанный к кнопке.
+- Диалог: блокирующее решение обо всём приложении, не привязанное к одной области.
+
+## Контрольные точки
+
+<div className="ab-layout-fig-scroll" tabIndex={0}>
+<img className="ab-layout-fig-light" src="/layout-figures/layout-breakpoints-light.svg" alt="Вёрстки шириной 390, 768, 1180 и 1920 пикселей" width="900" />
+<img className="ab-layout-fig-dark" src="/layout-figures/layout-breakpoints-dark.svg" alt="Вёрстки шириной 390, 768, 1180 и 1920 пикселей, в тёмных цветах" width="900" />
+</div>
+
+- **390.** Нижняя панель или шторка заменяет боковую панель. Основная панель — единственная видимая. Боковая колонка — шторка.
+- **768.** Боковая панель (или рельс) и основная панель видны. Боковая колонка — шторка справа.
+- **1180.** Полная боковая панель, основная панель и боковая колонка стоят рядом.
+- **1920.** Те же три панели, с промежутком.
+
+Документ не прокручивается ни на одной ширине. Проверьте 390, 768, 1180 и 1920, в светлой и тёмной теме.
+
+`AB_ASIDE_SHEET_QUERY` из `ab-nextjs-core/ab-page-provider` — это `(max-width: 1179px)`. Ниже этого боковая колонка — лист. `useAbAsideToggle` выбирает лист или панель и возвращает `aria-expanded`, `aria-controls` и `onClick`.
+
+## Слежение за прокруткой и якоря
+
+<div className="ab-layout-fig-scroll" tabIndex={0}>
+<img className="ab-layout-fig-light" src="/layout-figures/layout-scroll-spy-light.svg" alt="Слежение за прокруткой использует основную область как корень IntersectionObserver и подсвечивает активный пункт оглавления." width="900" />
+<img className="ab-layout-fig-dark" src="/layout-figures/layout-scroll-spy-dark.svg" alt="Слежение за прокруткой использует основную область как корень IntersectionObserver и подсвечивает активный пункт оглавления, в тёмных цветах." width="900" />
+</div>
+
+Окно никогда не прокручивается, поэтому слушатель на `window` никогда не срабатывает. Передайте основную область.
+
+```tsx title="app/outline.tsx"
+'use client';
+
+import { useAbPage } from 'ab-nextjs-core/ab-page-provider';
+import { scrollToAbSection, useAbScrollSpy } from 'ab-nextjs-hooks/useAbScrollSpy';
+
+const ids = ['anatomy-and-slots', 'what-scrolls'];
+
+export function Outline() {
+  const { mainScrollElement } = useAbPage();
+  const activeId = useAbScrollSpy(ids, { root: mainScrollElement });
+  return (
+    <a
+      href={`#${activeId ?? ids[0]}`}
+      aria-current={activeId ? 'location' : undefined}
+      onClick={(event) => {
+        event.preventDefault();
+        scrollToAbSection(activeId ?? ids[0], { container: mainScrollElement });
+      }}
+    >
+      On this page
+    </a>
+  );
+}
+```
+
+`useAbScrollSpy` сначала принимает идентификаторы, затем параметры. `root` — прокручиваемая область (`useAbPage().mainScrollElement`). С корнем `rootMargin` по умолчанию — `AB_SCROLL_SPY_PANE_ROOT_MARGIN` (`0px 0px -60% 0px`). `lastAtBottom` по умолчанию true: последний идентификатор побеждает, когда эта область внизу. Поле окна — `AB_SCROLL_SPY_ROOT_MARGIN` (`-64px 0px -60% 0px`). Не используйте это поле внутри панели. Панель приложения снаружи области.
+
+`scrollToAbSection(id, { container })` прокручивает этот элемент. `container` — параметр. `root` у этой функции — устаревший псевдоним `container`. Вызов мгновенный, когда читатель предпочитает уменьшенное движение.
+
+`getAbMainScroller` из `ab-nextjs-components/ab-toc` читает `[data-ab-part="main-content"]`. Вызывайте его в эффекте или обработчике события, никогда во время рендера.
+
+```tsx title="app/find-scroller.tsx"
+'use client';
+
+import { useEffect, useState } from 'react';
+import { getAbMainScroller } from 'ab-nextjs-components/ab-toc';
+
+export function MainScrollerLabel() {
+  const [ready, setReady] = useState(false);
+  useEffect(() => { setReady(getAbMainScroller() != null); }, []);
+  return <span>{ready ? 'main' : ''}</span>;
+}
+```
+
+`AbToc` использует основную область, когда вы передаёте `onNavigate` в `scrollToAbSection`. Обычный `href="#id"` по-прежнему работает без JavaScript. Держите `scroll-margin-top` небольшим. Над содержимым панели не лежит фиксированная панель. Липкий заголовок внутри основной области использует `top: 0`: это верх основной области, а не верх viewport.
+
+## Welcome
+
+<div className="ab-layout-fig-scroll" tabIndex={0}>
+<img className="ab-layout-fig-light" src="/layout-figures/layout-welcome-mapping-light.svg" alt="Welcome: верхняя панель — шапка приложения, счётчик — mainHeader, слайд — основное содержимое, стрелки и «Пропустить» — mainBar, а песочница — боковая колонка." width="900" />
+<img className="ab-layout-fig-dark" src="/layout-figures/layout-welcome-mapping-dark.svg" alt="Welcome: верхняя панель — шапка приложения, счётчик — mainHeader, слайд — основное содержимое, стрелки и «Пропустить» — mainBar, а песочница — боковая колонка, в тёмных цветах." width="900" />
+</div>
+
+Welcome уже стоит на этом каркасе (`pageName="welcome"`).
+
+- Верхняя панель (логотип, тема, глобус): `header` у `AbAppLayout`. Ориентир banner внутри слота. Без собранной вручную фиксированной панели.
+- Панель телефона: `mainHeader` у `AbMainLayout`, с `mobileHeader="main"`. Счётчик живёт в основной области.
+- Слайд: основное содержимое. Он прокручивается только когда слайд выше панели.
+- Точки, стрелки и «Пропустить»: `mainBar` у `AbMainLayout`, с `mainBarPin="always"` и `mainBarLabel`. Это не подвал приложения.
+- Песочница: `AbAsideLayout`. Панель с 1180px. `asideBelow="inline-in-main"` присоединяет её к прокрутке основной области от 768px до 1179px. `asideDrawerAt="mobile"` делает тот же элемент шторкой справа ниже 768px.
+- Глобус ниже 768px: `AbDrawerList`, `side="bottom"`, настоящие ссылки языков. С 768px глобус — меню.
+- Боковая панель и подвал приложения: опущены, поэтому 0px.
+
+`surface="page"` красит поверхность Welcome токенами темы на каждой панели.
+
+## Делайте, не делайте, и контрольный список
+
+- Кладите хром в `header`, `mainHeader`, `mainBar`, `asideHeader`, `asideBar`, `navBar` или `footer`. Не собирайте панель через `position: fixed`.
+- Опустите пустой слот или передайте `null`. Не рисуйте пустой `<div>`, чтобы зарезервировать место.
+- Прокручивайте через `scrollToAbSection(id, { container })`. Не вызывайте `window.scrollTo` и не слушайте прокрутку `window`.
+- Используйте `AbDrawer` с той областью, которой принадлежит интерфейс. Не накрывайте viewport через `position: fixed` для региональной шторки.
+- Оставьте ряд сетки равным `auto`. Не зашивайте высоту панели (`64px`, `--ab-app-bar-height`).
+- Поставьте `min-height: 0` на ребёнка сетки или flex, который должен прокручиваться. Не полагайтесь на один `100vh`.
+
+Прежде чем открыть pull request:
+
+- Страница использует `AbAppLayout` и `AbMainLayout`, и `AbAsideLayout`, если у неё есть оглавление.
+- Документ никогда не прокручивается. Прокручиваются только панели, и прокручиваются независимо.
+- Пустые шапка, панель или подвал имеют высоту 0px.
+- Нет хрома страницы с `position: fixed`, нет слушателя прокрутки `window`, нет зашитой высоты панели.
+- Шторки используют верные `scope` и `side`, удерживают фокус, закрываются по Escape и по затемнению и уважают уменьшенное движение и запасной вариант без JavaScript.
+- Проверено на 390, 768, 1180 и 1920, в светлой и тёмной теме.
+- Новые подписи есть для en, fr, es и ru.

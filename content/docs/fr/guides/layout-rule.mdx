@@ -1,0 +1,259 @@
+---
+title: "Règle de mise en page"
+description: "Un même cadre pour chaque écran : le document ne défile jamais, les emplacements vides mesurent 0px et les tiroirs restent dans un volet."
+icon: widgets
+---
+
+## La règle
+
+Chaque écran utilise le même cadre, issu de **ab-nextjs-core**.
+
+1. L’application, le volet principal et le panneau latéral sont des boîtes à hauteur fixe. Le document ne défile pas.
+2. La barre latérale, le contenu principal et le contenu du panneau latéral défilent chacun de leur côté.
+3. Un en-tête, un pied de page ou une barre que vous laissez vide mesure 0px. Ce n’est pas une rangée invisible.
+4. Un tiroir glisse à l’intérieur de l’application, du volet principal ou du panneau latéral. Il ne couvre pas la fenêtre du navigateur.
+5. Les points de rupture sont 768, 1180 et 1920. En dessous de 1180, le panneau latéral est un tiroir. À partir de 1180, c’est un volet.
+
+`variant="panes"` sur `AbAppLayout` est ce cadre. La variante par défaut conserve l’ancienne mise en page empilée. Les nouvelles pages utilisent `panes`.
+
+<div className="ab-layout-fig-scroll" tabIndex={0}>
+<img className="ab-layout-fig-light" src="/layout-figures/layout-anatomy-light.svg" alt="AbAppLayout avec en-tête, barre latérale, mise en page principale (mainHeader, contenu, mainBar), mise en page latérale (asideHeader, contenu, asideBar) et pied de page" width="900" />
+<img className="ab-layout-fig-dark" src="/layout-figures/layout-anatomy-dark.svg" alt="AbAppLayout avec en-tête, barre latérale, mise en page principale (mainHeader, contenu, mainBar), mise en page latérale (asideHeader, contenu, asideBar) et pied de page, en couleurs sombres" width="900" />
+</div>
+
+## Anatomie et emplacements
+
+`orientation` est obligatoire (`vertical` ou `horizontal`). Chaque mise en page a un fichier client et un jumeau serveur sous `ab-nextjs-core/server/`. Les props correspondent. Utilisez le jumeau serveur dans un composant serveur.
+
+- En-tête de l’application : prop `header` de `AbAppLayout`, partie `header`. Ne défile pas. 0px lorsqu’il est vide.
+- Barre latérale : prop `sideBar` de `AbAppLayout`, partie `sidebar`. Défile de son côté.
+- Barre inférieure : prop `navBar` de `AbAppLayout`, partie `bottomBar`. Ne défile pas. 0px lorsqu’elle est vide.
+- Pied de page de l’application : prop `footer` de `AbAppLayout`, partie `footer`. Ne défile pas. 0px lorsqu’il est vide.
+- En-tête principal : prop `mainHeader` de `AbMainLayout`, partie `main-header`. Ne défile pas. 0px lorsqu’il est vide.
+- Contenu principal : enfants de `AbMainLayout`, partie `main-content`. Défile de son côté.
+- Barre principale : prop `mainBar` de `AbMainLayout`, partie `main-bar`. Ne défile pas. 0px lorsqu’elle est vide.
+- En-tête du panneau latéral : prop `asideHeader` de `AbAsideLayout`, partie `aside-header`. Ne défile pas. 0px lorsqu’il est vide.
+- Contenu du panneau latéral : enfants de `AbAsideLayout`, partie `aside-content`. Défile de son côté.
+- Barre du panneau latéral : prop `asideBar` de `AbAsideLayout`, partie `aside-bar`. Ne défile pas. 0px lorsqu’elle est vide.
+
+Les anciennes props `header` et `footer` de `AbMainLayout` et `AbAsideLayout` sont des alias dépréciés de `mainHeader` / `mainBar` et de `asideHeader` / `asideBar`. Le code nouveau utilise les noms du tableau. La prop de la mise en page de l’application est `sideBar`, et non `sidebar`.
+
+`mobileHeader="main"` masque l’en-tête de l’application en dessous de 768px et montre `mainHeader` comme barre du téléphone. `tabletHeader="main"` fait de même de 768px à 1179px. `mainHeaderAt="all"` garde cet en-tête principal visible à toutes les largeurs.
+
+```tsx title="app/shell.tsx"
+import AbAppLayout from 'ab-nextjs-core/ab-app-layout';
+import AbPageProvider from 'ab-nextjs-core/ab-page-provider';
+import AbMainLayout from 'ab-nextjs-core/server/ab-main-layout';
+import AbAsideLayout from 'ab-nextjs-core/server/ab-aside-layout';
+
+export function Shell({ children, outline }: { children: React.ReactNode; outline: React.ReactNode }) {
+  return (
+    <AbPageProvider>
+      <AbAppLayout orientation="vertical" variant="panes" pageName="docs" mobileHeader="main" tabletHeader="main">
+        <AbMainLayout id="main" orientation="vertical" pageName="docs" mainHeader={<p>Docs</p>}>
+          {children}
+        </AbMainLayout>
+        <AbAsideLayout orientation="vertical" pageName="docs" asideHeader={<h2>On this page</h2>}>
+          {outline}
+        </AbAsideLayout>
+      </AbAppLayout>
+    </AbPageProvider>
+  );
+}
+```
+
+Omettez un emplacement, ou passez `null`, et cette rangée n’est pas rendue. Les tests peuvent viser les zones de défilement avec `[data-ab-part="main-content"]` et `[data-ab-part="aside-content"]`.
+
+## Ce qui défile
+
+<div className="ab-layout-fig-scroll" tabIndex={0}>
+<img className="ab-layout-fig-light" src="/layout-figures/layout-scroll-regions-light.svg" alt="Le document est verrouillé. La barre latérale, le contenu principal et le contenu du panneau latéral défilent chacun de leur côté." width="900" />
+<img className="ab-layout-fig-dark" src="/layout-figures/layout-scroll-regions-dark.svg" alt="Le document est verrouillé. La barre latérale, le contenu principal et le contenu du panneau latéral défilent chacun de leur côté, en couleurs sombres." width="900" />
+</div>
+
+Lorsque `variant="panes"` est monté, l’application est une grille `100dvh` (`auto` / `minmax(0, 1fr)` / `auto`) avec `overflow: hidden`. Le paquet verrouille `html` et `body` tant que cette mise en page est montée, le document ne peut donc pas rebondir. Le verrou utilise `:has()`, et `data-ab-layout-lock` là où `:has()` manque. `acquireAbLayoutLock`, depuis `ab-nextjs-core/ab-app-layout`, compte les mises en page montées : en démonter une sur deux conserve le verrou.
+
+Chaque zone de contenu qui défile utilise `overflow: auto`, `scrollbar-gutter: stable` et `overscroll-behavior: contain`. Un enfant de grille ou de flex qui doit défiler a aussi besoin de `min-height: 0`. Le paquet le pose sur les volets. Si vous ajoutez votre propre grille dans un volet, posez-le là aussi, sinon l’enfant grandit avec son contenu et ne défile jamais.
+
+L’en-tête, le pied de page et les barres se décalent avec `env(safe-area-inset-*)`. Ces insets valent 0 sauf si le viewport définit `viewport-fit=cover`.
+
+Il n’y a pas de décalage `--ab-app-bar-height` et pas de `padding-top: 64px` pour dégager une barre fixe. La rangée de grille est `auto`. Vide signifie 0px.
+
+## Emplacements vides
+
+<div className="ab-layout-fig-scroll" tabIndex={0}>
+<img className="ab-layout-fig-light" src="/layout-figures/layout-empty-chrome-light.svg" alt="Avec du contenu, l’en-tête et les barres prennent de la place. Lorsqu’ils sont vides, ils mesurent 0px et le contenu principal récupère l’espace." width="900" />
+<img className="ab-layout-fig-dark" src="/layout-figures/layout-empty-chrome-dark.svg" alt="Avec du contenu, l’en-tête et les barres prennent de la place. Lorsqu’ils sont vides, ils mesurent 0px et le contenu principal récupère l’espace, en couleurs sombres." width="900" />
+</div>
+
+Deux couches masquent un emplacement vide :
+
+1. La mise en page ne rend pas l’enveloppe pour `null`, `undefined`, `false`, `''` ou un tableau vide.
+2. Une règle CSS replie un emplacement qui s’est rendu mais n’a aucun élément enfant.
+
+Ne rendez pas un `<div>` vide pour garder une rangée. Omettez la prop.
+
+## Tiroirs
+
+<div className="ab-layout-fig-scroll" tabIndex={0}>
+<img className="ab-layout-fig-light" src="/layout-figures/layout-drawer-scopes-light.svg" alt="Les portées d’AbDrawer : app, main et aside, et les côtés top, bottom, left et right." width="900" />
+<img className="ab-layout-fig-dark" src="/layout-figures/layout-drawer-scopes-dark.svg" alt="Les portées d’AbDrawer : app, main et aside, et les côtés top, bottom, left et right, en couleurs sombres." width="900" />
+</div>
+
+`AbDrawer` et `useAbDrawer` sont publiés depuis `ab-nextjs-components/ab-drawer`. `AbDrawerList` est la liste sélectionnable, depuis `ab-nextjs-components/ab-drawer-list`.
+
+`scope` vaut `app`, `main` ou `aside`. Il choisit la boîte qui découpe le tiroir. `side` vaut `top`, `bottom`, `left`, `right`, `start` ou `end`. `start` et `end` suivent le sens d’écriture.
+
+`useAbDrawer(scope)` renvoie `open`, `show`, `close`, `toggle`, `triggerProps` et `drawerProps`. Étalez `drawerProps` sur le tiroir et `triggerProps` sur le bouton. Le retour du focus est géré par `AbDrawer`.
+
+```tsx title="app/language-drawer.tsx"
+'use client';
+
+import AbDrawerList from 'ab-nextjs-components/ab-drawer-list';
+import { useAbDrawer } from 'ab-nextjs-components/ab-drawer';
+
+export function LanguageDrawer() {
+  const drawer = useAbDrawer('app');
+  return (
+    <>
+      <button type="button" {...drawer.triggerProps}>Language</button>
+      <AbDrawerList
+        {...drawer.drawerProps}
+        side="bottom"
+        title="Language"
+        items={[
+          { value: 'en', label: 'English' },
+          { value: 'fr', label: 'Français', lang: 'fr' },
+          { value: 'es', label: 'Español', lang: 'es' },
+          { value: 'ru', label: 'Русский', lang: 'ru' },
+        ]}
+      />
+    </>
+  );
+}
+```
+
+Chaque tiroir :
+
+- C’est une boîte de dialogue. `title` devient le titre qui la nomme, ou définissez vous-même `aria-labelledby` / `aria-label`.
+- Le focus entre à l’ouverture et revient sur le déclencheur à la fermeture.
+- Échap la ferme. Le voile aussi. Les deux appellent `onClose`.
+- Avec `modal` (la valeur par défaut), le reste de cette portée est inerte. Pas toute l’application, sauf si `scope="app"`.
+- Le glissement dure `AB_DRAWER_DURATION` (240ms). Le mouvement réduit le supprime.
+- `noJsFallback` (la valeur par défaut) rend le contenu dans le flux de la page lorsque JavaScript n’a pas tourné.
+
+`tier` empile les tiroirs : `aside`, puis `nav`, puis `sheet`. Les tiroirs du produit (navigation, plan, recherche, réglages) sont des composants distincts. Leurs props sont sur la page [Drawer](/docs/packages/components/drawer).
+
+- Tiroir : une liste ou un formulaire qui appartient à une région, ou qui a besoin de place sur un petit écran.
+- Menu : une liste courte ancrée à un bouton.
+- Dialogue : une décision bloquante sur toute l’application, non liée à une seule région.
+
+## Points de rupture
+
+<div className="ab-layout-fig-scroll" tabIndex={0}>
+<img className="ab-layout-fig-light" src="/layout-figures/layout-breakpoints-light.svg" alt="Mises en page à 390, 768, 1180 et 1920 pixels de large" width="900" />
+<img className="ab-layout-fig-dark" src="/layout-figures/layout-breakpoints-dark.svg" alt="Mises en page à 390, 768, 1180 et 1920 pixels de large, en couleurs sombres" width="900" />
+</div>
+
+- **390.** La barre inférieure, ou un tiroir, remplace la barre latérale. Le volet principal est le seul volet visible. Le panneau latéral est un tiroir.
+- **768.** La barre latérale (ou le rail) et le volet principal sont visibles. Le panneau latéral est un tiroir à droite.
+- **1180.** La barre latérale complète, le volet principal et le volet latéral sont côte à côte.
+- **1920.** Les mêmes trois volets, avec un intervalle.
+
+Le document ne défile à aucune largeur. Vérifiez 390, 768, 1180 et 1920, en clair et en sombre.
+
+`AB_ASIDE_SHEET_QUERY`, depuis `ab-nextjs-core/ab-page-provider`, vaut `(max-width: 1179px)`. En dessous, le panneau latéral est une feuille. `useAbAsideToggle` choisit la feuille ou le volet et renvoie `aria-expanded`, `aria-controls` et `onClick`.
+
+## Suivi du défilement et ancres
+
+<div className="ab-layout-fig-scroll" tabIndex={0}>
+<img className="ab-layout-fig-light" src="/layout-figures/layout-scroll-spy-light.svg" alt="Le suivi du défilement utilise la zone principale comme racine d’IntersectionObserver et met en évidence l’élément actif du plan." width="900" />
+<img className="ab-layout-fig-dark" src="/layout-figures/layout-scroll-spy-dark.svg" alt="Le suivi du défilement utilise la zone principale comme racine d’IntersectionObserver et met en évidence l’élément actif du plan, en couleurs sombres." width="900" />
+</div>
+
+La fenêtre ne défile jamais, un écouteur sur `window` ne se déclenche donc jamais. Passez la zone principale.
+
+```tsx title="app/outline.tsx"
+'use client';
+
+import { useAbPage } from 'ab-nextjs-core/ab-page-provider';
+import { scrollToAbSection, useAbScrollSpy } from 'ab-nextjs-hooks/useAbScrollSpy';
+
+const ids = ['anatomy-and-slots', 'what-scrolls'];
+
+export function Outline() {
+  const { mainScrollElement } = useAbPage();
+  const activeId = useAbScrollSpy(ids, { root: mainScrollElement });
+  return (
+    <a
+      href={`#${activeId ?? ids[0]}`}
+      aria-current={activeId ? 'location' : undefined}
+      onClick={(event) => {
+        event.preventDefault();
+        scrollToAbSection(activeId ?? ids[0], { container: mainScrollElement });
+      }}
+    >
+      On this page
+    </a>
+  );
+}
+```
+
+`useAbScrollSpy` prend d’abord les identifiants, puis les options. `root` est la zone qui défile (`useAbPage().mainScrollElement`). Avec une racine, la `rootMargin` par défaut est `AB_SCROLL_SPY_PANE_ROOT_MARGIN` (`0px 0px -60% 0px`). `lastAtBottom` vaut true par défaut : le dernier identifiant l’emporte lorsque cette zone est en bas. La marge de la fenêtre est `AB_SCROLL_SPY_ROOT_MARGIN` (`-64px 0px -60% 0px`). N’utilisez pas cette marge à l’intérieur d’un volet. La barre est en dehors du volet.
+
+`scrollToAbSection(id, { container })` fait défiler cet élément. `container` est l’option. `root` sur cette fonction est un alias déprécié de `container`. L’appel est instantané lorsque le lecteur préfère le mouvement réduit.
+
+`getAbMainScroller`, depuis `ab-nextjs-components/ab-toc`, lit `[data-ab-part="main-content"]`. Appelez-le dans un effet ou un gestionnaire d’événement, jamais pendant le rendu.
+
+```tsx title="app/find-scroller.tsx"
+'use client';
+
+import { useEffect, useState } from 'react';
+import { getAbMainScroller } from 'ab-nextjs-components/ab-toc';
+
+export function MainScrollerLabel() {
+  const [ready, setReady] = useState(false);
+  useEffect(() => { setReady(getAbMainScroller() != null); }, []);
+  return <span>{ready ? 'main' : ''}</span>;
+}
+```
+
+`AbToc` utilise la zone principale lorsque vous transmettez `onNavigate` à `scrollToAbSection`. Un simple `href="#id"` fonctionne encore sans JavaScript. Gardez `scroll-margin-top` petit. Aucune barre fixe ne recouvre le contenu du volet. Un titre collant dans le volet principal utilise `top: 0`, c’est le haut du volet principal, pas le haut du viewport.
+
+## Welcome
+
+<div className="ab-layout-fig-scroll" tabIndex={0}>
+<img className="ab-layout-fig-light" src="/layout-figures/layout-welcome-mapping-light.svg" alt="Welcome : la barre du haut est l’en-tête de l’application, le compteur est mainHeader, la diapositive est le contenu principal, les flèches et Passer sont mainBar, et le bac à sable est le panneau latéral." width="900" />
+<img className="ab-layout-fig-dark" src="/layout-figures/layout-welcome-mapping-dark.svg" alt="Welcome : la barre du haut est l’en-tête de l’application, le compteur est mainHeader, la diapositive est le contenu principal, les flèches et Passer sont mainBar, et le bac à sable est le panneau latéral, en couleurs sombres." width="900" />
+</div>
+
+Welcome est déjà sur ce cadre (`pageName="welcome"`).
+
+- Barre du haut (logo, thème, globe) : `header` de `AbAppLayout`. Un repère banner dans l’emplacement. Pas de barre fixe construite à la main.
+- Barre du téléphone : `mainHeader` de `AbMainLayout`, avec `mobileHeader="main"`. Le compteur vit dans le volet principal.
+- Diapositive : contenu principal. Elle ne défile que lorsque la diapositive est plus haute que le volet.
+- Points, flèches et Passer : `mainBar` de `AbMainLayout`, avec `mainBarPin="always"` et `mainBarLabel`. Ce n’est pas un pied de page d’application.
+- Bac à sable : `AbAsideLayout`. Un volet à partir de 1180px. `asideBelow="inline-in-main"` le rattache à la zone de défilement du volet principal de 768px à 1179px. `asideDrawerAt="mobile"` fait de ce même élément un tiroir à droite en dessous de 768px.
+- Globe en dessous de 768px : `AbDrawerList`, `side="bottom"`, de vrais liens de langue. À partir de 768px, le globe est un menu.
+- Barre latérale et pied de page de l’application : omis, donc 0px.
+
+`surface="page"` peint la surface de Welcome à partir des tokens du thème, sur chaque volet.
+
+## À faire, à éviter, et la liste de contrôle
+
+- Placez le chrome dans `header`, `mainHeader`, `mainBar`, `asideHeader`, `asideBar`, `navBar` ou `footer`. Ne construisez pas une barre avec `position: fixed`.
+- Omettez un emplacement vide, ou passez `null`. Ne rendez pas un `<div>` vide pour réserver de l’espace.
+- Défilez avec `scrollToAbSection(id, { container })`. N’appelez pas `window.scrollTo`, et n’écoutez pas le défilement de `window`.
+- Utilisez `AbDrawer` avec la portée qui possède l’interface. Ne couvrez pas le viewport avec `position: fixed` pour un tiroir régional.
+- Laissez la rangée de grille à `auto`. Ne codez pas en dur une hauteur de barre (`64px`, `--ab-app-bar-height`).
+- Posez `min-height: 0` sur un enfant de grille ou de flex qui doit défiler. Ne vous fiez pas à `100vh` seul.
+
+Avant d’ouvrir une pull request :
+
+- La page utilise `AbAppLayout` et `AbMainLayout`, et `AbAsideLayout` lorsqu’elle a un plan.
+- Le document ne défile jamais. Seuls les volets défilent, et ils défilent indépendamment.
+- Un en-tête, une barre ou un pied de page vide mesure 0px.
+- Pas de chrome de page en `position: fixed`, pas d’écouteur de défilement sur `window`, pas de hauteur de barre codée en dur.
+- Les tiroirs utilisent les bons `scope` et `side`, piègent le focus, se ferment avec Échap et le voile, et respectent le mouvement réduit ainsi que le repli sans JavaScript.
+- Vérifié à 390, 768, 1180 et 1920, en clair et en sombre.
+- Les nouveaux libellés existent pour en, fr, es et ru.

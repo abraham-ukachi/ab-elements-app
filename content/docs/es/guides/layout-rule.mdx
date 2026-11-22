@@ -1,0 +1,259 @@
+---
+title: "Regla de diseño"
+description: "Un mismo marco para cada pantalla: el documento nunca se desplaza, los huecos vacíos miden 0px y los cajones permanecen dentro de un panel."
+icon: widgets
+---
+
+## La regla
+
+Cada pantalla usa el mismo marco, de **ab-nextjs-core**.
+
+1. La app, el panel principal y el panel lateral son cajas de altura fija. El documento no se desplaza.
+2. La barra lateral, el contenido principal y el contenido del panel lateral se desplazan cada uno por su cuenta.
+3. Un encabezado, un pie o una barra que dejes vacíos miden 0px. No son una fila invisible.
+4. Un cajón se desliza dentro de la app, del panel principal o del panel lateral. No cubre la ventana del navegador.
+5. Los puntos de interrupción son 768, 1180 y 1920. Por debajo de 1180 el panel lateral es un cajón. Desde 1180 es un panel.
+
+`variant="panes"` en `AbAppLayout` es ese marco. La variante predeterminada conserva el diseño apilado anterior. Las páginas nuevas usan `panes`.
+
+<div className="ab-layout-fig-scroll" tabIndex={0}>
+<img className="ab-layout-fig-light" src="/layout-figures/layout-anatomy-light.svg" alt="AbAppLayout con encabezado, barra lateral, diseño principal (mainHeader, contenido, mainBar), diseño lateral (asideHeader, contenido, asideBar) y pie" width="900" />
+<img className="ab-layout-fig-dark" src="/layout-figures/layout-anatomy-dark.svg" alt="AbAppLayout con encabezado, barra lateral, diseño principal (mainHeader, contenido, mainBar), diseño lateral (asideHeader, contenido, asideBar) y pie, en colores oscuros" width="900" />
+</div>
+
+## Anatomía y huecos
+
+`orientation` es obligatorio (`vertical` o `horizontal`). Cada diseño tiene un archivo de cliente y un gemelo de servidor bajo `ab-nextjs-core/server/`. Las props coinciden. Usa el gemelo de servidor en un componente de servidor.
+
+- Encabezado de la app: prop `header` de `AbAppLayout`, parte `header`. No se desplaza. 0px cuando está vacío.
+- Barra lateral: prop `sideBar` de `AbAppLayout`, parte `sidebar`. Se desplaza por su cuenta.
+- Barra inferior: prop `navBar` de `AbAppLayout`, parte `bottomBar`. No se desplaza. 0px cuando está vacía.
+- Pie de la app: prop `footer` de `AbAppLayout`, parte `footer`. No se desplaza. 0px cuando está vacío.
+- Encabezado principal: prop `mainHeader` de `AbMainLayout`, parte `main-header`. No se desplaza. 0px cuando está vacío.
+- Contenido principal: hijos de `AbMainLayout`, parte `main-content`. Se desplaza por su cuenta.
+- Barra principal: prop `mainBar` de `AbMainLayout`, parte `main-bar`. No se desplaza. 0px cuando está vacía.
+- Encabezado del panel lateral: prop `asideHeader` de `AbAsideLayout`, parte `aside-header`. No se desplaza. 0px cuando está vacío.
+- Contenido del panel lateral: hijos de `AbAsideLayout`, parte `aside-content`. Se desplaza por su cuenta.
+- Barra del panel lateral: prop `asideBar` de `AbAsideLayout`, parte `aside-bar`. No se desplaza. 0px cuando está vacía.
+
+Las props antiguas `header` y `footer` de `AbMainLayout` y `AbAsideLayout` son alias en desuso de `mainHeader` / `mainBar` y de `asideHeader` / `asideBar`. El código nuevo usa los nombres de la tabla. La prop del diseño de la app es `sideBar`, no `sidebar`.
+
+`mobileHeader="main"` oculta el encabezado de la app por debajo de 768px y muestra `mainHeader` como barra del teléfono. `tabletHeader="main"` hace lo mismo de 768px a 1179px. `mainHeaderAt="all"` mantiene visible ese encabezado principal en cualquier ancho.
+
+```tsx title="app/shell.tsx"
+import AbAppLayout from 'ab-nextjs-core/ab-app-layout';
+import AbPageProvider from 'ab-nextjs-core/ab-page-provider';
+import AbMainLayout from 'ab-nextjs-core/server/ab-main-layout';
+import AbAsideLayout from 'ab-nextjs-core/server/ab-aside-layout';
+
+export function Shell({ children, outline }: { children: React.ReactNode; outline: React.ReactNode }) {
+  return (
+    <AbPageProvider>
+      <AbAppLayout orientation="vertical" variant="panes" pageName="docs" mobileHeader="main" tabletHeader="main">
+        <AbMainLayout id="main" orientation="vertical" pageName="docs" mainHeader={<p>Docs</p>}>
+          {children}
+        </AbMainLayout>
+        <AbAsideLayout orientation="vertical" pageName="docs" asideHeader={<h2>On this page</h2>}>
+          {outline}
+        </AbAsideLayout>
+      </AbAppLayout>
+    </AbPageProvider>
+  );
+}
+```
+
+Omite un hueco, o pasa `null`, y esa fila no se renderiza. Los tests pueden apuntar a las zonas de desplazamiento con `[data-ab-part="main-content"]` y `[data-ab-part="aside-content"]`.
+
+## Qué se desplaza
+
+<div className="ab-layout-fig-scroll" tabIndex={0}>
+<img className="ab-layout-fig-light" src="/layout-figures/layout-scroll-regions-light.svg" alt="El documento está bloqueado. La barra lateral, el contenido principal y el contenido del panel lateral se desplazan cada uno por su cuenta." width="900" />
+<img className="ab-layout-fig-dark" src="/layout-figures/layout-scroll-regions-dark.svg" alt="El documento está bloqueado. La barra lateral, el contenido principal y el contenido del panel lateral se desplazan cada uno por su cuenta, en colores oscuros." width="900" />
+</div>
+
+Con `variant="panes"` montado, la app es una cuadrícula `100dvh` (`auto` / `minmax(0, 1fr)` / `auto`) y `overflow: hidden`. El paquete bloquea `html` y `body` mientras ese diseño está montado, así que el documento no puede rebotar. El bloqueo usa `:has()`, y `data-ab-layout-lock` donde falta `:has()`. `acquireAbLayoutLock`, de `ab-nextjs-core/ab-app-layout`, cuenta los diseños montados, de modo que desmontar uno de dos mantiene el bloqueo.
+
+Cada zona de contenido que se desplaza usa `overflow: auto`, `scrollbar-gutter: stable` y `overscroll-behavior: contain`. Un hijo de cuadrícula o de flex que deba desplazarse también necesita `min-height: 0`. El paquete lo pone en los paneles. Si añades tu propia cuadrícula dentro de un panel, ponlo ahí también, o el hijo crece con su contenido y nunca se desplaza.
+
+El encabezado, el pie y las barras se separan con `env(safe-area-inset-*)`. Esos insets valen 0 salvo que el viewport defina `viewport-fit=cover`.
+
+No hay un desplazamiento `--ab-app-bar-height` ni un `padding-top: 64px` para despejar una barra fija. La fila de la cuadrícula es `auto`. Vacío significa 0px.
+
+## Huecos vacíos
+
+<div className="ab-layout-fig-scroll" tabIndex={0}>
+<img className="ab-layout-fig-light" src="/layout-figures/layout-empty-chrome-light.svg" alt="Con contenido, el encabezado y las barras ocupan espacio. Cuando están vacíos miden 0px y el contenido principal recupera el espacio." width="900" />
+<img className="ab-layout-fig-dark" src="/layout-figures/layout-empty-chrome-dark.svg" alt="Con contenido, el encabezado y las barras ocupan espacio. Cuando están vacíos miden 0px y el contenido principal recupera el espacio, en colores oscuros." width="900" />
+</div>
+
+Dos capas ocultan un hueco vacío:
+
+1. El diseño no renderiza el envoltorio para `null`, `undefined`, `false`, `''` o un array vacío.
+2. Una regla CSS pliega un hueco que se renderizó pero no tiene elementos hijos.
+
+No renderices un `<div>` vacío para conservar una fila. Omite la prop.
+
+## Cajones
+
+<div className="ab-layout-fig-scroll" tabIndex={0}>
+<img className="ab-layout-fig-light" src="/layout-figures/layout-drawer-scopes-light.svg" alt="Ámbitos de AbDrawer: app, main y aside, y lados top, bottom, left y right." width="900" />
+<img className="ab-layout-fig-dark" src="/layout-figures/layout-drawer-scopes-dark.svg" alt="Ámbitos de AbDrawer: app, main y aside, y lados top, bottom, left y right, en colores oscuros." width="900" />
+</div>
+
+`AbDrawer` y `useAbDrawer` se publican desde `ab-nextjs-components/ab-drawer`. `AbDrawerList` es la lista seleccionable, desde `ab-nextjs-components/ab-drawer-list`.
+
+`scope` es `app`, `main` o `aside`. Elige la caja que recorta el cajón. `side` es `top`, `bottom`, `left`, `right`, `start` o `end`. `start` y `end` siguen la dirección de escritura.
+
+`useAbDrawer(scope)` devuelve `open`, `show`, `close`, `toggle`, `triggerProps` y `drawerProps`. Extiende `drawerProps` sobre el cajón y `triggerProps` sobre el botón. La devolución del foco la gestiona `AbDrawer`.
+
+```tsx title="app/language-drawer.tsx"
+'use client';
+
+import AbDrawerList from 'ab-nextjs-components/ab-drawer-list';
+import { useAbDrawer } from 'ab-nextjs-components/ab-drawer';
+
+export function LanguageDrawer() {
+  const drawer = useAbDrawer('app');
+  return (
+    <>
+      <button type="button" {...drawer.triggerProps}>Language</button>
+      <AbDrawerList
+        {...drawer.drawerProps}
+        side="bottom"
+        title="Language"
+        items={[
+          { value: 'en', label: 'English' },
+          { value: 'fr', label: 'Français', lang: 'fr' },
+          { value: 'es', label: 'Español', lang: 'es' },
+          { value: 'ru', label: 'Русский', lang: 'ru' },
+        ]}
+      />
+    </>
+  );
+}
+```
+
+Cada cajón:
+
+- Es un diálogo. `title` se convierte en el encabezado que lo nombra, o define tú mismo `aria-labelledby` / `aria-label`.
+- El foco entra al abrirse y vuelve al disparador al cerrarse.
+- Escape lo cierra. El velo también. Ambos llaman a `onClose`.
+- Con `modal` (el predeterminado), el resto de ese ámbito queda inerte. No toda la app, salvo que `scope="app"`.
+- El deslizamiento es `AB_DRAWER_DURATION` (240ms). El movimiento reducido lo quita.
+- `noJsFallback` (el predeterminado) renderiza el contenido en el flujo de la página cuando JavaScript no ha corrido.
+
+`tier` apila los cajones: `aside`, luego `nav`, luego `sheet`. Los cajones del producto (navegación, esquema, búsqueda, ajustes) son componentes aparte. Sus props están en la página [Drawer](/docs/packages/components/drawer).
+
+- Cajón: una lista o un formulario que pertenece a una región, o que necesita sitio en una pantalla pequeña.
+- Menú: una lista corta anclada a un botón.
+- Diálogo: una decisión que bloquea toda la app, no atada a una sola región.
+
+## Puntos de interrupción
+
+<div className="ab-layout-fig-scroll" tabIndex={0}>
+<img className="ab-layout-fig-light" src="/layout-figures/layout-breakpoints-light.svg" alt="Diseños a 390, 768, 1180 y 1920 píxeles de ancho" width="900" />
+<img className="ab-layout-fig-dark" src="/layout-figures/layout-breakpoints-dark.svg" alt="Diseños a 390, 768, 1180 y 1920 píxeles de ancho, en colores oscuros" width="900" />
+</div>
+
+- **390.** La barra inferior, o un cajón, sustituye a la barra lateral. El principal es el único panel visible. El panel lateral es un cajón.
+- **768.** La barra lateral (o el rail) y el panel principal están visibles. El panel lateral es un cajón a la derecha.
+- **1180.** La barra lateral completa, el panel principal y el panel lateral quedan uno al lado del otro.
+- **1920.** Los mismos tres paneles, con un hueco entre ellos.
+
+El documento no se desplaza en ningún ancho. Comprueba 390, 768, 1180 y 1920, en claro y en oscuro.
+
+`AB_ASIDE_SHEET_QUERY`, de `ab-nextjs-core/ab-page-provider`, es `(max-width: 1179px)`. Por debajo, el panel lateral es una hoja. `useAbAsideToggle` elige la hoja o el panel y devuelve `aria-expanded`, `aria-controls` y `onClick`.
+
+## Seguimiento del desplazamiento y anclas
+
+<div className="ab-layout-fig-scroll" tabIndex={0}>
+<img className="ab-layout-fig-light" src="/layout-figures/layout-scroll-spy-light.svg" alt="El seguimiento del desplazamiento usa la zona principal como raíz de IntersectionObserver y resalta el elemento activo del esquema." width="900" />
+<img className="ab-layout-fig-dark" src="/layout-figures/layout-scroll-spy-dark.svg" alt="El seguimiento del desplazamiento usa la zona principal como raíz de IntersectionObserver y resalta el elemento activo del esquema, en colores oscuros." width="900" />
+</div>
+
+La ventana nunca se desplaza, así que un listener en `window` nunca se dispara. Pasa la zona principal.
+
+```tsx title="app/outline.tsx"
+'use client';
+
+import { useAbPage } from 'ab-nextjs-core/ab-page-provider';
+import { scrollToAbSection, useAbScrollSpy } from 'ab-nextjs-hooks/useAbScrollSpy';
+
+const ids = ['anatomy-and-slots', 'what-scrolls'];
+
+export function Outline() {
+  const { mainScrollElement } = useAbPage();
+  const activeId = useAbScrollSpy(ids, { root: mainScrollElement });
+  return (
+    <a
+      href={`#${activeId ?? ids[0]}`}
+      aria-current={activeId ? 'location' : undefined}
+      onClick={(event) => {
+        event.preventDefault();
+        scrollToAbSection(activeId ?? ids[0], { container: mainScrollElement });
+      }}
+    >
+      On this page
+    </a>
+  );
+}
+```
+
+`useAbScrollSpy` toma primero los ids y después las opciones. `root` es la zona que se desplaza (`useAbPage().mainScrollElement`). Con una raíz, el `rootMargin` predeterminado es `AB_SCROLL_SPY_PANE_ROOT_MARGIN` (`0px 0px -60% 0px`). `lastAtBottom` es true de forma predeterminada: gana el último id cuando esa zona está al final. El margen de la ventana es `AB_SCROLL_SPY_ROOT_MARGIN` (`-64px 0px -60% 0px`). No uses ese margen dentro de un panel. La barra está fuera del panel.
+
+`scrollToAbSection(id, { container })` desplaza ese elemento. `container` es la opción. `root` en esta función es un alias en desuso de `container`. La llamada es instantánea cuando quien lee prefiere el movimiento reducido.
+
+`getAbMainScroller`, de `ab-nextjs-components/ab-toc`, lee `[data-ab-part="main-content"]`. Llámalo en un efecto o en un manejador de evento, nunca durante el render.
+
+```tsx title="app/find-scroller.tsx"
+'use client';
+
+import { useEffect, useState } from 'react';
+import { getAbMainScroller } from 'ab-nextjs-components/ab-toc';
+
+export function MainScrollerLabel() {
+  const [ready, setReady] = useState(false);
+  useEffect(() => { setReady(getAbMainScroller() != null); }, []);
+  return <span>{ready ? 'main' : ''}</span>;
+}
+```
+
+`AbToc` usa la zona principal cuando pasas `onNavigate` hasta `scrollToAbSection`. Un `href="#id"` simple sigue funcionando sin JavaScript. Mantén `scroll-margin-top` pequeño. Ninguna barra fija se sienta sobre el contenido del panel. Un encabezado fijo dentro del principal usa `top: 0`, que es la parte superior del principal, no la del viewport.
+
+## Welcome
+
+<div className="ab-layout-fig-scroll" tabIndex={0}>
+<img className="ab-layout-fig-light" src="/layout-figures/layout-welcome-mapping-light.svg" alt="Welcome: la barra superior es el encabezado de la app, el contador es mainHeader, la diapositiva es el contenido principal, las flechas y Omitir son mainBar, y la zona de pruebas es el panel lateral." width="900" />
+<img className="ab-layout-fig-dark" src="/layout-figures/layout-welcome-mapping-dark.svg" alt="Welcome: la barra superior es el encabezado de la app, el contador es mainHeader, la diapositiva es el contenido principal, las flechas y Omitir son mainBar, y la zona de pruebas es el panel lateral, en colores oscuros." width="900" />
+</div>
+
+Welcome ya está en este marco (`pageName="welcome"`).
+
+- Barra superior (logo, tema, globo): `header` de `AbAppLayout`. Un landmark banner dentro del hueco. Sin una barra fija hecha a mano.
+- Barra del teléfono: `mainHeader` de `AbMainLayout`, con `mobileHeader="main"`. El contador vive en el principal.
+- Diapositiva: contenido principal. Solo se desplaza cuando la diapositiva es más alta que el panel.
+- Puntos, flechas y Omitir: `mainBar` de `AbMainLayout`, con `mainBarPin="always"` y `mainBarLabel`. No es un pie de la app.
+- Zona de pruebas: `AbAsideLayout`. Un panel desde 1180px. `asideBelow="inline-in-main"` lo une al desplazamiento del principal de 768px a 1179px. `asideDrawerAt="mobile"` convierte ese mismo elemento en un cajón a la derecha por debajo de 768px.
+- Globo por debajo de 768px: `AbDrawerList`, `side="bottom"`, enlaces de idioma de verdad. Desde 768px el globo es un menú.
+- Barra lateral y pie de la app: omitidos, así que 0px.
+
+`surface="page"` pinta la superficie de Welcome a partir de los tokens del tema, en cada panel.
+
+## Qué hacer, qué no, y la lista de comprobación
+
+- Pon el chrome en `header`, `mainHeader`, `mainBar`, `asideHeader`, `asideBar`, `navBar` o `footer`. No construyas una barra con `position: fixed`.
+- Omite un hueco vacío, o pasa `null`. No renderices un `<div>` vacío para reservar espacio.
+- Desplázate con `scrollToAbSection(id, { container })`. No llames a `window.scrollTo` y no escuches el desplazamiento de `window`.
+- Usa `AbDrawer` con el ámbito dueño de la interfaz. No cubras el viewport con `position: fixed` para un cajón regional.
+- Deja la fila de la cuadrícula en `auto`. No codifiques a mano una altura de barra (`64px`, `--ab-app-bar-height`).
+- Pon `min-height: 0` en un hijo de cuadrícula o de flex que deba desplazarse. No te fíes solo de `100vh`.
+
+Antes de abrir una pull request:
+
+- La página usa `AbAppLayout` y `AbMainLayout`, y `AbAsideLayout` cuando tiene un esquema.
+- El documento nunca se desplaza. Solo se desplazan los paneles, y lo hacen por separado.
+- Un encabezado, una barra o un pie vacíos miden 0px.
+- Sin chrome de página en `position: fixed`, sin listener de desplazamiento en `window`, sin una altura de barra codificada a mano.
+- Los cajones usan el `scope` y el `side` correctos, atrapan el foco, se cierran con Escape y el velo, y respetan el movimiento reducido y el respaldo sin JavaScript.
+- Comprobado a 390, 768, 1180 y 1920, en claro y en oscuro.
+- Las etiquetas nuevas existen para en, fr, es y ru.
