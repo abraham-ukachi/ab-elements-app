@@ -4,7 +4,7 @@ description: "Construye una primera página de AbElements: un diseño de paneles
 icon: bolt
 ---
 
-## Crear el diseño
+## Crear el diseño [#create-the-layout]
 
 `AbAppLayout`, de **ab-nextjs-core**, es la página. `orientation` es obligatorio. `variant="panes"` es el shell de la documentación: el documento no se desplaza, y el panel principal, el panel lateral y la barra lateral se desplazan cada uno por su cuenta. Un hueco de encabezado, pie o barra que dejes vacío mide 0px de alto.
 
@@ -24,7 +24,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
 Pasa `header`, `sideBar`, `navBar` y `footer` cuando esos huecos tengan interfaz. Si omites un hueco, no ocupa espacio.
 
-## Añadir un panel principal
+## Añadir un panel principal [#add-a-main-pane]
 
 `AbMainLayout` es el artículo. Dale `id="main"` cuando ese elemento sea el destino del enlace de salto. `mainHeader` y `mainBar` son los huecos propios del panel, distintos del encabezado de la aplicación y de la barra inferior.
 

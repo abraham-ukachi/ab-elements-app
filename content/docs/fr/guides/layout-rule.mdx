@@ -21,7 +21,7 @@ Chaque écran utilise le même cadre, issu de **ab-nextjs-core**.
 <img className="ab-layout-fig-dark" src="/layout-figures/layout-anatomy-dark.svg" alt="AbAppLayout avec en-tête, barre latérale, mise en page principale (mainHeader, contenu, mainBar), mise en page latérale (asideHeader, contenu, asideBar) et pied de page, en couleurs sombres" width="900" />
 </div>
 
-## Anatomie et emplacements
+## Anatomie et emplacements [#anatomy-and-slots]
 
 `orientation` est obligatoire (`vertical` ou `horizontal`). Chaque mise en page a un fichier client et un jumeau serveur sous `ab-nextjs-core/server/`. Les props correspondent. Utilisez le jumeau serveur dans un composant serveur.
 
@@ -64,7 +64,7 @@ export function Shell({ children, outline }: { children: React.ReactNode; outlin
 
 Omettez un emplacement, ou passez `null`, et cette rangée n’est pas rendue. Les tests peuvent viser les zones de défilement avec `[data-ab-part="main-content"]` et `[data-ab-part="aside-content"]`.
 
-## Ce qui défile
+## Ce qui défile [#what-scrolls]
 
 <div className="ab-layout-fig-scroll" tabIndex={0}>
 <img className="ab-layout-fig-light" src="/layout-figures/layout-scroll-regions-light.svg" alt="Le document est verrouillé. La barre latérale, le contenu principal et le contenu du panneau latéral défilent chacun de leur côté." width="900" />

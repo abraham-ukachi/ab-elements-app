@@ -21,7 +21,7 @@ Cada pantalla usa el mismo marco, de **ab-nextjs-core**.
 <img className="ab-layout-fig-dark" src="/layout-figures/layout-anatomy-dark.svg" alt="AbAppLayout con encabezado, barra lateral, diseño principal (mainHeader, contenido, mainBar), diseño lateral (asideHeader, contenido, asideBar) y pie, en colores oscuros" width="900" />
 </div>
 
-## Anatomía y huecos
+## Anatomía y huecos [#anatomy-and-slots]
 
 `orientation` es obligatorio (`vertical` o `horizontal`). Cada diseño tiene un archivo de cliente y un gemelo de servidor bajo `ab-nextjs-core/server/`. Las props coinciden. Usa el gemelo de servidor en un componente de servidor.
 
@@ -64,7 +64,7 @@ export function Shell({ children, outline }: { children: React.ReactNode; outlin
 
 Si omites un hueco o pasas `null`, esa fila no se renderiza. Las pruebas pueden apuntar a las zonas de desplazamiento con `[data-ab-part="main-content"]` y `[data-ab-part="aside-content"]`.
 
-## Qué se desplaza
+## Qué se desplaza [#what-scrolls]
 
 <div className="ab-layout-fig-scroll" tabIndex={0}>
 <img className="ab-layout-fig-light" src="/layout-figures/layout-scroll-regions-light.svg" alt="El documento está bloqueado. La barra lateral, el contenido principal y el contenido del panel lateral se desplazan cada uno por su cuenta." width="900" />

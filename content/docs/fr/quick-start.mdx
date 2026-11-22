@@ -4,7 +4,7 @@ description: "Construisez une première page AbElements : une mise en page en vo
 icon: bolt
 ---
 
-## Créer la mise en page
+## Créer la mise en page [#create-the-layout]
 
 `AbAppLayout`, dans **ab-nextjs-core**, est la page. `orientation` est obligatoire. `variant="panes"` est le shell de la documentation : le document ne défile pas, et le volet principal, le panneau latéral et la barre latérale défilent chacun de leur côté. Un emplacement d’en-tête, de pied de page ou de barre laissé vide mesure 0px de haut.
 
@@ -24,7 +24,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
 Passez `header`, `sideBar`, `navBar` et `footer` lorsque ces emplacements ont une interface. Omettez un emplacement et il n’occupe aucun espace.
 
-## Ajouter un volet principal
+## Ajouter un volet principal [#add-a-main-pane]
 
 `AbMainLayout` est l’article. Donnez-lui `id="main"` lorsque cet élément est la cible du lien d’évitement. `mainHeader` et `mainBar` sont les emplacements propres au volet, distincts de l’en-tête de l’application et de la barre inférieure.
 

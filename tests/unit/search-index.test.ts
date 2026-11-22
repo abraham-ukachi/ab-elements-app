@@ -230,6 +230,29 @@ describe('search documents 📚', () => {
     }
   });
 
+  it('keeps the sample heading ids in every locale', () => {
+    // ⚓ the ids the code samples and links use, pinned with `[#id]` outside English
+    const pinned = {
+      'quick-start': ['create-the-layout', 'add-a-main-pane'],
+      'guides/layout-rule': ['anatomy-and-slots', 'what-scrolls'],
+    } as const;
+    for (const locale of SEARCH_LOCALES) {
+      const records = collectDocRecords(root, locale);
+      for (const [slug, ids] of Object.entries(pinned)) {
+        const prefix = `${docsUrl(slug)}#`;
+        const anchors = records
+          .filter((record) => record.recordType === 'section' && record.url.startsWith(prefix))
+          .map((record) => record.url.slice(prefix.length));
+        const page = source.getPage(slug.split('/'), locale);
+        const toc = docsTocItems(page!.data.toc).map((item) => item.id);
+        for (const id of ids) {
+          expect(anchors, `${locale} ${slug}`).toContain(id);
+          expect(toc, `${locale} ${slug}`).toContain(id);
+        }
+      }
+    }
+  });
+
   it('uses the same heading anchors as the rendered outline', () => {
     // 🌍 every locale, every page
     for (const locale of SEARCH_LOCALES) {

@@ -21,7 +21,7 @@ icon: widgets
 <img className="ab-layout-fig-dark" src="/layout-figures/layout-anatomy-dark.svg" alt="AbAppLayout с шапкой, боковой панелью, основной вёрсткой (mainHeader, содержимое, mainBar), боковой вёрсткой (asideHeader, содержимое, asideBar) и подвалом, в тёмных цветах" width="900" />
 </div>
 
-## Анатомия и слоты
+## Анатомия и слоты [#anatomy-and-slots]
 
 `orientation` обязателен (`vertical` или `horizontal`). У каждой вёрстки есть клиентский файл и серверный двойник в `ab-nextjs-core/server/`. Пропы совпадают. В серверном компоненте используйте серверный двойник.
 
@@ -64,7 +64,7 @@ export function Shell({ children, outline }: { children: React.ReactNode; outlin
 
 Пропустите слот или передайте `null` — и этот ряд не отрисуется. В тестах области прокрутки можно находить через `[data-ab-part="main-content"]` и `[data-ab-part="aside-content"]`.
 
-## Что прокручивается
+## Что прокручивается [#what-scrolls]
 
 <div className="ab-layout-fig-scroll" tabIndex={0}>
 <img className="ab-layout-fig-light" src="/layout-figures/layout-scroll-regions-light.svg" alt="Документ заблокирован. Боковая панель, основное содержимое и содержимое боковой колонки прокручиваются каждое само по себе." width="900" />
