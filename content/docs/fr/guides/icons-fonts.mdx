@@ -79,4 +79,4 @@ Remplissez `icons` à partir des modules par icône que documente la page Icons.
 
 Le paquet d’icônes livre aussi une feuille de styles de masques CSS (`abicon`, `abicon-filled`, `abicon-w300`). Ce fichier n’est pas une clé `exports` dans icons <PackageVersion name="ab-nextjs-icons" />. Utilisez `AbIcon` dans React. N’utilisez les classes de masque que là où la page [Icons](/docs/packages/icons) les montre déjà, pour une page qui n’est pas en React.
 
-`getAbIconSvg`, `abIconNames` et `abIconWeights` sont les aides d’un script de build. Ils vivent sur le baril d’icônes du paquet, qui est le même genre de chemin : un fichier que le paquet livre, et non une clé d’export. La page Icons a l’appel.
+`getAbIconSvg`, `abIconNames` et `abIconWeights` sont les aides d’un script de build. Ils se trouvent dans le fichier d’index (barrel) des icônes du paquet, qui est le même genre de chemin : un fichier que le paquet livre, et non une clé d’export. La page Icons a l’appel.

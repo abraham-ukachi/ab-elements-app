@@ -39,7 +39,7 @@ Roboto Mono se licencia bajo la SIL Open Font License 1.1, incluida con el paque
 
 ## Dibujar un icono
 
-`AbIcon` es el componente. `name` es el nombre de AbIcons en snake_case (`home`, `search`, `palette`). `variant` es `outlined` (el predeterminado) o `filled`. `weight` va de 100 a 700 para los trazos outlined. El peso predeterminado es 200. Omite `label` y el icono es decorativo.
+`AbIcon` es el componente. `name` es el nombre de AbIcons en snake_case (`home`, `search`, `palette`). `variant` es `outlined` (el predeterminado) o `filled`. `weight` va de 100 a 700 para los iconos de contorno (`outlined`). El peso predeterminado es 200. Si omites `label`, el icono es decorativo.
 
 ```tsx title="app/icon.tsx"
 import AbIcon from 'ab-nextjs-components/ab-icon';
@@ -79,4 +79,4 @@ Rellena `icons` con los módulos por icono que documenta la página Icons. Un no
 
 El paquete de iconos también incluye una hoja de estilos de máscaras CSS (`abicon`, `abicon-filled`, `abicon-w300`). Ese archivo no es una clave `exports` en icons <PackageVersion name="ab-nextjs-icons" />. Usa `AbIcon` en React. Usa las clases de máscara solo donde la página [Icons](/docs/packages/icons) ya las muestra, para una página que no es React.
 
-`getAbIconSvg`, `abIconNames` y `abIconWeights` son las ayudas de un script de build. Viven en el barril de iconos del paquete, que es el mismo tipo de ruta: un archivo que el paquete incluye, no una clave de export. La página Icons tiene la llamada.
+`getAbIconSvg`, `abIconNames` y `abIconWeights` son las ayudas de un script de build. Están en el archivo índice (barrel) de iconos del paquete, que es el mismo tipo de ruta: un archivo que el paquete incluye, no una clave de export. La página Icons tiene la llamada.

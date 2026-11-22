@@ -135,12 +135,12 @@ export function LanguageDrawer() {
 
 Chaque tiroir :
 
-- C’est une boîte de dialogue. `title` devient le titre qui la nomme, ou définissez vous-même `aria-labelledby` / `aria-label`.
+- Est une boîte de dialogue. `title` devient le titre qui la nomme, ou définissez vous-même `aria-labelledby` / `aria-label`.
 - Le focus entre à l’ouverture et revient sur le déclencheur à la fermeture.
 - Échap la ferme. Le voile aussi. Les deux appellent `onClose`.
 - Avec `modal` (la valeur par défaut), le reste de cette portée est inerte. Pas toute l’application, sauf si `scope="app"`.
 - Le glissement dure `AB_DRAWER_DURATION` (240ms). Le mouvement réduit le supprime.
-- `noJsFallback` (la valeur par défaut) rend le contenu dans le flux de la page lorsque JavaScript n’a pas tourné.
+- `noJsFallback` (la valeur par défaut) rend le contenu dans le flux de la page lorsque JavaScript ne s’est pas exécuté.
 
 `tier` empile les tiroirs : `aside`, puis `nav`, puis `sheet`. Les tiroirs du produit (navigation, plan, recherche, réglages) sont des composants distincts. Leurs props sont sur la page [Drawer](/docs/packages/components/drawer).
 
@@ -229,7 +229,7 @@ export function MainScrollerLabel() {
 
 Welcome est déjà sur ce cadre (`pageName="welcome"`).
 
-- Barre du haut (logo, thème, globe) : `header` de `AbAppLayout`. Un repère banner dans l’emplacement. Pas de barre fixe construite à la main.
+- Barre du haut (logo, thème, globe) : `header` de `AbAppLayout`. Un repère `banner` dans l’emplacement. Pas de barre fixe construite à la main.
 - Barre du téléphone : `mainHeader` de `AbMainLayout`, avec `mobileHeader="main"`. Le compteur vit dans le volet principal.
 - Diapositive : contenu principal. Elle ne défile que lorsque la diapositive est plus haute que le volet.
 - Points, flèches et Passer : `mainBar` de `AbMainLayout`, avec `mainBarPin="always"` et `mainBarLabel`. Ce n’est pas un pied de page d’application.
@@ -241,7 +241,7 @@ Welcome est déjà sur ce cadre (`pageName="welcome"`).
 
 ## À faire, à éviter, et la liste de contrôle
 
-- Placez le chrome dans `header`, `mainHeader`, `mainBar`, `asideHeader`, `asideBar`, `navBar` ou `footer`. Ne construisez pas une barre avec `position: fixed`.
+- Placez les éléments d’interface (barres, en-têtes) dans `header`, `mainHeader`, `mainBar`, `asideHeader`, `asideBar`, `navBar` ou `footer`. Ne construisez pas une barre avec `position: fixed`.
 - Omettez un emplacement vide, ou passez `null`. Ne rendez pas un `<div>` vide pour réserver de l’espace.
 - Défilez avec `scrollToAbSection(id, { container })`. N’appelez pas `window.scrollTo`, et n’écoutez pas le défilement de `window`.
 - Utilisez `AbDrawer` avec la portée qui possède l’interface. Ne couvrez pas le viewport avec `position: fixed` pour un tiroir régional.
@@ -253,7 +253,7 @@ Avant d’ouvrir une pull request :
 - La page utilise `AbAppLayout` et `AbMainLayout`, et `AbAsideLayout` lorsqu’elle a un plan.
 - Le document ne défile jamais. Seuls les volets défilent, et ils défilent indépendamment.
 - Un en-tête, une barre ou un pied de page vide mesure 0px.
-- Pas de chrome de page en `position: fixed`, pas d’écouteur de défilement sur `window`, pas de hauteur de barre codée en dur.
+- Aucun élément d’interface en `position: fixed`, pas d’écouteur de défilement sur `window`, pas de hauteur de barre codée en dur.
 - Les tiroirs utilisent les bons `scope` et `side`, piègent le focus, se ferment avec Échap et le voile, et respectent le mouvement réduit ainsi que le repli sans JavaScript.
 - Vérifié à 390, 768, 1180 et 1920, en clair et en sombre.
 - Les nouveaux libellés existent pour en, fr, es et ru.

@@ -8,7 +8,7 @@ icon: bolt
 
 `AbAppLayout`, de **ab-nextjs-core**, es la página. `orientation` es obligatorio. `variant="panes"` es el shell de la documentación: el documento no se desplaza, y el panel principal, el panel lateral y la barra lateral se desplazan cada uno por su cuenta. Un hueco de encabezado, pie o barra que dejes vacío mide 0px de alto.
 
-El import de abajo es el diseño de cliente. Un gemelo de servidor vive en `ab-nextjs-core/server/ab-app-layout`, con los mismos huecos.
+El import de abajo es el diseño de cliente. Hay un gemelo de servidor en `ab-nextjs-core/server/ab-app-layout`, con los mismos huecos.
 
 ```tsx title="app/layout.tsx"
 import AbAppLayout from 'ab-nextjs-core/ab-app-layout';
@@ -22,7 +22,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 }
 ```
 
-Pasa `header`, `sideBar`, `navBar` y `footer` cuando esos huecos tengan interfaz. Omite un hueco y no ocupa espacio.
+Pasa `header`, `sideBar`, `navBar` y `footer` cuando esos huecos tengan interfaz. Si omites un hueco, no ocupa espacio.
 
 ## Añadir un panel principal
 

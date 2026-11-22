@@ -1,6 +1,6 @@
 ---
 title: "Thèmes et mode sombre"
-description: "Réglez le clair, le sombre ou le système avec les tokens publiés, le script sans flash et l’interrupteur de thème partagé."
+description: "Choisissez le mode clair, sombre ou système avec les tokens publiés, le script sans flash et l’interrupteur de thème partagé."
 icon: palette
 ---
 
@@ -8,7 +8,7 @@ icon: palette
 
 Chaque écran Ab utilise un seul jeu de tokens de couleur et de typographie, issu de **ab-nextjs-theme**. Le clair et le sombre sont des variables CSS sur la page. La classe sur `<html>` décide des valeurs que vous voyez.
 
-Le hook qui mémorise le choix, et le script qui l’applique avant la première image, vivent dans **ab-nextjs-hooks**. Le contrôle segmenté vit dans **ab-nextjs-components**. Ce guide relie les trois. Les valeurs de couleur elles-mêmes sont sur la page [Theme](/docs/packages/theme).
+Le hook qui mémorise le choix, et le script qui l’applique avant le premier rendu, se trouvent dans **ab-nextjs-hooks**. Le contrôle segmenté se trouve dans **ab-nextjs-components**. Ce guide relie les trois. Les valeurs de couleur elles-mêmes sont sur la page [Theme](/docs/packages/theme).
 
 ## Tokens
 
@@ -26,7 +26,7 @@ code { font-family: var(--ab-font-code); }
 a { color: var(--ab-link-color); }
 ```
 
-Le fond de page clair est `#FFF8F5`. Le fond de page sombre est `#19120C`. Le texte courant est `#211A16` en clair et `#F4ECE5` en sombre. Les liens et les boutons pleins utilisent le bronze qui passe WCAG AA sur le fond clair. Le sauge ne sert que de petite marque d’état.
+Le fond de page clair est `#FFF8F5`. Le fond de page sombre est `#19120C`. Le texte courant est `#211A16` en clair et `#F4ECE5` en sombre. Les liens et les boutons pleins utilisent le bronze, conforme au niveau WCAG AA, sur le fond clair. Le vert sauge ne sert qu’aux petits indicateurs d’état.
 
 Les articles de la documentation ajoutent la classe `ab-prose`. Cette classe stylise les titres, les listes, les liens et le code en ligne à partir des mêmes tokens.
 

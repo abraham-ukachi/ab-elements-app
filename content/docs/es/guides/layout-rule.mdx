@@ -62,7 +62,7 @@ export function Shell({ children, outline }: { children: React.ReactNode; outlin
 }
 ```
 
-Omite un hueco, o pasa `null`, y esa fila no se renderiza. Los tests pueden apuntar a las zonas de desplazamiento con `[data-ab-part="main-content"]` y `[data-ab-part="aside-content"]`.
+Si omites un hueco o pasas `null`, esa fila no se renderiza. Las pruebas pueden apuntar a las zonas de desplazamiento con `[data-ab-part="main-content"]` y `[data-ab-part="aside-content"]`.
 
 ## Qué se desplaza
 
@@ -77,7 +77,7 @@ Cada zona de contenido que se desplaza usa `overflow: auto`, `scrollbar-gutter: 
 
 El encabezado, el pie y las barras se separan con `env(safe-area-inset-*)`. Esos insets valen 0 salvo que el viewport defina `viewport-fit=cover`.
 
-No hay un desplazamiento `--ab-app-bar-height` ni un `padding-top: 64px` para despejar una barra fija. La fila de la cuadrícula es `auto`. Vacío significa 0px.
+No hay un margen de compensación `--ab-app-bar-height` ni un `padding-top: 64px` para despejar una barra fija. La fila de la cuadrícula es `auto`. Vacío significa 0px.
 
 ## Huecos vacíos
 
@@ -89,7 +89,7 @@ No hay un desplazamiento `--ab-app-bar-height` ni un `padding-top: 64px` para de
 Dos capas ocultan un hueco vacío:
 
 1. El diseño no renderiza el envoltorio para `null`, `undefined`, `false`, `''` o un array vacío.
-2. Una regla CSS pliega un hueco que se renderizó pero no tiene elementos hijos.
+2. Una regla CSS colapsa un hueco que se renderizó pero no tiene elementos hijos.
 
 No renderices un `<div>` vacío para conservar una fila. Omite la prop.
 
@@ -104,7 +104,7 @@ No renderices un `<div>` vacío para conservar una fila. Omite la prop.
 
 `scope` es `app`, `main` o `aside`. Elige la caja que recorta el cajón. `side` es `top`, `bottom`, `left`, `right`, `start` o `end`. `start` y `end` siguen la dirección de escritura.
 
-`useAbDrawer(scope)` devuelve `open`, `show`, `close`, `toggle`, `triggerProps` y `drawerProps`. Extiende `drawerProps` sobre el cajón y `triggerProps` sobre el botón. La devolución del foco la gestiona `AbDrawer`.
+`useAbDrawer(scope)` devuelve `open`, `show`, `close`, `toggle`, `triggerProps` y `drawerProps`. Propaga `drawerProps` en el cajón y `triggerProps` sobre el botón. La devolución del foco la gestiona `AbDrawer`.
 
 ```tsx title="app/language-drawer.tsx"
 'use client';
@@ -139,8 +139,8 @@ Cada cajón:
 - El foco entra al abrirse y vuelve al disparador al cerrarse.
 - Escape lo cierra. El velo también. Ambos llaman a `onClose`.
 - Con `modal` (el predeterminado), el resto de ese ámbito queda inerte. No toda la app, salvo que `scope="app"`.
-- El deslizamiento es `AB_DRAWER_DURATION` (240ms). El movimiento reducido lo quita.
-- `noJsFallback` (el predeterminado) renderiza el contenido en el flujo de la página cuando JavaScript no ha corrido.
+- El deslizamiento dura `AB_DRAWER_DURATION` (240ms). El movimiento reducido lo quita.
+- `noJsFallback` (el predeterminado) renderiza el contenido en el flujo de la página cuando JavaScript no se ha ejecutado.
 
 `tier` apila los cajones: `aside`, luego `nav`, luego `sheet`. Los cajones del producto (navegación, esquema, búsqueda, ajustes) son componentes aparte. Sus props están en la página [Drawer](/docs/packages/components/drawer).
 
@@ -155,7 +155,7 @@ Cada cajón:
 <img className="ab-layout-fig-dark" src="/layout-figures/layout-breakpoints-dark.svg" alt="Diseños a 390, 768, 1180 y 1920 píxeles de ancho, en colores oscuros" width="900" />
 </div>
 
-- **390.** La barra inferior, o un cajón, sustituye a la barra lateral. El principal es el único panel visible. El panel lateral es un cajón.
+- **390.** La barra inferior, o un cajón, sustituye a la barra lateral. El panel principal es el único visible. El panel lateral es un cajón.
 - **768.** La barra lateral (o el rail) y el panel principal están visibles. El panel lateral es un cajón a la derecha.
 - **1180.** La barra lateral completa, el panel principal y el panel lateral quedan uno al lado del otro.
 - **1920.** Los mismos tres paneles, con un hueco entre ellos.
@@ -218,7 +218,7 @@ export function MainScrollerLabel() {
 }
 ```
 
-`AbToc` usa la zona principal cuando pasas `onNavigate` hasta `scrollToAbSection`. Un `href="#id"` simple sigue funcionando sin JavaScript. Mantén `scroll-margin-top` pequeño. Ninguna barra fija se sienta sobre el contenido del panel. Un encabezado fijo dentro del principal usa `top: 0`, que es la parte superior del principal, no la del viewport.
+`AbToc` usa la zona principal cuando pasas `onNavigate` hasta `scrollToAbSection`. Un `href="#id"` simple sigue funcionando sin JavaScript. Mantén `scroll-margin-top` pequeño. Ninguna barra fija se superpone al contenido del panel. Un encabezado `sticky` dentro del panel principal usa `top: 0`, que es la parte superior del panel principal, no la del viewport.
 
 ## Welcome
 
@@ -229,11 +229,11 @@ export function MainScrollerLabel() {
 
 Welcome ya está en este marco (`pageName="welcome"`).
 
-- Barra superior (logo, tema, globo): `header` de `AbAppLayout`. Un landmark banner dentro del hueco. Sin una barra fija hecha a mano.
-- Barra del teléfono: `mainHeader` de `AbMainLayout`, con `mobileHeader="main"`. El contador vive en el principal.
+- Barra superior (logo, tema, globo): `header` de `AbAppLayout`. Un landmark `banner` dentro del hueco. Sin una barra fija hecha a mano.
+- Barra del teléfono: `mainHeader` de `AbMainLayout`, con `mobileHeader="main"`. El contador vive en el panel principal.
 - Diapositiva: contenido principal. Solo se desplaza cuando la diapositiva es más alta que el panel.
 - Puntos, flechas y Omitir: `mainBar` de `AbMainLayout`, con `mainBarPin="always"` y `mainBarLabel`. No es un pie de la app.
-- Zona de pruebas: `AbAsideLayout`. Un panel desde 1180px. `asideBelow="inline-in-main"` lo une al desplazamiento del principal de 768px a 1179px. `asideDrawerAt="mobile"` convierte ese mismo elemento en un cajón a la derecha por debajo de 768px.
+- Zona de pruebas: `AbAsideLayout`. Un panel desde 1180px. `asideBelow="inline-in-main"` lo une al desplazamiento del panel principal de 768px a 1179px. `asideDrawerAt="mobile"` convierte ese mismo elemento en un cajón a la derecha por debajo de 768px.
 - Globo por debajo de 768px: `AbDrawerList`, `side="bottom"`, enlaces de idioma de verdad. Desde 768px el globo es un menú.
 - Barra lateral y pie de la app: omitidos, así que 0px.
 
@@ -241,11 +241,11 @@ Welcome ya está en este marco (`pageName="welcome"`).
 
 ## Qué hacer, qué no, y la lista de comprobación
 
-- Pon el chrome en `header`, `mainHeader`, `mainBar`, `asideHeader`, `asideBar`, `navBar` o `footer`. No construyas una barra con `position: fixed`.
+- Pon los elementos de interfaz (barras, encabezados) en `header`, `mainHeader`, `mainBar`, `asideHeader`, `asideBar`, `navBar` o `footer`. No construyas una barra con `position: fixed`.
 - Omite un hueco vacío, o pasa `null`. No renderices un `<div>` vacío para reservar espacio.
 - Desplázate con `scrollToAbSection(id, { container })`. No llames a `window.scrollTo` y no escuches el desplazamiento de `window`.
 - Usa `AbDrawer` con el ámbito dueño de la interfaz. No cubras el viewport con `position: fixed` para un cajón regional.
-- Deja la fila de la cuadrícula en `auto`. No codifiques a mano una altura de barra (`64px`, `--ab-app-bar-height`).
+- Deja la fila de la cuadrícula en `auto`. No fijes en el código una altura de barra (`64px`, `--ab-app-bar-height`).
 - Pon `min-height: 0` en un hijo de cuadrícula o de flex que deba desplazarse. No te fíes solo de `100vh`.
 
 Antes de abrir una pull request:
@@ -253,7 +253,7 @@ Antes de abrir una pull request:
 - La página usa `AbAppLayout` y `AbMainLayout`, y `AbAsideLayout` cuando tiene un esquema.
 - El documento nunca se desplaza. Solo se desplazan los paneles, y lo hacen por separado.
 - Un encabezado, una barra o un pie vacíos miden 0px.
-- Sin chrome de página en `position: fixed`, sin listener de desplazamiento en `window`, sin una altura de barra codificada a mano.
+- Sin elementos de interfaz en `position: fixed`, sin listener de desplazamiento en `window`, sin una altura de barra fijada en el código.
 - Los cajones usan el `scope` y el `side` correctos, atrapan el foco, se cierran con Escape y el velo, y respetan el movimiento reducido y el respaldo sin JavaScript.
 - Comprobado a 390, 768, 1180 y 1920, en claro y en oscuro.
 - Las etiquetas nuevas existen para en, fr, es y ru.
