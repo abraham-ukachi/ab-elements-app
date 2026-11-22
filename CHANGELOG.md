@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.30](https://github.com/abraham-ukachi/ab-elements-app/compare/v0.2.29...v0.2.30) (2026-11-22)
+
+* :sparkles: Add a build-time search index for English, French, Spanish and Russian, served as static JSON at `/api/search/<locale>`
+* :lock: Fail the build when a locale snapshot is missing, invalid, or larger than 150 KB gzip
+* :globe_with_meridians: Tag a docs hit with the language of the file that was indexed, and clear the English fallback mark when a translation is added
+* :arrow_up: Depend on `@zbsearch/stemmers` so each locale index can stem its own language
+* :white_check_mark: Test indexing, heading anchors, fallback tagging, stemmers and the size gate
+
 ### [0.2.29](https://github.com/abraham-ukachi/ab-elements-app/compare/v0.2.28...v0.2.29) (2026-11-12)
 
 * :memo: Write the theming, icons and fonts, and layout-rule guides against the published package APIs, with the layout figures in `.github/layout/`
