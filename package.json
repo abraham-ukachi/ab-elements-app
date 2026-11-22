@@ -1,6 +1,6 @@
 {
   "name": "ab-elements-app",
-  "version": "0.2.29",
+  "version": "0.2.30",
   "description": "abElements is the home of every Ab package: docs, live examples, and an installable PWA, built with the same packages it documents.",
   "private": true,
   "homepage": "https://ab-elements.vercel.app/",
@@ -31,7 +31,10 @@
   "scripts": {
     "postinstall": "fumadocs-mdx",
     "props:extract": "node --experimental-strip-types scripts/extract-props.mts",
-    "prebuild": "node --experimental-strip-types scripts/extract-props.mts && node --experimental-strip-types scripts/changelog-gate.mts",
+    "search:index": "node --experimental-strip-types scripts/build-search-index.mts",
+    "search:gate": "node --experimental-strip-types scripts/search-index-gate.mts",
+    "predev": "node --experimental-strip-types scripts/build-search-index.mts",
+    "prebuild": "node --experimental-strip-types scripts/extract-props.mts && node --experimental-strip-types scripts/changelog-gate.mts && node --experimental-strip-types scripts/build-search-index.mts && node --experimental-strip-types scripts/search-index-gate.mts",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -49,6 +52,7 @@
   "packageManager": "pnpm@11.3.0",
   "dependencies": {
     "@types/mdx": "2.0.14",
+    "@zbsearch/stemmers": "4.0.1",
     "ab-nextjs-animations": "0.2.6",
     "ab-nextjs-components": "0.7.1",
     "ab-nextjs-core": "0.2.4",
@@ -64,6 +68,7 @@
     "next-intl": "^4.14.9",
     "react": "19.3.0",
     "react-dom": "19.3.0",
+    "zbsearch": "4.0.1",
     "zod": "4.6.7"
   },
   "devDependencies": {
@@ -76,6 +81,7 @@
     "chrome-launcher": "1.2.2",
     "eslint": "^9.39.5",
     "eslint-config-next": "16.3.4",
+    "github-slugger": "2.0.0",
     "lighthouse": "13.6.0",
     "tailwindcss": "^4.3.3",
     "ts-morph": "26.0.0",

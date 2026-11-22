@@ -1,7 +1,7 @@
 /* 
 * @license MIT
 * ~~~~~~~~~~~~
-* ab-elements-app
+* ab-elements-app 
 * ~~~~~~~~~~~~
 * Copyright (c) 2026 Abraham Ukachi. The abElements Project.
 *
@@ -24,13 +24,13 @@
 * SOFTWARE.
 *
 * @project: ab-elements-app
-* @name: route
-* @file: app/api/search/route.ts
-* @type: route
+* @name: search-index-gate
+* @file: scripts/search-index-gate.mts
+* @type: build script (server only, never imported by a client component)
 * @authors: Abraham Ukachi <abrahamukachi@gmail.com>
 *
 * Example usage:
-*   1+|> GET /api/search  # → the static per-locale docs indexes
+*   1+|> node --experimental-strip-types scripts/search-index-gate.mts
 *    -|>
 *
 */
@@ -43,18 +43,15 @@
 */
 
 
-// 🔎 The docs search index (0.2.24): fumadocs-core's build-time index of every docs page, one per locale (the
-// loader's i18n config), exported as static JSON at build time (`staticGET`, no search server at runtime) 📦.
-// The client side (the shell's search drawer querying it) comes with the search UI.
+// 🚦 prebuild (0.2.30): fail the build when a locale snapshot is missing, invalid, or over 150 KB gzip.
+//    There is no warn switch. CI leaves this strict.
 
-// import fumadocs' search server helper 🔎
-import { createFromSource } from 'fumadocs-core/search/server';
-// import the docs source 📚
-import { source } from '@/lib/source';
+// import the gate 🚦
+import { assertSearchIndex } from '../lib/search-gate.ts';
 
 
-// 🧊 built once at build time, never revalidated
-export const revalidate = false;
+// 🚦 read data/search and throw on the first problem
+const report = assertSearchIndex();
 
-// 📦 `GET /api/search` = the exported per-locale indexes (static)
-export const { staticGET: GET } = createFromSource(source);
+// ✅ one line so the CI log shows the gate ran
+console.log(`search-index-gate: ${report.locales.map((item) => `${item.locale}=${item.gzipBytes}`).join(' ')}`);
