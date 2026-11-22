@@ -123,6 +123,6 @@ describe('docs content 0.2.27 📚', () => {
   it('🔭 quick start still ends on "Keep it accessible"', () => {
     const text = read('quick-start.mdx');
     const headings = [...text.matchAll(/^#{2,4} .+$/gm)].map((match) => match[0]);
-    expect(headings.at(-1)).toBe('### Keep it accessible');
+    expect(headings.at(-1)).toBe('### Keep it accessible [#keep-it-accessible]');
   });
 });

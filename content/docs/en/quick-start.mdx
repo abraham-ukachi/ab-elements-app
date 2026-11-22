@@ -4,7 +4,7 @@ description: "Build a first AbElements page: a panes layout, a main pane and an 
 icon: bolt
 ---
 
-## Create the layout
+## Create the layout [#create-the-layout]
 
 `AbAppLayout` from **ab-nextjs-core** is the page. `orientation` is required. `variant="panes"` is the docs shell: the document does not scroll, and the main pane, the aside and the sidebar each scroll on their own. An empty header, footer or bar slot is 0px tall.
 
@@ -24,7 +24,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
 Pass `header`, `sideBar`, `navBar` and `footer` when those slots have UI. Leave a slot out and it takes no space.
 
-## Add a main pane
+## Add a main pane [#add-a-main-pane]
 
 `AbMainLayout` is the article. Give it `id="main"` when that element is the skip-link target. `mainHeader` and `mainBar` are the pane's own slots, separate from the app header and the bottom bar.
 
@@ -40,7 +40,7 @@ export default function Page() {
 }
 ```
 
-## Add an outline
+## Add an outline [#add-an-outline]
 
 `useAbScrollSpy` from **ab-nextjs-hooks** reports which heading is current. On a panes layout the scroll root is the main pane (`useAbPage().mainScrollElement` from **ab-nextjs-core**), not the window. `scrollToAbSection` scrolls that same container.
 
@@ -66,6 +66,6 @@ export function Outline() {
 
 Call `scrollToAbSection(id, { container: mainScrollElement })` when a control should move the pane. A plain `href="#id"` still works without JavaScript.
 
-### Keep it accessible
+### Keep it accessible [#keep-it-accessible]
 
 Every outline link points at a real heading id, so it works without JavaScript too. The current link uses `aria-current="location"`. One `h1` per page is enough; the outline starts at `h2`.

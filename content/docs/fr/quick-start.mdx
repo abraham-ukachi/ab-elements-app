@@ -1,0 +1,71 @@
+---
+title: Démarrage rapide
+description: "Construisez une première page AbElements : une mise en page en volets, un volet principal et un plan qui suit ce volet."
+icon: bolt
+---
+
+## Créer la mise en page [#create-the-layout]
+
+`AbAppLayout`, dans **ab-nextjs-core**, est la page. `orientation` est obligatoire. `variant="panes"` est le shell de la documentation : le document ne défile pas, et le volet principal, le panneau latéral et la barre latérale défilent chacun de leur côté. Un emplacement d’en-tête, de pied de page ou de barre laissé vide mesure 0px de haut.
+
+L’import ci-dessous est la mise en page client. Un jumeau serveur se trouve dans `ab-nextjs-core/server/ab-app-layout`, avec les mêmes emplacements.
+
+```tsx title="app/layout.tsx"
+import AbAppLayout from 'ab-nextjs-core/ab-app-layout';
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <AbAppLayout orientation="vertical" variant="panes" pageName="docs">
+      {children}
+    </AbAppLayout>
+  );
+}
+```
+
+Passez `header`, `sideBar`, `navBar` et `footer` lorsque ces emplacements ont une interface. Omettez un emplacement et il n’occupe aucun espace.
+
+## Ajouter un volet principal [#add-a-main-pane]
+
+`AbMainLayout` est l’article. Donnez-lui `id="main"` lorsque cet élément est la cible du lien d’évitement. `mainHeader` et `mainBar` sont les emplacements propres au volet, distincts de l’en-tête de l’application et de la barre inférieure.
+
+```tsx title="app/page.tsx"
+import AbMainLayout from 'ab-nextjs-core/server/ab-main-layout';
+
+export default function Page() {
+  return (
+    <AbMainLayout id="main" orientation="vertical" pageName="docs">
+      <h1>Hello AbElements</h1>
+    </AbMainLayout>
+  );
+}
+```
+
+## Ajouter un plan [#add-an-outline]
+
+`useAbScrollSpy`, dans **ab-nextjs-hooks**, indique quel titre est actif. Dans une mise en page en volets, la racine du défilement est le volet principal (`useAbPage().mainScrollElement`, dans **ab-nextjs-core**), et non la fenêtre. `scrollToAbSection` fait défiler ce même conteneur.
+
+```tsx title="app/outline.tsx"
+'use client';
+
+import { useAbPage } from 'ab-nextjs-core/ab-page-provider';
+import { scrollToAbSection, useAbScrollSpy } from 'ab-nextjs-hooks/useAbScrollSpy';
+
+const ids = ['create-the-layout', 'add-a-main-pane'];
+
+export function Outline() {
+  const { mainScrollElement } = useAbPage();
+  const activeId = useAbScrollSpy(ids, { root: mainScrollElement });
+
+  return (
+    <a href={`#${activeId ?? ids[0]}`} aria-current={activeId ? 'location' : undefined}>
+      On this page
+    </a>
+  );
+}
+```
+
+Appelez `scrollToAbSection(id, { container: mainScrollElement })` lorsqu’un contrôle doit déplacer le volet. Un simple `href="#id"` fonctionne encore sans JavaScript.
+
+### Garantir l’accessibilité [#keep-it-accessible]
+
+Chaque lien du plan pointe vers l’identifiant d’un vrai titre, il fonctionne donc aussi sans JavaScript. Le lien actif utilise `aria-current="location"`. Un seul `h1` par page suffit ; le plan commence au `h2`.

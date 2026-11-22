@@ -4,13 +4,13 @@ description: "Load the self-hosted faces and draw AbIcons with AbIcon, without a
 icon: match_case
 ---
 
-## Overview
+## Overview [#overview]
 
 **ab-nextjs-fonts** ships the faces as files: Inter for body text, Mulish for titles, Roboto Mono for code, plus Quicksand, Roboto and Zilla Slab. A page does not wait on a third-party stylesheet, and the text does not jump when the face arrives.
 
 **ab-nextjs-icons** is the artwork. **ab-nextjs-components** draws it. `AbIcon` takes a name, an optional SVG, a variant and a weight. An unregistered name falls back to a Material Symbols ligature and warns in development. Register the names a screen uses so that fallback never shows.
 
-## Font classes
+## Font classes [#font-classes]
 
 The package root exports a class-name constant per family. `interStyles.regular` is the string `font-inter-regular`.
 
@@ -37,7 +37,7 @@ Roboto Mono is licensed under the SIL Open Font License 1.1, included with the p
   Each family also has a `styles.css` of `@font-face` rules. Fonts <PackageVersion name="ab-nextjs-fonts" /> does not publish an `exports` map, so those subpaths are files on disk, not export-surface keys. The [Fonts](/docs/packages/fonts) page lists them. Import only the families you use.
 </Callout>
 
-## Draw an icon
+## Draw an icon [#draw-an-icon]
 
 `AbIcon` is the component. `name` is the snake_case AbIcons name (`home`, `search`, `palette`). `variant` is `outlined` (the default) or `filled`. `weight` is 100 to 700 for outlined strokes. The default weight is 200. Omit `label` and the icon is decorative.
 
@@ -53,7 +53,7 @@ export function HomeMark() {
 
 The component looks up markup in this order: the `svg` prop, then the registry, then the font fallback. Pass `svg` when a screen should ship only that glyph. The per-icon module that produces that value is documented on the [Icons](/docs/packages/icons) page. Icons <PackageVersion name="ab-nextjs-icons" /> does not publish an `exports` map, so this guide does not show that module as a sample import.
 
-## Register a set
+## Register a set [#register-a-set]
 
 `AbIconRegistrar` is the server-safe way to register many glyphs once, above the tree that draws them. It renders nothing. The value is a map of names to SVG data (`AbIconSvgData`, exported from the same `ab-icon` entry).
 
@@ -75,7 +75,7 @@ export function IconRoot({ children }: { children: React.ReactNode }) {
 
 Fill `icons` from the per-icon modules the Icons page documents. A name that is missing from the map still draws, as a font ligature, until you add it. This site registers the shell glyphs that way so the sidebar, the drawers and the theme button never use that fallback.
 
-## CSS masks
+## CSS masks [#css-masks]
 
 The icon package also ships a stylesheet of CSS masks (`abicon`, `abicon-filled`, `abicon-w300`). That file is not an `exports` key in icons <PackageVersion name="ab-nextjs-icons" />. Use `AbIcon` in React. Use the mask classes only where the [Icons](/docs/packages/icons) page already shows them, for a page that is not React.
 

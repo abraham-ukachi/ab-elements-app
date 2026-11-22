@@ -1,0 +1,82 @@
+---
+title: "Иконки и шрифты"
+description: "Подключите самостоятельно размещённые шрифты и рисуйте AbIcons через AbIcon, без отката к веб-шрифту."
+icon: match_case
+---
+
+## Обзор [#overview]
+
+**ab-nextjs-fonts** поставляет гарнитуры файлами: Inter для основного текста, Mulish для заголовков, Roboto Mono для кода, а также Quicksand, Roboto и Zilla Slab. Страница не ждёт стороннюю таблицу стилей, и текст не прыгает, когда шрифт загружается.
+
+**ab-nextjs-icons** — это рисунок. **ab-nextjs-components** его выводит. `AbIcon` принимает имя, необязательный SVG, вариант и насыщенность. Незарегистрированное имя откатывается к лигатуре Material Symbols и предупреждает в разработке. Зарегистрируйте имена, которые использует экран, чтобы этот запасной вариант никогда не показывался.
+
+## Классы шрифтов [#font-classes]
+
+Корень пакета экспортирует константу имени класса для каждой гарнитуры. `interStyles.regular` — это строка `font-inter-regular`.
+
+```tsx title="app/layout.tsx"
+import { interStyles, mulishStyles, robotoMonoStyles } from 'ab-nextjs-fonts';
+
+export default function Layout({ children }: { children: React.ReactNode }) {
+  return (
+    <body className={interStyles.regular}>
+      <h1 className={mulishStyles.extrabold}>{children}</h1>
+      <code className={robotoMonoStyles.regular}>pnpm add ab-nextjs-fonts</code>
+    </body>
+  );
+}
+```
+
+Та же форма есть у `quicksandStyles`, `robotoStyles` и `zillaSlabStyles`. Насыщенность, которую гарнитура не поставляет, просто отсутствует на объекте. Inter и Mulish идут от extralight до black. Roboto Mono — от light до bold.
+
+Этот сайт направляет три токена темы на три из них: `--ab-font-body` (Inter), `--ab-font-title` (Mulish) и `--ab-font-code` (Roboto Mono). В новом CSS предпочитайте токены. Используйте константы классов, когда одному элементу нужна насыщенность, которую токен не задаёт.
+
+Roboto Mono распространяется по лицензии SIL Open Font License 1.1, она приложена к пакету.
+
+<Callout type="note" title="Таблицы стилей шрифтов">
+  У каждой гарнитуры также есть `styles.css` с правилами `@font-face`. Fonts <PackageVersion name="ab-nextjs-fonts" /> не публикует карту `exports`, поэтому эти подпути — файлы на диске, а не ключи поверхности экспорта. Страница [Fonts](/docs/packages/fonts) их перечисляет. Импортируйте только те гарнитуры, которые вы используете.
+</Callout>
+
+## Нарисуйте иконку [#draw-an-icon]
+
+`AbIcon` — это компонент. `name` — имя AbIcons в snake_case (`home`, `search`, `palette`). `variant` — `outlined` (по умолчанию) или `filled`. `weight` от 100 до 700 задаёт толщину обводки для `outlined`. Насыщенность по умолчанию — 200. Опустите `label`, и иконка станет декоративной.
+
+```tsx title="app/icon.tsx"
+import AbIcon from 'ab-nextjs-components/ab-icon';
+
+export function HomeMark() {
+  return <AbIcon name="home" variant="outlined" weight={200} label="Home" />;
+}
+```
+
+`filled` — прежний булев флаг для `variant="filled"`. Залитые иконки остаются сплошными. Насыщенность обводки они не принимают.
+
+Компонент ищет разметку в таком порядке: проп `svg`, затем реестр, затем запасной шрифт. Передавайте `svg`, когда экран должен поставить только этот глиф. Модуль отдельной иконки, который даёт это значение, описан на странице [Icons](/docs/packages/icons). Icons <PackageVersion name="ab-nextjs-icons" /> не публикует карту `exports`, поэтому это руководство не показывает тот модуль как пример импорта.
+
+## Зарегистрируйте набор [#register-a-set]
+
+`AbIconRegistrar` — безопасный на сервере способ зарегистрировать много глифов один раз, выше дерева, которое их рисует. Он ничего не рендерит. Значение — карта имён к данным SVG (`AbIconSvgData`, экспортируется из той же точки входа `ab-icon`).
+
+```tsx title="app/icons.tsx"
+import AbIcon, { AbIconRegistrar, type AbIconSvgData } from 'ab-nextjs-components/ab-icon';
+
+const icons: Record<string, AbIconSvgData> = {};
+
+export function IconRoot({ children }: { children: React.ReactNode }) {
+  return (
+    <>
+      <AbIconRegistrar icons={icons} />
+      <AbIcon name="search" label="Search" />
+      {children}
+    </>
+  );
+}
+```
+
+Заполните `icons` из модулей отдельных иконок, которые описывает страница Icons. Имя, которого нет в карте, всё равно отрисуется лигатурой шрифта, пока вы его не добавите. Этот сайт так регистрирует глифы оболочки, чтобы боковая панель, шторки и кнопка темы никогда не использовали этот запасной вариант.
+
+## CSS-маски [#css-masks]
+
+Пакет иконок также поставляет таблицу стилей CSS-масок (`abicon`, `abicon-filled`, `abicon-w300`). Этот файл не является ключом `exports` в icons <PackageVersion name="ab-nextjs-icons" />. В React используйте `AbIcon`. Классы масок используйте только там, где их уже показывает страница [Icons](/docs/packages/icons), для страницы, которая не на React.
+
+`getAbIconSvg`, `abIconNames` и `abIconWeights` — помощники для скрипта сборки. Они находятся в barrel-файле (index) иконок пакета, а это тот же вид пути: файл, который поставляет пакет, а не ключ экспорта. Вызов есть на странице Icons.

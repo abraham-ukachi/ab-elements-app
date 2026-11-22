@@ -1,0 +1,111 @@
+---
+title: "Temas y modo oscuro"
+description: "Elige claro, oscuro o sistema con los tokens publicados, el script sin destello y el interruptor de tema compartido."
+icon: palette
+---
+
+## Resumen [#overview]
+
+Cada pantalla de Ab usa un solo conjunto de tokens de color y de tipografía, de **ab-nextjs-theme**. Claro y oscuro son variables CSS en la página. La clase de `<html>` decide qué valores ves.
+
+El hook que guarda la elección, y el script que la aplica antes del primer renderizado, están en **ab-nextjs-hooks**. El control segmentado está en **ab-nextjs-components**. Esta guía une los tres. Los valores de color están en la página [Theme](/docs/packages/theme).
+
+## Tokens [#tokens]
+
+Lee las variables. No copies valores hexadecimales en un componente.
+
+```css title="app/globals.css"
+body {
+  background: var(--ab-color-bg);
+  color: var(--ab-color-text);
+  font-family: var(--ab-font-body);
+}
+
+h1 { font-family: var(--ab-font-title); }
+code { font-family: var(--ab-font-code); }
+a { color: var(--ab-link-color); }
+```
+
+El fondo de página claro es `#FFF8F5`. El fondo de página oscuro es `#19120C`. El texto de cuerpo es `#211A16` en claro y `#F4ECE5` en oscuro. Los enlaces y los botones rellenos usan el bronce que supera WCAG AA sobre el fondo claro. El salvia solo sirve como una marca de estado pequeña.
+
+Los artículos de la documentación añaden la clase `ab-prose`. Esa clase da estilo a los encabezados, las listas, los enlaces y el código en línea a partir de los mismos tokens.
+
+`material-theme.json` es la fuente de color de Material (`light`, `dark`, y los esquemas de contraste medio y alto). El `themeColor` del viewport puede importarlo. La interfaz del día a día debe usar las variables CSS.
+
+<Callout type="note" title="Importación de la hoja de estilos">
+  Importa la hoja de estilos del tema una sola vez, antes de los estilos de los componentes, como muestra la página [Theme](/docs/packages/theme). Theme <PackageVersion name="ab-nextjs-theme" /> no publica un mapa `exports` en `package.json`, así que esa subruta es un archivo que el paquete incluye, no una clave de la superficie de exportación. Esta guía no la repite como import de ejemplo.
+</Callout>
+
+## Sin destello [#no-flash]
+
+`getAbThemeScript` devuelve una cadena. Ponla en `<head>` para que el primer renderizado ya tenga la clase correcta. La clave de almacenamiento es `theme`. Un valor guardado puede ser `light`, `dark` o `system`. `system` sigue `prefers-color-scheme`.
+
+```tsx title="app/layout.tsx"
+import { getAbThemeScript } from 'ab-nextjs-hooks/abThemeScript';
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en">
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: getAbThemeScript({ defaultTheme: 'system' }) }} />
+      </head>
+      <body>{children}</body>
+    </html>
+  );
+}
+```
+
+`abThemeScript` es esa llamada con las opciones predeterminadas (`defaultTheme: 'light'`). Este sitio pasa `system`, que es lo que obtiene quien lee hasta que elige.
+
+El script define `class`, `data-theme` (el tema resuelto, `light` o `dark`), `data-theme-mode` (la elección, incluido `system`) y `color-scheme`. Si el almacenamiento está bloqueado, el respaldo es el sistema operativo.
+
+## Leer y cambiar el modo [#read-and-change-the-mode]
+
+`useAbThemeMode` devuelve la elección, el tema que se está pintando de verdad y un setter. Es seguro en el servidor: no lee `localStorage` durante el render.
+
+```tsx title="app/theme-toggle.tsx"
+'use client';
+
+import { useAbThemeMode } from 'ab-nextjs-hooks/useAbTheme';
+
+export function ThemeLabel() {
+  const { mode, resolvedTheme, setMode } = useAbThemeMode('system');
+  return (
+    <button type="button" onClick={() => setMode(resolvedTheme === 'dark' ? 'light' : 'dark')}>
+      {mode}
+    </button>
+  );
+}
+```
+
+`resolvedTheme` es `light` o `dark`. `mode` es lo que eligió quien lee, incluido `system`. `useAbTheme` es la tupla anterior, `[mode, setMode]`, de la misma entrada.
+
+## Un interruptor para toda la página [#one-toggle-for-the-whole-page]
+
+`AbThemeToggle` es el control segmentado (o un solo botón de icono). Envuelve la página en `AbThemeModeProvider` cuando más de un interruptor deben mantenerse sincronizados. Sin el provider, cada interruptor guarda su propio estado.
+
+```tsx title="app/theme-bar.tsx"
+'use client';
+
+import AbThemeModeProvider from 'ab-nextjs-components/ab-theme-mode';
+import AbThemeToggle from 'ab-nextjs-components/ab-theme-toggle';
+
+export function ThemeBar() {
+  return (
+    <AbThemeModeProvider defaultMode="system">
+      <AbThemeToggle
+        variant="segmented"
+        labels={{ group: 'Theme', light: 'Light', dark: 'Dark', system: 'System' }}
+      />
+    </AbThemeModeProvider>
+  );
+}
+```
+
+`variant="icon"` es la forma de un solo botón. `labels.switchTo` nombra el modo al que un clic va a cambiar. Los glifos son `light_mode`, `dark_mode` y `brightness_auto`. Registra esos iconos como describe la guía [Iconos y fuentes](/docs/guides/icons-fonts), o el botón recurre a una ligadura de fuente.
+
+## Qué dejar fuera por ahora [#what-to-leave-alone]
+
+El color de acento, la densidad y una escala de tamaño de fuente aún no son tokens. No añadas un segundo archivo de tema en la app. Cuando el paquete los publique, esta página los usará.
+
+El movimiento reducido va aparte. `useAbReducedMotion`, de `ab-nextjs-hooks/useAbReducedMotion`, lee `prefers-reduced-motion`. No cambia el esquema de color.

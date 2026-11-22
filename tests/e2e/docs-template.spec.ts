@@ -122,9 +122,9 @@ for (const scheme of THEMES) {
       });
 
       test('🔗 Edit / Report / Source point at the content file', async ({ page }) => {
-        // 🏳️ quick-start is English-only, so fr / es / ru link the English file
+        // 🌍 quick start has a file in every locale, so Edit / Source open that locale's MDX
         await openPage(page, `${l.prefix}/docs/quick-start`);
-        const file = 'content/docs/en/quick-start.mdx';
+        const file = `content/docs/${l.locale}/quick-start.mdx`;
         await expect(extra(page, 'edit')).toHaveAttribute('href', new RegExp(`/edit/main/${file}$`));
         await expect(extra(page, 'source')).toHaveAttribute('href', new RegExp(`/blob/main/${file}$`));
         const report = new URL((await extra(page, 'report').getAttribute('href'))!);

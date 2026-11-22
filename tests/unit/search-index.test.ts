@@ -184,11 +184,37 @@ describe('search documents 📚', () => {
         expect(sections.every((record) => record.isFallback === choice.isFallback && record.contentLocale === choice.contentLocale)).toBe(true);
       }
     }
-    // ✅ the two pages that already have a translation
-    expect(existsSync(join(root, 'content/docs/fr/installation.mdx'))).toBe(true);
-    expect(resolveDocContent(root, 'fr', 'installation.mdx').isFallback).toBe(false);
-    // 🏳️ quick start is still English until a file lands
-    expect(resolveDocContent(root, 'fr', 'quick-start.mdx').isFallback).toBe(true);
+    // ✅ the translated pages: introduction, installation, the quick start and the three guides
+    const translated = [
+      'index.mdx',
+      'installation.mdx',
+      'quick-start.mdx',
+      'guides/theming-dark-mode.mdx',
+      'guides/icons-fonts.mdx',
+      'guides/layout-rule.mdx',
+    ];
+    for (const locale of ['fr', 'es', 'ru'] as const) {
+      const pages = collectDocRecords(root, locale).filter((record) => record.recordType === 'page');
+      // 🏳️ 17 pages, 6 translated: these 11 package pages still fall back to English (was 15 before the four new files)
+      const fallback = [
+        '/docs/packages/animations',
+        '/docs/packages/components',
+        '/docs/packages/components/drawer',
+        '/docs/packages/core',
+        '/docs/packages/core/layouts',
+        '/docs/packages/fonts',
+        '/docs/packages/hooks',
+        '/docs/packages/hooks/scroll-spy',
+        '/docs/packages/i18n',
+        '/docs/packages/icons',
+        '/docs/packages/theme',
+      ];
+      expect(pages.filter((record) => record.isFallback).map((record) => record.url).sort(), locale).toEqual(fallback);
+      for (const file of translated) {
+        expect(existsSync(join(root, 'content/docs', locale, file)), `${locale} ${file}`).toBe(true);
+        expect(resolveDocContent(root, locale, file).isFallback, `${locale} ${file}`).toBe(false);
+      }
+    }
   });
 
   it('flips isFallback when a translated file appears', () => {
@@ -214,6 +240,47 @@ describe('search documents 📚', () => {
       expect(after.find((record) => record.recordType === 'section')?.isFallback).toBe(false);
     } finally {
       rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+  it('keeps the sample heading ids in every locale', () => {
+    // ⚓ the ids the code samples cite, pinned with fumadocs `[#id]` in en, fr, es and ru
+    const pinned = {
+      'quick-start': ['create-the-layout', 'add-a-main-pane'],
+      'guides/layout-rule': ['anatomy-and-slots', 'what-scrolls'],
+    } as const;
+    for (const locale of SEARCH_LOCALES) {
+      const records = collectDocRecords(root, locale);
+      for (const [slug, ids] of Object.entries(pinned)) {
+        const prefix = `${docsUrl(slug)}#`;
+        const anchors = records
+          .filter((record) => record.recordType === 'section' && record.url.startsWith(prefix))
+          .map((record) => record.url.slice(prefix.length));
+        const page = source.getPage(slug.split('/'), locale);
+        const toc = docsTocItems(page!.data.toc).map((item) => item.id);
+        for (const id of ids) {
+          expect(anchors, `${locale} ${slug}`).toContain(id);
+          expect(toc, `${locale} ${slug}`).toContain(id);
+        }
+      }
+    }
+  });
+
+  it('keeps translated guide heading ids identical to English', () => {
+    // ⚓ every h2/h3 on the quick start and the three guides is pinned to the English slug
+    const slugs = ['quick-start', 'guides/theming-dark-mode', 'guides/icons-fonts', 'guides/layout-rule'];
+    const english = collectDocRecords(root, 'en');
+    for (const locale of ['fr', 'es', 'ru'] as const) {
+      const records = collectDocRecords(root, locale);
+      for (const slug of slugs) {
+        const prefix = `${docsUrl(slug)}#`;
+        const ids = (rows: ReturnType<typeof collectDocRecords>) => rows
+          .filter((record) => record.recordType === 'section' && record.url.startsWith(prefix))
+          .map((record) => record.url.slice(prefix.length));
+        const enIds = ids(english);
+        expect(enIds.length, slug).toBeGreaterThan(1);
+        expect(ids(records), `${locale} ${slug}`).toEqual(enIds);
+      }
     }
   });
 

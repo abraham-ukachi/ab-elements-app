@@ -1,0 +1,71 @@
+---
+title: Inicio rápido
+description: "Construye una primera página de AbElements: un diseño de paneles, un panel principal y un esquema que sigue a ese panel."
+icon: bolt
+---
+
+## Crear el diseño [#create-the-layout]
+
+`AbAppLayout`, de **ab-nextjs-core**, es la página. `orientation` es obligatorio. `variant="panes"` es el shell de la documentación: el documento no se desplaza, y el panel principal, el panel lateral y la barra lateral se desplazan cada uno por su cuenta. Un hueco de encabezado, pie o barra que dejes vacío mide 0px de alto.
+
+El import de abajo es el diseño de cliente. Hay un gemelo de servidor en `ab-nextjs-core/server/ab-app-layout`, con los mismos huecos.
+
+```tsx title="app/layout.tsx"
+import AbAppLayout from 'ab-nextjs-core/ab-app-layout';
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <AbAppLayout orientation="vertical" variant="panes" pageName="docs">
+      {children}
+    </AbAppLayout>
+  );
+}
+```
+
+Pasa `header`, `sideBar`, `navBar` y `footer` cuando esos huecos tengan interfaz. Si omites un hueco, no ocupa espacio.
+
+## Añadir un panel principal [#add-a-main-pane]
+
+`AbMainLayout` es el artículo. Dale `id="main"` cuando ese elemento sea el destino del enlace de salto. `mainHeader` y `mainBar` son los huecos propios del panel, distintos del encabezado de la aplicación y de la barra inferior.
+
+```tsx title="app/page.tsx"
+import AbMainLayout from 'ab-nextjs-core/server/ab-main-layout';
+
+export default function Page() {
+  return (
+    <AbMainLayout id="main" orientation="vertical" pageName="docs">
+      <h1>Hello AbElements</h1>
+    </AbMainLayout>
+  );
+}
+```
+
+## Añadir un esquema [#add-an-outline]
+
+`useAbScrollSpy`, de **ab-nextjs-hooks**, indica qué encabezado está activo. En un diseño de paneles, la raíz del desplazamiento es el panel principal (`useAbPage().mainScrollElement`, de **ab-nextjs-core**), no la ventana. `scrollToAbSection` desplaza ese mismo contenedor.
+
+```tsx title="app/outline.tsx"
+'use client';
+
+import { useAbPage } from 'ab-nextjs-core/ab-page-provider';
+import { scrollToAbSection, useAbScrollSpy } from 'ab-nextjs-hooks/useAbScrollSpy';
+
+const ids = ['create-the-layout', 'add-a-main-pane'];
+
+export function Outline() {
+  const { mainScrollElement } = useAbPage();
+  const activeId = useAbScrollSpy(ids, { root: mainScrollElement });
+
+  return (
+    <a href={`#${activeId ?? ids[0]}`} aria-current={activeId ? 'location' : undefined}>
+      On this page
+    </a>
+  );
+}
+```
+
+Llama a `scrollToAbSection(id, { container: mainScrollElement })` cuando un control deba mover el panel. Un `href="#id"` simple sigue funcionando sin JavaScript.
+
+### Mantenlo accesible [#keep-it-accessible]
+
+Cada enlace del esquema apunta al id de un encabezado real, así que también funciona sin JavaScript. El enlace actual usa `aria-current="location"`. Basta un `h1` por página; el esquema empieza en `h2`.

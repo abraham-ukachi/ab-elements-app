@@ -1,0 +1,71 @@
+---
+title: Быстрый старт
+description: "Соберите первую страницу AbElements: вёрстку из панелей, основную панель и оглавление, которое следует за этой панелью."
+icon: bolt
+---
+
+## Создайте вёрстку [#create-the-layout]
+
+`AbAppLayout` из **ab-nextjs-core** и есть страница. `orientation` обязателен. `variant="panes"` — это оболочка документации: документ не прокручивается, а основная панель, боковая колонка и боковая панель прокручиваются каждая сама по себе. Пустой слот шапки, подвала или панели имеет высоту 0px.
+
+Импорт ниже — клиентская вёрстка. Серверный двойник лежит в `ab-nextjs-core/server/ab-app-layout`, с теми же слотами.
+
+```tsx title="app/layout.tsx"
+import AbAppLayout from 'ab-nextjs-core/ab-app-layout';
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <AbAppLayout orientation="vertical" variant="panes" pageName="docs">
+      {children}
+    </AbAppLayout>
+  );
+}
+```
+
+Передавайте `header`, `sideBar`, `navBar` и `footer`, когда в этих слотах есть интерфейс. Пропустите слот — и он не займёт места.
+
+## Добавьте основную панель [#add-a-main-pane]
+
+`AbMainLayout` — это статья. Задайте `id="main"`, если этот элемент является целью ссылки для пропуска. `mainHeader` и `mainBar` — собственные слоты панели, отдельные от шапки приложения и нижней панели.
+
+```tsx title="app/page.tsx"
+import AbMainLayout from 'ab-nextjs-core/server/ab-main-layout';
+
+export default function Page() {
+  return (
+    <AbMainLayout id="main" orientation="vertical" pageName="docs">
+      <h1>Hello AbElements</h1>
+    </AbMainLayout>
+  );
+}
+```
+
+## Добавьте оглавление [#add-an-outline]
+
+`useAbScrollSpy` из **ab-nextjs-hooks** сообщает, какой заголовок сейчас активен. Во вёрстке из панелей корень прокрутки — основная панель (`useAbPage().mainScrollElement` из **ab-nextjs-core**), а не окно. `scrollToAbSection` прокручивает тот же контейнер.
+
+```tsx title="app/outline.tsx"
+'use client';
+
+import { useAbPage } from 'ab-nextjs-core/ab-page-provider';
+import { scrollToAbSection, useAbScrollSpy } from 'ab-nextjs-hooks/useAbScrollSpy';
+
+const ids = ['create-the-layout', 'add-a-main-pane'];
+
+export function Outline() {
+  const { mainScrollElement } = useAbPage();
+  const activeId = useAbScrollSpy(ids, { root: mainScrollElement });
+
+  return (
+    <a href={`#${activeId ?? ids[0]}`} aria-current={activeId ? 'location' : undefined}>
+      On this page
+    </a>
+  );
+}
+```
+
+Вызывайте `scrollToAbSection(id, { container: mainScrollElement })`, когда элемент управления должен сдвинуть панель. Обычный `href="#id"` по-прежнему работает без JavaScript.
+
+### Сохраните доступность [#keep-it-accessible]
+
+Каждая ссылка оглавления ведёт на id настоящего заголовка, поэтому она работает и без JavaScript. Текущая ссылка использует `aria-current="location"`. Одного `h1` на страницу достаточно; оглавление начинается с `h2`.
