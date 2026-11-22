@@ -155,6 +155,7 @@ test.describe('Welcome slides 🎞️', () => {
     await page.getByRole('button', { name: /^Language/ }).click();
     // pick French with the keyboard (focus the item + Enter) ⌨️
     const french = page.getByRole('menuitemradio', { name: 'Français' });
+    await expect(french).toBeVisible();
     await french.focus();
     await page.keyboard.press('Enter');
 
