@@ -51,6 +51,8 @@
 
 // import the filesystem helpers 📁
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
+// import `createRequire` so the build can read zbsearch's own package.json (no eval) 📦
+import { createRequire } from 'node:module';
 // import the path helpers 🧭
 import { dirname, join } from 'node:path';
 // import gzip (the size gate measures the compressed file) 💨
@@ -85,10 +87,11 @@ import { getAbPackageSymbols, getAbPackages, type AbPackage } from './packages.t
 import { loadChangelogs, type ChangelogDocument } from './changelog.ts';
 
 
-// 🧾 zbsearch schema. Full text is title, content and identifiers.
-//    section and description stay on the row for the drawer, but as enums so a repeated lede is not
-//    tokenized once per heading. urls and ids are enums for the same reason.
-//    Sorting stays off: hits come back by score, and the sorter's copy of every string blew the gzip budget.
+// 🧾 zbsearch schema. Full text is title, section, description, content and identifiers (all `string`).
+//    A heading row leaves `description` empty, so the page lede is not tokenized once per heading.
+//    id, url, group, record type, package name, kind, status and content locale are enums: each value stays
+//    one token, out of the word index. Sorting stays off: hits come back by score, and the sorter's copy
+//    of every string blew the gzip budget.
 export const SEARCH_SCHEMA = {
   id: 'enum', // 🆔 exact id, not tokenized
   url: 'enum', // 🔗 exact path, not tokenized
@@ -114,6 +117,30 @@ const SEARCH_CREATE = {
 
 // 🔢 the schema version written into every file
 const SCHEMA_VERSION = 1 as const;
+
+// 📦 resolve zbsearch the way Node resolves it for this file (build scripts and Vitest)
+const requireZbsearch = createRequire(import.meta.url);
+
+
+/**
+ * `installedZbsearchVersion` - the `version` in the installed zbsearch package.json 🔢
+ *
+ * Read at build time. The snapshot records it, so a later client can see which engine wrote the file.
+ *
+ * @returns { string }
+ */
+export function installedZbsearchVersion(): string {
+  // 📁 zbsearch's own package.json, not a copy of the number
+  const pkgPath = requireZbsearch.resolve('zbsearch/package.json');
+  // 📖 the version field
+  const pkg = JSON.parse(readFileSync(pkgPath, 'utf8')) as { version?: string };
+  // 🔢 the string
+  const version = String(pkg.version ?? '');
+  // 🚨 a missing version means the install is broken
+  if (!/^\d+\.\d+\.\d+/.test(version)) throw new Error(`search-index: zbsearch version "${version}" is not semver`);
+  // 🔢 what the snapshot writes
+  return version;
+}
 
 // 📏 a prop type longer than this is cut (the name is still whole)
 const PROP_TYPE_LIMIT = 80;
@@ -455,8 +482,8 @@ export function collectDocRecords(root: string, locale: AppLocale): SearchRecord
         url: `${url}#${heading.anchor}`,
         title: heading.text,
         section,
-      description: '',
-      content: heading.excerpt,
+        description: '',
+        content: heading.excerpt,
         group,
         recordType: 'section',
         packageName: parsed.packageName,
@@ -842,7 +869,7 @@ export function buildSearchFile(root: string, locale: AppLocale, records: readon
   return {
     locale,
     engine: 'zbsearch',
-    engineVersion: '4.0.1',
+    engineVersion: installedZbsearchVersion(),
     language,
     schemaVersion: SCHEMA_VERSION,
     suggestions,

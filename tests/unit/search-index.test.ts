@@ -49,7 +49,9 @@
 // import the test helpers 🧪
 import { describe, expect, it } from 'vitest';
 // import the filesystem helpers 📁
-import { existsSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+// import `createRequire` to read the installed zbsearch version the same way the indexer does 📦
+import { createRequire } from 'node:module';
 // import the path helpers 🧭
 import { join } from 'node:path';
 // import the temp directory 📁
@@ -76,6 +78,7 @@ import {
   collectSearchRecords,
   docPageSources,
   docsUrl,
+  installedZbsearchVersion,
   openSearchSnapshot,
   resolveDocContent,
 } from '@/lib/search-index';
@@ -301,6 +304,15 @@ describe('search snapshots 📦', () => {
     const russian = openSearchSnapshot('ru', files.ru.snapshot as RawData);
     expect(titlesFor(russian, 'установки').length).toBeGreaterThan(0);
     expect(titlesFor(russian, 'установка').length).toBeGreaterThan(0);
+  });
+
+  it('records the installed zbsearch version', () => {
+    // 📦 the version field of the package that is actually installed
+    const pkgPath = createRequire(import.meta.url).resolve('zbsearch/package.json');
+    const version = (JSON.parse(readFileSync(pkgPath, 'utf8')) as { version: string }).version;
+    // 🔢 the helper and every snapshot agree with that file
+    expect(installedZbsearchVersion()).toBe(version);
+    for (const locale of SEARCH_LOCALES) expect(files[locale].engineVersion).toBe(version);
   });
 
   it('suggests a near miss and stays quiet on an exact term', () => {
