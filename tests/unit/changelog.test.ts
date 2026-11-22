@@ -238,7 +238,7 @@ describe('changelog link safety 🔒', () => {
 
 describe('installed packages 🚦', () => {
   it('accepts the app and every installed package version', () => {
-    // 📚 today's node_modules, after the 2026-11-12 changelog releases
+    // 📚 today's node_modules (hooks 0.1.9; the other Ab packages are the 2026-11-12 releases)
     const audit = auditChangelogs(loadChangelogs());
     // ✅ nothing missing, Unreleased, or badly headed
     expect(audit.failures).toEqual([]);
@@ -248,7 +248,7 @@ describe('installed packages 🚦', () => {
       'ab-nextjs-icons@0.2.8',
       'ab-nextjs-animations@0.2.6',
       'ab-nextjs-theme@0.3.10',
-      'ab-nextjs-hooks@0.1.8',
+      'ab-nextjs-hooks@0.1.9',
       'ab-nextjs-core@0.2.4',
       'ab-nextjs-components@0.7.1',
       'ab-nextjs-i18n@0.1.0',

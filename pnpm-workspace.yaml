@@ -23,3 +23,8 @@ allowBuilds:
 #    icons 0.2.8 published 2026-11-12 06:31:09.969 Paris, safe to drop at or after 2026-11-13 06:32 Paris.
 #    hooks 0.1.8 published 2026-11-12 06:31:29.486 Paris, safe to drop at or after 2026-11-13 06:32 Paris.
 #    i18n 0.1.0 was never pinned (published 2026-10-03). 🌍
+# ⌨️ Nov 22 2026: hooks 0.1.9 is inside the one-day window (D33).
+#    published 2026-11-22T00:30:22.769Z (01:30:22.769 Paris).
+#    The pin stops being needed at 2026-11-23 01:30:22.769 Paris (publish time plus 24h).
+minimumReleaseAgeExclude:
+  - ab-nextjs-hooks@0.1.9 # D33: expires 2026-11-23 01:30:22.769 Paris

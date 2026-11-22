@@ -48,7 +48,7 @@
 *       on 2026-11-13: core 0.2.4, theme 0.3.10, fonts 0.2.8, components 0.7.1,
 *       animations 0.2.6, icons 0.2.8 and hooks 0.1.8. i18n 0.1.0 was never pinned. 🌍
 *       Each of those pins had three cases (exact version, locked version, still in date).
-*       With the list gone, those 21 cases are gone and only the empty-list guard remains.
+*       ⌨️ hooks 0.1.9 is pinned until 2026-11-23 01:30:22.769 Paris (24h after 00:30:22.769Z).
 */
 
 import { readFileSync } from 'node:fs'; // 📂
