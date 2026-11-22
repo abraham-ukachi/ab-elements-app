@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.31](https://github.com/abraham-ukachi/ab-elements-app/compare/v0.2.30...v0.2.31) (2026-11-22)
+
+* :globe_with_meridians: Translate the quick start and the theming, icons and fonts, and layout-rule guides into French, Spanish and Russian
+* :pushpin: Pin every heading on those pages to the English slug in English, French, Spanish and Russian
+* :white_check_mark: Clear the English search fallback for those four pages, from 15 fallback pages to 11 in each non-English locale
+* :pencil2: Say the Spanish layout counter is in the main pane
+* :white_check_mark: Wait for the welcome globe menu item before pressing Enter
+
 ### [0.2.30](https://github.com/abraham-ukachi/ab-elements-app/compare/v0.2.29...v0.2.30) (2026-11-22)
 
 * :sparkles: Add a build-time search index for English, French, Spanish and Russian, served as static JSON at `/api/search/<locale>`
