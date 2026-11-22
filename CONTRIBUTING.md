@@ -158,7 +158,7 @@ pnpm lint && pnpm build
 
 | Tool | Version | Where it's pinned |
 |:-----|:--------|:------------------|
-| [Node.js](https://nodejs.org) | **>= 24** | `engines.node` in [`package.json`](./package.json) (Vercel dropped Node 20.x) |
+| [Node.js](https://nodejs.org) | **26** (`26.x`) | `engines.node` in [`package.json`](./package.json). Vercel deploys the latest 26.x for builds and Functions. |
 | [pnpm](https://pnpm.io) | **11** (exactly `pnpm@11.3.0`) | `packageManager` in [`package.json`](./package.json); settings in [`pnpm-workspace.yaml`](./pnpm-workspace.yaml) |
 | [Git](https://git-scm.com) | any recent version | |
 
@@ -1676,7 +1676,7 @@ pnpm exec ab-nextjs-i18n check                 # exit 1 on missing keys / placeh
 
 ## Testing 🧪
 
-Unit tests run with [Vitest](https://vitest.dev) and live in `tests/unit` (`*.test.ts`). The [CI workflow](./.github/workflows/ci.yml) runs on every pull request and every push to `main` (Node.js 24, the pinned pnpm, `pnpm install --frozen-lockfile`). Every pull request must:
+Unit tests run with [Vitest](https://vitest.dev) and live in `tests/unit` (`*.test.ts`). The [CI workflow](./.github/workflows/ci.yml) runs on every pull request and every push to `main` (Node.js 26, the pinned pnpm, `pnpm install --frozen-lockfile`). Every pull request must:
 
 1. pass `pnpm lint`,
 2. pass `pnpm typecheck`,

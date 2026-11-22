@@ -89,6 +89,8 @@ import settings from 'ab-nextjs-icons/ab-icons/icons/settings';
 import brightness_auto from 'ab-nextjs-icons/ab-icons/icons/brightness_auto';
 // import the ONE theme engine every toggle shares (so the pill, the mobile icon & Settings never disagree) 🌗
 import { useAbThemeMode } from 'ab-nextjs-hooks/useAbTheme';
+// import the one search shortcut (hooks 0.1.9): ⌘K on Apple, Ctrl+K elsewhere ⌨️
+import { useAbHotkey } from 'ab-nextjs-hooks/useAbHotkey';
 // import the client translations & the localized pathname helper from `ab-nextjs-i18n` 🌐
 import { useAbTranslations } from 'ab-nextjs-i18n';
 import { localizeAbPathname } from 'ab-nextjs-i18n/config';
@@ -99,6 +101,8 @@ import { Link, usePathname } from '@/i18n/navigation';
 import abI18nConfig from '@/i18n/config';
 // import the rail preference (0.2.22) 🗂️
 import { useSidebarRail } from '@/lib/sidebar-rail';
+// import the shell's one search combo and its explicit input policy ⌨️
+import { DOCS_SEARCH_HOTKEY, docsSearchHotkeyOptions } from '@/lib/search-hotkey';
 // import the repo URL (the GitHub button) 🐙
 import { GITHUB_URL } from '@/lib/nav';
 
@@ -272,6 +276,7 @@ export function DocsMainBar({ crumbs, asideToggle = true, mobileSearch = false }
           onLanguage={mobileSearch ? undefined : () => setOpen('settings')}
           // 🔎 404 mock: the 34px "Search" pill in the packaged search slot (components 0.3.2), right before the theme
           //    button; the pill carries its own invisible 44px hit area 👆
+          //    `hotkey={false}`: this pill does not listen and shows no key cap. The shell's one `useAbHotkey` does ⌨️
           search={mobileSearch ? <AbSearchTrigger size="sm" variant="field" label={labels.searchShort} onOpen={() => setOpen('search')} hotkey={false} /> : undefined}
           languageExpanded={open === 'settings'}
           labels={{ language: t('drawers.changeLanguage'), toDark: t('drawers.toDark'), toLight: t('drawers.toLight'), header: t('drawers.mobileHeader') }}
@@ -282,7 +287,7 @@ export function DocsMainBar({ crumbs, asideToggle = true, mobileSearch = false }
         {/* 🍞 Home (no "Docs" crumb) */}
         <AbBreadcrumbs items={crumbs} label={labels.breadcrumbs} />
         <span className="grow" aria-hidden="true" />
-        {/* 🔎 the field opens the search drawer (no ⌘K, no hotkey) */}
+        {/* 🔎 the field opens the search drawer. No key cap on the bar; the shell listens once ⌨️ */}
         <div className="w-[260px]"><AbSearchTrigger variant="field" label={labels.search} onOpen={() => setOpen('search')} hotkey={false} /></div>
         <AbLocaleSwitcher variant="icon" align="end" label={labels.language} current={locale} locales={locales} getHref={(code) => localizeAbPathname(pathname, code, abI18nConfig)} />
         <ThemePill />
@@ -318,7 +323,8 @@ function ShellBar({ topLinks }: Readonly<{ topLinks: { href: string; label: stri
       divider // ➖ the 1×20 rule before GitHub
       moreMenu={false} // 🚫 no `⋮`
       brand={<AbLink href="/" aria-label={labels.brand}><AbLogo wordmark alt="" size={22} /></AbLink>}
-      // 🔎 the 300 / 360 field opens the search drawer (drawer spec §4: no shortcut hint anywhere)
+      // 🔎 the 300 / 360 field opens the search drawer (drawer spec §4: no shortcut hint on the bar).
+      //    The shell's one `useAbHotkey` is the listener; this field does not register another ⌨️
       search={<AbSearchTrigger variant="field" label={labels.search} onOpen={() => setOpen('search')} hotkey={false} />}
       nav={topLinks}
       labels={{ nav: labels.nav, more: labels.more }}
@@ -349,6 +355,10 @@ export default function DocsShell({ locale, labels, locales, sections, topLinks,
   // 🗄️ the open drawer (one at a time)
   const [open, setOpen] = useState<OpenDrawer>('');
   const close = useCallback(() => setOpen(''), []);
+  // ⌨️ ONE listener for every page in this shell (Home, docs, the 404). ⌘K on Apple, Ctrl+K elsewhere.
+  //    `allowInInputs: true` is explicit (hooks 0.1.9): the combo still opens search while a text field
+  //    is focused, which is what the 404 field's older listener already did. A bare key is not bound.
+  useAbHotkey(DOCS_SEARCH_HOTKEY, () => setOpen('search'), docsSearchHotkeyOptions);
   // 🌐 the drawer strings
   const t = useAbTranslations('Shell');
   // 🧭 locale switch = same page, other locale (a plain router: the path is already prefixed)

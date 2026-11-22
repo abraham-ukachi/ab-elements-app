@@ -111,7 +111,7 @@ Versions as declared in [`package.json`](./package.json) (2026-10-03):
 | [ESLint](https://eslint.org) + `eslint-config-next` | **^9.39.5** + **16.3.4** | Flat config in [`eslint.config.mjs`](./eslint.config.mjs). |
 | `@types/node` / `@types/react` / `@types/react-dom` | ^26.6.4 / ^19.3.0 / ^19.3.0 | |
 | `clsx` | ^2.1.1 | Peer of `ab-nextjs-core` / `ab-nextjs-components`. |
-| Node.js | **>= 20.9** | Minimum required by Next.js 16. |
+| Node.js | **26.x** | `engines.node`. Vercel uses it for builds and Functions. |
 | Package manager | **pnpm 11** | Settings live in [`pnpm-workspace.yaml`](./pnpm-workspace.yaml). |
 | Database (planned) | **MySQL 8**-compatible on Vercel | See [Database](#database). |
 

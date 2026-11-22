@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.32](https://github.com/abraham-ukachi/ab-elements-app/compare/v0.2.31...v0.2.32) (2026-11-22)
+
+* :wrench: Move to Node.js 26 (`26.x` in engines, Node 26 in CI)
+* :arrow_up: Use ab-nextjs-hooks 0.1.9, with an exact release-age pin that expires 2026-11-23 01:30:22.769 Paris
+* :sparkles: Open search with Cmd/Ctrl+K from the docs shell, including while a text field is focused
+* :white_check_mark: Test that shortcut inside text fields, and a bare key and Ctrl+Shift+K on the closed shell
+
 ### [0.2.31](https://github.com/abraham-ukachi/ab-elements-app/compare/v0.2.30...v0.2.31) (2026-11-22)
 
 * :globe_with_meridians: Translate the quick start and the theming, icons and fonts, and layout-rule guides into French, Spanish and Russian

@@ -106,7 +106,10 @@ export function NotFoundDidYouMean() {
 /**
  * `NotFoundSearch` - Client Component 🔎
  *
- * The full-width "Search docs… ⌘K" field: a click, Enter or ⌘K / Ctrl+K opens the shell's search drawer.
+ * The full-width "Search docs… ⌘K" field: a click or Enter opens the shell's search drawer.
+ * `hotkey` stays on so the mock keeps its key cap. components 0.7.1 ties that cap to its own listener,
+ * which opens search from anywhere (an input included) and has no `allowInInputs` switch.
+ * The shell's one `useAbHotkey` is the listener that states the choice: `allowInInputs: true` ⌨️.
  *
  * @param { { label: string } } props - the (translated) placeholder
  * @returns { ReactElement }
@@ -114,6 +117,8 @@ export function NotFoundDidYouMean() {
 export function NotFoundSearch({ label }: Readonly<{ label: string }>) {
   // 🗄️ the shell's drawer state
   const { setOpen } = useShellDrawer();
-  // return the packaged big field (size="lg": 44px, 440px wide, full width on a phone 📏; its ⌘K cap like the mock ⌨️)
+  // return the packaged big field (size="lg": 44px, 440px wide, full width on a phone 📏; its ⌘K cap like the mock ⌨️).
+  // `hotkey` shows that cap. On components 0.7.1 the cap and the listener are one switch, so this field
+  // still listens too. It fires while typing. The shell states the same choice as `allowInInputs: true`.
   return <AbSearchTrigger size="lg" variant="field" label={label} onOpen={() => setOpen('search')} hotkey />;
 }
