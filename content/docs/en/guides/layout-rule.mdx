@@ -21,7 +21,7 @@ Every screen uses the same frame from **ab-nextjs-core**.
 <img className="ab-layout-fig-dark" src="/layout-figures/layout-anatomy-dark.svg" alt="AbAppLayout with header, sidebar, main layout (mainHeader, content, mainBar), aside layout (asideHeader, content, asideBar) and footer, in dark colours" width="900" />
 </div>
 
-## Anatomy and slots
+## Anatomy and slots [#anatomy-and-slots]
 
 `orientation` is required (`vertical` or `horizontal`). Each layout has a client file and a server twin under `ab-nextjs-core/server/`. The props match. Use the server twin in a Server Component.
 
@@ -64,7 +64,7 @@ export function Shell({ children, outline }: { children: React.ReactNode; outlin
 
 Leave a slot out, or pass `null`, and that row is not rendered. Tests can target the scrollers with `[data-ab-part="main-content"]` and `[data-ab-part="aside-content"]`.
 
-## What scrolls
+## What scrolls [#what-scrolls]
 
 <div className="ab-layout-fig-scroll" tabIndex={0}>
 <img className="ab-layout-fig-light" src="/layout-figures/layout-scroll-regions-light.svg" alt="The document is locked. The sidebar, main content and aside content each scroll on their own." width="900" />

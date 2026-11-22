@@ -195,8 +195,21 @@ describe('search documents 📚', () => {
     ];
     for (const locale of ['fr', 'es', 'ru'] as const) {
       const pages = collectDocRecords(root, locale).filter((record) => record.recordType === 'page');
-      // 🏳️ 17 pages, 6 translated: 11 still fall back to English (was 15 before these four files)
-      expect(pages.filter((record) => record.isFallback), locale).toHaveLength(11);
+      // 🏳️ 17 pages, 6 translated: these 11 package pages still fall back to English (was 15 before the four new files)
+      const fallback = [
+        '/docs/packages/animations',
+        '/docs/packages/components',
+        '/docs/packages/components/drawer',
+        '/docs/packages/core',
+        '/docs/packages/core/layouts',
+        '/docs/packages/fonts',
+        '/docs/packages/hooks',
+        '/docs/packages/hooks/scroll-spy',
+        '/docs/packages/i18n',
+        '/docs/packages/icons',
+        '/docs/packages/theme',
+      ];
+      expect(pages.filter((record) => record.isFallback).map((record) => record.url).sort(), locale).toEqual(fallback);
       for (const file of translated) {
         expect(existsSync(join(root, 'content/docs', locale, file)), `${locale} ${file}`).toBe(true);
         expect(resolveDocContent(root, locale, file).isFallback, `${locale} ${file}`).toBe(false);
@@ -231,7 +244,7 @@ describe('search documents 📚', () => {
   });
 
   it('keeps the sample heading ids in every locale', () => {
-    // ⚓ the ids the code samples and links use, pinned with `[#id]` outside English
+    // ⚓ the ids the code samples cite, pinned with fumadocs `[#id]` in en, fr, es and ru
     const pinned = {
       'quick-start': ['create-the-layout', 'add-a-main-pane'],
       'guides/layout-rule': ['anatomy-and-slots', 'what-scrolls'],

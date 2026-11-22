@@ -55,7 +55,7 @@ import { expect, test } from '@playwright/test';
 // import axe for Playwright ♿
 import AxeBuilder from '@axe-core/playwright';
 // import the shared page opener (skips the Splash, waits for the theme & fonts) 🧰
-import { openPage } from './layout-helpers';
+import { openPage, PART } from './layout-helpers';
 
 
 // 🌍 the 4 locales & their URL prefix (as-needed: none for English)
@@ -152,6 +152,36 @@ test.describe('docs · outline 📑', () => {
       const hrefs = await page.locator(TOC_LINKS).evaluateAll((nodes) => nodes.map((node) => node.getAttribute('href')));
       expect(ids.length, url).toBeGreaterThan(1);
       expect(hrefs, url).toEqual(ids.map((id) => `#${id}`));
+    }
+  });
+
+  test('⚓ pinned hashes open the same section in every locale', async ({ page }) => {
+    // 🔗 the four ids the samples cite, pinned with `[#id]` on en, fr, es and ru
+    const sections = [
+      { path: '/docs/quick-start', id: 'create-the-layout', en: 'Create the layout', fr: 'Créer la mise en page', es: 'Crear el diseño', ru: 'Создайте вёрстку', scrolls: false },
+      { path: '/docs/quick-start', id: 'add-a-main-pane', en: 'Add a main pane', fr: 'Ajouter un volet principal', es: 'Añadir un panel principal', ru: 'Добавьте основную панель', scrolls: true },
+      { path: '/docs/guides/layout-rule', id: 'anatomy-and-slots', en: 'Anatomy and slots', fr: 'Anatomie et emplacements', es: 'Anatomía y huecos', ru: 'Анатомия и слоты', scrolls: true },
+      { path: '/docs/guides/layout-rule', id: 'what-scrolls', en: 'What scrolls', fr: 'Ce qui défile', es: 'Qué se desplaza', ru: 'Что прокручивается', scrolls: true },
+    ] as const;
+    const locales = [
+      { prefix: '', locale: 'en' },
+      { prefix: '/fr', locale: 'fr' },
+      { prefix: '/es', locale: 'es' },
+      { prefix: '/ru', locale: 'ru' },
+    ] as const;
+    for (const loc of locales) {
+      for (const section of sections) {
+        await openPage(page, `${loc.prefix}${section.path}#${section.id}`);
+        const heading = page.locator(`[data-docs-body] #${section.id}`);
+        await expect(heading, `${loc.locale} ${section.id}`).toHaveCount(1);
+        await expect(heading).toBeVisible();
+        await expect(heading).toHaveText(section[loc.locale]);
+        await expect(page.locator(`${PART.aside} a[href="#${section.id}"]`)).toHaveCount(1);
+        expect(await page.evaluate(() => document.scrollingElement?.scrollTop ?? 0), section.id).toBe(0);
+        if (section.scrolls) {
+          expect(await page.locator(PART.mainContent).evaluate((el) => (el as HTMLElement).scrollTop), `${loc.locale} ${section.id}`).toBeGreaterThan(0);
+        }
+      }
     }
   });
 
