@@ -45,7 +45,7 @@
 
 // 🎭 The three guides and /changelog (0.2.29), at 390 · 768 · 1180 · 1920 × light · dark × en · fr · es · ru:
 //   📐 the 0.2.23 rules that fit a shell page (the document never scrolls; the aside is a pane from 1180);
-//   🏳️ the English-fallback banner in es / fr / ru;
+//   🏳️ the English-fallback banner on the changelog in es / fr / ru (the guides are translated);
 //   🪓 axe (serious / critical);
 //   🔭 scroll spy on the main pane from 1180;
 //   ⚓ an anchor deep link scrolls that pane, not the document.
@@ -66,7 +66,7 @@ const WIDTHS = [
   { name: 'desktop', width: 1920, height: 1080 },
 ] as const;
 
-// 🌍 the four locales. Guide titles stay English. The changelog title is translated.
+// 🌍 the four locales. Guide titles follow the translated frontmatter. The changelog title is translated too.
 const LOCALES = [
   { locale: 'en', prefix: '', changelog: 'Changelog' },
   { locale: 'fr', prefix: '/fr', changelog: 'Journal des modifications' },
@@ -74,12 +74,35 @@ const LOCALES = [
   { locale: 'ru', prefix: '/ru', changelog: 'Изменения' },
 ] as const;
 
-// 📚 the pages
+// 📚 the pages. Guide h1s are the localized frontmatter titles (the shell sidebar uses the same words).
+const GUIDE_TITLES = {
+  en: {
+    '/docs/guides/theming-dark-mode': 'Theming & dark mode',
+    '/docs/guides/icons-fonts': 'Icons & fonts',
+    '/docs/guides/layout-rule': 'Layout rule',
+  },
+  fr: {
+    '/docs/guides/theming-dark-mode': 'Thèmes et mode sombre',
+    '/docs/guides/icons-fonts': 'Icônes et polices',
+    '/docs/guides/layout-rule': 'Règle de mise en page',
+  },
+  es: {
+    '/docs/guides/theming-dark-mode': 'Temas y modo oscuro',
+    '/docs/guides/icons-fonts': 'Iconos y fuentes',
+    '/docs/guides/layout-rule': 'Regla de diseño',
+  },
+  ru: {
+    '/docs/guides/theming-dark-mode': 'Темы и тёмный режим',
+    '/docs/guides/icons-fonts': 'Иконки и шрифты',
+    '/docs/guides/layout-rule': 'Правило вёрстки',
+  },
+} as const;
+
 const PAGES = [
-  { id: 'theming', path: '/docs/guides/theming-dark-mode', title: 'Theming & dark mode', kind: 'guide' },
-  { id: 'icons', path: '/docs/guides/icons-fonts', title: 'Icons & fonts', kind: 'guide' },
-  { id: 'layout', path: '/docs/guides/layout-rule', title: 'Layout rule', kind: 'guide' },
-  { id: 'changelog', path: '/changelog', title: '', kind: 'changelog' },
+  { id: 'theming', path: '/docs/guides/theming-dark-mode', kind: 'guide' },
+  { id: 'icons', path: '/docs/guides/icons-fonts', kind: 'guide' },
+  { id: 'layout', path: '/docs/guides/layout-rule', kind: 'guide' },
+  { id: 'changelog', path: '/changelog', kind: 'changelog' },
 ] as const;
 
 // 🪓 impacts that fail
@@ -138,13 +161,13 @@ for (const scheme of THEMES) {
             // 🌗 the picked theme
             await expect(page.locator('html')).toHaveAttribute('data-theme', scheme);
             // 1️⃣ one h1
-            const h1 = doc.kind === 'changelog' ? loc.changelog : doc.title;
+            const h1 = doc.kind === 'changelog' ? loc.changelog : GUIDE_TITLES[loc.locale][doc.path];
             await expect(page.getByRole('heading', { level: 1 })).toHaveCount(1);
             await expect(page.getByRole('heading', { level: 1 })).toHaveText(h1);
-            // 🏳️ English notes in es / fr / ru (skip each code block's copy status)
+            // 🏳️ the changelog is still English in es / fr / ru; the guides are not (skip each code block's copy status)
             const banner = page.locator('article [role="status"]:not([data-ab-part="code-block-copy"] *)');
-            await expect(banner).toHaveCount(loc.locale === 'en' ? 0 : 1);
-            if (doc.kind === 'guide' && loc.locale !== 'en') await expect(page.locator('article[data-docs-page]')).toHaveAttribute('lang', 'en');
+            await expect(banner).toHaveCount(doc.kind === 'changelog' && loc.locale !== 'en' ? 1 : 0);
+            if (doc.kind === 'guide') await expect(page.locator('article[data-docs-page]')).toHaveAttribute('lang', loc.locale);
             if (doc.kind === 'changelog') await expect(page.locator('[data-changelog-body]')).toHaveAttribute('lang', 'en');
             // 🚫 the document does not scroll
             const rest = await documentScroll(page);

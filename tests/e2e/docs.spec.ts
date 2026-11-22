@@ -70,16 +70,16 @@ const LOCALES = [
 const DOCS = [
   { slug: '', title: 'Introduction', translated: true },
   { slug: '/installation', title: 'Installation', translated: true },
-  { slug: '/quick-start', title: 'Quick start', translated: false },
+  { slug: '/quick-start', title: 'Quick start', translated: true },
   { slug: '/packages/core', title: 'Core', translated: false },
-  { slug: '/guides/icons-fonts', title: 'Icons & fonts', translated: false },
+  { slug: '/guides/icons-fonts', title: 'Icons & fonts', translated: true },
 ] as const;
 
 // 🏳️ the localized titles of the translated pages
 const TRANSLATED_TITLES: Record<string, Record<string, string>> = {
-  fr: { '': 'Introduction', '/installation': 'Installation' },
-  es: { '': 'Introducción', '/installation': 'Instalación' },
-  ru: { '': 'Введение', '/installation': 'Установка' },
+  fr: { '': 'Introduction', '/installation': 'Installation', '/quick-start': 'Démarrage rapide', '/guides/icons-fonts': 'Icônes et polices' },
+  es: { '': 'Introducción', '/installation': 'Instalación', '/quick-start': 'Inicio rápido', '/guides/icons-fonts': 'Iconos y fuentes' },
+  ru: { '': 'Введение', '/installation': 'Установка', '/quick-start': 'Быстрый старт', '/guides/icons-fonts': 'Иконки и шрифты' },
 };
 
 // 🎯 the desktop outline links (the aside's AbToc; the drawer has its own copy)
@@ -131,7 +131,8 @@ for (const { locale, prefix } of LOCALES) {
       // 🖱️ next navigates
       await pager.locator('a').last().click();
       await expect(page).toHaveURL(new RegExp(`${prefix}/docs/quick-start$`));
-      await expect(page.getByRole('heading', { level: 1 })).toHaveText('Quick start');
+      const quickTitle = locale === 'en' ? 'Quick start' : TRANSLATED_TITLES[locale]['/quick-start'];
+      await expect(page.getByRole('heading', { level: 1 })).toHaveText(quickTitle);
       // 🏁 the first page has no "previous"
       await openPage(page, `${prefix}/docs`);
       await expect(page.locator('[data-docs-pager] a')).toHaveCount(1);
@@ -169,8 +170,8 @@ test.describe('docs · outline 📑', () => {
 
   test('✏️ "Edit this page" opens the content file on GitHub', async ({ page }) => {
     await openPage(page, '/fr/docs/quick-start');
-    // 🏳️ a fallback page edits the English file
-    await expect(page.locator('[data-ab-part="aside"] a[href*="/edit/main/"]')).toHaveAttribute('href', /\/content\/docs\/en\/quick-start\.mdx$/);
+    // 🇫🇷 a translated page edits its own file
+    await expect(page.locator('[data-ab-part="aside"] a[href*="/edit/main/"]')).toHaveAttribute('href', /\/content\/docs\/fr\/quick-start\.mdx$/);
     await openPage(page, '/fr/docs/installation');
     await expect(page.locator('[data-ab-part="aside"] a[href*="/edit/main/"]')).toHaveAttribute('href', /\/content\/docs\/fr\/installation\.mdx$/);
   });
@@ -305,7 +306,7 @@ test.describe('docs · a11y ♿', () => {
     test(`🪓 axe on a fallback page (fr, ${scheme})`, async ({ page }) => {
       await page.emulateMedia({ colorScheme: scheme });
       await page.setViewportSize({ width: 1280, height: 800 });
-      await openPage(page, '/fr/docs/quick-start');
+      await openPage(page, '/fr/docs/packages/core');
       const { violations } = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa']).analyze();
       expect(violations.filter((v) => ['serious', 'critical'].includes(v.impact ?? '')).map((v) => `${v.id}: ${v.nodes[0]?.target.join(' ')}`)).toEqual([]);
     });

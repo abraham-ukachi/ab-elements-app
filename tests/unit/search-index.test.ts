@@ -184,11 +184,24 @@ describe('search documents 📚', () => {
         expect(sections.every((record) => record.isFallback === choice.isFallback && record.contentLocale === choice.contentLocale)).toBe(true);
       }
     }
-    // ✅ the two pages that already have a translation
-    expect(existsSync(join(root, 'content/docs/fr/installation.mdx'))).toBe(true);
-    expect(resolveDocContent(root, 'fr', 'installation.mdx').isFallback).toBe(false);
-    // 🏳️ quick start is still English until a file lands
-    expect(resolveDocContent(root, 'fr', 'quick-start.mdx').isFallback).toBe(true);
+    // ✅ the translated pages: introduction, installation, the quick start and the three guides
+    const translated = [
+      'index.mdx',
+      'installation.mdx',
+      'quick-start.mdx',
+      'guides/theming-dark-mode.mdx',
+      'guides/icons-fonts.mdx',
+      'guides/layout-rule.mdx',
+    ];
+    for (const locale of ['fr', 'es', 'ru'] as const) {
+      const pages = collectDocRecords(root, locale).filter((record) => record.recordType === 'page');
+      // 🏳️ 17 pages, 6 translated: 11 still fall back to English (was 15 before these four files)
+      expect(pages.filter((record) => record.isFallback), locale).toHaveLength(11);
+      for (const file of translated) {
+        expect(existsSync(join(root, 'content/docs', locale, file)), `${locale} ${file}`).toBe(true);
+        expect(resolveDocContent(root, locale, file).isFallback, `${locale} ${file}`).toBe(false);
+      }
+    }
   });
 
   it('flips isFallback when a translated file appears', () => {
