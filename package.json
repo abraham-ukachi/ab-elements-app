@@ -47,7 +47,7 @@
     "lighthouse:strict": "node scripts/lighthouse.mjs --strict"
   },
   "engines": {
-    "node": ">=24"
+    "node": "26.x"
   },
   "packageManager": "pnpm@11.3.0",
   "dependencies": {

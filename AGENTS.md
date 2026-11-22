@@ -15,7 +15,7 @@ Rules for any agent (or human) working on **ab-elements-app**. Keep the Next.js 
 ## Toolchain
 
 - **pnpm 11** only (pinned via `packageManager`). Don't use npm or yarn and don't add another lockfile. pnpm settings (e.g. `allowBuilds`, `overrides`) live in `pnpm-workspace.yaml`, not in `package.json`.
-- **Node.js 24+** (`engines.node`). Vercel uses it to pick the runtime.
+- **Node.js 26** (`engines.node` is `26.x`). Vercel uses it to pick the runtime for builds and Functions.
 - **Next.js 16.3.4** with React 19 and Turbopack (the default; no `--turbopack` flag). Every `ab-nextjs-*` package peers `next ^16.3.4`, so **bump Next and all Ab packages together, never one alone**.
 - Tailwind CSS v4 with CSS-first config (`@import "tailwindcss"` + `@tailwindcss/postcss`). There's no `tailwind.config.*`.
 - ESLint 9 flat config from `eslint-config-next`. Run `pnpm lint` (`eslint .`) and `pnpm build` before every commit; both must pass.
