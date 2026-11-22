@@ -40,7 +40,7 @@ export default function Page() {
 }
 ```
 
-## Añadir un esquema
+## Añadir un esquema [#add-an-outline]
 
 `useAbScrollSpy`, de **ab-nextjs-hooks**, indica qué encabezado está activo. En un diseño de paneles, la raíz del desplazamiento es el panel principal (`useAbPage().mainScrollElement`, de **ab-nextjs-core**), no la ventana. `scrollToAbSection` desplaza ese mismo contenedor.
 
@@ -66,6 +66,6 @@ export function Outline() {
 
 Llama a `scrollToAbSection(id, { container: mainScrollElement })` cuando un control deba mover el panel. Un `href="#id"` simple sigue funcionando sin JavaScript.
 
-### Mantenlo accesible
+### Mantenlo accesible [#keep-it-accessible]
 
 Cada enlace del esquema apunta al id de un encabezado real, así que también funciona sin JavaScript. El enlace actual usa `aria-current="location"`. Basta un `h1` por página; el esquema empieza en `h2`.

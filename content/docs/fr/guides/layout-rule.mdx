@@ -4,7 +4,7 @@ description: "Un même cadre pour chaque écran : le document ne défile jamais,
 icon: widgets
 ---
 
-## La règle
+## La règle [#the-rule]
 
 Chaque écran utilise le même cadre, issu de **ab-nextjs-core**.
 
@@ -79,7 +79,7 @@ L’en-tête, le pied de page et les barres se décalent avec `env(safe-area-ins
 
 Il n’y a pas de décalage `--ab-app-bar-height` et pas de `padding-top: 64px` pour dégager une barre fixe. La rangée de grille est `auto`. Vide signifie 0px.
 
-## Emplacements vides
+## Emplacements vides [#empty-slots]
 
 <div className="ab-layout-fig-scroll" tabIndex={0}>
 <img className="ab-layout-fig-light" src="/layout-figures/layout-empty-chrome-light.svg" alt="Avec du contenu, l’en-tête et les barres prennent de la place. Lorsqu’ils sont vides, ils mesurent 0px et le contenu principal récupère l’espace." width="900" />
@@ -93,7 +93,7 @@ Deux couches masquent un emplacement vide :
 
 Ne rendez pas un `<div>` vide pour garder une rangée. Omettez la prop.
 
-## Tiroirs
+## Tiroirs [#drawers]
 
 <div className="ab-layout-fig-scroll" tabIndex={0}>
 <img className="ab-layout-fig-light" src="/layout-figures/layout-drawer-scopes-light.svg" alt="Les portées d’AbDrawer : app, main et aside, et les côtés top, bottom, left et right." width="900" />
@@ -148,7 +148,7 @@ Chaque tiroir :
 - Menu : une liste courte ancrée à un bouton.
 - Dialogue : une décision bloquante sur toute l’application, non liée à une seule région.
 
-## Points de rupture
+## Points de rupture [#breakpoints]
 
 <div className="ab-layout-fig-scroll" tabIndex={0}>
 <img className="ab-layout-fig-light" src="/layout-figures/layout-breakpoints-light.svg" alt="Mises en page à 390, 768, 1180 et 1920 pixels de large" width="900" />
@@ -164,7 +164,7 @@ Le document ne défile à aucune largeur. Vérifiez 390, 768, 1180 et 1920, en c
 
 `AB_ASIDE_SHEET_QUERY`, depuis `ab-nextjs-core/ab-page-provider`, vaut `(max-width: 1179px)`. En dessous, le panneau latéral est une feuille. `useAbAsideToggle` choisit la feuille ou le volet et renvoie `aria-expanded`, `aria-controls` et `onClick`.
 
-## Suivi du défilement et ancres
+## Suivi du défilement et ancres [#scroll-spy-and-anchors]
 
 <div className="ab-layout-fig-scroll" tabIndex={0}>
 <img className="ab-layout-fig-light" src="/layout-figures/layout-scroll-spy-light.svg" alt="Le suivi du défilement utilise la zone principale comme racine d’IntersectionObserver et met en évidence l’élément actif du plan." width="900" />
@@ -220,7 +220,7 @@ export function MainScrollerLabel() {
 
 `AbToc` utilise la zone principale lorsque vous transmettez `onNavigate` à `scrollToAbSection`. Un simple `href="#id"` fonctionne encore sans JavaScript. Gardez `scroll-margin-top` petit. Aucune barre fixe ne recouvre le contenu du volet. Un titre collant dans le volet principal utilise `top: 0`, c’est le haut du volet principal, pas le haut du viewport.
 
-## Welcome
+## Welcome [#welcome]
 
 <div className="ab-layout-fig-scroll" tabIndex={0}>
 <img className="ab-layout-fig-light" src="/layout-figures/layout-welcome-mapping-light.svg" alt="Welcome : la barre du haut est l’en-tête de l’application, le compteur est mainHeader, la diapositive est le contenu principal, les flèches et Passer sont mainBar, et le bac à sable est le panneau latéral." width="900" />
@@ -239,7 +239,7 @@ Welcome est déjà sur ce cadre (`pageName="welcome"`).
 
 `surface="page"` peint la surface de Welcome à partir des tokens du thème, sur chaque volet.
 
-## À faire, à éviter, et la liste de contrôle
+## À faire, à éviter, et la liste de contrôle [#do-dont-and-the-checklist]
 
 - Placez les éléments d’interface (barres, en-têtes) dans `header`, `mainHeader`, `mainBar`, `asideHeader`, `asideBar`, `navBar` ou `footer`. Ne construisez pas une barre avec `position: fixed`.
 - Omettez un emplacement vide, ou passez `null`. Ne rendez pas un `<div>` vide pour réserver de l’espace.

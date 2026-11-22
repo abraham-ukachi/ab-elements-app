@@ -40,7 +40,7 @@ export default function Page() {
 }
 ```
 
-## Ajouter un plan
+## Ajouter un plan [#add-an-outline]
 
 `useAbScrollSpy`, dans **ab-nextjs-hooks**, indique quel titre est actif. Dans une mise en page en volets, la racine du défilement est le volet principal (`useAbPage().mainScrollElement`, dans **ab-nextjs-core**), et non la fenêtre. `scrollToAbSection` fait défiler ce même conteneur.
 
@@ -66,6 +66,6 @@ export function Outline() {
 
 Appelez `scrollToAbSection(id, { container: mainScrollElement })` lorsqu’un contrôle doit déplacer le volet. Un simple `href="#id"` fonctionne encore sans JavaScript.
 
-### Garantir l’accessibilité
+### Garantir l’accessibilité [#keep-it-accessible]
 
 Chaque lien du plan pointe vers l’identifiant d’un vrai titre, il fonctionne donc aussi sans JavaScript. Le lien actif utilise `aria-current="location"`. Un seul `h1` par page suffit ; le plan commence au `h2`.

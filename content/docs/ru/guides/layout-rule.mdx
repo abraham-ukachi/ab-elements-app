@@ -4,7 +4,7 @@ description: "Один каркас для каждого экрана: доку
 icon: widgets
 ---
 
-## Правило
+## Правило [#the-rule]
 
 Каждый экран использует один и тот же каркас из **ab-nextjs-core**.
 
@@ -79,7 +79,7 @@ export function Shell({ children, outline }: { children: React.ReactNode; outlin
 
 Нет смещения `--ab-app-bar-height` и нет `padding-top: 64px`, чтобы освободить место под фиксированную панель. Ряд сетки — `auto`. Пусто значит 0px.
 
-## Пустые слоты
+## Пустые слоты [#empty-slots]
 
 <div className="ab-layout-fig-scroll" tabIndex={0}>
 <img className="ab-layout-fig-light" src="/layout-figures/layout-empty-chrome-light.svg" alt="С содержимым шапка и панели занимают место. Когда они пусты, их высота 0px, и основное содержимое забирает пространство." width="900" />
@@ -93,7 +93,7 @@ export function Shell({ children, outline }: { children: React.ReactNode; outlin
 
 Не рисуйте пустой `<div>`, чтобы сохранить ряд. Опустите проп.
 
-## Шторки
+## Шторки [#drawers]
 
 <div className="ab-layout-fig-scroll" tabIndex={0}>
 <img className="ab-layout-fig-light" src="/layout-figures/layout-drawer-scopes-light.svg" alt="Области AbDrawer: app, main и aside, и стороны top, bottom, left и right." width="900" />
@@ -148,7 +148,7 @@ export function LanguageDrawer() {
 - Меню: короткий список, привязанный к кнопке.
 - Диалог: блокирующее решение обо всём приложении, не привязанное к одной области.
 
-## Брейкпоинты
+## Брейкпоинты [#breakpoints]
 
 <div className="ab-layout-fig-scroll" tabIndex={0}>
 <img className="ab-layout-fig-light" src="/layout-figures/layout-breakpoints-light.svg" alt="Вёрстки шириной 390, 768, 1180 и 1920 пикселей" width="900" />
@@ -164,7 +164,7 @@ export function LanguageDrawer() {
 
 `AB_ASIDE_SHEET_QUERY` из `ab-nextjs-core/ab-page-provider` — это `(max-width: 1179px)`. Ниже этого боковая колонка — выезжающий лист (sheet). `useAbAsideToggle` выбирает лист или панель и возвращает `aria-expanded`, `aria-controls` и `onClick`.
 
-## Слежение за прокруткой и якоря
+## Слежение за прокруткой и якоря [#scroll-spy-and-anchors]
 
 <div className="ab-layout-fig-scroll" tabIndex={0}>
 <img className="ab-layout-fig-light" src="/layout-figures/layout-scroll-spy-light.svg" alt="Слежение за прокруткой использует основную область как корень IntersectionObserver и подсвечивает активный пункт оглавления." width="900" />
@@ -220,7 +220,7 @@ export function MainScrollerLabel() {
 
 `AbToc` использует основную область, когда вы передаёте `onNavigate` в `scrollToAbSection`. Обычный `href="#id"` по-прежнему работает без JavaScript. Держите `scroll-margin-top` небольшим. Над содержимым панели не лежит фиксированная панель. Липкий заголовок внутри основной области использует `top: 0`: это верх основной области, а не верх viewport.
 
-## Welcome
+## Welcome [#welcome]
 
 <div className="ab-layout-fig-scroll" tabIndex={0}>
 <img className="ab-layout-fig-light" src="/layout-figures/layout-welcome-mapping-light.svg" alt="Welcome: верхняя панель — шапка приложения, счётчик — mainHeader, слайд — основное содержимое, стрелки и «Пропустить» — mainBar, а песочница — боковая колонка." width="900" />
@@ -239,7 +239,7 @@ Welcome уже стоит на этом каркасе (`pageName="welcome"`).
 
 `surface="page"` красит поверхность Welcome токенами темы на каждой панели.
 
-## Что делать, чего избегать и контрольный список
+## Что делать, чего избегать и контрольный список [#do-dont-and-the-checklist]
 
 - Размещайте элементы интерфейса (панели, шапки) в `header`, `mainHeader`, `mainBar`, `asideHeader`, `asideBar`, `navBar` или `footer`. Не собирайте панель через `position: fixed`.
 - Опустите пустой слот или передайте `null`. Не рисуйте пустой `<div>`, чтобы зарезервировать место.

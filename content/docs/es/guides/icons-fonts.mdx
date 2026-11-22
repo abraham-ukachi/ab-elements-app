@@ -4,13 +4,13 @@ description: "Carga las fuentes autoalojadas y dibuja AbIcons con AbIcon, sin un
 icon: match_case
 ---
 
-## Resumen
+## Resumen [#overview]
 
 **ab-nextjs-fonts** entrega las fuentes como archivos: Inter para el texto de cuerpo, Mulish para los títulos, Roboto Mono para el código, más Quicksand, Roboto y Zilla Slab. Una página no espera una hoja de estilos de terceros, y el texto no salta cuando llega la fuente.
 
 **ab-nextjs-icons** es el dibujo. **ab-nextjs-components** lo pinta. `AbIcon` toma un nombre, un SVG opcional, una variante y un peso. Un nombre no registrado recurre a una ligadura de Material Symbols y avisa en desarrollo. Registra los nombres que usa una pantalla para que ese respaldo no se muestre nunca.
 
-## Clases de fuente
+## Clases de fuente [#font-classes]
 
 La raíz del paquete exporta una constante de nombre de clase por familia. `interStyles.regular` es la cadena `font-inter-regular`.
 
@@ -37,7 +37,7 @@ Roboto Mono se licencia bajo la SIL Open Font License 1.1, incluida con el paque
   Cada familia también tiene un `styles.css` de reglas `@font-face`. Fonts <PackageVersion name="ab-nextjs-fonts" /> no publica un mapa `exports`, así que esas subrutas son archivos en disco, no claves de la superficie de exportación. La página [Fonts](/docs/packages/fonts) las lista. Importa solo las familias que uses.
 </Callout>
 
-## Dibujar un icono
+## Dibujar un icono [#draw-an-icon]
 
 `AbIcon` es el componente. `name` es el nombre de AbIcons en snake_case (`home`, `search`, `palette`). `variant` es `outlined` (el predeterminado) o `filled`. `weight` va de 100 a 700 para los iconos de contorno (`outlined`). El peso predeterminado es 200. Si omites `label`, el icono es decorativo.
 
@@ -53,7 +53,7 @@ export function HomeMark() {
 
 El componente busca el marcado en este orden: la prop `svg`, luego el registro y después el respaldo de fuente. Pasa `svg` cuando una pantalla debe incluir solo ese glifo. El módulo por icono que produce ese valor está documentado en la página [Icons](/docs/packages/icons). Icons <PackageVersion name="ab-nextjs-icons" /> no publica un mapa `exports`, así que esta guía no muestra ese módulo como import de ejemplo.
 
-## Registrar un conjunto
+## Registrar un conjunto [#register-a-set]
 
 `AbIconRegistrar` es la forma segura en el servidor de registrar muchos glifos una sola vez, por encima del árbol que los dibuja. No renderiza nada. El valor es un mapa de nombres a datos SVG (`AbIconSvgData`, exportado desde la misma entrada `ab-icon`).
 
@@ -75,7 +75,7 @@ export function IconRoot({ children }: { children: React.ReactNode }) {
 
 Rellena `icons` con los módulos por icono que documenta la página Icons. Un nombre que falta en el mapa se dibuja igual, como una ligadura de fuente, hasta que lo añadas. Este sitio registra así los glifos del shell, para que la barra lateral, los cajones y el botón de tema no usen nunca ese respaldo.
 
-## Máscaras CSS
+## Máscaras CSS [#css-masks]
 
 El paquete de iconos también incluye una hoja de estilos de máscaras CSS (`abicon`, `abicon-filled`, `abicon-w300`). Ese archivo no es una clave `exports` en icons <PackageVersion name="ab-nextjs-icons" />. Usa `AbIcon` en React. Usa las clases de máscara solo donde la página [Icons](/docs/packages/icons) ya las muestra, para una página que no es React.
 

@@ -4,7 +4,7 @@ description: "One frame for every screen: the document never scrolls, empty slot
 icon: widgets
 ---
 
-## The rule
+## The rule [#the-rule]
 
 Every screen uses the same frame from **ab-nextjs-core**.
 
@@ -79,7 +79,7 @@ The header, footer and bars pad with `env(safe-area-inset-*)`. Those insets are 
 
 There is no `--ab-app-bar-height` offset and no `padding-top: 64px` to clear a fixed bar. The grid row is `auto`. Empty means 0px.
 
-## Empty slots
+## Empty slots [#empty-slots]
 
 <div className="ab-layout-fig-scroll" tabIndex={0}>
 <img className="ab-layout-fig-light" src="/layout-figures/layout-empty-chrome-light.svg" alt="With content the header and bars take space. When empty they measure 0px and main gets the space." width="900" />
@@ -93,7 +93,7 @@ Two layers hide an empty slot:
 
 Do not render an empty `<div>` to keep a row. Omit the prop.
 
-## Drawers
+## Drawers [#drawers]
 
 <div className="ab-layout-fig-scroll" tabIndex={0}>
 <img className="ab-layout-fig-light" src="/layout-figures/layout-drawer-scopes-light.svg" alt="AbDrawer scopes app, main and aside, and sides top, bottom, left and right." width="900" />
@@ -148,7 +148,7 @@ Every drawer:
 - Menu: a short list anchored to a button.
 - Dialog: a blocking decision about the whole app, not tied to one region.
 
-## Breakpoints
+## Breakpoints [#breakpoints]
 
 <div className="ab-layout-fig-scroll" tabIndex={0}>
 <img className="ab-layout-fig-light" src="/layout-figures/layout-breakpoints-light.svg" alt="Layouts at 390, 768, 1180 and 1920 pixels wide" width="900" />
@@ -164,7 +164,7 @@ The document never scrolls at any width. Check 390, 768, 1180 and 1920 in light 
 
 `AB_ASIDE_SHEET_QUERY` from `ab-nextjs-core/ab-page-provider` is `(max-width: 1179px)`. Below that, the aside is a sheet. `useAbAsideToggle` picks the sheet or the pane and returns `aria-expanded`, `aria-controls` and `onClick`.
 
-## Scroll spy and anchors
+## Scroll spy and anchors [#scroll-spy-and-anchors]
 
 <div className="ab-layout-fig-scroll" tabIndex={0}>
 <img className="ab-layout-fig-light" src="/layout-figures/layout-scroll-spy-light.svg" alt="The scroll spy uses the main scroller as its IntersectionObserver root and highlights the active outline item." width="900" />
@@ -220,7 +220,7 @@ export function MainScrollerLabel() {
 
 `AbToc` uses the main scroller when you pass `onNavigate` through to `scrollToAbSection`. A plain `href="#id"` still works without JavaScript. Keep `scroll-margin-top` small. No fixed bar sits over the pane's content. A sticky heading inside main uses `top: 0`, which is the top of main, not the top of the viewport.
 
-## Welcome
+## Welcome [#welcome]
 
 <div className="ab-layout-fig-scroll" tabIndex={0}>
 <img className="ab-layout-fig-light" src="/layout-figures/layout-welcome-mapping-light.svg" alt="Welcome: the top bar is the app header, the counter is mainHeader, the slide is main content, the arrows and Skip are mainBar, and the playground is the aside." width="900" />
@@ -239,7 +239,7 @@ Welcome is already on this frame (`pageName="welcome"`).
 
 `surface="page"` paints the welcome surface from the theme tokens on every pane.
 
-## Do, don't, and the checklist
+## Do, don't, and the checklist [#do-dont-and-the-checklist]
 
 - Put chrome in `header`, `mainHeader`, `mainBar`, `asideHeader`, `asideBar`, `navBar`, or `footer`. Do not build a bar with `position: fixed`.
 - Omit an empty slot, or pass `null`. Do not render an empty `<div>` to reserve space.

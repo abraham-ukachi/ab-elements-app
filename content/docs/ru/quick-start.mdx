@@ -40,7 +40,7 @@ export default function Page() {
 }
 ```
 
-## Добавьте оглавление
+## Добавьте оглавление [#add-an-outline]
 
 `useAbScrollSpy` из **ab-nextjs-hooks** сообщает, какой заголовок сейчас активен. Во вёрстке из панелей корень прокрутки — основная панель (`useAbPage().mainScrollElement` из **ab-nextjs-core**), а не окно. `scrollToAbSection` прокручивает тот же контейнер.
 
@@ -66,6 +66,6 @@ export function Outline() {
 
 Вызывайте `scrollToAbSection(id, { container: mainScrollElement })`, когда элемент управления должен сдвинуть панель. Обычный `href="#id"` по-прежнему работает без JavaScript.
 
-### Сохраните доступность
+### Сохраните доступность [#keep-it-accessible]
 
 Каждая ссылка оглавления ведёт на id настоящего заголовка, поэтому она работает и без JavaScript. Текущая ссылка использует `aria-current="location"`. Одного `h1` на страницу достаточно; оглавление начинается с `h2`.

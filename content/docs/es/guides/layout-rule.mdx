@@ -4,7 +4,7 @@ description: "Un mismo marco para cada pantalla: el documento nunca se desplaza,
 icon: widgets
 ---
 
-## La regla
+## La regla [#the-rule]
 
 Cada pantalla usa el mismo marco, de **ab-nextjs-core**.
 
@@ -79,7 +79,7 @@ El encabezado, el pie y las barras se separan con `env(safe-area-inset-*)`. Esos
 
 No hay un margen de compensación `--ab-app-bar-height` ni un `padding-top: 64px` para despejar una barra fija. La fila de la cuadrícula es `auto`. Vacío significa 0px.
 
-## Huecos vacíos
+## Huecos vacíos [#empty-slots]
 
 <div className="ab-layout-fig-scroll" tabIndex={0}>
 <img className="ab-layout-fig-light" src="/layout-figures/layout-empty-chrome-light.svg" alt="Con contenido, el encabezado y las barras ocupan espacio. Cuando están vacíos miden 0px y el contenido principal recupera el espacio." width="900" />
@@ -93,7 +93,7 @@ Dos capas ocultan un hueco vacío:
 
 No renderices un `<div>` vacío para conservar una fila. Omite la prop.
 
-## Cajones
+## Cajones [#drawers]
 
 <div className="ab-layout-fig-scroll" tabIndex={0}>
 <img className="ab-layout-fig-light" src="/layout-figures/layout-drawer-scopes-light.svg" alt="Ámbitos de AbDrawer: app, main y aside, y lados top, bottom, left y right." width="900" />
@@ -148,7 +148,7 @@ Cada cajón:
 - Menú: una lista corta anclada a un botón.
 - Diálogo: una decisión que bloquea toda la app, no atada a una sola región.
 
-## Puntos de interrupción
+## Puntos de interrupción [#breakpoints]
 
 <div className="ab-layout-fig-scroll" tabIndex={0}>
 <img className="ab-layout-fig-light" src="/layout-figures/layout-breakpoints-light.svg" alt="Diseños a 390, 768, 1180 y 1920 píxeles de ancho" width="900" />
@@ -164,7 +164,7 @@ El documento no se desplaza en ningún ancho. Comprueba 390, 768, 1180 y 1920, e
 
 `AB_ASIDE_SHEET_QUERY`, de `ab-nextjs-core/ab-page-provider`, es `(max-width: 1179px)`. Por debajo, el panel lateral es una hoja. `useAbAsideToggle` elige la hoja o el panel y devuelve `aria-expanded`, `aria-controls` y `onClick`.
 
-## Seguimiento del desplazamiento y anclas
+## Seguimiento del desplazamiento y anclas [#scroll-spy-and-anchors]
 
 <div className="ab-layout-fig-scroll" tabIndex={0}>
 <img className="ab-layout-fig-light" src="/layout-figures/layout-scroll-spy-light.svg" alt="El seguimiento del desplazamiento usa la zona principal como raíz de IntersectionObserver y resalta el elemento activo del esquema." width="900" />
@@ -220,7 +220,7 @@ export function MainScrollerLabel() {
 
 `AbToc` usa la zona principal cuando pasas `onNavigate` hasta `scrollToAbSection`. Un `href="#id"` simple sigue funcionando sin JavaScript. Mantén `scroll-margin-top` pequeño. Ninguna barra fija se superpone al contenido del panel. Un encabezado `sticky` dentro del panel principal usa `top: 0`, que es la parte superior del panel principal, no la del viewport.
 
-## Welcome
+## Welcome [#welcome]
 
 <div className="ab-layout-fig-scroll" tabIndex={0}>
 <img className="ab-layout-fig-light" src="/layout-figures/layout-welcome-mapping-light.svg" alt="Welcome: la barra superior es el encabezado de la app, el contador es mainHeader, la diapositiva es el contenido principal, las flechas y Omitir son mainBar, y la zona de pruebas es el panel lateral." width="900" />
@@ -239,7 +239,7 @@ Welcome ya está en este marco (`pageName="welcome"`).
 
 `surface="page"` pinta la superficie de Welcome a partir de los tokens del tema, en cada panel.
 
-## Qué hacer, qué no, y la lista de comprobación
+## Qué hacer, qué no, y la lista de comprobación [#do-dont-and-the-checklist]
 
 - Pon los elementos de interfaz (barras, encabezados) en `header`, `mainHeader`, `mainBar`, `asideHeader`, `asideBar`, `navBar` o `footer`. No construyas una barra con `position: fixed`.
 - Omite un hueco vacío, o pasa `null`. No renderices un `<div>` vacío para reservar espacio.

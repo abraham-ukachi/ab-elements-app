@@ -4,13 +4,13 @@ description: "Choisissez le mode clair, sombre ou système avec les tokens publi
 icon: palette
 ---
 
-## Vue d’ensemble
+## Vue d’ensemble [#overview]
 
 Chaque écran Ab utilise un seul jeu de tokens de couleur et de typographie, issu de **ab-nextjs-theme**. Le clair et le sombre sont des variables CSS sur la page. La classe sur `<html>` décide des valeurs que vous voyez.
 
 Le hook qui mémorise le choix, et le script qui l’applique avant le premier rendu, se trouvent dans **ab-nextjs-hooks**. Le contrôle segmenté se trouve dans **ab-nextjs-components**. Ce guide relie les trois. Les valeurs de couleur elles-mêmes sont sur la page [Theme](/docs/packages/theme).
 
-## Tokens
+## Tokens [#tokens]
 
 Lisez les variables. Ne copiez pas de valeurs hexadécimales dans un composant.
 
@@ -36,7 +36,7 @@ Les articles de la documentation ajoutent la classe `ab-prose`. Cette classe sty
   Importez la feuille de styles du thème une seule fois, avant les styles des composants, comme le montre la page [Theme](/docs/packages/theme). Theme <PackageVersion name="ab-nextjs-theme" /> ne publie pas de carte `exports` dans `package.json`, ce sous-chemin est donc un fichier livré par le paquet, et non une clé de la surface d’export. Ce guide ne le répète pas comme exemple d’import.
 </Callout>
 
-## Sans flash
+## Sans flash [#no-flash]
 
 `getAbThemeScript` renvoie une chaîne. Placez-la dans `<head>` pour que le premier affichage ait déjà la bonne classe. La clé de stockage est `theme`. Une valeur enregistrée peut être `light`, `dark` ou `system`. `system` suit `prefers-color-scheme`.
 
@@ -59,7 +59,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
 Le script définit `class`, `data-theme` (le thème résolu, `light` ou `dark`), `data-theme-mode` (le choix, y compris `system`) et `color-scheme`. Si le stockage est bloqué, le repli est le système d’exploitation.
 
-## Lire et changer le mode
+## Lire et changer le mode [#read-and-change-the-mode]
 
 `useAbThemeMode` renvoie le choix, le thème qui peint réellement, et un setter. Il est sûr sur le serveur : il ne lit pas `localStorage` pendant le rendu.
 
@@ -80,7 +80,7 @@ export function ThemeLabel() {
 
 `resolvedTheme` vaut `light` ou `dark`. `mode` est ce que le lecteur a choisi, y compris `system`. `useAbTheme` est l’ancien tuple, `[mode, setMode]`, depuis la même entrée.
 
-## Un seul interrupteur pour toute la page
+## Un seul interrupteur pour toute la page [#one-toggle-for-the-whole-page]
 
 `AbThemeToggle` est le contrôle segmenté (ou un seul bouton icône). Enveloppez la page dans `AbThemeModeProvider` lorsque plusieurs interrupteurs doivent rester synchronisés. Sans le provider, chaque interrupteur garde son propre état.
 
@@ -104,7 +104,7 @@ export function ThemeBar() {
 
 `variant="icon"` est la forme à un seul bouton. `labels.switchTo` nomme le mode vers lequel un clic va basculer. Les glyphes sont `light_mode`, `dark_mode` et `brightness_auto`. Enregistrez ces icônes comme le décrit le guide [Icônes et polices](/docs/guides/icons-fonts), sinon le bouton retombe sur une ligature de police.
 
-## Ce qu’il faut laisser de côté
+## Ce qu’il faut laisser de côté [#what-to-leave-alone]
 
 La couleur d’accent, la densité et une échelle de taille de police ne sont pas encore des tokens. N’ajoutez pas un second fichier de thème dans l’application. Lorsque le paquet les livrera, cette page les utilisera.
 

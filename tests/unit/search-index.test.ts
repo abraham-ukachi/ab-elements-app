@@ -266,6 +266,24 @@ describe('search documents 📚', () => {
     }
   });
 
+  it('keeps translated guide heading ids identical to English', () => {
+    // ⚓ every h2/h3 on the quick start and the three guides is pinned to the English slug
+    const slugs = ['quick-start', 'guides/theming-dark-mode', 'guides/icons-fonts', 'guides/layout-rule'];
+    const english = collectDocRecords(root, 'en');
+    for (const locale of ['fr', 'es', 'ru'] as const) {
+      const records = collectDocRecords(root, locale);
+      for (const slug of slugs) {
+        const prefix = `${docsUrl(slug)}#`;
+        const ids = (rows: ReturnType<typeof collectDocRecords>) => rows
+          .filter((record) => record.recordType === 'section' && record.url.startsWith(prefix))
+          .map((record) => record.url.slice(prefix.length));
+        const enIds = ids(english);
+        expect(enIds.length, slug).toBeGreaterThan(1);
+        expect(ids(records), `${locale} ${slug}`).toEqual(enIds);
+      }
+    }
+  });
+
   it('uses the same heading anchors as the rendered outline', () => {
     // 🌍 every locale, every page
     for (const locale of SEARCH_LOCALES) {
